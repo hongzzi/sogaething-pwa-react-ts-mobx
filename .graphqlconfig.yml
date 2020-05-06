@@ -1,0 +1,7 @@
+projects:
+  app:
+    schemaPath: ./src/generated/schema.graphql
+    includes: ["**/*.graphql"]
+    extensions:
+      endpoints:
+        default: ${env:NEXT_APP_GRAPHQL_ENDPOINT}
