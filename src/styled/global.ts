@@ -8,6 +8,7 @@ export default createGlobalStyle`
 
   html {
     font-size: 16px;
+    height: 100%;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
@@ -15,5 +16,10 @@ export default createGlobalStyle`
   body {
     padding: 0;
     margin: 0;
+    height: 100%;
+  }
+
+  #__next {
+    height: 100%;
   }
 `

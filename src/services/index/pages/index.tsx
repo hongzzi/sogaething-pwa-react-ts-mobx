@@ -1,36 +1,21 @@
 import styled from '~/styled'
 import Pikachu from '../components/Pikachu'
 import { useStore } from '../store'
+import Nav from '../components/Nav'
 
 export default function PageIndex() {
   const store = useStore()
 
   return (
-    <Container>
-      <Title>Next.js Starter</Title>
-      <Line>
-        <Code>Next.js</Code>
-        <Code>TypeScript</Code>
-        <Code>Babel</Code>
-        <Code>Express.js</Code>
-        <Code>Apollo Client</Code>
-        <Code>React Apollo</Code>
-        <Code>React Apollo Hooks</Code>
-        <Code>GraphQL Codegen</Code>
-        <Code>MobX</Code>
-        <Code>mobx-state-tree</Code>
-        <Code>styled-components</Code>
-        <Code>next-optimized-images</Code>
-        <Code>Serverless Framework</Code>
-        <Code>AWS Lambda</Code>
-        <Code>Dotenv</Code>
-      </Line>
-      <Line>version: {store.environments.get('NEXT_APP_VERSION')}</Line>
-      <Line>by <Author>@tonyfromundefined</Author></Line>
-      <Pikachu />
-    </Container>
+    <Layout>
+        <Nav />
+    </Layout>
   )
 }
+
+const Layout = styled.div`
+  position: relative;
+`;
 
 const Container = styled.div`
   padding: 1rem;

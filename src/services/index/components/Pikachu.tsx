@@ -1,5 +1,6 @@
 import { useGetPikachuQuery } from '~/generated/graphql'
 import styled from '~/styled'
+import Link from 'next/link'
 
 export default function Pikachu() {
   const { data, loading, error } = useGetPikachuQuery()
@@ -7,6 +8,7 @@ export default function Pikachu() {
   return (
     <Container>
       <Caption>GraphQL Result</Caption>
+      <Link href='/user'><a>User</a></Link>
       {loading &&
         <p>loading...</p>
       }

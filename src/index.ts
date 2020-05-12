@@ -1,5 +1,6 @@
 import bodyParser from 'body-parser'
 import cookieParser from 'cookie-parser'
+import cors from 'cors';
 import express from 'express'
 import asyncify from 'express-asyncify'
 import session from 'express-session'
@@ -23,7 +24,11 @@ async function main() {
   await app.prepare()
 
   const server = asyncify(express())
-
+  server.get('/service-worker.js', (req, res) => {
+    const filePath = path.join(__dirname, 'dist', 'service-worker.js')
+    app.serveStatic(req, res, filePath)
+  })
+  server.use(cors())
   server.use(bodyParser.json())
   server.use(bodyParser.urlencoded({ extended: true }))
   server.use(cookieParser())

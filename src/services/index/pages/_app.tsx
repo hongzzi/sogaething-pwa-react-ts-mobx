@@ -5,7 +5,7 @@ import Head from 'next/head'
 import React, { Fragment } from 'react'
 import { ApolloProvider as ApolloHookProvider, getMarkupFromTree } from 'react-apollo-hooks'
 import { renderToString as renderFunction } from 'react-dom/server'
-import { ThemeProvider } from '~/styled'
+import { ThemeProvider } from 'styled-components'
 import GlobalStyle from '~/styled/global'
 import baseTheme from '~/styled/themes/base'
 import { createApolloClient } from '../apollo'
@@ -101,6 +101,7 @@ class App extends NextApp<any> {
             </ThemeProvider>
           </StoreProvider>
         </ApolloHookProvider>
+        <noscript>You should use javascript</noscript>
       </Container>
     )
   }
