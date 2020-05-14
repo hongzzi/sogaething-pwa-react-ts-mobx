@@ -1,0 +1,14 @@
+{
+    "name": "Legend of Market",
+    "short_name": "LOM",
+    "background_color": "#FFFFFF",
+    "theme_color": "status bar color",
+    "description": "Legend of Market",
+    "display": "standalone",
+    "start_url": "/",
+    "icons": [{
+        "src": "/static/test_icon_192.png",
+        "type": "image/png",
+        "sizes": "192x192"
+    }]
+}
