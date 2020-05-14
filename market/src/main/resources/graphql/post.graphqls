@@ -1,0 +1,28 @@
+type Post {
+    post_id : ID!
+    uploader_id : Int!
+    is_buy : Boolean!
+    title : String!
+    sale_date : String!
+    contents : String!
+    view_count : Int!
+    enroll_date : String
+    modify_date : String
+    deal : String!
+}
+
+type Query {
+	findAllPosts: [Post]!
+}
+
+input CreatePostInput {
+    uploader_id : Int!
+    title : String!
+    sale_date : String!
+    contents : String!
+    deal : String!
+}
+
+type Mutation {
+    createPost(input: CreatePostInput!): Post
+}
