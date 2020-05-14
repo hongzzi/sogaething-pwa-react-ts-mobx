@@ -1,10 +1,10 @@
 import styled from '~/styled'
-import Pikachu from '../components/Pikachu'
-import { useStore } from '../store'
 import Nav from '../components/Nav'
+import Pikachu from '../components/Pikachu'
+import useStores from '../helpers/useStores'
 
 export default function PageIndex() {
-  const store = useStore()
+  const store = useStores()
 
   return (
     <Layout>

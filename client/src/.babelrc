@@ -1,6 +1,6 @@
 {
   "presets": [
-    "next/babel"
+    "@babel/preset-env", "@babel/preset-react", "mobx", "next/babel"
   ],
   "env": {
     "production": {
@@ -17,5 +17,35 @@
         }]
       ]
     }, 
-  }
+  },
+  "plugins": [
+    [
+      "@babel/plugin-proposal-object-rest-spread",
+      {},
+      "@babel/plugin-proposal-object-rest-spread-in-admin"
+    ],
+    [
+      "@babel/plugin-syntax-dynamic-import",
+      {},
+      "@babel/plugin-syntax-dynamic-import-in-admin"
+    ],
+    [
+      "babel-plugin-styled-components",
+      {},
+      "babel-plugin-styled-components-in-admin"
+    ],
+    [
+      "@babel/plugin-transform-runtime",
+      {
+        "corejs": 2
+      }
+    ],
+    ["@babel/plugin-proposal-decorators", { "legacy": true }],
+    [
+      "@babel/plugin-proposal-class-properties",
+      {"loose" : true},
+      "@babel/plugin-proposal-class-properties-in-admin"
+    ],
+    ["babel-plugin-styled-components"]
+  ],
 }

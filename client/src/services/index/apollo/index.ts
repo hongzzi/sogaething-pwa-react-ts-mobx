@@ -4,20 +4,21 @@ import { setContext } from 'apollo-link-context'
 import { createHttpLink } from 'apollo-link-http'
 import fetch from 'isomorphic-unfetch'
 import { checkTokenIsExpired } from '../helpers'
-import { IStore } from '../store'
+import { ENDPOINT } from './../constants';
+import { RootStore } from './../store/index';
 
 let apolloClient: ApolloClient<NormalizedCacheObject>
 
 const isServer = typeof window === 'undefined'
 
-export function createApolloClient(store: IStore, state?: any) {
+export function createApolloClient(store: RootStore, state?: any) {
   if (apolloClient) {
     return apolloClient
 
   } else {
     const httpLink = createHttpLink({
       fetch,
-      uri: store.environments.get('NEXT_APP_GRAPHQL_ENDPOINT'),
+      uri: ENDPOINT.GRAPHQL,
     })
 
     const link = createAuthorizationLink(store).concat(httpLink)
@@ -43,10 +44,12 @@ export function createApolloClient(store: IStore, state?: any) {
   }
 }
 
-function createAuthorizationLink(store: IStore) {
+function createAuthorizationLink(store: RootStore) {
   return setContext(async (_req, { headers }) => {
-    const tokens = store.tokens
-
+    const tokens = {
+      accessToken : store.authStore.token,
+      refreshTokens : store.authStore.refreshToken,
+    }
     if (typeof tokens === 'undefined') {
       return {
         headers,
@@ -60,7 +63,7 @@ function createAuthorizationLink(store: IStore) {
 
     } else {
       try {
-        const { accessToken: refreshedAccessToken } = await store.refreshTokens(tokens)
+        const { accessToken: refreshedAccessToken } = await store.authStore.refreshTokens(tokens)
 
         if (!refreshedAccessToken) {
           throw new Error()
