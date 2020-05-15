@@ -58,7 +58,7 @@
 ## :busts_in_silhouette: 정보
 
 ### SSAFY 2기 Seoul 4반 심화프로젝트 <br>
-팀명 : 404 Not Found
+팀명 : 404 Not Found <br>
 팀장 : 류일한<br>
 팀원 : 동명환, 문지현, 박동준, 박지홍
 
