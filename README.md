@@ -1,4 +1,6 @@
 # :cow: 소개띵 :dog: 
+![main](./img/main.png)
+
 [![npm version](https://img.shields.io/npm/v/react.svg?style=flat)](https://www.npmjs.com/package/react)
 > 매칭시스템을 도입한 중고거래 PWA
 
