@@ -1,12 +1,20 @@
+import Link from 'next/link';
 import * as React from 'react';
 import styled from 'styled-components';
-import Link from 'next/link';
+import HomeImage from '../../assets/img/home-none.png?url';
+import useStores from '../../helpers/useStores';
+interface INav {
+    size?: {
+        height: number,
+    }
+}
 
-export default () => {
+export default (props: INav) => {
+    const {pageStore} = useStores();
     return(
-        <WrapprNav>
+        <WrapprNav size={props.size}>
             <WrapperNavItem>
-                1
+                <img src={HomeImage} />
             </WrapperNavItem>
             <WrapperNavItem>
                 1
@@ -26,17 +34,17 @@ export default () => {
     )
 }
 
-const WrapprNav = styled.div`
+const WrapprNav = styled.nav`
     position: fixed;
     display: flex;
     justify-content: space-around;
     bottom: 0;
-    height: 8%;
+    height: ${(props: Pick<INav, 'size'>) => props.size ? props.size.height : '48px'};
     width : 100%;
     background-color: lightblue;
+    align-items: center;
 `;
 
 const WrapperNavItem = styled.div`
-    background-color: yellow;    
+    background-color: yellow;
 `;
-
