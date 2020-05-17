@@ -3,7 +3,7 @@ import styled from '~/styled';
 import HeaderBack from '../../assets/img/header-back.png?url';
 import HeaderCheck from '../../assets/img/header-check.png?url';
 import HeacerMenu from '../../assets/img/header-menu.png?url';
-import CustomIcon from '../CustonIcon';
+import CustomIcon from '../CustomIcon';
 
 interface ICategoryHeader {
   type: 'check' | 'back-check' | 'normal' | 'chat';

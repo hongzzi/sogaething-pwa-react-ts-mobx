@@ -21,4 +21,5 @@ const Wrapper = styled.img`
     border-radius: 50%;
     height : ${(props : {size : number}) => props.size * 20 + 'px'};
     width : ${(props : {size : number}) => props.size * 20 + 'px'};
+    background-color: white;
 `;

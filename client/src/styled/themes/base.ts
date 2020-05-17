@@ -4,6 +4,12 @@ const theme = {
   ...openColor,
   pointFontColor : '#f7b500',
   mainFontColor : '#2b2b2b',
+  mainBGcolor: '#ffffff',
+  mainCategoryTextColor: '#08979c',
+  subFontColor : '#c6c6c6',
+  searchBarColor: '#ff9500',
+  
+  mainUserCardBGColor: '#222b45',
   button: {
     primary: {
       bodyColor: '#fef9f0',
