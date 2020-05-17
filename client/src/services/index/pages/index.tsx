@@ -1,13 +1,19 @@
 import styled from '~/styled'
+import CommonBtn from '../components/CommonBtn'
 import Nav from '../components/Nav'
 import Pikachu from '../components/Pikachu'
 import useStores from '../helpers/useStores'
+import CategoryHeader from '../components/CategoryHeader';
 
 export default function PageIndex() {
   const store = useStores()
 
   return (
     <Layout>
+        <CategoryHeader type={'normal'}/>
+        <CommonBtn type={'disable'} text={'test'} />
+        <Line>123123</Line>
+        
         <Nav />
     </Layout>
   )
