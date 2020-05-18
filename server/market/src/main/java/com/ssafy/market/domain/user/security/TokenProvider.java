@@ -1,6 +1,6 @@
 package com.ssafy.market.domain.user.security;
 
-import com.ssafy.market.config.AppProperties;
+import com.ssafy.market.global.config.AppProperties;
 import io.jsonwebtoken.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

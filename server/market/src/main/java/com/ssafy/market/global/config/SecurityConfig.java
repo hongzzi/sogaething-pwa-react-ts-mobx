@@ -1,4 +1,4 @@
-package com.ssafy.market.config;
+package com.ssafy.market.global.config;
 
 import com.ssafy.market.domain.user.security.*;
 import com.ssafy.market.domain.user.security.oauth2.HttpCookieOAuth2AuthorizationRequestRepository;
@@ -16,10 +16,8 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.stereotype.Component;
 
 @Configuration
