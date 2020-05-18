@@ -1,4 +1,4 @@
-package com.ssafy.market.config;
+package com.ssafy.market.global.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
