@@ -1,6 +1,8 @@
 package com.ssafy.market.domain.chat.controller;
 
 import com.ssafy.market.domain.chat.domain.ChatMessage;
+import com.ssafy.market.domain.chat.service.ChatService;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -12,13 +14,17 @@ import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 // Controller 의 메서드는 message handling methods 이다.
 //이 메서드들은 한 Client 에게서 message 를 수신한 다음, 다른 Client 에게 broadcast 한다.
 @Controller
+@RequiredArgsConstructor
 public class ChatController {
 
 //    private static final Logger logger = LoggerFactory.getLogger(WebSocketEventListener.class);
+    private final ChatService chatService;
 
     @MessageMapping("/chat.sendMessage")
     @SendTo("/topic/public")
     public ChatMessage sendMessage(@Payload ChatMessage chatMessage){
+        boolean isSaved = chatService.saveMessage(chatMessage);
+        System.out.println(isSaved);
         return chatMessage;
     }
 

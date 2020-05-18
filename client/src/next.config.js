@@ -2,6 +2,8 @@ const path = require("path");
 const TsconfigPathsPlugin = require("tsconfig-paths-webpack-plugin");
 const withOptimizedImages = require("next-optimized-images");
 const SWPrecacheWebpackPlugin = require("sw-precache-webpack-plugin");
+const withBundleAnalyzer = require("@next/bundle-analyzer");
+const CompressionPlugin = require('compression-webpack-plugin');
 
 module.exports = withOptimizedImages({
   distDir: "../dist",
@@ -19,6 +21,9 @@ module.exports = withOptimizedImages({
         minify: true,
       })
     );
+    config.plugins.push(
+      new CompressionPlugin()
+    )
     return config;
   },
 });
