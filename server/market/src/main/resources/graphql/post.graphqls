@@ -10,7 +10,7 @@ type Post {
 }
 
 type Query {
-	findAllPosts: [Post]!
+	findAllPosts: [Post]
 }
 
 input CreatePostInput {

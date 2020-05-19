@@ -52,6 +52,8 @@ dependencies {
     testImplementation 'org.springframework.security:spring-security-test'
 
     annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
+
+    compile group: 'com.graphql-java', name: 'graphql-java-tools', version: '5.2.4'
 }
 
 test {
