@@ -78,44 +78,49 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     // Authorization 에서 사용할 userDetailService와 password Encoder를 정의
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http
-                .cors()
-                    .and()
-                .sessionManagement()
-                    .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                  .and()
+        http.authorizeRequests()
+                .anyRequest().permitAll()
+                .and()
                 .csrf()
-                    .disable()
-                .formLogin()
-                   .disable()
-                .httpBasic()
-                   .disable()
-                .exceptionHandling()
-                    .authenticationEntryPoint(new RestAuthenticationEntryPoint())
-                    .and()
-                .authorizeRequests()
-                    .antMatchers("/",
-                        "/error",
-                        "/favicon.ico",
-                        "/**/*.png",
-                        "/**/*.gif",
-                        "/**/*.svg",
-                        "/**/*.jpg",
-                        "/**/*.html",
-                        "/**/*.css",
-                        "/**/*.js")
-                        .permitAll()
-                    .antMatchers("/","/auth/**", "/oauth2/**", "/apis/graphql")
-                        .permitAll()
-                    .anyRequest()
-                        .authenticated()
-                    .and()
-                .oauth2Login()
-                    .userInfoEndpoint()
-                        .userService(customOAuth2UserService)
-                        .and()
-                    .successHandler(oAuth2AuthenticationSuccessHandler)
-                    .failureHandler(oAuth2AuthenticationFailureHandler);
+                .disable();
+//        http
+//                .cors()
+//                    .and()
+//                .sessionManagement()
+//                    .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+//                  .and()
+//                .csrf()
+//                    .disable()
+//                .formLogin()
+//                   .disable()
+//                .httpBasic()
+//                   .disable()
+//                .exceptionHandling()
+//                    .authenticationEntryPoint(new RestAuthenticationEntryPoint())
+//                    .and()
+//                .authorizeRequests()
+//                    .antMatchers("/",
+//                        "/error",
+//                        "/favicon.ico",
+//                        "/**/*.png",
+//                        "/**/*.gif",
+//                        "/**/*.svg",
+//                        "/**/*.jpg",
+//                        "/**/*.html",
+//                        "/**/*.css",
+//                        "/**/*.js")
+//                        .permitAll()
+//                    .antMatchers("/","/auth/**", "/oauth2/**", "/apis/graphql", "/chat/**", "/ws-stomp/**")
+//                        .permitAll()
+//                    .anyRequest()
+//                        .authenticated()
+//                    .and()
+//                .oauth2Login()
+//                    .userInfoEndpoint()
+//                        .userService(customOAuth2UserService)
+//                        .and()
+//                    .successHandler(oAuth2AuthenticationSuccessHandler)
+//                    .failureHandler(oAuth2AuthenticationFailureHandler);
 //
 //        // Add our custom Token based authentication filter
 //        http.addFilterBefore(tokenAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);

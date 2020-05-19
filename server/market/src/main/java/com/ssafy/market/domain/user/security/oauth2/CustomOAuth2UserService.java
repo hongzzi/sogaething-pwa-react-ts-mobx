@@ -1,12 +1,5 @@
 package com.ssafy.market.domain.user.security.oauth2;
 
-//import com.project.sogaething.login.domain.AuthProvider;
-//import com.project.sogaething.login.domain.User;
-//import com.project.sogaething.login.exception.OAuth2AuthenticationProcessingException;
-//import com.project.sogaething.login.repository.UserRepository;
-//import com.project.sogaething.login.security.UserPrincipal;
-//import com.project.sogaething.login.security.oauth2.user.OAuth2UserInfo;
-//import com.project.sogaething.login.security.oauth2.user.OAuth2UserInfoFactory;
 import com.ssafy.market.domain.user.domain.AuthProvider;
 import com.ssafy.market.domain.user.domain.User;
 import com.ssafy.market.domain.user.exception.OAuth2AuthenticationProcessingException;
@@ -17,10 +10,6 @@ import com.ssafy.market.domain.user.security.oauth2.user.OAuth2UserInfoFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.core.AuthenticationException;
-//import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
-//import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
-//import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
-//import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;

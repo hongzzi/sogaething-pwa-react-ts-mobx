@@ -1,14 +1,6 @@
 package com.ssafy.market.domain.user.controller;
 
 import com.ssafy.market.domain.user.domain.AuthProvider;
-//import com.project.sogaething.login.domain.User;
-//import com.project.sogaething.login.exception.BadRequestException;
-//import com.project.sogaething.login.payload.ApiResponse;
-//import com.project.sogaething.login.payload.AuthResponse;
-//import com.project.sogaething.login.payload.LoginRequest;
-//import com.project.sogaething.login.payload.SignUpRequest;
-//import com.project.sogaething.login.repository.UserRepository;
-//import com.project.sogaething.login.security.TokenProvider;
 import com.ssafy.market.domain.user.domain.User;
 import com.ssafy.market.domain.user.exception.BadRequestException;
 import com.ssafy.market.domain.user.payload.ApiResponse;
