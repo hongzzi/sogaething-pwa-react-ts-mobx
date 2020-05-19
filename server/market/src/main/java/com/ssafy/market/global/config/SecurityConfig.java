@@ -77,6 +77,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     // Authorization 에서 사용할 userDetailService와 password Encoder를 정의
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        http.authorizeRequests()
+                .anyRequest().permitAll()
+                .and()
+                .csrf()
+                .disable();
 //        http
 //                .cors()
 //                    .and()
