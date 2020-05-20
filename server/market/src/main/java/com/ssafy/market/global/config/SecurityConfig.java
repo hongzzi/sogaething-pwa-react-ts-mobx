@@ -4,7 +4,6 @@ import com.ssafy.market.domain.user.security.*;
 import com.ssafy.market.domain.user.security.oauth2.HttpCookieOAuth2AuthorizationRequestRepository;
 import com.ssafy.market.domain.user.security.oauth2.OAuth2AuthenticationFailureHandler;
 import com.ssafy.market.domain.user.security.oauth2.OAuth2AuthenticationSuccessHandler;
-import com.ssafy.market.domain.user.security.oauth2.CustomOAuth2UserService;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -19,6 +18,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.stereotype.Component;
 
 @Configuration
@@ -34,9 +34,7 @@ import org.springframework.stereotype.Component;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     // 인증 시 사용할 custom User Service
-    private final CustomUserDetailsService customUserDetailsService;
-
-    private final CustomOAuth2UserService customOAuth2UserService;
+//    private final CustomUserDetailsService customUserDetailsService;
 
     private final OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
 
@@ -55,18 +53,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return new HttpCookieOAuth2AuthorizationRequestRepository();
     }
 
-    @Override
-    public void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
-        authenticationManagerBuilder
-                .userDetailsService(customUserDetailsService)
-                .passwordEncoder(passwordEncoder());
-    }
+//    @Override
+//    public void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
+//        authenticationManagerBuilder
+//                .userDetailsService(customUserDetailsService);
+//    }
 
-    // password 를 저장할때 사용할 encoding algorithm 을 정의
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
 
 
     @Bean(BeanIds.AUTHENTICATION_MANAGER)
@@ -78,51 +70,36 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     // Authorization 에서 사용할 userDetailService와 password Encoder를 정의
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests()
-                .anyRequest().permitAll()
+        http
+            .cors()
                 .and()
-                .csrf()
-                .disable();
-//        http
-//                .cors()
-//                    .and()
-//                .sessionManagement()
-//                    .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-//                  .and()
-//                .csrf()
-//                    .disable()
-//                .formLogin()
-//                   .disable()
-//                .httpBasic()
-//                   .disable()
-//                .exceptionHandling()
-//                    .authenticationEntryPoint(new RestAuthenticationEntryPoint())
-//                    .and()
-//                .authorizeRequests()
-//                    .antMatchers("/",
-//                        "/error",
-//                        "/favicon.ico",
-//                        "/**/*.png",
-//                        "/**/*.gif",
-//                        "/**/*.svg",
-//                        "/**/*.jpg",
-//                        "/**/*.html",
-//                        "/**/*.css",
-//                        "/**/*.js")
-//                        .permitAll()
-//                    .antMatchers("/","/auth/**", "/oauth2/**", "/apis/graphql", "/chat/**", "/ws-stomp/**")
-//                        .permitAll()
-//                    .anyRequest()
-//                        .authenticated()
-//                    .and()
-//                .oauth2Login()
-//                    .userInfoEndpoint()
-//                        .userService(customOAuth2UserService)
-//                        .and()
-//                    .successHandler(oAuth2AuthenticationSuccessHandler)
-//                    .failureHandler(oAuth2AuthenticationFailureHandler);
-//
-//        // Add our custom Token based authentication filter
-//        http.addFilterBefore(tokenAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+            .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+              .and()
+            .csrf()
+                .disable()
+            .formLogin()
+               .disable()
+            .httpBasic()
+               .disable()
+            .exceptionHandling()
+                .authenticationEntryPoint(new RestAuthenticationEntryPoint())
+                .and()
+            .authorizeRequests()
+                .antMatchers("/",
+                    "/error",
+                    "/favicon.ico",
+                    "/**/*.png",
+                    "/**/*.gif",
+                    "/**/*.svg",
+                    "/**/*.jpg",
+                    "/**/*.html",
+                    "/**/*.css",
+                    "/**/*.js")
+                    .permitAll()
+                .antMatchers("/","/auth/**", "/oauth2/**", "/apis/graphql", "/chat/**", "/ws-stomp/**")
+                    .permitAll();
+
+        http.addFilterBefore(tokenAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
     }
 }
