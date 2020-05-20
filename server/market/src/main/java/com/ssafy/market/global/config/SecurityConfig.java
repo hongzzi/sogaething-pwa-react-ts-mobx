@@ -4,7 +4,6 @@ import com.ssafy.market.domain.user.security.*;
 import com.ssafy.market.domain.user.security.oauth2.HttpCookieOAuth2AuthorizationRequestRepository;
 import com.ssafy.market.domain.user.security.oauth2.OAuth2AuthenticationFailureHandler;
 import com.ssafy.market.domain.user.security.oauth2.OAuth2AuthenticationSuccessHandler;
-import com.ssafy.market.domain.user.security.oauth2.CustomOAuth2UserService;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -36,7 +35,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     // 인증 시 사용할 custom User Service
     private final CustomUserDetailsService customUserDetailsService;
 
-    private final CustomOAuth2UserService customOAuth2UserService;
+//    private final CustomOAuth2UserService customOAuth2UserService;
 
     private final OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
 
@@ -58,15 +57,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
         authenticationManagerBuilder
-                .userDetailsService(customUserDetailsService)
-                .passwordEncoder(passwordEncoder());
+                .userDetailsService(customUserDetailsService);
     }
 
-    // password 를 저장할때 사용할 encoding algorithm 을 정의
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
 
 
     @Bean(BeanIds.AUTHENTICATION_MANAGER)

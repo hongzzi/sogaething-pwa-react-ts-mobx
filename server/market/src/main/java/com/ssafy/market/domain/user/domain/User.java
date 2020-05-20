@@ -1,7 +1,5 @@
 package com.ssafy.market.domain.user.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -15,7 +13,7 @@ import javax.validation.constraints.NotNull;
 @Entity
 @NoArgsConstructor
 @Table(name = "users", uniqueConstraints = {
-        @UniqueConstraint(columnNames = "email")
+        @UniqueConstraint(columnNames = "id")
 })
 public class User {
     @Id
@@ -31,12 +29,9 @@ public class User {
 
     private String imageUrl;
 
-    @Column(nullable = false)
-    private Boolean emailVerified = false;
-
     @NotNull
-    @Enumerated(EnumType.STRING)
-    private AuthProvider provider;
+    @Column(nullable = false)
+    private String provider;
 
     private String providerId;
 
@@ -46,6 +41,8 @@ public class User {
 
     private int trust;
 
-    private String token;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Role role;
 
 }
