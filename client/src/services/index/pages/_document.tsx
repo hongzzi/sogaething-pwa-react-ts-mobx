@@ -44,6 +44,7 @@ export default class extends Document {
           <link rel='icon' sizes='192x192'href='/icon.png' />
           <link rel='icon' sizes='57x57'href='/icon57.png' />
           <link rel='manifest' href='static/manifest.json' />
+          <link href='https://fonts.googleapis.com/css2?family=Jua&display=swap' rel='stylesheet'/>
         </Head>
         <body>
           <Main />

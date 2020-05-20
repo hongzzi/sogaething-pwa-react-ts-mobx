@@ -5,3 +5,10 @@ query getPikachu {
     name
   }
 }
+
+
+enum Epsode {
+  A,
+  B,
+  C
+}

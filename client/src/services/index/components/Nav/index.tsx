@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import * as React from 'react';
+import styled from '~/styled';
 import ChatImageFocus from '../../assets/img/chat-focus.png?url';
 import ChatImage from '../../assets/img/chat-none.png?url';
 import CircleImageFocus from '../../assets/img/circle-focus.png?url';
@@ -11,7 +12,6 @@ import MenuImage from '../../assets/img/menu-none.png?url';
 import UserImageFocus from '../../assets/img/user-focus.png?url';
 import UserImage from '../../assets/img/user-none.png?url';
 import useStores from '../../helpers/useStores';
-import styled from '~/styled';
 import CustomIcon from '../CustomIcon';
 interface INav {
   size?: {
@@ -37,7 +37,9 @@ export default (props: INav) => {
       </WrapperNavItem>
       <WrapperNavItem>
         <Link href='/user'>
-          <CustomIcon url={UserImage} />
+          <a>
+            <CustomIcon url={UserImage} />
+          </a>
         </Link>
       </WrapperNavItem>
     </WrapprNav>
@@ -52,10 +54,8 @@ const WrapprNav = styled.nav`
   height: ${(props: Pick<INav, 'size'>) =>
     props.size ? props.size.height : '48px'};
   width: 100%;
-  background-color: ${props=> props.theme.mainBGcolor};
+  background-color: ${(props) => props.theme.mainBGcolor};
   align-items: center;
 `;
 
-const WrapperNavItem = styled.div`
-  
-`;
+const WrapperNavItem = styled.div``;

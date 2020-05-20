@@ -1,3 +1,6 @@
+# source: https://graphql-pokemon.now.sh/
+# timestamp: Tue May 19 2020 14:36:44 GMT+0900 (대한민국 표준시)
+
 """Represents a Pokémon's attack types"""
 type Attack {
   """The name of this Pokémon attack"""
@@ -90,4 +93,3 @@ type Query {
   pokemons(first: Int!): [Pokemon]
   pokemon(id: String, name: String): Pokemon
 }
-
