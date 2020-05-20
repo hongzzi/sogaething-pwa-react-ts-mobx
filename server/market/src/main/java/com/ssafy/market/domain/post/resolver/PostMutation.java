@@ -19,7 +19,5 @@ public class PostMutation implements GraphQLMutationResolver {
     public Post createPost(CreatePostInput input){
         System.out.println(input.toString());
         return postRepository.save(new Post(null, input.getUploader_id(), false, input.getTitle(), input.getSale_date(), input.getContents(), (long) 0, input.getDeal(), "진행중"));
-//        return postRepository.save(new Post(Long uploader_id, String title, Date sale_date, String contents, String deal));
-//        return postRepository.save(new Post(Long post_id, Long uploader_id, boolean is_buy, String title, Date sale_date, String contents, Long view_count, Date enroll_date, Date modify_date, String deal, String deal_state));
     }
 }
