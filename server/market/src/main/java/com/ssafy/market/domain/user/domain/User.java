@@ -33,7 +33,7 @@ public class User {
     @Column(nullable = false)
     private String provider;
 
-    private String providerId;
+    private Long providerId;
 
     private String phone;
 
@@ -44,5 +44,6 @@ public class User {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Role role;
+
 
 }
