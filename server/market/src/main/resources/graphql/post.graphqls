@@ -6,13 +6,11 @@ type Post {
     sale_date : String!
     contents : String!
     view_count : Int!
-    enroll_date : String
-    modify_date : String
     deal : String!
 }
 
 type Query {
-	findAllPosts: [Post]!
+	findAllPosts: [Post]
 }
 
 input CreatePostInput {

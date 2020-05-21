@@ -1,0 +1,28 @@
+type User {
+    id : ID!
+    name : String!
+    email : String
+    imageUrl : String!
+    provider : String!
+    providerId : Int!
+    phone : String!
+    address : String!
+    trust : Int!
+}
+
+type LoginOutput {
+    token : String!
+}
+
+input LoginUserInput {
+    provider : String!
+}
+
+extend type Query {
+    findAllUsers: [User]
+    loginUser: LoginOutput
+}
+
+#extend type Mutation {
+#    loginUser(input: LoginUserInput!): LoginOutput
+#}

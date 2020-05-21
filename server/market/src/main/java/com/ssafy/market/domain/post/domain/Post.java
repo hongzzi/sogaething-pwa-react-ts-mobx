@@ -1,6 +1,7 @@
 package com.ssafy.market.domain.post.domain;
 
 import com.ssafy.market.domain.BaseTimeEntity;
+import com.ssafy.market.domain.user.domain.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -16,6 +17,8 @@ public class Post extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long post_id;
 
+    @ManyToOne(targetEntity = User.class)
+    @JoinColumn(name = "id")
     private Long uploader_id;
 
     private boolean is_buy;
@@ -27,12 +30,6 @@ public class Post extends BaseTimeEntity {
     private String contents;
 
     private Long view_count;
-
-//    @Temporal(TemporalType.TIMESTAMP)
-    private Date enroll_date;
-
-    @Column(name = "modify_date", nullable = false, updatable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
-    private Timestamp modify_date;
 
     private String deal;
 
@@ -50,7 +47,7 @@ public class Post extends BaseTimeEntity {
         this.deal = deal;
     }
 
-    public Post(Long post_id, Long uploader_id, boolean is_buy, String title, Date sale_date, String contents, Long view_count, Date enroll_date, Timestamp modify_date, String deal, String deal_state) {
+    public Post(Long post_id, Long uploader_id, boolean is_buy, String title, Date sale_date, String contents, Long view_count, String deal, String deal_state) {
         this.post_id = post_id;
         this.uploader_id = uploader_id;
         this.is_buy = is_buy;
@@ -58,8 +55,6 @@ public class Post extends BaseTimeEntity {
         this.sale_date = sale_date;
         this.contents = contents;
         this.view_count = view_count;
-        this.enroll_date = enroll_date;
-        this.modify_date = modify_date;
         this.deal = deal;
         this.deal_state = deal_state;
     }
