@@ -17,9 +17,9 @@ public class Post extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long postId;
 
-    @ManyToOne(targetEntity = User.class)
+    @ManyToOne
     @JoinColumn(name = "id")
-    private Long uploaderId;
+    private User user;
 
     private boolean isBuy;
 
@@ -39,17 +39,19 @@ public class Post extends BaseTimeEntity {
         this.postId = postId;
     }
 
-    public Post(Long uploaderId, String title, Date saleDate, String contents, String deal) {
-        this.uploaderId = uploaderId;
+    public Post(User user, String title, Date saleDate, String contents, String deal) {
+        this.user = user;
+//        this.uploaderId = uploaderId;
         this.title = title;
         this.saleDate = saleDate;
         this.contents = contents;
         this.deal = deal;
     }
 
-    public Post(Long postId, Long uploaderId, boolean isBuy, String title, Date saleDate, String contents, Long viewCount, String deal, String dealState) {
+    public Post(Long postId, User user, boolean isBuy, String title, Date saleDate, String contents, Long viewCount, String deal, String dealState) {
         this.postId = postId;
-        this.uploaderId = uploaderId;
+        this.user = user;
+//        this.uploaderId = uploaderId;
         this.isBuy = isBuy;
         this.title = title;
         this.saleDate = saleDate;

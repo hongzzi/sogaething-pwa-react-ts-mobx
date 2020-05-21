@@ -1,6 +1,6 @@
 type Post {
     postId : ID!
-    uploaderId : Int!
+    user : User!
     isBuy : Boolean!
     title : String!
     saleDate : String!
