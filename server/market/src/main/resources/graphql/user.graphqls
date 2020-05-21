@@ -22,7 +22,3 @@ extend type Query {
     findAllUsers: [User]
     loginUser: LoginOutput
 }
-
-#extend type Mutation {
-#    loginUser(input: LoginUserInput!): LoginOutput
-#}

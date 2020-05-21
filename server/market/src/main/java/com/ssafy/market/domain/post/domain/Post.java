@@ -15,48 +15,45 @@ import java.util.Date;
 public class Post extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long post_id;
+    @Column(name = "post_id")
+    private Long postId;
 
-    @ManyToOne(targetEntity = User.class)
+    @ManyToOne
     @JoinColumn(name = "id")
-    private Long uploader_id;
+    private User user;
 
-    private boolean is_buy;
+    @Column(name = "is_buy")
+    private boolean isBuy;
 
+    @Column(name = "title")
     private String title;
 
-    private Date sale_date;
+    @Column(name = "sale_date")
+    private Date saleDate;
 
+    @Column(name = "contents")
     private String contents;
 
-    private Long view_count;
+    @Column(name = "view_count")
+    private Long viewCount;
 
+    @Column(name = "deal")
     private String deal;
 
-    private String deal_state;
+    @Column(name = "deal_state")
+    private String dealState;
 
-    public Post(Long post_id) {
-        this.post_id = post_id;
-    }
-
-    public Post(Long uploader_id, String title, Date sale_date, String contents, String deal) {
-        this.uploader_id = uploader_id;
+    public Post(Long postId, User user, boolean isBuy, String title, Date saleDate, String contents, Long viewCount, String deal, String dealState) {
+        this.postId = postId;
+        this.user = user;
+        this.isBuy = isBuy;
         this.title = title;
-        this.sale_date = sale_date;
+        this.saleDate = saleDate;
         this.contents = contents;
+        this.viewCount = viewCount;
         this.deal = deal;
+        this.dealState = dealState;
     }
 
-    public Post(Long post_id, Long uploader_id, boolean is_buy, String title, Date sale_date, String contents, Long view_count, String deal, String deal_state) {
-        this.post_id = post_id;
-        this.uploader_id = uploader_id;
-        this.is_buy = is_buy;
-        this.title = title;
-        this.sale_date = sale_date;
-        this.contents = contents;
-        this.view_count = view_count;
-        this.deal = deal;
-        this.deal_state = deal_state;
-    }
 }
 
