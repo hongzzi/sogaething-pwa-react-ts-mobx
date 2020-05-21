@@ -1,11 +1,11 @@
 type Post {
-    post_id : ID!
-    uploader_id : Int!
-    is_buy : Boolean!
+    postId : ID!
+    uploaderId : Int!
+    isBuy : Boolean!
     title : String!
-    sale_date : String!
+    saleDate : String!
     contents : String!
-    view_count : Int!
+    viewCount : Int!
     deal : String!
 }
 
@@ -14,9 +14,9 @@ type Query {
 }
 
 input CreatePostInput {
-    uploader_id : Int!
+    uploaderId : Int!
     title : String!
-    sale_date : String!
+    saleDate : String!
     contents : String!
     deal : String!
 }

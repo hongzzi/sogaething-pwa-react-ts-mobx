@@ -2,6 +2,7 @@ package com.ssafy.market.domain.chat.controller;
 
 import com.ssafy.market.domain.chat.domain.ChatRoom;
 import com.ssafy.market.domain.chat.repository.ChatRoomRepository;
+import com.ssafy.market.domain.chat.service.RedisExample;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,6 +15,8 @@ public class ChatRoomController {
 
     private final ChatRoomRepository chatRoomRepository;
 
+    private final RedisExample redisExample;
+
     // 채팅방 생성
     @PostMapping("/create/room")
     public Object createRoom(@RequestParam String name) {
@@ -24,7 +27,6 @@ public class ChatRoomController {
     // 모든 채팅방 목록 반환
     @GetMapping("/rooms")
     public List<ChatRoom> room() {
-        System.out.println("목록 반환");
         return chatRoomRepository.findAllRoom();
     }
 
@@ -32,5 +34,14 @@ public class ChatRoomController {
     @GetMapping("/room/{roomId}")
     public ChatRoom roomInfo(@PathVariable String roomId) {
         return chatRoomRepository.findRoomById(roomId);
+    }
+
+    // redis 예제
+    @GetMapping("/redis")
+    public Boolean redisTest(){
+        redisExample.setGetValuesExam();
+
+        redisExample.hashExam();
+        return true;
     }
 }

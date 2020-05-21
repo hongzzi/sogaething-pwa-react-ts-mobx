@@ -9,7 +9,6 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 
 @Getter
-@Setter
 @Entity
 @NoArgsConstructor
 @Table(name = "users", uniqueConstraints = {
@@ -23,8 +22,6 @@ public class User {
     @Column(nullable = false)
     private String name;
 
-    @Email
-    @Column(nullable = false)
     private String email;
 
     private String imageUrl;
@@ -45,5 +42,32 @@ public class User {
     @Column(nullable = false)
     private Role role;
 
+    public User(Long id, String name, @Email String email, String imageUrl, @NotNull String provider, Long providerId, String phone, String address, int trust, Role role) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.imageUrl = imageUrl;
+        this.provider = provider;
+        this.providerId = providerId;
+        this.phone = phone;
+        this.address = address;
+        this.trust = trust;
+        this.role = role;
+    }
 
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                ", imageUrl='" + imageUrl + '\'' +
+                ", provider='" + provider + '\'' +
+                ", providerId='" + providerId + '\'' +
+                ", phone='" + phone + '\'' +
+                ", address='" + address + '\'' +
+                ", trust=" + trust +
+                ", role=" + role +
+                '}';
+    }
 }

@@ -1,25 +1,28 @@
 type User {
     id : ID!
     name : String!
-    email : String!
+    email : String
     imageUrl : String!
-    emailVerified : Boolean
     provider : String!
-    providerId : String!
+    providerId : Int!
     phone : String!
     address : String!
     trust : Int!
-    token : String!
 }
 
 type LoginOutput {
-    output : String!
+    token : String!
 }
 
 input LoginUserInput {
     provider : String!
 }
 
-extend type Mutation {
-    loginUser(input: LoginUserInput!): LoginOutput
+extend type Query {
+    findAllUsers: [User]
+    loginUser: LoginOutput
 }
+
+#extend type Mutation {
+#    loginUser(input: LoginUserInput!): LoginOutput
+#}

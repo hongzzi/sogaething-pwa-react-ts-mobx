@@ -15,48 +15,48 @@ import java.util.Date;
 public class Post extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long post_id;
+    private Long postId;
 
     @ManyToOne(targetEntity = User.class)
     @JoinColumn(name = "id")
-    private Long uploader_id;
+    private Long uploaderId;
 
-    private boolean is_buy;
+    private boolean isBuy;
 
     private String title;
 
-    private Date sale_date;
+    private Date saleDate;
 
     private String contents;
 
-    private Long view_count;
+    private Long viewCount;
 
     private String deal;
 
-    private String deal_state;
+    private String dealState;
 
-    public Post(Long post_id) {
-        this.post_id = post_id;
+    public Post(Long postId) {
+        this.postId = postId;
     }
 
-    public Post(Long uploader_id, String title, Date sale_date, String contents, String deal) {
-        this.uploader_id = uploader_id;
+    public Post(Long uploaderId, String title, Date saleDate, String contents, String deal) {
+        this.uploaderId = uploaderId;
         this.title = title;
-        this.sale_date = sale_date;
+        this.saleDate = saleDate;
         this.contents = contents;
         this.deal = deal;
     }
 
-    public Post(Long post_id, Long uploader_id, boolean is_buy, String title, Date sale_date, String contents, Long view_count, String deal, String deal_state) {
-        this.post_id = post_id;
-        this.uploader_id = uploader_id;
-        this.is_buy = is_buy;
+    public Post(Long postId, Long uploaderId, boolean isBuy, String title, Date saleDate, String contents, Long viewCount, String deal, String dealState) {
+        this.postId = postId;
+        this.uploaderId = uploaderId;
+        this.isBuy = isBuy;
         this.title = title;
-        this.sale_date = sale_date;
+        this.saleDate = saleDate;
         this.contents = contents;
-        this.view_count = view_count;
+        this.viewCount = viewCount;
         this.deal = deal;
-        this.deal_state = deal_state;
+        this.dealState = dealState;
     }
 }
 

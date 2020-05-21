@@ -14,17 +14,19 @@ import javax.persistence.*;
 public class DetailDeal extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long deal_id;
+    private Long dealId;
 
     @OneToOne(targetEntity = Post.class)
-    @JoinColumn(name="post_id")
-    private Long post_id;
+    @JoinColumn(name="postId")
+    private Long postId;
 
 //    @OneToOne(targetEntity = User.class)
 //    @JoinColumn(name="id")
-    private Long buyer_id;
+    private Long buyerId;
 
 //    @OneToOne(targetEntity = User.class)
 //    @JoinColumn(name="id")
-    private Long seller_id;
+    private Long sellerId;
+
+    private Long hashtagId;
 }
