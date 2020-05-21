@@ -1,7 +1,6 @@
 package com.ssafy.market.domain.chat.controller;
 
 import com.ssafy.market.domain.chat.domain.ChatMessage;
-import com.ssafy.market.domain.chat.domain.ChatRoom;
 import com.ssafy.market.domain.chat.domain.MessageType;
 import com.ssafy.market.domain.chat.redis.RedisPublisher;
 import com.ssafy.market.domain.chat.repository.ChatRoomRepository;
