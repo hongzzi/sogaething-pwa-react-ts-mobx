@@ -4,6 +4,7 @@ import com.coxautodev.graphql.tools.GraphQLMutationResolver;
 import com.ssafy.market.domain.post.dto.CreatePostInput;
 import com.ssafy.market.domain.post.domain.Post;
 import com.ssafy.market.domain.post.respository.PostRepository;
+import com.ssafy.market.domain.user.domain.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -17,7 +18,6 @@ public class PostMutation implements GraphQLMutationResolver {
 
     @Transactional
     public Post createPost(CreatePostInput input){
-        System.out.println(input.toString());
-        return postRepository.save(new Post(null, input.getUploader_id(), false, input.getTitle(), input.getSale_date(), input.getContents(), (long) 0, input.getDeal(), "진행중"));
+        return postRepository.save(new Post(null, new User(input.getUploaderId()), false, input.getTitle(), input.getSaleDate(), input.getContents(), (long) 0, input.getDeal(), "진행중"));
     }
 }
