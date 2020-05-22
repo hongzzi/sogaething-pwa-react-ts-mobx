@@ -18,9 +18,8 @@ export default class extends React.Component {
     const appProps = await App.getInitialProps(appContext);
     const { Component, router } = appContext;
     const mobxStore = initializeStore();
-    mobxStore.setEnv(extractNextEnvironments(process.env as IEnvironments));
-    const apolloClient = createApolloClient(mobxStore);
     appContext.ctx.mobxStore = mobxStore;
+    const apolloClient = createApolloClient(mobxStore);
 
     try {
       await getMarkupFromTree({

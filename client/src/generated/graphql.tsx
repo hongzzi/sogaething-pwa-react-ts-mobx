@@ -6,90 +6,119 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
+  /** The `Upload` scalar type represents a file upload. */
+  Upload: any;
 };
 
-/** Represents a Pokémon's attack types */
-export type IAttack = {
-  /** The name of this Pokémon attack */
-  name?: Maybe<Scalars["String"]>;
-  /** The type of this Pokémon attack */
-  type?: Maybe<Scalars["String"]>;
-  /** The damage of this Pokémon attack */
-  damage?: Maybe<Scalars["Int"]>;
+export type IAuthInput = {
+  accessToken: Scalars["String"];
 };
 
-/** Represents a Pokémon */
-export type IPokemon = {
-  /** The ID of an object */
-  id: Scalars["ID"];
-  /** The identifier of this Pokémon */
-  number?: Maybe<Scalars["String"]>;
-  /** The name of this Pokémon */
-  name?: Maybe<Scalars["String"]>;
-  /** The minimum and maximum weight of this Pokémon */
-  weight?: Maybe<IPokemonDimension>;
-  /** The minimum and maximum weight of this Pokémon */
-  height?: Maybe<IPokemonDimension>;
-  /** The classification of this Pokémon */
-  classification?: Maybe<Scalars["String"]>;
-  /** The type(s) of this Pokémon */
-  types?: Maybe<Array<Maybe<Scalars["String"]>>>;
-  /** The type(s) of Pokémons that this Pokémon is resistant to */
-  resistant?: Maybe<Array<Maybe<Scalars["String"]>>>;
-  /** The attacks of this Pokémon */
-  attacks?: Maybe<IPokemonAttack>;
-  /** The type(s) of Pokémons that this Pokémon weak to */
-  weaknesses?: Maybe<Array<Maybe<Scalars["String"]>>>;
-  fleeRate?: Maybe<Scalars["Float"]>;
-  /** The maximum CP of this Pokémon */
-  maxCP?: Maybe<Scalars["Int"]>;
-  /** The evolutions of this Pokémon */
-  evolutions?: Maybe<Array<Maybe<IPokemon>>>;
-  /** The evolution requirements of this Pokémon */
-  evolutionRequirements?: Maybe<IPokemonEvolutionRequirement>;
-  /** The maximum HP of this Pokémon */
-  maxHP?: Maybe<Scalars["Int"]>;
-  image?: Maybe<Scalars["String"]>;
-};
-
-/** Represents a Pokémon's attack types */
-export type IPokemonAttack = {
-  /** The fast attacks of this Pokémon */
-  fast?: Maybe<Array<Maybe<IAttack>>>;
-  /** The special attacks of this Pokémon */
-  special?: Maybe<Array<Maybe<IAttack>>>;
-};
-
-/** Represents a Pokémon's dimensions */
-export type IPokemonDimension = {
-  /** The minimum value of this dimension */
-  minimum?: Maybe<Scalars["String"]>;
-  /** The maximum value of this dimension */
-  maximum?: Maybe<Scalars["String"]>;
-};
-
-/** Represents a Pokémon's requirement to evolve */
-export type IPokemonEvolutionRequirement = {
-  /** The amount of candy to evolve */
-  amount?: Maybe<Scalars["Int"]>;
-  /** The name of the candy to evolve */
+export type IAuthResponse = {
+  token?: Maybe<Scalars["String"]>;
   name?: Maybe<Scalars["String"]>;
 };
 
-/** Query any Pokémon by number or name */
+export enum ICacheControlScope {
+  Public = "PUBLIC",
+  Private = "PRIVATE"
+}
+
+export type IMutation = {
+  authFacebook?: Maybe<IAuthResponse>;
+  authGoogle?: Maybe<IAuthResponse>;
+  setTest?: Maybe<IAuthResponse>;
+};
+
+export type IMutationAuthFacebookArgs = {
+  input: IAuthInput;
+};
+
+export type IMutationAuthGoogleArgs = {
+  input: IAuthInput;
+};
+
+export type IMutationSetTestArgs = {
+  input: ITest;
+};
+
 export type IQuery = {
-  query?: Maybe<IQuery>;
-  pokemons?: Maybe<Array<Maybe<IPokemon>>>;
-  pokemon?: Maybe<IPokemon>;
+  /** A simple type for getting started! */
+  hello?: Maybe<Scalars["String"]>;
+  hello2?: Maybe<Scalars["String"]>;
 };
 
-/** Query any Pokémon by number or name */
-export type IQueryPokemonsArgs = {
-  first: Scalars["Int"];
+export type IQueryHello2Args = {
+  input: ITest;
 };
 
-/** Query any Pokémon by number or name */
-export type IQueryPokemonArgs = {
-  id?: Maybe<Scalars["String"]>;
+export type ITest = {
   name?: Maybe<Scalars["String"]>;
 };
+
+export type ITestResponse = {
+  name?: Maybe<Scalars["String"]>;
+};
+
+export type IGetHello2QueryVariables = {};
+
+export type IGetHello2Query = { __typename?: "Query" } & Pick<IQuery, "hello2">;
+
+import gql from "graphql-tag";
+import * as React from "react";
+import * as ReactApollo from "react-apollo";
+import * as ReactApolloHooks from "react-apollo-hooks";
+export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
+
+export const GetHello2Document = gql`
+  query getHello2 {
+    hello2(input: { name: "Hong" })
+  }
+`;
+
+export const GetHello2Component = (
+  props: Omit<
+    Omit<
+      ReactApollo.QueryProps<IGetHello2Query, IGetHello2QueryVariables>,
+      "query"
+    >,
+    "variables"
+  > & { variables?: IGetHello2QueryVariables }
+) => (
+  <ReactApollo.Query<IGetHello2Query, IGetHello2QueryVariables>
+    query={GetHello2Document}
+    {...props}
+  />
+);
+
+export type IGetHello2Props<TChildProps = {}> = Partial<
+  ReactApollo.DataProps<IGetHello2Query, IGetHello2QueryVariables>
+> &
+  TChildProps;
+export function withGetHello2<TProps, TChildProps = {}>(
+  operationOptions?: ReactApollo.OperationOption<
+    TProps,
+    IGetHello2Query,
+    IGetHello2QueryVariables,
+    IGetHello2Props<TChildProps>
+  >
+) {
+  return ReactApollo.withQuery<
+    TProps,
+    IGetHello2Query,
+    IGetHello2QueryVariables,
+    IGetHello2Props<TChildProps>
+  >(GetHello2Document, {
+    alias: "withGetHello2",
+    ...operationOptions
+  });
+}
+
+export function useGetHello2Query(
+  baseOptions?: ReactApolloHooks.QueryHookOptions<IGetHello2QueryVariables>
+) {
+  return ReactApolloHooks.useQuery<IGetHello2Query, IGetHello2QueryVariables>(
+    GetHello2Document,
+    baseOptions
+  );
+}

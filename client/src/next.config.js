@@ -4,6 +4,8 @@ const withOptimizedImages = require("next-optimized-images");
 const SWPrecacheWebpackPlugin = require("sw-precache-webpack-plugin");
 const withBundleAnalyzer = require("@next/bundle-analyzer");
 const CompressionPlugin = require('compression-webpack-plugin');
+const Dotenv = require("dotenv-webpack");
+const webpack = require('webpack');
 
 module.exports = withOptimizedImages({
   distDir: "../dist",
@@ -23,7 +25,13 @@ module.exports = withOptimizedImages({
     );
     config.plugins.push(
       new CompressionPlugin()
-    )
+    );
+    config.plugins.push(
+      new webpack.EnvironmentPlugin(process.env)
+    );
+    config.node = {
+      fs: "empty",
+    };
     return config;
   },
 });

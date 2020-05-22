@@ -14,24 +14,17 @@ let store: RootStore | null = null;
 const initialRoot = {
   authStore: initialAuth,
   pageStore: initialPage,
-  environments: [],
 };
 
 export class RootStore {
   authStore: AuthStore;
   pageStore: PageStore;
-  environments: IEnvironments;
-
-  constructor(initialData: any ) {
+  constructor(initialData: any) {
     this.authStore = new AuthStore(initialData.authStore, this);
     this.pageStore = new PageStore(initialData.pageStore, this);
-    this.environments = initialData.env;
-  }
-
-  setEnv(env: IEnvironments) {
-    this.environments = env;
   }
 }
+
 export default function initializeStore(initialData = initialRoot) {
   if (isServer) {
     return new RootStore(initialData);

@@ -11,5 +11,5 @@ export enum PAGE_PATHS {
   }
 
 export enum ENDPOINT {
-    GRAPHQL = 'https://graphql-pokemon.now.sh/',
+    GRAPHQL = 'http://localhost:4000/graphql/',
 }
