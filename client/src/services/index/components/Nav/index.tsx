@@ -1,3 +1,4 @@
+import { useObserver } from 'mobx-react';
 import Link from 'next/link';
 import * as React from 'react';
 import styled from '~/styled';
@@ -19,29 +20,72 @@ interface INav {
   };
 }
 
+function usePageData() {
+  const { pageStore } = useStores();
+  return useObserver(() => ({
+    // useObserver를 사용해서 리턴하는 값의 업데이트를 계속 반영한다
+    clickedIdx: pageStore.clickedIdx,
+  }));
+}
+
 export default (props: INav) => {
   const { pageStore } = useStores();
+  const { clickedIdx } = usePageData();
+
   return (
     <WrapprNav size={props.size}>
-      <WrapperNavItem>
-        <CustomIcon url={HomeImage} />
+      <Link href='/'>
+        <a>
+          <WrapperNavItem onClick={() => pageStore.setClickedIdx(0)}>
+            {clickedIdx === 0 ? (
+              <CustomIcon url={HomeImageFocus} />
+            ) : (
+              <CustomIcon url={HomeImage} />
+            )}
+          </WrapperNavItem>
+        </a>
+      </Link>
+
+      <Link href='/category'>
+        <a>
+          <WrapperNavItem onClick={() => pageStore.setClickedIdx(1)}>
+            {clickedIdx === 1 ? (
+              <CustomIcon url={MenuImageFocus} />
+            ) : (
+              <CustomIcon url={MenuImage} />
+            )}
+          </WrapperNavItem>
+        </a>
+      </Link>
+      <WrapperNavItem onClick={() => pageStore.setClickedIdx(2)}>
+        {clickedIdx === 2 ? (
+          <CustomIcon url={CircleImageFocus} />
+        ) : (
+          <CustomIcon url={CircleImage} />
+        )}
       </WrapperNavItem>
-      <WrapperNavItem>
-        <CustomIcon url={MenuImage} />
-      </WrapperNavItem>
-      <WrapperNavItem>
-        <CustomIcon url={CircleImage} />
-      </WrapperNavItem>
-      <WrapperNavItem>
-        <CustomIcon url={ChatImage} />
-      </WrapperNavItem>
-      <WrapperNavItem>
-        <Link href='/user'>
-          <a>
-            <CustomIcon url={UserImage} />
-          </a>
-        </Link>
-      </WrapperNavItem>
+      <Link href='/chat'>
+        <a>
+          <WrapperNavItem onClick={() => pageStore.setClickedIdx(3)}>
+            {clickedIdx === 3 ? (
+              <CustomIcon url={ChatImageFocus} />
+            ) : (
+              <CustomIcon url={ChatImage} />
+            )}
+          </WrapperNavItem>
+        </a>
+      </Link>
+      <Link href='/user'>
+        <a>
+          <WrapperNavItem onClick={() => pageStore.setClickedIdx(4)}>
+            {clickedIdx === 4 ? (
+              <CustomIcon url={UserImageFocus} />
+            ) : (
+              <CustomIcon url={UserImage} />
+            )}
+          </WrapperNavItem>
+        </a>
+      </Link>
     </WrapprNav>
   );
 };
