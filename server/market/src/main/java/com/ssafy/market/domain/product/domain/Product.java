@@ -13,11 +13,11 @@ import javax.persistence.*;
 public class Product extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long product_id;
+    private Long productId;
 
-    @ManyToOne(targetEntity = Post.class)
+    @ManyToOne
     @JoinColumn(name="post_id")
-    private Long post_id;
+    private Post post;
 
     private Long price;
     private String category;

@@ -1,5 +1,5 @@
 type User {
-    id : ID!
+    userId : ID!
     name : String!
     email : String
     imageUrl : String!
@@ -10,15 +10,19 @@ type User {
     trust : Int!
 }
 
-type LoginOutput {
+type LoginUserOutput {
     token : String!
 }
 
 input LoginUserInput {
     provider : String!
+    token : String!
 }
 
 extend type Query {
     findAllUsers: [User]
-    loginUser: LoginOutput
+}
+
+extend type Mutation {
+    loginUser(input : LoginUserInput!): LoginUserOutput
 }

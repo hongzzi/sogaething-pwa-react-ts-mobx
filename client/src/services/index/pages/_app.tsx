@@ -11,15 +11,15 @@ import GlobalStyle from '~/styled/global'
 import baseTheme from '~/styled/themes/base'
 import { createApolloClient } from '../apollo'
 import FaviconImage from '../assets/favicon.png?url'
-import initializeStore, { RootStore } from '../store'
+import initializeStore, { IEnvironments, RootStore } from '../store'
 
 export default class extends React.Component {
   static async getInitialProps(appContext: any) {
     const appProps = await App.getInitialProps(appContext);
     const { Component, router } = appContext;
     const mobxStore = initializeStore();
-    const apolloClient = createApolloClient(mobxStore);
     appContext.ctx.mobxStore = mobxStore;
+    const apolloClient = createApolloClient(mobxStore);
 
     try {
       await getMarkupFromTree({
@@ -79,7 +79,7 @@ class App extends NextApp<any> {
     return (
       <Container>
         <Head>
-          <title>Hello, Next.js</title>
+          <title>소개띵</title>
           <link rel='shortcut icon' href={FaviconImage} />
         </Head>
         <ApolloHookProvider client={this.props.apolloClient}>
@@ -98,6 +98,6 @@ class App extends NextApp<any> {
   }
 }
 
-// function extractNextEnvironments(environments: IEnvironments): IEnvironments {
-//   return pickBy(environments, (_value, key) => key.indexOf('NEXT_APP') !== -1)
-// }
+function extractNextEnvironments(environments: IEnvironments): IEnvironments {
+  return pickBy(environments, (_value, key) => key.indexOf('NEXT_APP') !== -1)
+}

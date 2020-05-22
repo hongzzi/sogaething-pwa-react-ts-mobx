@@ -66,16 +66,22 @@ const TextuserAddr = styled.div`
 
 const WrapperMainButton = styled.div`
     display: flex;
+    text-align: center;
     justify-content: space-between;
 `;
 
 const MainButton = styled.div`
+    display: flex;
+    text-align: center;
+    align-items: center;
     margin-top: 55px;
     margin-bottom: 17px;
     width: 45%;
     height: 48px;
     border-radius: 7px;
     background-color: #ffffff;
-    text-align: center;
     font-size: 16px;
+    &>p{
+      margin: auto;
+    }
 `;

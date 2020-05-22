@@ -19,7 +19,7 @@ public class Post extends BaseTimeEntity {
     private Long postId;
 
     @ManyToOne
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "user_id")
     private User user;
 
     @Column(name = "is_buy")
