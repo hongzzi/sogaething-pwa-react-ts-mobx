@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
@@ -15,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import javax.mail.AuthenticationFailedException;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -40,24 +42,10 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
     @Override
     @Transactional
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        String Jwt = "Error";
         try{
-            String Domain = request.getHeader("Domain");
             String Token = getTokenFromRequest(request);
 
-            if (StringUtils.hasText(Domain) && Domain.equals("Kakao")){
-                User user = kakaoApi.getUserInfo(Token);
-
-                User selected = userRepository.findByProviderId(user.getProviderId());
-                if(selected == null){
-                    userRepository.save(user);
-                }
-                user = userRepository.findByProviderId(user.getProviderId());
-                Jwt = tokenProvider.createJwtToken(user);
-                request.setAttribute("Jwt", Jwt);
-            }else if(StringUtils.hasText(Domain) && Domain.equals("Google")){
-
-            }else if(StringUtils.hasText(Domain) && Domain.equals("Jwt") && StringUtils.hasText(Token) && tokenProvider.validateToken(Token)) {
+            if(StringUtils.hasText(Token) && tokenProvider.validateToken(Token)) {
                 Long userId = tokenProvider.getUserIdFromToken(Token);
                 UserDetails userDetails = customUserDetailsService.loadUserById(userId);
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
@@ -65,7 +53,6 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
 
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
-
         }catch (Exception e){
             logger.error("Could not set user authentication in security context", e);
         }
