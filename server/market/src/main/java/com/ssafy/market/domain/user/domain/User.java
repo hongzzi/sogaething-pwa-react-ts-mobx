@@ -11,7 +11,7 @@ import javax.validation.constraints.NotNull;
 @Getter
 @Entity
 @NoArgsConstructor
-@Table(name = "users", uniqueConstraints = {
+@Table(name = "user", uniqueConstraints = {
         @UniqueConstraint(columnNames = "id")
 })
 public class User {
@@ -42,6 +42,10 @@ public class User {
     @Column(nullable = false)
     private Role role;
 
+    public User(Long id) {
+        this.id = id;
+    }
+
     public User(Long id, String name, @Email String email, String imageUrl, @NotNull String provider, Long providerId, String phone, String address, int trust, Role role) {
         this.id = id;
         this.name = name;
@@ -53,21 +57,5 @@ public class User {
         this.address = address;
         this.trust = trust;
         this.role = role;
-    }
-
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", email='" + email + '\'' +
-                ", imageUrl='" + imageUrl + '\'' +
-                ", provider='" + provider + '\'' +
-                ", providerId='" + providerId + '\'' +
-                ", phone='" + phone + '\'' +
-                ", address='" + address + '\'' +
-                ", trust=" + trust +
-                ", role=" + role +
-                '}';
     }
 }

@@ -10,9 +10,9 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CreatePostInput {
-    private Long uploader_id;
+    private Long uploaderId;
     private String title;
-    private Date sale_date;
+    private Date saleDate;
     private String contents;
     private String deal;
 }
