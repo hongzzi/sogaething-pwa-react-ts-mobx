@@ -1,23 +1,34 @@
 import styled from '~/styled';
+import styled2 from 'styled-components';
+import CardList from '../components/CardList';
 import CategoryHeader from '../components/CategoryHeader';
 import CommonBtn from '../components/CommonBtn';
 import MainUserCard from '../components/MainUserCard';
 import Nav from '../components/Nav';
 import Pikachu from '../components/Pikachu';
+import ProductCardList from '../components/ProductCardList';
 import SearchBar from '../components/SearchBar';
 import useStores from '../helpers/useStores';
-import CardList from '../components/CardList';
 
 export default function PageIndex() {
   const store = useStores();
-
   return (
     <Layout>
       <Container>
         <SearchBar />
-        <StyledMainUserCard/>
-        <Line><CategoryText>'Category'</CategoryText>의 인기글</Line>
+        <StyledMainUserCard />
+        <Line>
+          <CategoryText>'Category'</CategoryText>의 인기글
+        </Line>
         <CardList />
+        <Line>
+          <CategoryText>'띵'</CategoryText>한 중고매물
+        </Line>
+        <ProductCardList />
+
+        <WrapperAlignCenter>
+          <CommonBtn type={'common'} text={'더보기'} />
+        </WrapperAlignCenter>
       </Container>
       <Nav />
     </Layout>
@@ -26,19 +37,23 @@ export default function PageIndex() {
 
 const Layout = styled.div`
   position: relative;
+  padding-bottom: 48px;
 `;
 
 const Container = styled.div`
   padding: 1rem;
 `;
 
-const StyledMainUserCard = styled(MainUserCard)`
-`;
+const StyledMainUserCard = styled(MainUserCard)``;
 
 const CategoryText = styled.p`
   display: inline-block;
-  font-size : 12px;
-  color: ${props => props.theme.mainCategoryTextColor};
+  font-size: 12px;
+  color: ${(props) => props.theme.mainCategoryTextColor};
+`;
+
+const WrapperAlignCenter = styled.div`
+  text-align: center;
 `;
 
 const Title = styled.h1`

@@ -1,0 +1,3 @@
+query getHello2 {
+  hello2(input: { name: "Hong" })
+}
