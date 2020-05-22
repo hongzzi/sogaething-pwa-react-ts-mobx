@@ -9,4 +9,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class LoginUserInput {
     private String provider;
+    private String token;
 }

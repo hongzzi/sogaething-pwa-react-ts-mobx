@@ -13,7 +13,7 @@ import javax.persistence.*;
 public class Product extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long product_id;
+    private Long productId;
 
     @ManyToOne
     @JoinColumn(name="post_id")

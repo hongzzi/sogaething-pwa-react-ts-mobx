@@ -1,6 +1,7 @@
 package com.ssafy.market.domain.file.domain;
 
 import com.ssafy.market.domain.post.domain.Post;
+import com.ssafy.market.domain.product.domain.Product;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -12,11 +13,11 @@ import javax.persistence.*;
 public class File {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long file_id;
+    private Long fileId;
 
     @ManyToOne
-    @JoinColumn(name = "post_id")
-    private Post post;
+    @JoinColumn(name = "product_id")
+    private Product product;
 
-    private String img_path;
+    private String imgPath;
 }
