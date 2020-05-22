@@ -1,5 +1,5 @@
 type User {
-    id : ID!
+    userId : ID!
     name : String!
     email : String
     imageUrl : String!

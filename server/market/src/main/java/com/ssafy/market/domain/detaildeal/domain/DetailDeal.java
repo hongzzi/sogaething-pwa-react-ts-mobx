@@ -16,15 +16,11 @@ public class DetailDeal extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long deal_id;
 
-    @OneToOne(targetEntity = Post.class)
+    @OneToOne
     @JoinColumn(name="post_id")
-    private Long post_id;
+    private Post post;
 
-//    @OneToOne(targetEntity = User.class)
-//    @JoinColumn(name="id")
     private Long buyer_id;
 
-//    @OneToOne(targetEntity = User.class)
-//    @JoinColumn(name="id")
     private Long seller_id;
 }

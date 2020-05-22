@@ -14,9 +14,9 @@ public class File {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long file_id;
 
-    @ManyToOne(targetEntity = Post.class)
+    @ManyToOne
     @JoinColumn(name = "post_id")
-    private Long post_id;
+    private Post post;
 
     private String img_path;
 }
