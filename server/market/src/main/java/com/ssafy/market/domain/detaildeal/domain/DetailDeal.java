@@ -1,6 +1,7 @@
 package com.ssafy.market.domain.detaildeal.domain;
 
 import com.ssafy.market.domain.BaseTimeEntity;
+import com.ssafy.market.domain.hashtag.domain.Hashtag;
 import com.ssafy.market.domain.post.domain.Post;
 import com.ssafy.market.domain.user.domain.User;
 import lombok.Getter;
@@ -18,15 +19,17 @@ public class DetailDeal extends BaseTimeEntity {
 
     @OneToOne(targetEntity = Post.class)
     @JoinColumn(name="postId")
-    private Long postId;
+    private Post postId;
 
-//    @OneToOne(targetEntity = User.class)
-//    @JoinColumn(name="id")
-    private Long buyerId;
+    @OneToOne(targetEntity = User.class)
+    @JoinColumn(name="id")
+    private User buyerId;
 
-//    @OneToOne(targetEntity = User.class)
-//    @JoinColumn(name="id")
-    private Long sellerId;
+    @OneToOne(targetEntity = User.class)
+    @JoinColumn(name="id")
+    private User sellerId;
 
-    private Long hashtagId;
+    @OneToOne(targetEntity = Hashtag.class)
+    @JoinColumn(name = "hashtagId")
+    private Hashtag hashtagId;
 }
