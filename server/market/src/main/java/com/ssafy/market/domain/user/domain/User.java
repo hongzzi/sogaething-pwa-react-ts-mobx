@@ -2,7 +2,6 @@ package com.ssafy.market.domain.user.domain;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -12,12 +11,12 @@ import javax.validation.constraints.NotNull;
 @Entity
 @NoArgsConstructor
 @Table(name = "user", uniqueConstraints = {
-        @UniqueConstraint(columnNames = "id")
+        @UniqueConstraint(columnNames = "userId")
 })
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long userId;
 
     @Column(nullable = false)
     private String name;
@@ -42,12 +41,12 @@ public class User {
     @Column(nullable = false)
     private Role role;
 
-    public User(Long id) {
-        this.id = id;
+    public User(Long userId) {
+        this.userId = userId;
     }
 
-    public User(Long id, String name, @Email String email, String imageUrl, @NotNull String provider, Long providerId, String phone, String address, int trust, Role role) {
-        this.id = id;
+    public User(Long userId, String name, @Email String email, String imageUrl, @NotNull String provider, Long providerId, String phone, String address, int trust, Role role) {
+        this.userId = userId;
         this.name = name;
         this.email = email;
         this.imageUrl = imageUrl;
