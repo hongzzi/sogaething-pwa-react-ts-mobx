@@ -47,8 +47,6 @@ public class Post extends BaseTimeEntity {
         this.postId = postId;
     }
 
-
-
     public Post(Long postId, User user, boolean isBuy, String title, Date saleDate, String contents, Long viewCount, String deal, String dealState) {
         this.postId = postId;
         this.user = user;

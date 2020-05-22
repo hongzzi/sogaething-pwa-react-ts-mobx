@@ -22,16 +22,7 @@ public class PostMutation implements GraphQLMutationResolver {
     @Transactional
     public Post createPost(CreatePostInput input){
         System.out.println(input.toString());
-        User user = null;
-        try{
-            user = (userRepository.findById(input.getUploaderId()).get());
-            if(user==null){
-                System.out.println("no data");
-                return null;
-            }
-        }catch (Exception e){
-            System.out.println(e);
-        }
+        User user = (userRepository.findById(input.getUploaderId()).get());
 //        user = user.getUserByid(Long.valueOf(input.getUploaderId()));
 //        System.out.println(user.toString());
 //        if(user.equals(user)){

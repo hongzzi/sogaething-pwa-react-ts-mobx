@@ -7,8 +7,9 @@ type Post {
     contents : String!
     viewCount : Int!
     deal : String!
-    createdDate : String
-    modifiedDate : String
+    dealState : String!
+#    createdDate : String
+#    modifiedDate : String
 }
 
 input CreatePostInput {
