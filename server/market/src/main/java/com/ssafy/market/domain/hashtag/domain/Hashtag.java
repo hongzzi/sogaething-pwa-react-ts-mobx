@@ -12,11 +12,11 @@ import javax.persistence.*;
 public class Hashtag {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long hashtag_id;
+    private Long hashtagId;
 
-    @ManyToOne(targetEntity = Product.class)
+    @ManyToOne
     @JoinColumn(name = "product_id")
-    private Long product_id;
+    private Product product;
 
     private String hashtag;
 }
