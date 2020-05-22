@@ -12,12 +12,12 @@ import javax.validation.constraints.NotNull;
 @Entity
 @NoArgsConstructor
 @Table(name = "user", uniqueConstraints = {
-        @UniqueConstraint(columnNames = "id")
+        @UniqueConstraint(columnNames = "userId")
 })
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long userId;
 
     @Column(nullable = false)
     private String name;
@@ -44,11 +44,11 @@ public class User {
 
 
     public User(Long id) {
-        this.id = id;
+        this.userId = id;
     }
 
     public User(Long id, String name, @Email String email, String imageUrl, @NotNull String provider, Long providerId, String phone, String address, int trust, Role role) {
-        this.id = id;
+        this.userId = id;
         this.name = name;
         this.email = email;
         this.imageUrl = imageUrl;
@@ -64,7 +64,7 @@ public class User {
     @Override
     public String toString() {
         return "User{" +
-                "id=" + id +
+                "id=" + userId +
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
                 ", imageUrl='" + imageUrl + '\'' +

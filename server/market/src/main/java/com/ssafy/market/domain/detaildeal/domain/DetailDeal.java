@@ -8,6 +8,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @NoArgsConstructor
 @Getter
@@ -19,17 +21,29 @@ public class DetailDeal extends BaseTimeEntity {
 
     @OneToOne(targetEntity = Post.class)
     @JoinColumn(name="postId")
-    private Post postId;
+    private Post post;
 
     @OneToOne(targetEntity = User.class)
-    @JoinColumn(name="id")
-    private User buyerId;
+    @JoinColumn(name="userId")
+    private User user;
 
-    @OneToOne(targetEntity = User.class)
-    @JoinColumn(name="id")
-    private User sellerId;
+//    @OneToOne(targetEntity = User.class)
+//    @JoinColumn(name="userId")
+//    @Column(name="sellerId")
+//    private User sellerId;
+
+//    @OneToMany(targetEntity = User.class)
+//    @JoinColumn(name="userId")
+//    private List<User> users = new ArrayList<>();
 
     @OneToOne(targetEntity = Hashtag.class)
     @JoinColumn(name = "hashtagId")
-    private Hashtag hashtagId;
+    private Hashtag hashtag;
+
+    public DetailDeal(Long dealId, Post post, User user, Hashtag hashtag){
+        this.dealId = dealId;
+        this.post = post;
+        this.user = user;
+        this.hashtag= hashtag;
+    }
 }

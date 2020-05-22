@@ -6,6 +6,7 @@ import com.ssafy.market.domain.post.domain.Post;
 import com.ssafy.market.domain.post.respository.PostRepository;
 import com.ssafy.market.domain.user.domain.User;
 import com.ssafy.market.domain.user.repository.UserRepository;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -22,7 +23,16 @@ public class PostMutation implements GraphQLMutationResolver {
     @Transactional
     public Post createPost(CreatePostInput input){
         System.out.println(input.toString());
-        User user = (userRepository.findById(input.getUploaderId()).get());
+        User user = null;
+        try{
+            user = (userRepository.findById(input.getUploaderId()).get());
+            if(user==null){
+                System.out.println("no data");
+                return null;
+            }
+        }catch (Exception e){
+            System.out.println(e);
+        }
 //        user = user.getUserByid(Long.valueOf(input.getUploaderId()));
 //        System.out.println(user.toString());
 //        if(user.equals(user)){

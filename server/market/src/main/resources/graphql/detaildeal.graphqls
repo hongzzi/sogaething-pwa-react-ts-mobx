@@ -1,0 +1,45 @@
+type DetailDeal {
+    dealId : ID!
+    post : Post!
+    user : User!
+    hashtag : Hashtag!
+    createdDate : String
+    modifiedDate : String
+}
+
+input CreateDetailDealInput {
+    postId : Int!
+    userId : Int!
+#    price : Int! - product
+#    imgPath: String! - file
+#    category : String! - product
+    hashtagId : Int!
+}
+input UpdateDetailDealInput {
+    dealId : ID!
+    postId: Int!
+    postTitle: String!
+    postContents : String!
+    price : Int!
+    deal : String!
+    dealState:String!
+    imgPath: String!
+    category : String!
+    hashtagId:Int!
+    hashtag : String!
+    address : String!
+}
+input DeleteDetailDealInput{
+    dealId : Int!
+}
+
+type Mutation {
+    createDetailDeal(input: CreateDetailDealInput!): DetailDeal
+#    updateDetailDeal(input: UpdateDetailDealInput!): DetailDeal
+#    deleteDetailDeal(input: DeleteDetailDealInput!): String
+}
+
+type Query {
+    findAllDetailDeals: [DetailDeal]
+    findDetailDealByPostId(postId: Int): DetailDeal
+}

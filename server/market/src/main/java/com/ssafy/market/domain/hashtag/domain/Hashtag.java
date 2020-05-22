@@ -16,7 +16,13 @@ public class Hashtag {
 
     @ManyToOne(targetEntity = Product.class)
     @JoinColumn(name = "productId")
-    private Long productId;
-
+    private Product product;
+//    private Long productId;
     private String hashtag;
+
+    public Hashtag(Long hashtagId, Product product, String hashtag){
+        this.hashtagId = hashtagId;
+        this.product = product;
+        this.hashtag = hashtag;
+    }
 }

@@ -13,13 +13,23 @@ import javax.persistence.*;
 public class Product extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long product_id;
+    private Long productId;
 
     @ManyToOne(targetEntity = Post.class)
-    @JoinColumn(name="post_id")
-    private Long post_id;
-
+    @JoinColumn(name="postId")
+    private Post post;
+//    private Long postId;
+    private String name;
     private Long price;
     private String category;
-    private boolean state;
+    private Boolean state;
+
+    public Product(Long productId, Post post, String name, Long price, String category,boolean state){
+        this.productId = productId;
+        this.post = post;
+        this.name = name;
+        this.price = price;
+        this.category = category;
+        this.state = state;
+    }
 }
