@@ -43,6 +43,9 @@ public class User {
     private Role role;
 
 
+    public User(Long id) {
+        this.id = id;
+    }
 
     public User(Long id, String name, @Email String email, String imageUrl, @NotNull String provider, Long providerId, String phone, String address, int trust, Role role) {
         this.id = id;
@@ -57,9 +60,6 @@ public class User {
         this.role = role;
     }
 
-    public User(Long uploaderId) {
-        this.id = uploaderId;
-    }
 
     @Override
     public String toString() {
@@ -77,3 +77,4 @@ public class User {
                 '}';
     }
 }
+
