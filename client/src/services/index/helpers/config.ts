@@ -14,8 +14,6 @@ switch (process.env.NODE_ENV) {
 }
 dotenv.config({ path });
 
-console.log(process.env);
-
 export const NEXT_APP_STAGE = process.env.NEXT_APP_STAGE;
 export const NEXT_APP_GRAPHQL_ENDPOINT = process.env.NEXT_APP_GRAPHQL_ENDPOINT;
 export const NEXT_APP_KAKAO_CLIENT_KEY = process.env.NEXT_APP_KAKAO_CLIENT_KEY;

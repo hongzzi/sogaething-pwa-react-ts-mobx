@@ -1,41 +1,58 @@
-# source: http://localhost:4000/graphql/
-# timestamp: Thu May 21 2020 23:34:15 GMT+0900 (대한민국 표준시)
+# source: http://3.34.131.20:8080/graphql
+# timestamp: Sat May 23 2020 23:26:20 GMT+0900 (대한민국 표준시)
 
-directive @cacheControl(maxAge: Int, scope: CacheControlScope) on FIELD_DEFINITION | OBJECT | INTERFACE
+"""This directive allows results to be deferred during execution"""
+directive @defer on FIELD
 
-input AuthInput {
-  accessToken: String!
+input CreatePostInput {
+  uploaderId: Int!
+  title: String!
+  saleDate: String!
+  contents: String!
+  deal: String!
 }
 
-type AuthResponse {
-  token: String
-  name: String
+input LoginUserInput {
+  provider: String!
+  token: String!
 }
 
-enum CacheControlScope {
-  PUBLIC
-  PRIVATE
+type LoginUserOutput {
+  token: String!
 }
 
 type Mutation {
-  authFacebook(input: AuthInput!): AuthResponse
-  authGoogle(input: AuthInput!): AuthResponse
-  setTest(input: test!): AuthResponse
+  createPost(input: CreatePostInput!): Post
+  loginUser(input: LoginUserInput!): LoginUserOutput
+}
+
+type Post {
+  postId: ID!
+  user: User
+  isBuy: Boolean!
+  title: String!
+  saleDate: String!
+  contents: String!
+  viewCount: Int!
+  deal: String!
+  createdDate: String
+  modifiedDate: String
 }
 
 type Query {
-  """A simple type for getting started!"""
-  hello: String
-  hello2(input: test!): String
+  findAllPosts: [Post]
+  findPostByPostId(id: Int): Post
+  findAllUsers: [User]
 }
 
-input test {
-  name: String
+type User {
+  userId: ID!
+  name: String!
+  email: String
+  imageUrl: String!
+  provider: String!
+  providerId: Int!
+  phone: String!
+  address: String!
+  trust: Int!
 }
-
-type TestResponse {
-  name: String
-}
-
-"""The `Upload` scalar type represents a file upload."""
-scalar Upload
