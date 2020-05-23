@@ -18,6 +18,7 @@ public class Product extends BaseTimeEntity {
     @ManyToOne(targetEntity = Post.class)
     @JoinColumn(name="postId")
     private Post post;
+
 //    private Long postId;
     private String name;
     private Long price;

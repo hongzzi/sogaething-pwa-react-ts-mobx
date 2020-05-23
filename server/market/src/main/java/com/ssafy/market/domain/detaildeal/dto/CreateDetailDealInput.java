@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class CreateDetailDealInput {
+public class CreateDetailDealInput{
     private Long postId;
     private Long userId;
     private Long hashtagId;
