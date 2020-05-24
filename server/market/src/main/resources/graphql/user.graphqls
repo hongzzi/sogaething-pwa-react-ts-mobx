@@ -26,3 +26,4 @@ extend type Query {
 extend type Mutation {
     loginUser(input : LoginUserInput!): LoginUserOutput
 }
+

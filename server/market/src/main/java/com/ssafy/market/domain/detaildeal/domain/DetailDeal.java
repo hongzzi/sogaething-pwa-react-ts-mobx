@@ -1,12 +1,15 @@
 package com.ssafy.market.domain.detaildeal.domain;
 
 import com.ssafy.market.domain.BaseTimeEntity;
+import com.ssafy.market.domain.hashtag.domain.Hashtag;
 import com.ssafy.market.domain.post.domain.Post;
 import com.ssafy.market.domain.user.domain.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @NoArgsConstructor
 @Getter
@@ -16,11 +19,23 @@ public class DetailDeal extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long dealId;
 
-    @OneToOne
-    @JoinColumn(name="post_id")
+    @OneToOne(targetEntity = Post.class)
+    @JoinColumn(name="postId")
     private Post post;
 
-    private Long buyerId;
+    @OneToOne(targetEntity = User.class)
+    @JoinColumn(name="userId")
+    private User user;
 
-    private Long sellerId;
+    @OneToOne(targetEntity = Hashtag.class)
+    @JoinColumn(name = "hashtagId")
+    private Hashtag hashtag;
+
+    public DetailDeal(Long dealId, Post post, User user, Hashtag hashtag){
+        this.dealId = dealId;
+        this.post = post;
+        this.user = user;
+        this.hashtag= hashtag;
+    }
+
 }

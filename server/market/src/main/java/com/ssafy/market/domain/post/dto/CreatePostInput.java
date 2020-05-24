@@ -1,5 +1,6 @@
 package com.ssafy.market.domain.post.dto;
 
+import com.ssafy.market.domain.user.domain.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

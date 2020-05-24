@@ -41,6 +41,7 @@ public class User {
     @Column(nullable = false)
     private Role role;
 
+
     public User(Long userId) {
         this.userId = userId;
     }
@@ -57,4 +58,22 @@ public class User {
         this.trust = trust;
         this.role = role;
     }
+
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + userId +
+                ", name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                ", imageUrl='" + imageUrl + '\'' +
+                ", provider='" + provider + '\'' +
+                ", providerId='" + providerId + '\'' +
+                ", phone='" + phone + '\'' +
+                ", address='" + address + '\'' +
+                ", trust=" + trust +
+                ", role=" + role +
+                '}';
+    }
 }
+
