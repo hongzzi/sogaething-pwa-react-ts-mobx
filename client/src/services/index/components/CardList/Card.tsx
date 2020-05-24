@@ -27,7 +27,7 @@ export const Card = styled.div`
 `;
 
 const WrapperText = styled.div`
-  margin-top: 54px;
+  margin-top: 60%;
   font-size: 10px;
   color: white;
   font-weight: bold;

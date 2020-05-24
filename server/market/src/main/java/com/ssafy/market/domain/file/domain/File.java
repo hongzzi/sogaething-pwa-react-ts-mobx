@@ -21,6 +21,7 @@ public class File {
 //    private Long productId;
 
     private String imgPath;
+
     public File(Long fileId, Product product, String imgPath){
         this.fileId = fileId;
         this.product = product;

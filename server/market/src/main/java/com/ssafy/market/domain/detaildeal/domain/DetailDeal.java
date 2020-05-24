@@ -37,4 +37,5 @@ public class DetailDeal extends BaseTimeEntity {
         this.user = user;
         this.hashtag= hashtag;
     }
+
 }

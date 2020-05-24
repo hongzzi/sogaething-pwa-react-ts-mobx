@@ -6,12 +6,18 @@ import AuthService from '../service/AuthService';
 export interface IAuth {
   email: string;
   id: number;
+  provider: string;
+  token: string;
 }
 
-export const initialAuth: IAuth = {
+export const initialAuth = {
   email: '',
   id: -1,
+  provider: '',
+  token: '',
 };
+
+export type Provider = 'kakao' | 'google' | 'naver';
 
 @autobind
 class AuthStore {
@@ -19,7 +25,8 @@ class AuthStore {
   @observable refreshToken: string = '';
   @observable auth: IAuth | undefined;
   @observable email = '';
-  @observable password = '';
+  @observable provider: string = '';
+
   private authService = new AuthService();
 
   constructor(initialData = initialAuth, root: any) {
@@ -66,19 +73,22 @@ class AuthStore {
   // }
 
   @action
+  setProvider(provider : Provider) {
+    this.provider = provider;
+  }
+
+  @action
   getTest() {
-    console.log(this.authService.test);
+    console.log("call store");
   }
 
   @action
   resetPasswordAndEmail() {
-    this.password = '';
     this.email = '';
   }
 
   @action
   setPassword(pw: string) {
-    this.password = pw;
   }
 
   @action

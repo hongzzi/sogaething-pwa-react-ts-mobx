@@ -8,96 +8,77 @@ export type Scalars = {
   Float: number;
 };
 
-/** Represents a Pokémon's attack types */
-export type IAttack = {
-  /** The name of this Pokémon attack */
-  name?: Maybe<Scalars["String"]>;
-  /** The type of this Pokémon attack */
-  type?: Maybe<Scalars["String"]>;
-  /** The damage of this Pokémon attack */
-  damage?: Maybe<Scalars["Int"]>;
+export type ICreatePostInput = {
+  uploaderId: Scalars["Int"];
+  title: Scalars["String"];
+  saleDate: Scalars["String"];
+  contents: Scalars["String"];
+  deal: Scalars["String"];
 };
 
-/** Represents a Pokémon */
-export type IPokemon = {
-  /** The ID of an object */
-  id: Scalars["ID"];
-  /** The identifier of this Pokémon */
-  number?: Maybe<Scalars["String"]>;
-  /** The name of this Pokémon */
-  name?: Maybe<Scalars["String"]>;
-  /** The minimum and maximum weight of this Pokémon */
-  weight?: Maybe<IPokemonDimension>;
-  /** The minimum and maximum weight of this Pokémon */
-  height?: Maybe<IPokemonDimension>;
-  /** The classification of this Pokémon */
-  classification?: Maybe<Scalars["String"]>;
-  /** The type(s) of this Pokémon */
-  types?: Maybe<Array<Maybe<Scalars["String"]>>>;
-  /** The type(s) of Pokémons that this Pokémon is resistant to */
-  resistant?: Maybe<Array<Maybe<Scalars["String"]>>>;
-  /** The attacks of this Pokémon */
-  attacks?: Maybe<IPokemonAttack>;
-  /** The type(s) of Pokémons that this Pokémon weak to */
-  weaknesses?: Maybe<Array<Maybe<Scalars["String"]>>>;
-  fleeRate?: Maybe<Scalars["Float"]>;
-  /** The maximum CP of this Pokémon */
-  maxCP?: Maybe<Scalars["Int"]>;
-  /** The evolutions of this Pokémon */
-  evolutions?: Maybe<Array<Maybe<IPokemon>>>;
-  /** The evolution requirements of this Pokémon */
-  evolutionRequirements?: Maybe<IPokemonEvolutionRequirement>;
-  /** The maximum HP of this Pokémon */
-  maxHP?: Maybe<Scalars["Int"]>;
-  image?: Maybe<Scalars["String"]>;
+export type ILoginUserInput = {
+  provider: Scalars["String"];
+  token: Scalars["String"];
 };
 
-/** Represents a Pokémon's attack types */
-export type IPokemonAttack = {
-  /** The fast attacks of this Pokémon */
-  fast?: Maybe<Array<Maybe<IAttack>>>;
-  /** The special attacks of this Pokémon */
-  special?: Maybe<Array<Maybe<IAttack>>>;
+export type ILoginUserOutput = {
+  token: Scalars["String"];
 };
 
-/** Represents a Pokémon's dimensions */
-export type IPokemonDimension = {
-  /** The minimum value of this dimension */
-  minimum?: Maybe<Scalars["String"]>;
-  /** The maximum value of this dimension */
-  maximum?: Maybe<Scalars["String"]>;
+export type IMutation = {
+  createPost?: Maybe<IPost>;
+  loginUser?: Maybe<ILoginUserOutput>;
 };
 
-/** Represents a Pokémon's requirement to evolve */
-export type IPokemonEvolutionRequirement = {
-  /** The amount of candy to evolve */
-  amount?: Maybe<Scalars["Int"]>;
-  /** The name of the candy to evolve */
-  name?: Maybe<Scalars["String"]>;
+export type IMutationCreatePostArgs = {
+  input: ICreatePostInput;
 };
 
-/** Query any Pokémon by number or name */
+export type IMutationLoginUserArgs = {
+  input: ILoginUserInput;
+};
+
+export type IPost = {
+  postId: Scalars["ID"];
+  user?: Maybe<IUser>;
+  isBuy: Scalars["Boolean"];
+  title: Scalars["String"];
+  saleDate: Scalars["String"];
+  contents: Scalars["String"];
+  viewCount: Scalars["Int"];
+  deal: Scalars["String"];
+  createdDate?: Maybe<Scalars["String"]>;
+  modifiedDate?: Maybe<Scalars["String"]>;
+};
+
 export type IQuery = {
-  query?: Maybe<IQuery>;
-  pokemons?: Maybe<Array<Maybe<IPokemon>>>;
-  pokemon?: Maybe<IPokemon>;
+  findAllPosts?: Maybe<Array<Maybe<IPost>>>;
+  findPostByPostId?: Maybe<IPost>;
+  findAllUsers?: Maybe<Array<Maybe<IUser>>>;
 };
 
-/** Query any Pokémon by number or name */
-export type IQueryPokemonsArgs = {
-  first: Scalars["Int"];
+export type IQueryFindPostByPostIdArgs = {
+  id?: Maybe<Scalars["Int"]>;
 };
 
-/** Query any Pokémon by number or name */
-export type IQueryPokemonArgs = {
-  id?: Maybe<Scalars["String"]>;
-  name?: Maybe<Scalars["String"]>;
+export type IUser = {
+  userId: Scalars["ID"];
+  name: Scalars["String"];
+  email?: Maybe<Scalars["String"]>;
+  imageUrl: Scalars["String"];
+  provider: Scalars["String"];
+  providerId: Scalars["Int"];
+  phone: Scalars["String"];
+  address: Scalars["String"];
+  trust: Scalars["Int"];
 };
-export type IGetPikachuQueryVariables = {};
+export type IGetLoginMutationVariables = {
+  input: ILoginUserInput;
+};
 
-export type IGetPikachuQuery = { __typename?: "Query" } & {
-  pokemon: Maybe<
-    { __typename?: "Pokemon" } & Pick<IPokemon, "id" | "number" | "name">
+export type IGetLoginMutation = { __typename?: "Mutation" } & {
+  loginUser: Maybe<
+    { __typename?: "LoginUserOutput" } & Pick<ILoginUserOutput, "token">
   >;
 };
 
@@ -107,59 +88,64 @@ import * as ReactApollo from "react-apollo";
 import * as ReactApolloHooks from "react-apollo-hooks";
 export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 
-export const GetPikachuDocument = gql`
-  query getPikachu {
-    pokemon(name: "Pikachu") {
-      id
-      number
-      name
+export const GetLoginDocument = gql`
+  mutation getLogin($input: LoginUserInput!) {
+    loginUser(input: $input) {
+      token
     }
   }
 `;
+export type IGetLoginMutationFn = ReactApollo.MutationFn<
+  IGetLoginMutation,
+  IGetLoginMutationVariables
+>;
 
-export const GetPikachuComponent = (
+export const GetLoginComponent = (
   props: Omit<
     Omit<
-      ReactApollo.QueryProps<IGetPikachuQuery, IGetPikachuQueryVariables>,
-      "query"
+      ReactApollo.MutationProps<IGetLoginMutation, IGetLoginMutationVariables>,
+      "mutation"
     >,
     "variables"
-  > & { variables?: IGetPikachuQueryVariables }
+  > & { variables?: IGetLoginMutationVariables }
 ) => (
-  <ReactApollo.Query<IGetPikachuQuery, IGetPikachuQueryVariables>
-    query={GetPikachuDocument}
+  <ReactApollo.Mutation<IGetLoginMutation, IGetLoginMutationVariables>
+    mutation={GetLoginDocument}
     {...props}
   />
 );
 
-export type IGetPikachuProps<TChildProps = {}> = Partial<
-  ReactApollo.DataProps<IGetPikachuQuery, IGetPikachuQueryVariables>
+export type IGetLoginProps<TChildProps = {}> = Partial<
+  ReactApollo.MutateProps<IGetLoginMutation, IGetLoginMutationVariables>
 > &
   TChildProps;
-export function withGetPikachu<TProps, TChildProps = {}>(
+export function withGetLogin<TProps, TChildProps = {}>(
   operationOptions?: ReactApollo.OperationOption<
     TProps,
-    IGetPikachuQuery,
-    IGetPikachuQueryVariables,
-    IGetPikachuProps<TChildProps>
+    IGetLoginMutation,
+    IGetLoginMutationVariables,
+    IGetLoginProps<TChildProps>
   >
 ) {
-  return ReactApollo.withQuery<
+  return ReactApollo.withMutation<
     TProps,
-    IGetPikachuQuery,
-    IGetPikachuQueryVariables,
-    IGetPikachuProps<TChildProps>
-  >(GetPikachuDocument, {
-    alias: "withGetPikachu",
+    IGetLoginMutation,
+    IGetLoginMutationVariables,
+    IGetLoginProps<TChildProps>
+  >(GetLoginDocument, {
+    alias: "withGetLogin",
     ...operationOptions
   });
 }
 
-export function useGetPikachuQuery(
-  baseOptions?: ReactApolloHooks.QueryHookOptions<IGetPikachuQueryVariables>
+export function useGetLoginMutation(
+  baseOptions?: ReactApolloHooks.MutationHookOptions<
+    IGetLoginMutation,
+    IGetLoginMutationVariables
+  >
 ) {
-  return ReactApolloHooks.useQuery<IGetPikachuQuery, IGetPikachuQueryVariables>(
-    GetPikachuDocument,
-    baseOptions
-  );
+  return ReactApolloHooks.useMutation<
+    IGetLoginMutation,
+    IGetLoginMutationVariables
+  >(GetLoginDocument, baseOptions);
 }

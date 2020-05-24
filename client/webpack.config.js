@@ -10,7 +10,6 @@ const entry = {};
 
 for (const file of files) {
   entry[file.split(".")[0]] = path.resolve(__dirname, "./serverless", file);
-  console.log(file);
 }
 
 module.exports = {

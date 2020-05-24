@@ -2,7 +2,6 @@ package com.ssafy.market.domain.user.domain;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -43,12 +42,12 @@ public class User {
     private Role role;
 
 
-    public User(Long id) {
-        this.userId = id;
+    public User(Long userId) {
+        this.userId = userId;
     }
 
-    public User(Long id, String name, @Email String email, String imageUrl, @NotNull String provider, Long providerId, String phone, String address, int trust, Role role) {
-        this.userId = id;
+    public User(Long userId, String name, @Email String email, String imageUrl, @NotNull String provider, Long providerId, String phone, String address, int trust, Role role) {
+        this.userId = userId;
         this.name = name;
         this.email = email;
         this.imageUrl = imageUrl;

@@ -17,6 +17,16 @@ class PageStore {
   constructor(initialData = initialPage, root: any) {
       this.nav = initialData.nav;
   }
+
+  @action
+  getClickedIdx() {
+    return this.clickedIdx;
+  }
+
+  @action
+  setClickedIdx(idx: number) {
+    this.clickedIdx = idx;
+  }
 }
 
 export default PageStore;

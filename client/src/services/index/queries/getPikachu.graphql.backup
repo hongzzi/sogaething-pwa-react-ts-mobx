@@ -5,3 +5,10 @@ query getPikachu {
     name
   }
 }
+
+
+query getHello($input: test!){
+    hello2(input: $input){
+        name
+    }
+}

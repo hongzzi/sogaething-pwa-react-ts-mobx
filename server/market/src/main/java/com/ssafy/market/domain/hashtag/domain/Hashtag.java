@@ -18,6 +18,7 @@ public class Hashtag {
     @JoinColumn(name = "productId")
     private Product product;
 //    private Long productId;
+
     private String hashtag;
 
     public Hashtag(Long hashtagId, Product product, String hashtag){

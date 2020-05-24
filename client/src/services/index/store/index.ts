@@ -5,6 +5,10 @@ const isServer = typeof window === 'undefined';
 
 useStaticRendering(isServer);
 
+export interface IEnvironments {
+  [key: string]: string
+}
+
 let store: RootStore | null = null;
 
 const initialRoot = {
@@ -15,13 +19,16 @@ const initialRoot = {
 export class RootStore {
   authStore: AuthStore;
   pageStore: PageStore;
-  
-  constructor(initialData: any ) {
-    this.authStore = new AuthStore(initialData.authStore, this);
+  constructor(initialData: any) {
+    if (isServer) {
+      this.authStore = new AuthStore(initialData.authStore, this);
+    } else {
+      this.authStore = new AuthStore({...initialData.authStore, token: window.sessionStorage.getItem('jwt')}, this);
+    }
     this.pageStore = new PageStore(initialData.pageStore, this);
   }
-
 }
+
 export default function initializeStore(initialData = initialRoot) {
   if (isServer) {
     return new RootStore(initialData);
