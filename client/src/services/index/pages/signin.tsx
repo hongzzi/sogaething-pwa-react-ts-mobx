@@ -1,24 +1,40 @@
-import axios from 'axios';
 import * as React from 'react';
 import KakaoLogin from 'react-kakao-login';
-import { useGetHello2Query } from '~/generated/graphql'
+import { useGetLoginMutation } from '~/generated/graphql';
 import styled from '~/styled';
 import GoogleIcon from '../assets/img/signin-google.png?url';
 import KakaoIcon from '../assets/img/signin-kakao.png?url';
 import CircleImageView from '../components/CircleImageView';
-import { NEXT_APP_GRAPHQL_ENDPOINT, NEXT_APP_KAKAO_CLIENT_KEY } from '../helpers/config';
+import {
+  NEXT_APP_GRAPHQL_ENDPOINT,
+  NEXT_APP_KAKAO_CLIENT_KEY,
+} from '../helpers/config';
 import useStores from '../helpers/useStores';
 
 interface ISignInProps {}
 
 export default (props: ISignInProps) => {
   const store = useStores();
-  const {data, loading, error} = useGetHello2Query();
-  console.log(NEXT_APP_KAKAO_CLIENT_KEY);
+
+  // const mutate = useGetLoginMutation;
+  const mutate = useGetLoginMutation();
 
   const success = (res: any) => {
     store.authStore.getTest();
-    console.log('kakao login 성공');
+    mutate({
+      variables: {
+        input: {
+          provider: 'Kakao',
+          token: res.response.access_token,
+        },
+      },
+    })
+    .then((res) => {
+      console.log(res);
+    })
+    .catch((err) => {
+      console.log(err);
+    })
   };
   const failure = () => {
     alert('실패');
@@ -49,12 +65,16 @@ export default (props: ISignInProps) => {
 
 const Wrapper = styled.div`
   padding: 40px;
+  height: 100%;
 `;
 
 const WrapperLine = styled.div`
   text-align: center;
-  margin-top: 40%;
-  margin-bottom: 30%;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  height: 50%;
+  width:100%;
 `;
 
 const WrapperLoginImageText = styled.div`
@@ -66,6 +86,7 @@ const WrapperLoginImageText = styled.div`
 
 const Line = styled.p`
   margin: 22px 0.5rem 0rem 0;
+  width: 100%;
   font-size: 36px;
   font-weight: bold;
   font-family: "Jua";

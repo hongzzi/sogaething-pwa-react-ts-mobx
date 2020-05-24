@@ -15,11 +15,22 @@ public class Product extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long productId;
 
-    @ManyToOne
-    @JoinColumn(name="post_id")
+    @ManyToOne(targetEntity = Post.class)
+    @JoinColumn(name="postId")
     private Post post;
 
+//    private Long postId;
+    private String name;
     private Long price;
     private String category;
-    private boolean state;
+    private Boolean state;
+
+    public Product(Long productId, Post post, String name, Long price, String category,boolean state){
+        this.productId = productId;
+        this.post = post;
+        this.name = name;
+        this.price = price;
+        this.category = category;
+        this.state = state;
+    }
 }
