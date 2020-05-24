@@ -65,12 +65,16 @@ export default (props: ISignInProps) => {
 
 const Wrapper = styled.div`
   padding: 40px;
+  height: 100%;
 `;
 
 const WrapperLine = styled.div`
   text-align: center;
-  margin-top: 40%;
-  margin-bottom: 30%;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  height: 50%;
+  width:100%;
 `;
 
 const WrapperLoginImageText = styled.div`
@@ -82,6 +86,7 @@ const WrapperLoginImageText = styled.div`
 
 const Line = styled.p`
   margin: 22px 0.5rem 0rem 0;
+  width: 100%;
   font-size: 36px;
   font-weight: bold;
   font-family: "Jua";
