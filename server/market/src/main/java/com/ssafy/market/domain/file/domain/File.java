@@ -15,9 +15,16 @@ public class File {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long fileId;
 
-    @ManyToOne
-    @JoinColumn(name = "product_id")
+    @ManyToOne(targetEntity = Product.class)
+    @JoinColumn(name = "productId")
     private Product product;
+//    private Long productId;
 
     private String imgPath;
+
+    public File(Long fileId, Product product, String imgPath){
+        this.fileId = fileId;
+        this.product = product;
+        this.imgPath = imgPath;
+    }
 }
