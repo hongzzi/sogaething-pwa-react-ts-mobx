@@ -14,7 +14,6 @@ import java.util.List;
 public class ChatRoomController {
 
     private final ChatRoomRepository chatRoomRepository;
-
     private final RedisExample redisExample;
 
     // 채팅방 생성
