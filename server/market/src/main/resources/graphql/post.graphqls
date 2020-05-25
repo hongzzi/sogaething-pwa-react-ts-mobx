@@ -1,6 +1,6 @@
 type Post {
     postId : ID!
-    user : User
+    userId : Int
     isBuy : Boolean!
     title : String!
     saleDate : String!
@@ -26,5 +26,6 @@ type Mutation {
 type Query {
     findAllPosts: [Post]
     findPostByPostId(id: Int): Post
+    findRecentPosts: [Post]
 #    findAllPostsByUploaderId(uploader_id: Int):[Post]
 }

@@ -22,6 +22,9 @@ public class Post extends BaseTimeEntity {
     @JoinColumn(name = "user_id")
     private User user;
 
+    @Column(name = "user_id", insertable = false, updatable = false, nullable = false)
+    private Long userId;
+
     @Column(name = "is_buy")
     private boolean isBuy;
 
@@ -42,6 +45,10 @@ public class Post extends BaseTimeEntity {
 
     @Column(name = "deal_state")
     private String dealState;
+
+    public Post(Long postId) {
+        this.postId = postId;
+    }
 
     public Post(Long postId, User user, boolean isBuy, String title, Date saleDate, String contents, Long viewCount, String deal, String dealState) {
         this.postId = postId;
