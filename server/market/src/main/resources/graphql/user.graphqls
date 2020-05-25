@@ -14,13 +14,22 @@ type LoginUserOutput {
     token : String!
 }
 
+type UserInfoOutput {
+    name : String
+    address : String
+    trust : Int
+    numOfPosts : Int
+}
+
 input LoginUserInput {
     provider : String!
     token : String!
 }
 
 extend type Query {
-    findAllUsers: [User]
+#    findAllUsers: [User]
+    findUserInfo: UserInfoOutput
+#    findUserHistory: [Post]
 }
 
 extend type Mutation {

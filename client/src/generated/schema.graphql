@@ -1,15 +1,49 @@
 # source: http://3.34.131.20:8080/graphql
-# timestamp: Sat May 23 2020 23:26:20 GMT+0900 (대한민국 표준시)
+# timestamp: Sun May 24 2020 13:13:36 GMT+0900 (대한민국 표준시)
 
 """This directive allows results to be deferred during execution"""
 directive @defer on FIELD
 
-input CreatePostInput {
-  uploaderId: Int!
+input CreateDetailDealInput {
+  postId: Int!
+  userId: Int!
+  hashtagId: Int!
+}
+
+input CreateProductInput {
+  postId: Int!
+  price: Int!
+  name: String!
+  category: String!
+  state: Boolean!
+}
+
+type DetailDeal {
+  dealId: ID!
+  post: Post!
+  user: User!
+  hashtag: Hashtag!
+  createdDate: String
+  modifiedDate: String
+}
+
+type DetailDealOutput {
+  postId: Int!
+  imgPath: String!
   title: String!
-  saleDate: String!
+  category: String!
+  hashtag: String!
   contents: String!
-  deal: String!
+  price: Int!
+  buyerId: Int!
+  sellerId: Int!
+  address: String!
+}
+
+type Hashtag {
+  hashtagId: ID!
+  product: Product!
+  hashtag: String!
 }
 
 input LoginUserInput {
@@ -22,7 +56,8 @@ type LoginUserOutput {
 }
 
 type Mutation {
-  createPost(input: CreatePostInput!): Post
+  createProduct(input: CreateProductInput!): Product
+  createDetailDeal(input: CreateDetailDealInput!): DetailDealOutput
   loginUser(input: LoginUserInput!): LoginUserOutput
 }
 
@@ -39,10 +74,23 @@ type Post {
   modifiedDate: String
 }
 
+type Product {
+  productId: ID!
+  post: Post
+  name: String!
+  price: Int!
+  category: String!
+  state: Boolean
+}
+
 type Query {
   findAllPosts: [Post]
   findPostByPostId(id: Int): Post
+  findAllDetailDeals: [DetailDeal]
+  findDetailDealByPost(postId: Int): [DetailDealOutput]
   findAllUsers: [User]
+  findAllProducts: [Product]
+  findProductById(productId: Int): Product
 }
 
 type User {

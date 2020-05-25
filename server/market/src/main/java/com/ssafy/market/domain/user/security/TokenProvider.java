@@ -2,12 +2,16 @@ package com.ssafy.market.domain.user.security;
 
 import com.ssafy.market.domain.user.domain.User;
 import com.ssafy.market.global.config.AppProperties;
+import graphql.schema.DataFetchingEnvironment;
+import graphql.servlet.GraphQLContext;
 import io.jsonwebtoken.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 
 @Service
@@ -73,4 +77,19 @@ public class TokenProvider {
         return false;
     }
 
+    public String getTokenFromRequest(HttpServletRequest request) {
+        String bearerToken = request.getHeader("Authorization");
+        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
+            return bearerToken.substring(7, bearerToken.length());
+        }
+        return null;
+    }
+
+    public Long getUserIdFromHeader(DataFetchingEnvironment env){
+        GraphQLContext context = env.getContext();
+        HttpServletRequest request = context.getHttpServletRequest().get();
+        String bearerToken = getTokenFromRequest(request);
+        Long userId = getUserIdFromToken(bearerToken);
+        return userId;
+    }
 }

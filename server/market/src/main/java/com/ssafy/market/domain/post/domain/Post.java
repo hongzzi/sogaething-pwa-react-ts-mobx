@@ -16,34 +16,40 @@ import java.util.Date;
 public class Post extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "postId")
+    @Column(name = "post_id")
     private Long postId;
 
-
     @ManyToOne
-    @JoinColumn(name = "userId")
+    @JoinColumn(name = "user_id")
     private User user;
 
-    @Column(name = "isBuy")
+    @Column(name = "user_id", insertable = false, updatable = false, nullable = false)
+    private Long userId;
+
+    @Column(name = "is_buy")
     private boolean isBuy;
 
     @Column(name = "title")
     private String title;
 
-    @Column(name = "saleDate")
+    @Column(name = "sale_date")
     private Date saleDate;
 
     @Column(name = "contents")
     private String contents;
 
-    @Column(name = "viewCount")
+    @Column(name = "view_count")
     private Long viewCount;
 
     @Column(name = "deal")
     private String deal;
 
-    @Column(name = "dealState")
+    @Column(name = "deal_state")
     private String dealState;
+
+    public Post(Long postId) {
+        this.postId = postId;
+    }
 
     public Post(Long postId, User user, boolean isBuy, String title, Date saleDate, String contents, Long viewCount, String deal, String dealState) {
         this.postId = postId;

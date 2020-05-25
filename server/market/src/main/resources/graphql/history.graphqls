@@ -1,0 +1,22 @@
+type History{
+    historyId: ID!
+    user: User
+    post: Post
+    createdDate : String
+    modifiedDate : String
+}
+
+type HistoryOutput{
+    userId: Int
+    postId: Int
+    createdDate : String
+    modifiedDate : String
+}
+
+extend type Query {
+    findUserHistoryByUserId: [Post]
+}
+
+extend type Mutation {
+    createHistory(postId:Int!) : HistoryOutput
+}

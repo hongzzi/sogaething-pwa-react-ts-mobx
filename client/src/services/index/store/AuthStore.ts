@@ -1,20 +1,18 @@
 import autobind from 'autobind-decorator';
 import jwtDecode from 'jwt-decode';
-import { action, observable, reaction } from 'mobx';
-import AuthService from '../service/AuthService';
+import { action, observable, reaction, toJS } from 'mobx';
 
 export interface IAuth {
-  email: string;
-  id: number;
-  provider: string;
-  token: string;
+  sub: number;
+}
+
+export interface IAuthResponseDto {
+  loginUser: {
+    token: string,
+  }
 }
 
 export const initialAuth = {
-  email: '',
-  id: -1,
-  provider: '',
-  token: '',
 };
 
 export type Provider = 'kakao' | 'google' | 'naver';
@@ -26,8 +24,6 @@ class AuthStore {
   @observable auth: IAuth | undefined;
   @observable email = '';
   @observable provider: string = '';
-
-  private authService = new AuthService();
 
   constructor(initialData = initialAuth, root: any) {
     if (this.token) {
@@ -73,13 +69,13 @@ class AuthStore {
   // }
 
   @action
-  setProvider(provider : Provider) {
+  setProvider(provider: Provider) {
     this.provider = provider;
   }
 
   @action
   getTest() {
-    console.log("call store");
+    console.log('call store');
   }
 
   @action
@@ -99,7 +95,20 @@ class AuthStore {
   @action
   setToken(token: string) {
     this.token = token;
-    this.auth = jwtDecode(token) as IAuth;
+    this.setAuth();
+  }
+  @action
+  setAuth() {
+    if (this.token) {
+      this.auth = jwtDecode(this.token) as IAuth;
+    }
+  }
+
+  @action
+  getAuth() {
+    if(this.token){
+      return this.auth;
+    }
   }
 
   @action
