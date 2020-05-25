@@ -1,9 +1,9 @@
 package com.ssafy.market.global.config;
 
 import com.ssafy.market.domain.user.security.*;
-import com.ssafy.market.domain.user.security.oauth2.HttpCookieOAuth2AuthorizationRequestRepository;
-import com.ssafy.market.domain.user.security.oauth2.OAuth2AuthenticationFailureHandler;
-import com.ssafy.market.domain.user.security.oauth2.OAuth2AuthenticationSuccessHandler;
+//import com.ssafy.market.domain.user.security.oauth2.HttpCookieOAuth2AuthorizationRequestRepository;
+//import com.ssafy.market.domain.user.security.oauth2.OAuth2AuthenticationFailureHandler;
+//import com.ssafy.market.domain.user.security.oauth2.OAuth2AuthenticationSuccessHandler;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -36,11 +36,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     // 인증 시 사용할 custom User Service
 //    private final CustomUserDetailsService customUserDetailsService;
 
-    private final OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
-
-    private final OAuth2AuthenticationFailureHandler oAuth2AuthenticationFailureHandler;
-
-    private final HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository;
+//    private final OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
+//
+//    private final OAuth2AuthenticationFailureHandler oAuth2AuthenticationFailureHandler;
+//
+//    private final HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository;
 
     // 로그인 시 JWT TOKEN을 확인해 인가된 사용자 유무를 판별하고 내부 process 수행
     @Bean
@@ -48,10 +48,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return new TokenAuthenticationFilter();
     }
 
-    @Bean
-    public HttpCookieOAuth2AuthorizationRequestRepository cookieAuthorizationRequestRepository() {
-        return new HttpCookieOAuth2AuthorizationRequestRepository();
-    }
+//    @Bean
+//    public HttpCookieOAuth2AuthorizationRequestRepository cookieAuthorizationRequestRepository() {
+//        return new HttpCookieOAuth2AuthorizationRequestRepository();
+//    }
 
 //    @Override
 //    public void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
@@ -71,34 +71,34 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-            .cors()
+                .cors()
                 .and()
-            .sessionManagement()
+                .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-              .and()
-            .csrf()
+                .and()
+                .csrf()
                 .disable()
-            .formLogin()
-               .disable()
-            .httpBasic()
-               .disable()
-            .exceptionHandling()
+                .formLogin()
+                .disable()
+                .httpBasic()
+                .disable()
+                .exceptionHandling()
                 .authenticationEntryPoint(new RestAuthenticationEntryPoint())
                 .and()
-            .authorizeRequests()
+                .authorizeRequests()
                 .antMatchers("/",
-                    "/error",
-                    "/favicon.ico",
-                    "/**/*.png",
-                    "/**/*.gif",
-                    "/**/*.svg",
-                    "/**/*.jpg",
-                    "/**/*.html",
-                    "/**/*.css",
-                    "/**/*.js")
-                    .permitAll()
+                        "/error",
+                        "/favicon.ico",
+                        "/**/*.png",
+                        "/**/*.gif",
+                        "/**/*.svg",
+                        "/**/*.jpg",
+                        "/**/*.html",
+                        "/**/*.css",
+                        "/**/*.js")
+                .permitAll()
                 .antMatchers("/","/auth/**", "/oauth2/**", "/apis/graphql", "/chat/**", "/ws-stomp/**")
-                    .permitAll();
+                .permitAll();
 
         http.addFilterBefore(tokenAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
     }

@@ -43,3 +43,4 @@ public class UserMutation implements GraphQLMutationResolver {
         return output;
     }
 }
+

@@ -7,12 +7,14 @@ export interface IAuth {
   email: string;
   id: number;
   provider: string;
+  token: string;
 }
 
-export const initialAuth: IAuth = {
+export const initialAuth = {
   email: '',
   id: -1,
   provider: '',
+  token: '',
 };
 
 export type Provider = 'kakao' | 'google' | 'naver';

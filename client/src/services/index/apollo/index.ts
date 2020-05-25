@@ -5,6 +5,7 @@ import { createHttpLink } from 'apollo-link-http'
 import fetch from 'isomorphic-unfetch'
 import { checkTokenIsExpired } from '../helpers'
 import { ENDPOINT } from './../constants';
+import { NEXT_APP_GRAPHQL_ENDPOINT } from './../helpers/config';
 import { RootStore } from './../store/index';
 
 let apolloClient: ApolloClient<NormalizedCacheObject>
@@ -18,7 +19,7 @@ export function createApolloClient(store: RootStore, state?: any) {
   } else {
     const httpLink = createHttpLink({
       fetch,
-      uri: ENDPOINT.GRAPHQL,
+      uri: NEXT_APP_GRAPHQL_ENDPOINT,
     })
 
     const link = createAuthorizationLink(store).concat(httpLink)

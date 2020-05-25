@@ -1,6 +1,7 @@
 package com.ssafy.market.domain.post.domain;
 
 import com.ssafy.market.domain.BaseTimeEntity;
+import com.ssafy.market.domain.product.domain.Product;
 import com.ssafy.market.domain.user.domain.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -61,6 +62,7 @@ public class Post extends BaseTimeEntity {
         this.deal = deal;
         this.dealState = dealState;
     }
+
 
 }
 

@@ -20,7 +20,11 @@ export class RootStore {
   authStore: AuthStore;
   pageStore: PageStore;
   constructor(initialData: any) {
-    this.authStore = new AuthStore(initialData.authStore, this);
+    if (isServer) {
+      this.authStore = new AuthStore(initialData.authStore, this);
+    } else {
+      this.authStore = new AuthStore({...initialData.authStore, token: window.sessionStorage.getItem('jwt')}, this);
+    }
     this.pageStore = new PageStore(initialData.pageStore, this);
   }
 }

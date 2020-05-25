@@ -1,0 +1,22 @@
+type Product{
+    productId : ID!
+    post : Post
+    name : String!
+    price : Int!
+    category :String!
+    state : Boolean
+}
+input CreateProductInput{
+    postId : Int!
+    price : Int!
+    name : String!
+    category : String!
+    state : Boolean!
+}
+extend type Mutation{
+    createProduct(input : CreateProductInput!) : Product
+}
+extend type Query{
+    findAllProducts: [Product]
+    findProductById(productId:Int) : Product
+}

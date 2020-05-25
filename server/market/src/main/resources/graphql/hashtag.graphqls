@@ -1,0 +1,16 @@
+type Hashtag{
+    hashtagId : ID!
+    product : Product!
+    hashtag : String!
+}
+input CreateHashtagInput{
+    productId : Int!
+    hashtag : String!
+}
+extend type Mutation{
+    createHashtag(input : CreateHashtagInput!) : Hashtag
+}
+extend type Query{
+    findAllHashtags : [Hashtag]
+    findHashtagById(id : Int) : Hashtag
+}

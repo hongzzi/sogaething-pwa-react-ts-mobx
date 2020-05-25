@@ -1,0 +1,18 @@
+type File{
+    fileId : ID!
+    product : Product
+    imgPath : String!
+}
+input CreateFileInput{
+    productId : Int!
+    imgPath : String!
+}
+
+extend type Mutation{
+    createFile(input : CreateFileInput!) : File
+}
+
+extend type Query{
+    findAllFiles : [File]
+    findFileById(fileId:Int) : File
+}

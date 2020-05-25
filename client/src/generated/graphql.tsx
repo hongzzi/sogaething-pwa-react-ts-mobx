@@ -6,63 +6,81 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
-  /** The `Upload` scalar type represents a file upload. */
-  Upload: any;
 };
 
-export type IAuthInput = {
-  accessToken: Scalars["String"];
+export type ICreatePostInput = {
+  uploaderId: Scalars["Int"];
+  title: Scalars["String"];
+  saleDate: Scalars["String"];
+  contents: Scalars["String"];
+  deal: Scalars["String"];
 };
 
-export type IAuthResponse = {
-  token?: Maybe<Scalars["String"]>;
-  name?: Maybe<Scalars["String"]>;
+export type ILoginUserInput = {
+  provider: Scalars["String"];
+  token: Scalars["String"];
 };
 
-export enum ICacheControlScope {
-  Public = "PUBLIC",
-  Private = "PRIVATE"
-}
+export type ILoginUserOutput = {
+  token: Scalars["String"];
+};
 
 export type IMutation = {
-  authFacebook?: Maybe<IAuthResponse>;
-  authGoogle?: Maybe<IAuthResponse>;
-  setTest?: Maybe<IAuthResponse>;
+  createPost?: Maybe<IPost>;
+  loginUser?: Maybe<ILoginUserOutput>;
 };
 
-export type IMutationAuthFacebookArgs = {
-  input: IAuthInput;
+export type IMutationCreatePostArgs = {
+  input: ICreatePostInput;
 };
 
-export type IMutationAuthGoogleArgs = {
-  input: IAuthInput;
+export type IMutationLoginUserArgs = {
+  input: ILoginUserInput;
 };
 
-export type IMutationSetTestArgs = {
-  input: ITest;
+export type IPost = {
+  postId: Scalars["ID"];
+  user?: Maybe<IUser>;
+  isBuy: Scalars["Boolean"];
+  title: Scalars["String"];
+  saleDate: Scalars["String"];
+  contents: Scalars["String"];
+  viewCount: Scalars["Int"];
+  deal: Scalars["String"];
+  createdDate?: Maybe<Scalars["String"]>;
+  modifiedDate?: Maybe<Scalars["String"]>;
 };
 
 export type IQuery = {
-  /** A simple type for getting started! */
-  hello?: Maybe<Scalars["String"]>;
-  hello2?: Maybe<Scalars["String"]>;
+  findAllPosts?: Maybe<Array<Maybe<IPost>>>;
+  findPostByPostId?: Maybe<IPost>;
+  findAllUsers?: Maybe<Array<Maybe<IUser>>>;
 };
 
-export type IQueryHello2Args = {
-  input: ITest;
+export type IQueryFindPostByPostIdArgs = {
+  id?: Maybe<Scalars["Int"]>;
 };
 
-export type ITest = {
-  name?: Maybe<Scalars["String"]>;
+export type IUser = {
+  userId: Scalars["ID"];
+  name: Scalars["String"];
+  email?: Maybe<Scalars["String"]>;
+  imageUrl: Scalars["String"];
+  provider: Scalars["String"];
+  providerId: Scalars["Int"];
+  phone: Scalars["String"];
+  address: Scalars["String"];
+  trust: Scalars["Int"];
+};
+export type IGetLoginMutationVariables = {
+  input: ILoginUserInput;
 };
 
-export type ITestResponse = {
-  name?: Maybe<Scalars["String"]>;
+export type IGetLoginMutation = { __typename?: "Mutation" } & {
+  loginUser: Maybe<
+    { __typename?: "LoginUserOutput" } & Pick<ILoginUserOutput, "token">
+  >;
 };
-
-export type IGetHello2QueryVariables = {};
-
-export type IGetHello2Query = { __typename?: "Query" } & Pick<IQuery, "hello2">;
 
 import gql from "graphql-tag";
 import * as React from "react";
@@ -70,55 +88,64 @@ import * as ReactApollo from "react-apollo";
 import * as ReactApolloHooks from "react-apollo-hooks";
 export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 
-export const GetHello2Document = gql`
-  query getHello2 {
-    hello2(input: { name: "Hong" })
+export const GetLoginDocument = gql`
+  mutation getLogin($input: LoginUserInput!) {
+    loginUser(input: $input) {
+      token
+    }
   }
 `;
+export type IGetLoginMutationFn = ReactApollo.MutationFn<
+  IGetLoginMutation,
+  IGetLoginMutationVariables
+>;
 
-export const GetHello2Component = (
+export const GetLoginComponent = (
   props: Omit<
     Omit<
-      ReactApollo.QueryProps<IGetHello2Query, IGetHello2QueryVariables>,
-      "query"
+      ReactApollo.MutationProps<IGetLoginMutation, IGetLoginMutationVariables>,
+      "mutation"
     >,
     "variables"
-  > & { variables?: IGetHello2QueryVariables }
+  > & { variables?: IGetLoginMutationVariables }
 ) => (
-  <ReactApollo.Query<IGetHello2Query, IGetHello2QueryVariables>
-    query={GetHello2Document}
+  <ReactApollo.Mutation<IGetLoginMutation, IGetLoginMutationVariables>
+    mutation={GetLoginDocument}
     {...props}
   />
 );
 
-export type IGetHello2Props<TChildProps = {}> = Partial<
-  ReactApollo.DataProps<IGetHello2Query, IGetHello2QueryVariables>
+export type IGetLoginProps<TChildProps = {}> = Partial<
+  ReactApollo.MutateProps<IGetLoginMutation, IGetLoginMutationVariables>
 > &
   TChildProps;
-export function withGetHello2<TProps, TChildProps = {}>(
+export function withGetLogin<TProps, TChildProps = {}>(
   operationOptions?: ReactApollo.OperationOption<
     TProps,
-    IGetHello2Query,
-    IGetHello2QueryVariables,
-    IGetHello2Props<TChildProps>
+    IGetLoginMutation,
+    IGetLoginMutationVariables,
+    IGetLoginProps<TChildProps>
   >
 ) {
-  return ReactApollo.withQuery<
+  return ReactApollo.withMutation<
     TProps,
-    IGetHello2Query,
-    IGetHello2QueryVariables,
-    IGetHello2Props<TChildProps>
-  >(GetHello2Document, {
-    alias: "withGetHello2",
+    IGetLoginMutation,
+    IGetLoginMutationVariables,
+    IGetLoginProps<TChildProps>
+  >(GetLoginDocument, {
+    alias: "withGetLogin",
     ...operationOptions
   });
 }
 
-export function useGetHello2Query(
-  baseOptions?: ReactApolloHooks.QueryHookOptions<IGetHello2QueryVariables>
+export function useGetLoginMutation(
+  baseOptions?: ReactApolloHooks.MutationHookOptions<
+    IGetLoginMutation,
+    IGetLoginMutationVariables
+  >
 ) {
-  return ReactApolloHooks.useQuery<IGetHello2Query, IGetHello2QueryVariables>(
-    GetHello2Document,
-    baseOptions
-  );
+  return ReactApolloHooks.useMutation<
+    IGetLoginMutation,
+    IGetLoginMutationVariables
+  >(GetLoginDocument, baseOptions);
 }
