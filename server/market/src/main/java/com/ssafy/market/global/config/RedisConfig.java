@@ -16,7 +16,7 @@ public class RedisConfig {
         JedisConnectionFactory connectionFactory = new JedisConnectionFactory();
         connectionFactory.setHostName("localhost");
         connectionFactory.setPort(6379);
-        connectionFactory.setPassword("Tkvltkscor");
+//        connectionFactory.setPassword("Tkvltkscor");
         return connectionFactory;
     }
 
