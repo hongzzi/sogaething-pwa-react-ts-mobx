@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Optional;
 
 @Component
@@ -19,15 +20,11 @@ public class PostQuery implements GraphQLQueryResolver {
         return postRepository.findAll();
     }
 
-//    public Optional<Post> findPostByPostId(Long id) {
-//        return postRepository.findByPost_id(id);
-//    }
-
     public Optional<Post> findPostByPostId(Long id) {
         return postRepository.findByPostId(id);
     }
 
-//    public Iterable<Post> findAllPostsByUploaderId() {
-//        return postRepository.findAll();
-//    }
+    public List<Post> findRecentPosts(){
+        return postRepository.findTop6ByOrderByCreatedDateDesc();
+    }
 }

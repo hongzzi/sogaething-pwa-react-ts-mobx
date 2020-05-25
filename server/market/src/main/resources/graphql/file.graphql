@@ -8,11 +8,11 @@ input CreateFileInput{
     imgPath : String!
 }
 
-type Mutation{
+extend type Mutation{
     createFile(input : CreateFileInput!) : File
 }
 
-type Query{
+extend type Query{
     findAllFiles : [File]
     findFileById(fileId:Int) : File
 }

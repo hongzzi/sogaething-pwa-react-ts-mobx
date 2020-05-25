@@ -13,7 +13,7 @@ input CreateProductInput{
     category : String!
     state : Boolean!
 }
-type Mutation{
+extend type Mutation{
     createProduct(input : CreateProductInput!) : Product
 }
 extend type Query{
