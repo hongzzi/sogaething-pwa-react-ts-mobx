@@ -10,4 +10,6 @@ import java.util.Optional;
 public interface FileRepository extends JpaRepository<File, Long> {
 
     File findByProduct(Product product);
+    int deleteByFileId(Long id);
+
 }

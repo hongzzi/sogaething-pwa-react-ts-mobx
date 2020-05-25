@@ -4,11 +4,13 @@ import com.ssafy.market.domain.BaseTimeEntity;
 import com.ssafy.market.domain.post.domain.Post;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 
 @NoArgsConstructor
 @Getter
+@Setter
 @Entity
 public class Product extends BaseTimeEntity {
     @Id
@@ -27,6 +29,13 @@ public class Product extends BaseTimeEntity {
 
     public Product(Long productId, Post post, String name, Long price, String category,boolean state){
         this.productId = productId;
+        this.post = post;
+        this.name = name;
+        this.price = price;
+        this.category = category;
+        this.state = state;
+    }
+    public void update(Post post, String name, Long price, String category, boolean state){
         this.post = post;
         this.name = name;
         this.price = price;

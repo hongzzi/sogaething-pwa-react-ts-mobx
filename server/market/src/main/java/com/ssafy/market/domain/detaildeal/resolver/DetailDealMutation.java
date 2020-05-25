@@ -11,7 +11,7 @@ import com.ssafy.market.domain.file.repository.FileRepository;
 import com.ssafy.market.domain.hashtag.domain.Hashtag;
 import com.ssafy.market.domain.hashtag.repository.HashtagRepository;
 import com.ssafy.market.domain.post.domain.Post;
-import com.ssafy.market.domain.post.respository.PostRepository;
+import com.ssafy.market.domain.post.repository.PostRepository;
 import com.ssafy.market.domain.product.domain.Product;
 import com.ssafy.market.domain.product.repository.ProductRepository;
 import com.ssafy.market.domain.user.domain.User;
@@ -54,13 +54,12 @@ public class DetailDealMutation implements GraphQLMutationResolver {
 //        System.out.println(input.toString());
 //
 //        DetailDeal detailDeal = detailDealRepository.findBydealId(input.getDealId()).get();
-//
-//
-//        Post post = postRepository.findById(input.getPostId()).get();
-//        User user = userRepository.findById(input.getUserId()).get();
+//        User user = detailDeal.getUser();
+//        Post post = detailDeal.getPost();
 //        Hashtag hashtag = hashtagRepository.findById(input.getHashtagId()).get();
-//
+//        post.update(input.getTitle(),input.getContents(),input.getDeal());
 //        Product product = productRepository.findByPost(post);
+//        product.update(post,product.getName(),input.getPrice(),product.getCategory(),product.getState());
 //        File file = fileRepository.findByProduct(product);
 //        DetailDealOutput output = new DetailDealOutput(input.getPostId(),file.getImgPath(),post.getTitle(),product.getCategory(),hashtag.getHashtag(),post.getContents(), product.getPrice(),post.getUser().getUserId(), input.getUserId(),user.getAddress());
 //        detailDealRepository.save(new DetailDeal(null, post,user,hashtag));
@@ -69,8 +68,8 @@ public class DetailDealMutation implements GraphQLMutationResolver {
 //
 //    }
 
-//    @Transactional
-//    public DetailDeal updateDetailDeal(UpdateDetailDealInput input){
-//
-//    }
+    @Transactional
+    public int deleteDetailDeal(Long id){
+        return detailDealRepository.deleteByDealId(id);
+    }
 }

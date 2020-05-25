@@ -3,10 +3,13 @@ package com.ssafy.market.domain.user.resolver;
 import com.coxautodev.graphql.tools.GraphQLMutationResolver;
 import com.coxautodev.graphql.tools.GraphQLQueryResolver;
 import com.ssafy.market.domain.post.domain.Post;
+import com.ssafy.market.domain.product.domain.Product;
+import com.ssafy.market.domain.product.dto.ProductOutput;
 import com.ssafy.market.domain.user.domain.User;
 import com.ssafy.market.domain.user.dto.LoginUserOutput;
 import com.ssafy.market.domain.user.dto.LoginUserInput;
 import com.ssafy.market.domain.user.dto.LoginUserOutput;
+import com.ssafy.market.domain.user.dto.UserOutput;
 import com.ssafy.market.domain.user.repository.UserRepository;
 import graphql.schema.DataFetchingEnvironment;
 import graphql.servlet.GraphQLContext;
@@ -15,6 +18,8 @@ import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
@@ -35,4 +40,23 @@ public class UserQuery implements GraphQLQueryResolver {
 //        LoginUserOutput output = new LoginUserOutput(Jwt);
 //        return output;
 //    }
+
+    @Transactional
+    public List<UserOutput> findAllUser()
+    {
+        List<UserOutput> outputs = new ArrayList<>();
+        List<User> userList = userRepository.findAll();
+         for(int i = 0; i< userList.size(); i++){
+            outputs.add(new UserOutput(userList.get(i).getUserId(),
+                    userList.get(i).getName(),
+                    userList.get(i).getEmail(),
+                userList.get(i).getImageUrl(),
+                userList.get(i).getProvider(),
+                userList.get(i).getProviderId(),
+                userList.get(i).getPhone(),
+                userList.get(i).getAddress(),
+                userList.get(i).getTrust()));
+        }
+        return outputs;
+    }
 }

@@ -1,8 +1,10 @@
 package com.ssafy.market.domain.hashtag.domain;
 
+import com.ssafy.market.domain.post.domain.Post;
 import com.ssafy.market.domain.product.domain.Product;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 
@@ -24,6 +26,9 @@ public class Hashtag {
     public Hashtag(Long hashtagId, Product product, String hashtag){
         this.hashtagId = hashtagId;
         this.product = product;
+        this.hashtag = hashtag;
+    }
+    public void update(String hashtag){
         this.hashtag = hashtag;
     }
 }

@@ -5,6 +5,7 @@ import com.ssafy.market.domain.product.domain.Product;
 import com.ssafy.market.domain.user.domain.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -18,7 +19,6 @@ public class Post extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "postId")
     private Long postId;
-
 
     @ManyToOne
     @JoinColumn(name = "userId")
@@ -56,7 +56,10 @@ public class Post extends BaseTimeEntity {
         this.deal = deal;
         this.dealState = dealState;
     }
-
-
+    public void update(String title, String contents, String deal){
+        this.title = title;
+        this.contents = contents;
+        this.deal = deal;
+    }
 }
 

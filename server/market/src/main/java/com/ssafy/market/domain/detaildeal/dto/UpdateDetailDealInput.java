@@ -11,9 +11,10 @@ public class UpdateDetailDealInput {
     private Long dealId;
     private Long postId;
     private Long hashtagId;
-    private String postTitle;
-    private String postContents;
+    private String Title;
+    private String Contents;
     private int price;
+    private String deal;
     private String imgPath;
     private String category;
     private String hashtag;

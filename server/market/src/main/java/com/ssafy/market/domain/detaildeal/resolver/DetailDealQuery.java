@@ -9,13 +9,12 @@ import com.ssafy.market.domain.file.repository.FileRepository;
 import com.ssafy.market.domain.hashtag.domain.Hashtag;
 import com.ssafy.market.domain.hashtag.repository.HashtagRepository;
 import com.ssafy.market.domain.post.domain.Post;
-import com.ssafy.market.domain.post.respository.PostRepository;
+import com.ssafy.market.domain.post.repository.PostRepository;
 import com.ssafy.market.domain.product.domain.Product;
 import com.ssafy.market.domain.product.repository.ProductRepository;
 import com.ssafy.market.domain.user.domain.User;
 import com.ssafy.market.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -36,9 +35,10 @@ public class DetailDealQuery implements GraphQLQueryResolver {
         return detailDealRepository.findAll();
     }
 
-//    public Optional<Post> findPostByPostId(Long id) {
-//        return postRepository.findByPost_id(id);
+//    public Optional<DetailDeal> findPostById(Long id) {
+//        return detailDealRepository.findById(id);
 //    }
+
 
     public List<DetailDealOutput> findDetailDealByPost(Long postId) {
         List<DetailDealOutput> outputList = new ArrayList<>();

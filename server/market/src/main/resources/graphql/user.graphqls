@@ -13,17 +13,36 @@ type User {
 type LoginUserOutput {
     token : String!
 }
-
+type UserOutput{
+    userId : ID!
+    name : String!
+    email : String
+    imageUrl : String
+    provider : String!
+    providerId : Int!
+    phone : String!
+    address : String!
+    trust : Int!
+}
 input LoginUserInput {
     provider : String!
     token : String!
 }
+input UpdateUserInput{
+    userId : ID!
+    imageUrl : String
+    phone : String!
+    address : String!
+    trust : Int!
+}
 
 extend type Query {
     findAllUsers: [User]
+    findAllUser: [UserOutput]
 }
 
 extend type Mutation {
     loginUser(input : LoginUserInput!): LoginUserOutput
+    updateUser(input : UpdateUserInput!) : UserOutput
+    deleteUser(id : Int!) : Int
 }
-

@@ -1,12 +1,11 @@
 package com.ssafy.market.domain.user.resolver;
 
 import com.coxautodev.graphql.tools.GraphQLMutationResolver;
-import com.ssafy.market.domain.post.domain.Post;
-import com.ssafy.market.domain.post.dto.CreatePostInput;
-import com.ssafy.market.domain.post.respository.PostRepository;
 import com.ssafy.market.domain.user.domain.User;
 import com.ssafy.market.domain.user.dto.LoginUserOutput;
 import com.ssafy.market.domain.user.dto.LoginUserInput;
+import com.ssafy.market.domain.user.dto.UpdateUserInput;
+import com.ssafy.market.domain.user.dto.UserOutput;
 import com.ssafy.market.domain.user.repository.UserRepository;
 import com.ssafy.market.domain.user.security.TokenProvider;
 import com.ssafy.market.global.apis.KakaoApi;
@@ -16,7 +15,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 
 @Component
@@ -47,6 +45,17 @@ public class UserMutation implements GraphQLMutationResolver {
         GraphQLContext context = env.getContext();
         LoginUserOutput output = new LoginUserOutput(Jwt);
         return output;
+    }
+    @Transactional
+    public UserOutput updateUser(UpdateUserInput input){
+        User user = userRepository.findById(input.getUserId()).get();
+        user.update(input.getImageUrl(),input.getPhone(),input.getAddress(),input.getTrust());
+        UserOutput output =  new UserOutput(input.getUserId(),user.getName(),user.getEmail(),user.getImageUrl(),user.getProvider(),user.getProviderId(),user.getPhone(),user.getAddress(),user.getTrust());
+        return output;
+    }
+    @Transactional
+    public int deleteUser(Long id){
+        return userRepository.deleteByUserId(id);
     }
 }
 

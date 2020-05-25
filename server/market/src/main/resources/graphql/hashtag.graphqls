@@ -7,10 +7,22 @@ input CreateHashtagInput{
     productId : Int!
     hashtag : String!
 }
-type Mutation{
-    createHashtag(input : CreateHashtagInput!) : Hashtag
+input UpdateHashtagInput{
+    hashtagId : Int!
+    hashtag : String!
 }
-type Query{
+type HashtagOutput{
+    hashtagId : ID!
+    productId : Int!
+    hashtag : String!
+}
+extend type Mutation{
+    createHashtag(input : CreateHashtagInput!) : HashtagOutput
+    updateHashtag(input : UpdateHashtagInput!) : HashtagOutput
+    deleteHashtag(id : Int!) : Int
+}
+extend type Query{
+    findAllHashtag : [HashtagOutput]
     findAllHashtags : [Hashtag]
-    findHashtagById(id : Int) : Hashtag
+    findByHashtagId(id : Int) : HashtagOutput
 }
