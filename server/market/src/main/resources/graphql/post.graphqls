@@ -1,31 +1,50 @@
-type Post {
+type Post{
     postId : ID!
     userId : Int
     isBuy : Boolean!
     title : String!
     saleDate : String!
     contents : String!
-    viewCount : Int!
+    viewCount : Int
     deal : String!
     createdDate : String
     modifiedDate : String
 }
+input UpdatePostInput{
+    postId : Int!
+    title : String!
+    contents : String!
+    deal : String!
+}
 
-input CreatePostInput {
+input CreatePostInput{
     uploaderId : Int!
     title : String!
     saleDate : String!
     contents : String!
     deal : String!
 }
-
-type Mutation {
-    createPost(input: CreatePostInput!): Post
+type PostOutput{
+    postId : ID!
+    userId : Int!
+    isBuy : Boolean!
+    title : String!
+    contents : String!
+    viewCount : Int!
+    deal : String!
 }
 
-type Query {
+extend type Mutation{
+    createPost(input: CreatePostInput!): PostOutput
+    updatePost(input: UpdatePostInput!) : PostOutput
+    deletePost(id : Int!) : Int!
+}
+type Query{
     findAllPosts: [Post]
-    findPostByPostId(id: Int): Post
+    findAllPost : [PostOutput]
+    findPostByPostId(id: Int): PostOutput
+    #    findAllPostsByUploaderId(uploader_id: Int):[Post]
+#    findPostByPostId(id: Int): Post
     findRecentPosts: [Post]
 #    findAllPostsByUploaderId(uploader_id: Int):[Post]
 }

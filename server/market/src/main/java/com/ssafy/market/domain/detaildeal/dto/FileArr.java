@@ -7,6 +7,6 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class DeleteDetailDealInput {
-    private Long dealId;
+public class FileArr {
+    private String ImgPath;
 }

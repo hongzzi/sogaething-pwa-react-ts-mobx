@@ -4,6 +4,8 @@ import com.coxautodev.graphql.tools.GraphQLMutationResolver;
 import com.ssafy.market.domain.user.domain.User;
 import com.ssafy.market.domain.user.dto.LoginUserOutput;
 import com.ssafy.market.domain.user.dto.LoginUserInput;
+import com.ssafy.market.domain.user.dto.UpdateUserInput;
+import com.ssafy.market.domain.user.dto.UserOutput;
 import com.ssafy.market.domain.user.repository.UserRepository;
 import com.ssafy.market.domain.user.security.TokenProvider;
 import com.ssafy.market.global.apis.KakaoApi;
@@ -41,6 +43,17 @@ public class UserMutation implements GraphQLMutationResolver {
 
         LoginUserOutput output = new LoginUserOutput(Jwt);
         return output;
+    }
+    @Transactional
+    public UserOutput updateUser(UpdateUserInput input){
+        User user = userRepository.findById(input.getUserId()).get();
+        user.update(input.getImageUrl(),input.getPhone(),input.getAddress(),input.getTrust());
+        UserOutput output =  new UserOutput(input.getUserId(),user.getName(),user.getEmail(),user.getImageUrl(),user.getProvider(),user.getProviderId(),user.getPhone(),user.getAddress(),user.getTrust());
+        return output;
+    }
+    @Transactional
+    public int deleteUser(Long id){
+        return userRepository.deleteByUserId(id);
     }
 }
 
