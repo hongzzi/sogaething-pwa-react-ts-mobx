@@ -8,12 +8,46 @@ export type Scalars = {
   Float: number;
 };
 
-export type ICreatePostInput = {
-  uploaderId: Scalars["Int"];
+export type ICreateDetailDealInput = {
+  postId: Scalars["Int"];
+  userId: Scalars["Int"];
+  hashtagId: Scalars["Int"];
+};
+
+export type ICreateProductInput = {
+  postId: Scalars["Int"];
+  price: Scalars["Int"];
+  name: Scalars["String"];
+  category: Scalars["String"];
+  state: Scalars["Boolean"];
+};
+
+export type IDetailDeal = {
+  dealId: Scalars["ID"];
+  post: IPost;
+  user: IUser;
+  hashtag: IHashtag;
+  createdDate?: Maybe<Scalars["String"]>;
+  modifiedDate?: Maybe<Scalars["String"]>;
+};
+
+export type IDetailDealOutput = {
+  postId: Scalars["Int"];
+  imgPath: Scalars["String"];
   title: Scalars["String"];
-  saleDate: Scalars["String"];
+  category: Scalars["String"];
+  hashtag: Scalars["String"];
   contents: Scalars["String"];
-  deal: Scalars["String"];
+  price: Scalars["Int"];
+  buyerId: Scalars["Int"];
+  sellerId: Scalars["Int"];
+  address: Scalars["String"];
+};
+
+export type IHashtag = {
+  hashtagId: Scalars["ID"];
+  product: IProduct;
+  hashtag: Scalars["String"];
 };
 
 export type ILoginUserInput = {
@@ -26,12 +60,17 @@ export type ILoginUserOutput = {
 };
 
 export type IMutation = {
-  createPost?: Maybe<IPost>;
+  createProduct?: Maybe<IProduct>;
+  createDetailDeal?: Maybe<IDetailDealOutput>;
   loginUser?: Maybe<ILoginUserOutput>;
 };
 
-export type IMutationCreatePostArgs = {
-  input: ICreatePostInput;
+export type IMutationCreateProductArgs = {
+  input: ICreateProductInput;
+};
+
+export type IMutationCreateDetailDealArgs = {
+  input: ICreateDetailDealInput;
 };
 
 export type IMutationLoginUserArgs = {
@@ -51,14 +90,35 @@ export type IPost = {
   modifiedDate?: Maybe<Scalars["String"]>;
 };
 
+export type IProduct = {
+  productId: Scalars["ID"];
+  post?: Maybe<IPost>;
+  name: Scalars["String"];
+  price: Scalars["Int"];
+  category: Scalars["String"];
+  state?: Maybe<Scalars["Boolean"]>;
+};
+
 export type IQuery = {
   findAllPosts?: Maybe<Array<Maybe<IPost>>>;
   findPostByPostId?: Maybe<IPost>;
+  findAllDetailDeals?: Maybe<Array<Maybe<IDetailDeal>>>;
+  findDetailDealByPost?: Maybe<Array<Maybe<IDetailDealOutput>>>;
   findAllUsers?: Maybe<Array<Maybe<IUser>>>;
+  findAllProducts?: Maybe<Array<Maybe<IProduct>>>;
+  findProductById?: Maybe<IProduct>;
 };
 
 export type IQueryFindPostByPostIdArgs = {
   id?: Maybe<Scalars["Int"]>;
+};
+
+export type IQueryFindDetailDealByPostArgs = {
+  postId?: Maybe<Scalars["Int"]>;
+};
+
+export type IQueryFindProductByIdArgs = {
+  productId?: Maybe<Scalars["Int"]>;
 };
 
 export type IUser = {
