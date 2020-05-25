@@ -63,29 +63,44 @@ public class DetailDealQuery implements GraphQLQueryResolver {
         return outputList;
     }
 
-    public List<DetailDealOutput> findDetailDealByPost(Long postId) {
-        List<DetailDealOutput> outputList = new ArrayList<>();
-        Post post = postRepository.findById(postId).get();
-        List<DetailDeal> dealList = detailDealRepository.findByPost(post);
-        List<FileArr> fileArr = new ArrayList<>();
-        for(int i = 0; i<dealList.size();i++){
-            Long id = dealList.get(i).getDealId();
-            Product product = productRepository.findByPost(post);
-            List<File> files = fileRepository.findByProduct(product);
-            Hashtag hashtag = hashtagRepository.findById(dealList.get(i).getHashtag().getHashtagId()).get();
-            for(int j = 0; j<files.size(); j++){
-                fileArr.add(new FileArr(files.get(j).getImgPath()));
-            }
-            User user = userRepository.findById(dealList.get(i).getUser().getUserId()).get();
-            outputList.add(new DetailDealOutput(id,postId,fileArr,post.getTitle(),product.getCategory(),
-                    hashtag.getHashtag(),post.getContents(),product.getPrice(),
-                    post.getUser().getUserId(),user.getUserId(),user.getAddress()));
-        }
-
-        return outputList;
-    }
-
-//    public Iterable<Post> findAllPostsByUploaderId() {
-//        return postRepository.findAll();
+//    public List<DetailDealOutput> findDetailDealByPosts(Long postId) {
+//        List<DetailDealOutput> outputList = new ArrayList<>();
+//        Post post = postRepository.findById(postId).get();
+//        List<DetailDeal> dealList = detailDealRepository.findByPost(post);
+//        List<FileArr> fileArr = new ArrayList<>();
+//        for(int i = 0; i<dealList.size();i++){
+//            Long id = dealList.get(i).getDealId();
+//            Product product = productRepository.findByPost(post);
+//            List<File> files = fileRepository.findByProduct(product);
+//            Hashtag hashtag = hashtagRepository.findById(dealList.get(i).getHashtag().getHashtagId()).get();
+//            for(int j = 0; j<files.size(); j++){
+//                fileArr.add(new FileArr(files.get(j).getImgPath()));
+//            }
+//            User user = userRepository.findById(dealList.get(i).getUser().getUserId()).get();
+//            outputList.add(new DetailDealOutput(id,postId,fileArr,post.getTitle(),product.getCategory(),
+//                    hashtag.getHashtag(),post.getContents(),product.getPrice(),
+//                    post.getUser().getUserId(),user.getUserId(),user.getAddress()));
+//        }
+//
+//        return outputList;
 //    }
+
+    public DetailDealOutput findDetailDealByPost(Long postId) {
+        Post post = postRepository.findById(postId).get();
+        DetailDeal deal = detailDealRepository.findByPost(post);
+        Product product = productRepository.findByPost(post);
+        Hashtag hashtag = hashtagRepository.findById(deal.getHashtag().getHashtagId()).get();
+        User user = userRepository.findById(deal.getUser().getUserId()).get();
+        List<FileArr> fileArr = new ArrayList<>();
+        List<File> files = fileRepository.findByProduct(product);
+        for (int j = 0; j < files.size(); j++) {
+            fileArr.add(new FileArr(files.get(j).getImgPath()));
+        }
+        DetailDealOutput output = new DetailDealOutput(
+                deal.getDealId(),postId,fileArr, post.getTitle(), product.getCategory(),
+                hashtag.getHashtag(), post.getContents(), product.getPrice(),
+                post.getUser().getUserId(), user.getUserId(), user.getAddress()
+        );
+        return output;
+    }
 }

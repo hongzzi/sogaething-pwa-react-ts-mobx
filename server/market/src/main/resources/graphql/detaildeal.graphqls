@@ -53,5 +53,7 @@ extend type Mutation {
 extend type Query {
     findAllDetailDeals: [DetailDeal]
     findAllDetailDeal: [DetailDealOutput]
-    findDetailDealByPost(postId: Int): [DetailDealOutput]
+#    findDetailDealByPosts(postId: Int): [DetailDealOutput]
+    findDetailDealByPost(postId: Int): DetailDealOutput
+
 }
