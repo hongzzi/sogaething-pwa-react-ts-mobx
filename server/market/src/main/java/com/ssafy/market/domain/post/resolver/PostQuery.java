@@ -24,23 +24,19 @@ public class PostQuery implements GraphQLQueryResolver {
             ,postList.get(i).getTitle(),postList.get(i).getContents(),postList.get(i).getViewCount(),postList.get(i).getDeal()));
         }
         return outputs;
-//        return postRepository.findAll();
     }
     public Iterable<Post> findAllPosts(){
         return postRepository.findAll();
     }
-//    public Optional<Post> findPostByPostId(Long id) {
-//        return postRepository.findByPost_id(id);
-//    }
+
 
     public PostOutput findPostByPostId(Long id) {
         Post post = postRepository.findByPostId(id).get();
         PostOutput output = new PostOutput(id,post.getUser().getUserId(),post.isBuy(),post.getTitle(),post.getContents(),post.getViewCount(),post.getDeal());
         return output;
-//        return postRepository.findByPostId(id);
     }
 
-//    public Iterable<Post> findAllPostsByUploaderId() {
-//        return postRepository.findAll();
-//    }
+    public List<Post> findRecentPosts(){
+        return postRepository.findTop6ByOrderByCreatedDateDesc();
+    }
 }

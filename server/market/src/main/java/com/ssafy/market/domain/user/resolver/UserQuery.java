@@ -1,8 +1,8 @@
 package com.ssafy.market.domain.user.resolver;
 
-import com.coxautodev.graphql.tools.GraphQLMutationResolver;
 import com.coxautodev.graphql.tools.GraphQLQueryResolver;
 import com.ssafy.market.domain.post.domain.Post;
+import com.ssafy.market.domain.post.repository.PostRepository;
 import com.ssafy.market.domain.product.domain.Product;
 import com.ssafy.market.domain.product.dto.ProductOutput;
 import com.ssafy.market.domain.user.domain.User;
@@ -10,13 +10,14 @@ import com.ssafy.market.domain.user.dto.LoginUserOutput;
 import com.ssafy.market.domain.user.dto.LoginUserInput;
 import com.ssafy.market.domain.user.dto.LoginUserOutput;
 import com.ssafy.market.domain.user.dto.UserOutput;
+import com.ssafy.market.domain.user.domain.User;
+import com.ssafy.market.domain.user.dto.UserInfoOutput;
 import com.ssafy.market.domain.user.repository.UserRepository;
+import com.ssafy.market.domain.user.security.TokenProvider;
 import graphql.schema.DataFetchingEnvironment;
-import graphql.servlet.GraphQLContext;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,8 +25,9 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 public class UserQuery implements GraphQLQueryResolver {
-
     private final UserRepository userRepository;
+    private final PostRepository postRepository;
+    private final TokenProvider tokenProvider;
 
     @Transactional
     public Iterable<User> findAllUsers(){
@@ -42,21 +44,35 @@ public class UserQuery implements GraphQLQueryResolver {
 //    }
 
     @Transactional
-    public List<UserOutput> findAllUser()
-    {
+    public List<UserOutput> findAllUser() {
         List<UserOutput> outputs = new ArrayList<>();
         List<User> userList = userRepository.findAll();
-         for(int i = 0; i< userList.size(); i++){
+        for (int i = 0; i < userList.size(); i++) {
             outputs.add(new UserOutput(userList.get(i).getUserId(),
                     userList.get(i).getName(),
                     userList.get(i).getEmail(),
-                userList.get(i).getImageUrl(),
-                userList.get(i).getProvider(),
-                userList.get(i).getProviderId(),
-                userList.get(i).getPhone(),
-                userList.get(i).getAddress(),
-                userList.get(i).getTrust()));
+                    userList.get(i).getImageUrl(),
+                    userList.get(i).getProvider(),
+                    userList.get(i).getProviderId(),
+                    userList.get(i).getPhone(),
+                    userList.get(i).getAddress(),
+                    userList.get(i).getTrust()));
         }
         return outputs;
+    }
+    @Transactional
+    public UserInfoOutput findUserInfo(DataFetchingEnvironment env){
+        Long userId = tokenProvider.getUserIdFromHeader(env);
+
+        User user = userRepository.findById(userId).get();
+        Long numOfPosts = postRepository.countPostByUserId(userId);
+
+        UserInfoOutput output = new UserInfoOutput();
+        output.setName(user.getName());
+        output.setAddress(user.getAddress());
+        output.setTrust(user.getTrust());
+        output.setNumOfPosts(numOfPosts);
+
+        return output;
     }
 }

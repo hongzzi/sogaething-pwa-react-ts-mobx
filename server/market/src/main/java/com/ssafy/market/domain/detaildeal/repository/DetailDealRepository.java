@@ -13,4 +13,5 @@ public interface DetailDealRepository extends JpaRepository<DetailDeal, Long> {
     List<DetailDeal> findByPost(Post post);
     int deleteByDealId(Long id);
 
+
 }

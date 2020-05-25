@@ -10,7 +10,6 @@ import com.ssafy.market.domain.user.repository.UserRepository;
 import com.ssafy.market.domain.user.security.TokenProvider;
 import com.ssafy.market.global.apis.KakaoApi;
 import graphql.schema.DataFetchingEnvironment;
-import graphql.servlet.GraphQLContext;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -42,7 +41,6 @@ public class UserMutation implements GraphQLMutationResolver {
             Jwt = tokenProvider.createJwtToken(user);
         }
 
-        GraphQLContext context = env.getContext();
         LoginUserOutput output = new LoginUserOutput(Jwt);
         return output;
     }

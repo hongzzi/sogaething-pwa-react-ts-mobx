@@ -1,6 +1,6 @@
-type Post {
+type Post{
     postId : ID!
-    user : User
+    userId : Int
     isBuy : Boolean!
     title : String!
     saleDate : String!
@@ -17,7 +17,7 @@ input UpdatePostInput{
     deal : String!
 }
 
-input CreatePostInput {
+input CreatePostInput{
     uploaderId : Int!
     title : String!
     saleDate : String!
@@ -34,14 +34,17 @@ type PostOutput{
     deal : String!
 }
 
-type Mutation {
+extend type Mutation{
     createPost(input: CreatePostInput!): PostOutput
     updatePost(input: UpdatePostInput!) : PostOutput
     deletePost(id : Int!) : Int!
 }
-type Query {
+type Query{
     findAllPosts: [Post]
-    finAllPost : [PostOutput]
+    findAllPost : [PostOutput]
     findPostByPostId(id: Int): PostOutput
     #    findAllPostsByUploaderId(uploader_id: Int):[Post]
+#    findPostByPostId(id: Int): Post
+    findRecentPosts: [Post]
+#    findAllPostsByUploaderId(uploader_id: Int):[Post]
 }

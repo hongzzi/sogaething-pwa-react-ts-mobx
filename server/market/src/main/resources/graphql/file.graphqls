@@ -1,6 +1,6 @@
 type File{
     fileId : ID!
-    product : Product
+    product : Product!
     imgPath : String!
 }
 type FileOutput{

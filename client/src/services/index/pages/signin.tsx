@@ -4,12 +4,11 @@ import { useGetLoginMutation } from '~/generated/graphql';
 import styled from '~/styled';
 import GoogleIcon from '../assets/img/signin-google.png?url';
 import KakaoIcon from '../assets/img/signin-kakao.png?url';
-import CircleImageView from '../components/CircleImageView';
 import {
-  NEXT_APP_GRAPHQL_ENDPOINT,
   NEXT_APP_KAKAO_CLIENT_KEY,
 } from '../helpers/config';
 import useStores from '../helpers/useStores';
+import { IAuthResponseDto } from '../store/AuthStore';
 
 interface ISignInProps {}
 
@@ -20,7 +19,6 @@ export default (props: ISignInProps) => {
   const mutate = useGetLoginMutation();
 
   const success = (res: any) => {
-    store.authStore.getTest();
     mutate({
       variables: {
         input: {
@@ -29,8 +27,9 @@ export default (props: ISignInProps) => {
         },
       },
     })
-    .then((res) => {
-      console.log(res);
+    .then((res: {data : IAuthResponseDto}) => {
+      store.authStore.setToken(res.data.loginUser.token);
+      store.authStore.setProvider('kakao');
     })
     .catch((err) => {
       console.log(err);

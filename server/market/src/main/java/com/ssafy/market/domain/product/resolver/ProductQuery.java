@@ -41,10 +41,10 @@ public class ProductQuery implements GraphQLQueryResolver {
     }
 
     @Transactional
-    public ProductOutput findByProductId(Long productId) {
-        Product product = productRepository.findByProductId(productId);
+    public ProductOutput findByProductId(Long id) {
+        Product product = productRepository.findByProductId(id);
 
-        ProductOutput output = new ProductOutput(productId, product.getPost().getPostId(), product.getName(),product.getPrice(), product.getCategory(),product.getState());
+        ProductOutput output = new ProductOutput(id, product.getPost().getPostId(), product.getName(),product.getPrice(), product.getCategory(),product.getState());
 //        System.out.println(productRepository.findByProductId(productId));
       return output;
     }

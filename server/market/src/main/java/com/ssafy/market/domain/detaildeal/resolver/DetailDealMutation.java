@@ -4,7 +4,7 @@ import com.coxautodev.graphql.tools.GraphQLMutationResolver;
 import com.ssafy.market.domain.detaildeal.domain.DetailDeal;
 import com.ssafy.market.domain.detaildeal.dto.CreateDetailDealInput;
 import com.ssafy.market.domain.detaildeal.dto.DetailDealOutput;
-import com.ssafy.market.domain.detaildeal.dto.UpdateDetailDealInput;
+import com.ssafy.market.domain.detaildeal.dto.FileArr;
 import com.ssafy.market.domain.detaildeal.repository.DetailDealRepository;
 import com.ssafy.market.domain.file.domain.File;
 import com.ssafy.market.domain.file.repository.FileRepository;
@@ -20,6 +20,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 @Component
 @RequiredArgsConstructor
@@ -34,39 +37,21 @@ public class DetailDealMutation implements GraphQLMutationResolver {
 
     @Transactional
     public DetailDealOutput createDetailDeal(CreateDetailDealInput input){
-        System.out.println(input.toString());
-
         Post post = postRepository.findById(input.getPostId()).get();
         User user = userRepository.findById(input.getUserId()).get();
         Hashtag hashtag = hashtagRepository.findById(input.getHashtagId()).get();
-
-        Product product = productRepository.findByPost(post);
-        File file = fileRepository.findByProduct(product);
-        DetailDealOutput output = new DetailDealOutput(input.getPostId(),file.getImgPath(),post.getTitle(),product.getCategory(),hashtag.getHashtag(),post.getContents(), product.getPrice(),post.getUser().getUserId(), input.getUserId(),user.getAddress());
-        detailDealRepository.save(new DetailDeal(null, post,user,hashtag));
+        List<FileArr> fileArr = new ArrayList<>();
+        Product pro = productRepository.findByPost(post);
+        List<File> files = fileRepository.findByProduct(pro);
+        for(int j = 0; j<files.size(); j++){
+            fileArr.add(new FileArr(files.get(j).getImgPath()));
+        }
+        DetailDeal detailDeal = detailDealRepository.save(new DetailDeal(null, post,user,hashtag));
+        DetailDealOutput output = new DetailDealOutput(detailDeal.getDealId(),input.getPostId(),fileArr,post.getTitle(),pro.getCategory(),hashtag.getHashtag(),post.getContents(), pro.getPrice(),post.getUser().getUserId(), input.getUserId(),user.getAddress());
         return output;
-//      return  detailDealRepository.save(new DetailDeal(null, post,user,hashtag));
+
 
     }
-
-//    @Transactional
-//    public DetailDealOutput updateDetailDeal(UpdateDetailDealInput input){
-//        System.out.println(input.toString());
-//
-//        DetailDeal detailDeal = detailDealRepository.findBydealId(input.getDealId()).get();
-//        User user = detailDeal.getUser();
-//        Post post = detailDeal.getPost();
-//        Hashtag hashtag = hashtagRepository.findById(input.getHashtagId()).get();
-//        post.update(input.getTitle(),input.getContents(),input.getDeal());
-//        Product product = productRepository.findByPost(post);
-//        product.update(post,product.getName(),input.getPrice(),product.getCategory(),product.getState());
-//        File file = fileRepository.findByProduct(product);
-//        DetailDealOutput output = new DetailDealOutput(input.getPostId(),file.getImgPath(),post.getTitle(),product.getCategory(),hashtag.getHashtag(),post.getContents(), product.getPrice(),post.getUser().getUserId(), input.getUserId(),user.getAddress());
-//        detailDealRepository.save(new DetailDeal(null, post,user,hashtag));
-//        return output;
-////      return  detailDealRepository.save(new DetailDeal(null, post,user,hashtag));
-//
-//    }
 
     @Transactional
     public int deleteDetailDeal(Long id){

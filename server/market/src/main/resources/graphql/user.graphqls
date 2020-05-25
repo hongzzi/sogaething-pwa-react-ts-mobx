@@ -24,6 +24,14 @@ type UserOutput{
     address : String!
     trust : Int!
 }
+
+type UserInfoOutput {
+    name : String
+    address : String
+    trust : Int
+    numOfPosts : Int
+}
+
 input LoginUserInput {
     provider : String!
     token : String!
@@ -39,6 +47,7 @@ input UpdateUserInput{
 extend type Query {
     findAllUsers: [User]
     findAllUser: [UserOutput]
+    findUserInfo: UserInfoOutput
 }
 
 extend type Mutation {

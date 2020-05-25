@@ -28,10 +28,13 @@ input UpdateDetailDealInput {
 input DeleteDetailDealInput{
     dealId : Int!
 }
-
-type DetailDealOutput{
-    postId: Int!
+type FileArr{
     imgPath: String!
+}
+type DetailDealOutput{
+    dealId:ID!
+    postId: Int!
+    imgPaths: [FileArr]
     title: String!
     category : String!
     hashtag : String!
@@ -44,7 +47,6 @@ type DetailDealOutput{
 }
 extend type Mutation {
     createDetailDeal(input: CreateDetailDealInput!): DetailDealOutput
-#    updateDetailDeal(input: UpdateDetailDealInput!): DetailDeal
     deleteDetailDeal(id : Int!): Int!
 }
 
