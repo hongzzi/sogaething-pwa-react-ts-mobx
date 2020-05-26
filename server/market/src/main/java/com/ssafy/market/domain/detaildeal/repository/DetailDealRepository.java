@@ -10,6 +10,10 @@ import java.util.Optional;
 public interface DetailDealRepository extends JpaRepository<DetailDeal, Long> {
 
     Optional<DetailDeal> findBydealId(Long dealId);
-    List<DetailDeal> findByPost(Post post);
+   DetailDeal findByPost(Post post);
+//    List<DetailDeal> findByPost(Post post);
+
+    int deleteByDealId(Long id);
+
 
 }

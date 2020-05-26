@@ -6,7 +6,6 @@ import com.ssafy.market.domain.history.dto.HistoryOutput;
 import com.ssafy.market.domain.history.respository.HistoryRepository;
 import com.ssafy.market.domain.post.domain.Post;
 import com.ssafy.market.domain.post.dto.CreatePostInput;
-import com.ssafy.market.domain.post.respository.PostRepository;
 import com.ssafy.market.domain.user.domain.User;
 import com.ssafy.market.domain.user.security.TokenProvider;
 import graphql.schema.DataFetchingEnvironment;
