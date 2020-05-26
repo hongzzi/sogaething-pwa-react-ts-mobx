@@ -47,10 +47,10 @@ public class ChatService {
         return true;
     }
 
-    public ChannelTopic getTopic(String roomId) {
-        ChannelTopic channelTopic = chatRoomRepository.getTopic(roomId);
-        return channelTopic;
-    }
+//    public ChannelTopic getTopic(String roomId) {
+//        ChannelTopic channelTopic = chatRoomRepository.getTopic(roomId);
+//        return channelTopic;
+//    }
 
     public void sendMessage(ChatMessage message) {
         ChannelTopic channelTopic = chatRoomRepository.getTopic(message.getRoomId());
