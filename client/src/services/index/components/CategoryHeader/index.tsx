@@ -7,6 +7,7 @@ import CustomIcon from '../CustomIcon';
 
 interface ICategoryHeader {
   type: 'check' | 'back-check' | 'normal' | 'chat';
+  text?: string;
 }
 
 export default (props: ICategoryHeader) => {
@@ -18,7 +19,7 @@ export default (props: ICategoryHeader) => {
         <>
           <TextWrapper>
             <StyledCustomIcon url={HeaderBack} />
-            <Text>Test</Text>
+            <Text>{props.text ? props.text : '소개띵'}</Text>
           </TextWrapper>
           <StyledCustomIcon url={HeacerMenu} />
         </>
@@ -33,12 +34,12 @@ export default (props: ICategoryHeader) => {
 };
 
 const Wrapper = styled.div`
-  width: 100%;
-  height: 80px;
+  grid-area: CH;
+  width: 100vw;
+  height: 56px;
+  padding: 2vh;
   box-shadow: 0 2px 4px 0 rgba(244, 244, 244, 0.5);
   display: flex;
-  padding-left: 20px;
-  padding-right: 8px;
   justify-content: space-between;
   align-items: center;
 `;

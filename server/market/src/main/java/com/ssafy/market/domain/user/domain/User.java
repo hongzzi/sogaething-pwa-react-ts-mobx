@@ -58,7 +58,15 @@ public class User {
         this.trust = trust;
         this.role = role;
     }
-
+    public void update(String imageUrl, String phone, String address, int trust){
+        this.imageUrl = imageUrl;
+        this.phone = phone;
+        this.address = address;
+        this.trust = trust;
+    }
+    public void setTrust (int trust){
+        this.trust = trust;
+    }
 
     @Override
     public String toString() {

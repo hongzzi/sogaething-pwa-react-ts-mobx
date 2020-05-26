@@ -4,13 +4,15 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class DetailDealOutput {
-//    private Long dealId;
+    private Long dealId;
     private Long postId;
-    private String imgPath; // file
+    private List<FileArr> imgPaths; // file
     private String title; // post
     private String category; // product
     private String hashtag; // hashtag

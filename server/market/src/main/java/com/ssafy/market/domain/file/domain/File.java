@@ -27,4 +27,7 @@ public class File {
         this.product = product;
         this.imgPath = imgPath;
     }
+    public void update (String imgPath){
+        this.imgPath = imgPath;
+    }
 }

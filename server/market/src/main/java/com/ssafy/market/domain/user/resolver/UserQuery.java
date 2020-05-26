@@ -1,7 +1,15 @@
 package com.ssafy.market.domain.user.resolver;
 
 import com.coxautodev.graphql.tools.GraphQLQueryResolver;
-import com.ssafy.market.domain.post.respository.PostRepository;
+import com.ssafy.market.domain.post.domain.Post;
+import com.ssafy.market.domain.post.repository.PostRepository;
+import com.ssafy.market.domain.product.domain.Product;
+import com.ssafy.market.domain.product.dto.ProductOutput;
+import com.ssafy.market.domain.user.domain.User;
+import com.ssafy.market.domain.user.dto.LoginUserOutput;
+import com.ssafy.market.domain.user.dto.LoginUserInput;
+import com.ssafy.market.domain.user.dto.LoginUserOutput;
+import com.ssafy.market.domain.user.dto.UserOutput;
 import com.ssafy.market.domain.user.domain.User;
 import com.ssafy.market.domain.user.dto.UserInfoOutput;
 import com.ssafy.market.domain.user.repository.UserRepository;
@@ -11,6 +19,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
@@ -24,6 +34,32 @@ public class UserQuery implements GraphQLQueryResolver {
         return userRepository.findAll();
     }
 
+//    @Transactional
+//    public LoginUserOutput loginUser(DataFetchingEnvironment env){
+//        GraphQLContext context = env.getContext();
+//        HttpServletRequest request = context.getHttpServletRequest().get();
+//        String Jwt = (String)request.getAttribute("Jwt");
+//        LoginUserOutput output = new LoginUserOutput(Jwt);
+//        return output;
+//    }
+
+    @Transactional
+    public List<UserOutput> findAllUser() {
+        List<UserOutput> outputs = new ArrayList<>();
+        List<User> userList = userRepository.findAll();
+        for (int i = 0; i < userList.size(); i++) {
+            outputs.add(new UserOutput(userList.get(i).getUserId(),
+                    userList.get(i).getName(),
+                    userList.get(i).getEmail(),
+                    userList.get(i).getImageUrl(),
+                    userList.get(i).getProvider(),
+                    userList.get(i).getProviderId(),
+                    userList.get(i).getPhone(),
+                    userList.get(i).getAddress(),
+                    userList.get(i).getTrust()));
+        }
+        return outputs;
+    }
     @Transactional
     public UserInfoOutput findUserInfo(DataFetchingEnvironment env){
         Long userId = tokenProvider.getUserIdFromHeader(env);

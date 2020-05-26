@@ -4,7 +4,7 @@ import com.coxautodev.graphql.tools.GraphQLQueryResolver;
 import com.ssafy.market.domain.history.domain.History;
 import com.ssafy.market.domain.history.respository.HistoryRepository;
 import com.ssafy.market.domain.post.domain.Post;
-import com.ssafy.market.domain.post.respository.PostRepository;
+import com.ssafy.market.domain.post.repository.PostRepository;
 import com.ssafy.market.domain.user.domain.User;
 import com.ssafy.market.domain.user.dto.UserInfoOutput;
 import com.ssafy.market.domain.user.repository.UserRepository;
