@@ -1,6 +1,8 @@
 package com.ssafy.market.domain.post.resolver;
 
 import com.coxautodev.graphql.tools.GraphQLQueryResolver;
+import com.ssafy.market.domain.detaildeal.dto.FileArr;
+import com.ssafy.market.domain.file.domain.File;
 import com.ssafy.market.domain.file.repository.FileRepository;
 import com.ssafy.market.domain.hashtag.domain.Hashtag;
 import com.ssafy.market.domain.hashtag.repository.HashtagRepository;
@@ -36,11 +38,19 @@ public class PostQuery implements GraphQLQueryResolver {
         }
         for(int i = 0; i<postList.size();i++){
             Post post = postList.get(i);
-//            Product product = productRepository.findByPost(post);
-//            Hashtag hashtag = hashtagRepository.findByProduct(product);
-            outputs.add(new PostOutput(post.getPostId(),post.getUser().getUserId(), post.isBuy(),post.getTitle(),post.getContents(),post.getViewCount(),post.getDeal()
-            ,post.getDealState()
-//                    ,product.getCategory(),product.getName(),hashtag.getHashtag()
+            Product product = productRepository.findByPost(post);
+            List<Hashtag> hashtagList = hashtagRepository.findByProduct(product);
+            String hashtag = "";
+            for (int j = 0; j<hashtagList.size();j++){
+                hashtag = hashtag +hashtagList.get(j).getHashtag()+" ";
+            }
+            List<File> files = fileRepository.findByProduct(product);
+            List<FileArr> fileArr = new ArrayList<>();
+            for (int j = 0; j < files.size(); j++) {
+                fileArr.add(new FileArr(files.get(j).getImgPath()));
+            }
+            outputs.add(new PostOutput(post.getPostId(),post.getUser().getUserId(), post.isBuy(),post.getTitle(),post.getContents(),post.getDeal()
+            ,post.getDealState(),product.getCategory(),product.getName(),product.getPrice(),hashtag,fileArr
             ));
         }
         return outputs;
@@ -58,9 +68,20 @@ public class PostQuery implements GraphQLQueryResolver {
         if(post==null){
             throw new SelectNotDataException("post 조회 결과 : ");
         }
-        PostOutput output = new PostOutput(id,post.getUser().getUserId(),post.isBuy(),post.getTitle(),post.getContents(),post.getViewCount(),post.getDeal(),post.getDealState()
-                // ,product.getCategory(),product.getName(),hashtag.getHashtag()
-        );
+        Product product = productRepository.findByPost(post);
+        List<Hashtag> hashtagList = hashtagRepository.findByProduct(product);
+        String hashtag = "";
+        for (int j = 0; j<hashtagList.size();j++){
+            hashtag = hashtag +hashtagList.get(j).getHashtag()+" ";
+        }
+        List<File> files = fileRepository.findByProduct(product);
+        List<FileArr> fileArr = new ArrayList<>();
+        for (int j = 0; j < files.size(); j++) {
+            fileArr.add(new FileArr(files.get(j).getImgPath()));
+        }
+        PostOutput output = new PostOutput(post.getPostId(),post.getUser().getUserId(), post.isBuy(),post.getTitle(),post.getContents(),post.getDeal()
+                ,post.getDealState(),product.getCategory(),product.getName(),product.getPrice(),hashtag,fileArr
+                );
         return output;
     }
 

@@ -29,8 +29,8 @@ public class ProductMutation implements GraphQLMutationResolver {
         if(post.getPostId() == input.getPostId()){
             throw new DuplicateProductException("postId" , input.getPostId());
         }
-        Product product = productRepository.save(new Product(null,post, input.getName(),input.getPrice(),input.getCategory(),input.getState()));
-        ProductOutput productOutput = new ProductOutput(product.getProductId(),post.getPostId(),product.getName(),product.getPrice(),product.getCategory(),product.getState());
+        Product product = productRepository.save(new Product(null,post, input.getName(),input.getPrice(),input.getCategory()));
+        ProductOutput productOutput = new ProductOutput(product.getProductId(),post.getPostId(),product.getName(),product.getPrice(),product.getCategory());
         return productOutput;
     }
     @Transactional
@@ -51,8 +51,8 @@ public class ProductMutation implements GraphQLMutationResolver {
         }else if(post == null){
             throw new DomainNotFoundException("postId" , input.getPostId());
         }
-        product.update(post,input.getName(),input.getPrice(),input.getCategory(), input.getState());
-        ProductOutput po = new ProductOutput(product.getProductId(),product.getPost().getPostId(), product.getName(), product.getPrice(), product.getCategory(),product.getState());
+        product.update(post,input.getName(),input.getPrice(),input.getCategory());
+        ProductOutput po = new ProductOutput(product.getProductId(),product.getPost().getPostId(), product.getName(), product.getPrice(), product.getCategory());
         return po;
     }
 

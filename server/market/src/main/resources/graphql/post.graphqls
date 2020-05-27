@@ -7,6 +7,7 @@ type Post{
     contents : String!
     viewCount : Int
     deal : String!
+    dealState : String!
     createdDate : String
     modifiedDate : String
 }
@@ -18,42 +19,43 @@ input UpdatePostInput{
     dealState : String!
     category : String!
     productname : String!
-    productState : String!
     price : Int!
     hashtag : String!
+    imgPaths :String!
 }
 
 input CreatePostInput{
     title : String!
-    saleDate : String!
+    contents : String!
+    deal : String!
+#    dealLocation:String!
+    category : String!
+    productname : String!
+#    productState : String!
+    price : Int!
+    hashtag : String!
+    imgPaths: String! ## 좀더 고민해봐야할 부분
+}
+type PostOutput{
+    postId : ID!
+    userId : Int! #게시자 id
+    isBuy : Boolean! # 구매 or 판매
+    title : String!
     contents : String!
     deal : String!
     dealState : String!
     category : String!
-    productname : String!
-    productState : String!
-    price : Int!
+    name : String!
     hashtag : String!
-    imgPath:String!
-}
-type PostOutput{
-    postId : ID!
-    userId : Int!
-    isBuy : Boolean!
-    title : String!
-    contents : String!
-    viewCount : Int!
-    deal : String!
-    dealState : String!
-#    category : String!
-#    name : String!
-#    hashtag : String!
+    imgPaths: [FileArr!] # 나중에 바뀔 부분
 }
 
 extend type Mutation{
+    updateViewcount(postId : Int!) : Int!
+    updateIsBuy(postId : Int!) : Int!
     createPost(input: CreatePostInput!): PostOutput
     updatePost(input: UpdatePostInput!) : PostOutput
-    deletePost(id : Int!) : Int!
+    deletePost(postId : Int!) : Int!
 }
 type Query{
     findAllPosts : [Post]

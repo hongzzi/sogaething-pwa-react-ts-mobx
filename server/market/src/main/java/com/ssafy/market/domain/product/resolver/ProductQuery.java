@@ -34,8 +34,8 @@ public class ProductQuery implements GraphQLQueryResolver {
                     productList.get(i).getPost().getPostId(),
                     productList.get(i).getName(),
                     productList.get(i).getPrice(),
-                    productList.get(i).getCategory(),
-                    productList.get(i).getState()));
+                    productList.get(i).getCategory()
+                    ));
         }
         return outputs;
     }
@@ -49,7 +49,7 @@ public class ProductQuery implements GraphQLQueryResolver {
         if(product==null){
             throw new SelectNotDataException("product 조회 결과 : ");
         }
-        ProductOutput output = new ProductOutput(id, product.getPost().getPostId(), product.getName(),product.getPrice(), product.getCategory(),product.getState());
+        ProductOutput output = new ProductOutput(id, product.getPost().getPostId(), product.getName(),product.getPrice(), product.getCategory());
       return output;
     }
 

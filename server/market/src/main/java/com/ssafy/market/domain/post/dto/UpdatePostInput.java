@@ -12,14 +12,12 @@ import java.util.Date;
 public class UpdatePostInput {
     private Long postId;
     private String title;
-//    private Date saleDate;
     private String contents;
     private String deal;
     private String dealState;
     private String category;
     private String productname;
-    private String productState;
     private Long price;
     private String hashtag;
-//    private String imgPath;
+    private String imgPaths; // 좀더 고민해보기
 }

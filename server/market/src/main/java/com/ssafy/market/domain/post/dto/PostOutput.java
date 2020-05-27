@@ -16,11 +16,11 @@ public class PostOutput {
     private Boolean isBuy;
     private String title;
     private String contents;
-    private Long viewCount;
     private String deal;
     private String dealState;
-//    private String category;
-//    private String name;
-//    private String hashtag;
-//    private List<FileArr> imgPaths; // file
+    private String category;
+    private String name;
+    private Long price;
+    private String hashtag;
+    private List<FileArr> imgPaths; // file
 }

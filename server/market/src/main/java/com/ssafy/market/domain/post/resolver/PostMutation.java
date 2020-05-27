@@ -1,6 +1,7 @@
 package com.ssafy.market.domain.post.resolver;
 
 import com.coxautodev.graphql.tools.GraphQLMutationResolver;
+import com.ssafy.market.domain.detaildeal.dto.FileArr;
 import com.ssafy.market.domain.file.domain.File;
 import com.ssafy.market.domain.file.repository.FileRepository;
 import com.ssafy.market.domain.hashtag.domain.Hashtag;
@@ -23,6 +24,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -43,17 +45,22 @@ public class PostMutation implements GraphQLMutationResolver {
         if(user==null){
             throw new UserNotFoundException("User");
         }
-        // hashtag를 따로 나누어서 집어넣기
         Post post = postRepository.save(new Post(null, user, false, input.getTitle(), null, input.getContents(), (long) 0, input.getDeal(), "진행중"));
-        Product product = productRepository.save(new Product(null,post,input.getProductname(), input.getPrice(),input.getCategory(),input.getProductState()));
+        Product product = productRepository.save(new Product(null,post,input.getProductname(), input.getPrice(),input.getCategory()));
         String[] hashtagarr = input.getHashtag().split(" ");
         for (int i = 0; i< hashtagarr.length; i++){
             Hashtag hashtag = hashtagRepository.save(new Hashtag(null,product,hashtagarr[i]));
         }
+        List<File> files = fileRepository.findByProduct(product);
+        List<FileArr> fileArr = new ArrayList<>();
+        for (int j = 0; j < files.size(); j++) {
+            fileArr.add(new FileArr(files.get(j).getImgPath()));
+        }
         // 링크는 url 받아서 넣어주기???
-        File file = fileRepository.save(new File(null,product,input.getImgPath()));
-        PostOutput output = new PostOutput(post.getPostId(),userId,post.isBuy(),post.getTitle(),post.getContents(),post.getViewCount(),post.getDeal(),post.getDealState()
-//                ,product.getCategory(),product.getName(),hashtag.getHashtag()
+        File file = fileRepository.save(new File(null,product,input.getImgPaths()));
+        PostOutput output = new PostOutput(post.getPostId(),userId,post.isBuy(),post.getTitle(),post.getContents()
+                ,post.getDeal(),post.getDealState()
+                ,product.getCategory(),product.getName(),input.getPrice(),input.getHashtag(),fileArr
         );
         return  output;
     }
@@ -66,8 +73,13 @@ public class PostMutation implements GraphQLMutationResolver {
         }
         post.update(input.getTitle(),input.getContents(),input.getDeal(),input.getDealState());
         Product product = productRepository.findByPost(post);
-        product.update(post,input.getProductname(),input.getPrice(),input.getCategory(),input.getProductState());
-//        List<Hashtag> hashtagList = hashtagRepository.findByProduct(product);
+        product.update(post,input.getProductname(),input.getPrice(),input.getCategory());
+        List<Hashtag> hashtagList = hashtagRepository.findByProduct(product);
+        List<File> files = fileRepository.findByProduct(product);
+        List<FileArr> fileArr = new ArrayList<>();
+        for (int j = 0; j < files.size(); j++) {
+            fileArr.add(new FileArr(files.get(j).getImgPath()));
+        }
 //        String hashtag = input.getHashtag();
 //        String[] hashtagarr = hashtag.split(" ");
 //        for (int j = 0; j<hashtagarr.length;j++){
@@ -76,25 +88,38 @@ public class PostMutation implements GraphQLMutationResolver {
 //        }
         // 해시태그 관련 추가하기
 //        hashtag.update(input.getHashtag());
-        PostOutput output = new PostOutput(post.getPostId(),userId,post.isBuy(),post.getTitle(),post.getContents(),post.getViewCount(),post.getDeal(),post.getDealState()
-//                ,product.getCategory(),product.getName(),hashtag.getHashtag()
+        PostOutput output = new PostOutput(post.getPostId(),userId,post.isBuy(),post.getTitle(),post.getContents(),post.getDeal(),post.getDealState()
+                ,product.getCategory(),product.getName(),product.getPrice(),input.getHashtag(),
+                fileArr
         );
         return output;
     }
+    public Long updateViewcount(Long postId){
+        Post post = postRepository.findByPostId(postId);
+        post.update(post.getViewCount()+1);
+        return post.getViewCount();
+    }
+    public Boolean updateIsBuy(Long postsId){
+        Post post = postRepository.findByPostId(postsId);
+        if(post.isBuy()== true){
+            post.update(false);
+        }else {
+            post.update(true);
+        }
+        return post.isBuy();
+    }
     @Transactional
-    public int deletePost(Long id){
-        Post post = postRepository.findByPostId(id);
+    public int deletePost(Long postId){ // 해시태그 삭제 추가 해야함.
+        Post post = postRepository.findByPostId(postId);
         if(post==null){
-            throw new DomainNotFoundException("postId " , id);
+            throw new DomainNotFoundException("postId " , postId);
         }
         Product product = productRepository.findByPost(post);
-//        Hashtag hashtag = hashtagRepository.findByProduct(product);
         List<File> fileList = fileRepository.findByProduct(product);
         productRepository.deleteByProductId(product.getProductId());
-//        hashtagRepository.deleteByHashtagId(hashtag.getHashtagId());
         for (int i = 0; i<fileList.size();i++){
             fileRepository.deleteByFileId(fileList.get(i).getFileId());
         }
-        return postRepository.deleteByPostId(id);
+        return postRepository.deleteByPostId(postId);
     }
 }

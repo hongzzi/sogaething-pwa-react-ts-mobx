@@ -27,7 +27,7 @@ type DetailOutput{
     price : Int!
     buyerId : Int!
     sellerId : Int!
-    writer : UserInfoOutput!
+    user : UserInfoOutput!
 
 }
 extend type Mutation {

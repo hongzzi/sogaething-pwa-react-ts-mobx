@@ -21,5 +21,5 @@ public class DetailOutput {
     private Long price; // product
     private Long buyerId;
     private Long sellerId;
-    private UserInfoOutput writer;
+    private UserInfoOutput user;
 }

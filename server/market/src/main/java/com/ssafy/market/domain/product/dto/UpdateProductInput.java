@@ -13,5 +13,5 @@ public class UpdateProductInput {
     private Long price;
     private String name;
     private String category;
-    private String state;
+//    private String state;
 }
