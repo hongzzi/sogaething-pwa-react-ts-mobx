@@ -16,6 +16,7 @@ import com.ssafy.market.domain.product.domain.Product;
 import com.ssafy.market.domain.product.repository.ProductRepository;
 import com.ssafy.market.domain.user.domain.User;
 import com.ssafy.market.domain.user.dto.UserInfoOutput;
+import com.ssafy.market.domain.user.dto.UserInfoResponse;
 import com.ssafy.market.domain.user.repository.UserRepository;
 import com.ssafy.market.domain.user.security.TokenProvider;
 import com.ssafy.market.global.exception.DomainNotFoundException;
@@ -53,19 +54,14 @@ public class DetailDealMutation implements GraphQLMutationResolver {
             throw new DomainNotFoundException("Post or user or hashtag, product not found");
         }
         List<File> files = fileRepository.findByProduct(pro);
-        List<FileArr> fileArr = new ArrayList<>();
-        for (int j = 0; j < files.size(); j++) {
-            fileArr.add(new FileArr(files.get(j).getImgPath()));
-        }
+
         DetailDeal detailDeal = detailDealRepository.save(new DetailDeal(null, post,user));
         List<Hashtag> hashtagList = hashtagRepository.findByProduct(pro);
-        String hashtag = "";
-        for (int j = 0; j<hashtagList.size();j++){
-            hashtag = hashtag +hashtagList.get(j).getHashtag()+" ";
-        }
-        UserInfoOutput userInfoOutput = new UserInfoOutput(writer.getName(),writer.getAddress(),writer.getTrust(),numOfPosts);
+
+        UserInfoResponse userInfoResponse = new UserInfoResponse(writer.getName(),writer.getAddress(),writer.getTrust(),numOfPosts,writer.getImageUrl());
+//        UserInfoOutput userInfoOutput = new UserInfoOutput(writer.getName(),writer.getAddress(),writer.getTrust(),numOfPosts);
         DetailOutput output = new DetailOutput(detailDeal.getDealId(),
-                input.getPostId(),fileArr,post.getTitle(),pro.getCategory(),hashtag,post.getContents(), pro.getPrice(),post.getUser().getUserId(), userId,userInfoOutput);
+                input.getPostId(),files,post.getTitle(),pro.getCategory(),hashtagList,post.getContents(), pro.getPrice(),post.getUser().getUserId(), userId,userInfoResponse);
         return output;
     }
     @Transactional
