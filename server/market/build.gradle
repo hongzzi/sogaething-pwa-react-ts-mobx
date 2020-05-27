@@ -18,10 +18,12 @@ configurations {
     }
 }
 
+// maven 으로부터 각종 dependency 가 있는 라이브러리들을 가져오도록 설정
 repositories {
     mavenCentral()
 }
 
+// 항목에 필요한 라이브러리들을 설정함으로써 maven 에서 필요한 것들을 가져옴
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
@@ -48,8 +50,8 @@ dependencies {
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-redis', version: '2.3.0.RELEASE'
     // https://mvnrepository.com/artifact/redis.clients/jedis
     compile group: 'redis.clients', name: 'jedis', version: '3.3.0'
-    // https://mvnrepository.com/artifact/com.fasterxml.jackson.datatype/jackson-datatype-jsr310
-    compile group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310', version: '2.11.0'
+//    // https://mvnrepository.com/artifact/com.fasterxml.jackson.datatype/jackson-datatype-jsr310
+//    compile group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310', version: '2.11.0'
 
 
     // https://mvnrepository.com/artifact/io.springfox/springfox-swagger-ui
@@ -63,7 +65,7 @@ dependencies {
     annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
 
 
-
+    // for 앱 테스트용 프론트
     implementation 'org.webjars.bower:bootstrap:4.3.1'
     implementation 'org.webjars.bower:vue:2.5.16'
     implementation 'org.webjars.bower:axios:0.17.1'
