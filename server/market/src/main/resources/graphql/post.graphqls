@@ -74,6 +74,7 @@ extend type Mutation{
 type Query{
     findAllPosts : [Post]
     findAllPost : [PostOutput]
+#    findByUser : [PostOutput]
     findPostByPostId(id: Int): PostOutput
     # findAllPostsByUploaderId(uploader_id: Int):[Post]
     #    findAllPostsByUploaderId(uploader_id: Int):[Post]
