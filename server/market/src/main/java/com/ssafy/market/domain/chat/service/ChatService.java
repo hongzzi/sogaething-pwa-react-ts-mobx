@@ -10,7 +10,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.data.redis.listener.ChannelTopic;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
 import java.util.*;
 
 @RequiredArgsConstructor
@@ -18,42 +17,37 @@ import java.util.*;
 public class ChatService {
     private static final Logger logger = LoggerFactory.getLogger(ChatService.class);
 
-    private final ChatRepository chatRoomRepository;
-    private final RedisPublisher redisPublisher;
-
-    @PostConstruct
-    private void init(){
-
-//        chatRooms = new LinkedHashMap<>();
-    }
+    private final ChatRepository chatRepository;
+//    private final RedisPublisher redisPublisher;
 
     public List<ChatRoom> findAllRoom() {
-        List<ChatRoom> chatRooms = chatRoomRepository.findAllRoom();
+        List<ChatRoom> chatRooms = chatRepository.findAllRoom();
         return chatRooms;
     }
 
     public ChatRoom findRoomById(String roomId) {
-        ChatRoom chatRoom = chatRoomRepository.findRoomById(roomId);
+        ChatRoom chatRoom = chatRepository.findRoomById(roomId);
         return chatRoom;
     }
 
-    public ChatRoom createChatRoom(String name) {
-        ChatRoom chatRoom = chatRoomRepository.createChatRoom(name);
-        return chatRoom;
+    public ChatRoom createChatRoom(ChatRoom chatRoom) {
+        ChatRoom result = chatRepository.createChatRoom(chatRoom);
+        return result;
     }
 
     public boolean enterChatRoom(String roomId) {
-        chatRoomRepository.enterChatRoom(roomId);
+        chatRepository.enterChatRoom(roomId);
         return true;
     }
 
-    public ChannelTopic getTopic(String roomId) {
-        ChannelTopic channelTopic = chatRoomRepository.getTopic(roomId);
-        return channelTopic;
-    }
+//    public ChannelTopic getTopic(String roomId) {
+//        ChannelTopic channelTopic = chatRoomRepository.getTopic(roomId);
+//        return channelTopic;
+//    }
 
-    public void sendMessage(ChatMessage message) {
-        ChannelTopic channelTopic = chatRoomRepository.getTopic(message.getRoomId());
-        redisPublisher.publish(channelTopic, message);
+    public void sendMessage(ChatMessage chatMessage) {
+        chatRepository.sendMessage(chatMessage);
+//        ChannelTopic channelTopic = chatRepository.getTopic(message.getRoomId());
+//        redisPublisher.publish(channelTopic, message);
     }
 }

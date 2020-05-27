@@ -1,8 +1,10 @@
 package com.ssafy.market.domain.chat.service;
 
 import com.ssafy.market.domain.chat.domain.ChatMessage;
+import com.ssafy.market.domain.chat.domain.ChatRoom;
 import com.ssafy.market.domain.chat.domain.MessageType;
 import com.ssafy.market.global.config.RedisConfig;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.data.redis.core.HashOperations;
@@ -15,35 +17,38 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Service
+@RequiredArgsConstructor
 public class RedisExample {
+    private final RedisTemplate<String, Object> redisTemplate;
     public void setGetValuesExam() {
-        ConfigurableApplicationContext ctx = new AnnotationConfigApplicationContext(RedisConfig.class);
+//        ConfigurableApplicationContext ctx = new AnnotationConfigApplicationContext(RedisConfig.class);
         try {
             @SuppressWarnings("unchecked")
-            RedisTemplate<String, Object> redisTemplate = (RedisTemplate<String, Object>)ctx.getBean("redisTemplate");
+//            RedisTemplate<String, Object> redisTemplate = (RedisTemplate<String, Object>)ctx.getBean("redisTemplate");
             // value operation
             ValueOperations<String, Object> values = redisTemplate.opsForValue();
 
             // set
-            values.set("chatMessage", new ChatMessage(MessageType.ENTER, "id01", "박동준", "테스트", LocalDateTime.now().toString()));
+//            values.set("chatMessage", new ChatMessage(MessageType.ENTER, "id01", "박동준", "테스트", LocalDateTime.now().toString()));
 //            values.set("chatMessage", new ChatMessage(MessageType.ENTER, "id01", "박동준", "테스트"));
+//            values.set("chatRoom", new ChatRoom("01"));
 
             // get
-            System.out.println("ChatMessaged added : " + values.get("chatMessage"));
+            System.out.println("ChatMessaged added : " + values.get("chatRoom"));
         }
         catch(Exception e) {
             e.printStackTrace();
         }
         finally {
-            ctx.close();
+//            ctx.close();
         }
     }
 
     public void hashExam() {
-        ConfigurableApplicationContext ctx = new AnnotationConfigApplicationContext(RedisConfig.class);
+//        ConfigurableApplicationContext ctx = new AnnotationConfigApplicationContext(RedisConfig.class);
         try {
             @SuppressWarnings("unchecked")
-            RedisTemplate<String, Object> redisTemplate = (RedisTemplate<String, Object>)ctx.getBean("redisTemplate");
+//            RedisTemplate<String, Object> redisTemplate = (RedisTemplate<String, Object>)ctx.getBean("redisTemplate");
 
             Map<String, String> empBobMap = new HashMap<>();
             empBobMap.put("name", "Bob");
@@ -57,11 +62,12 @@ public class RedisExample {
 
             // Hash Operation
             HashOperations<String, String, String> hash = redisTemplate.opsForHash();
-            String empBobKey = "emp:Bob";
-            String empJohnKey = "emp:John";
+            String empBobKey = "empBob";
+            String empJohnKey = "empJohn";
 
             hash.putAll(empBobKey, empBobMap);
             hash.putAll(empJohnKey, empJohnMap);
+
 
             System.out.println("Get emp Bob : " + hash.entries(empBobKey));
             System.out.println("Get emp John : " + hash.entries(empJohnKey));
@@ -71,7 +77,7 @@ public class RedisExample {
             e.printStackTrace();
         }
         finally {
-            ctx.close();
+//            ctx.close();
         }
 
     }

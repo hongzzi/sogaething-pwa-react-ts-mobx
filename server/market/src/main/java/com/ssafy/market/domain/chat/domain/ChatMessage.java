@@ -19,7 +19,7 @@ public class ChatMessage implements Serializable {
     private String sender;
     private String message;
 
-    private String createdDateTime = LocalDateTime.now().toString();
+//    private String createdDateTime = LocalDateTime.now().toString();
 
     @Override
     public String toString() {
@@ -27,7 +27,7 @@ public class ChatMessage implements Serializable {
                 "type=" + type +
                 ", content='" + message + '\'' +
                 ", sender='" + sender + '\'' +
-                ", createdDateTime=" + createdDateTime +
+//                ", createdDateTime=" + createdDateTime +
                 '}';
     }
 }
