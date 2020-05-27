@@ -46,7 +46,6 @@ input LoginUserInput {
 }
 
 input UpdateUserInput{
-    userId : ID!
     imageUrl : String
     phone : String!
     address : String!

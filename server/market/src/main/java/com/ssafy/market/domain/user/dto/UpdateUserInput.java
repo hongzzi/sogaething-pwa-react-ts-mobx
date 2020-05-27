@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UpdateUserInput {
-    private Long userId;
+//    private Long userId;
     private String imageUrl;
     private String phone;
     private String address;

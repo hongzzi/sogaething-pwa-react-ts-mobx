@@ -4,14 +4,12 @@ type Product{
     name : String!
     price : Int!
     category :String!
-    state : Boolean
 }
 input CreateProductInput{
     postId : Int!
     price : Int!
     name : String!
     category : String!
-    state : Boolean!
 }
 input UpdateProductInput{
     productId : ID!
@@ -19,7 +17,6 @@ input UpdateProductInput{
     price : Int!
     name : String!
     category : String!
-    state : Boolean!
 }
 
 type ProductOutput{
@@ -28,7 +25,6 @@ type ProductOutput{
     name : String!
     price : Int!
     category :String!
-    state : Boolean
 }
 type Mutation{
     updateProduct(input: UpdateProductInput!) : ProductOutput
