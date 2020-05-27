@@ -21,10 +21,19 @@ public class ChatController {
     private final ChatService chatService;
     private final RedisExample redisExample;
 
+//    // 채팅방 생성
+//    @PostMapping("/room")
+//    public Object createChatRoom(@RequestParam String name) {
+//        ChatRoom chatRoom = chatService.createChatRoom(name);
+//        return chatRoom;
+//    }
+
     // 채팅방 생성
-    @PostMapping("/create/room")
-    public Object createChatRoom(@RequestParam String name) {
-        ChatRoom chatRoom = chatService.createChatRoom(name);
+    @PostMapping("/room")
+    public Object createChatRoom(@RequestBody ChatRoom chatRoom) {
+        System.out.println(chatRoom);
+        ChatRoom result = chatService.createChatRoom(chatRoom);
+        System.out.println(result);
         return chatRoom;
     }
 
@@ -35,9 +44,9 @@ public class ChatController {
     }
 
     // 특정 채팅방 조회
-    @GetMapping("/room/{roomId}")
-    public ChatRoom roomInfo(@PathVariable String roomId) {
-        return chatService.findRoomById(roomId);
+    @GetMapping("/room/{postId}")
+    public ChatRoom roomInfo(@PathVariable String postId) {
+        return chatService.findRoomById(postId);
     }
 
     /**
@@ -60,7 +69,7 @@ public class ChatController {
     public Boolean redisTest(){
         redisExample.setGetValuesExam();
 
-        redisExample.hashExam();
+//        redisExample.hashExam();
         return true;
     }
 }
