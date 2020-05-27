@@ -70,6 +70,13 @@ dependencies {
     implementation 'org.webjars:sockjs-client:1.1.2'
     implementation 'org.webjars:stomp-websocket:2.3.3-1'
     implementation 'com.google.code.gson:gson:2.8.0'
+
+//    implementation 'org.springframework.boot:spring-boot-starter-data-elasticsearch'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testCompile group: 'org.hamcrest', name: 'hamcrest-junit', version: '2.0.0.0'
+    testImplementation 'org.hamcrest:hamcrest:2.2'
+    testImplementation 'org.hamcrest:hamcrest-library:2.2'
+    testImplementation 'junit:junit:4.12'
 }
 
 test {
