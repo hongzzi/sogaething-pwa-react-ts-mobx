@@ -1,6 +1,5 @@
 package com.ssafy.market.domain.user.dto;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,10 +7,11 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UpdateUserInput {
-//    private Long userId;
-    private String imageUrl;
-    private String phone;
+public class UserInfoResponse {
+    private String name;
     private String address;
     private int trust;
+    private Long numOfPosts;
+    private String imgurl;
 }
+

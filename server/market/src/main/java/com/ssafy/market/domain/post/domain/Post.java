@@ -47,6 +47,8 @@ public class Post extends BaseTimeEntity {
 
     @Column(name = "deal_state")
     private String dealState;
+//    @Column(name = "deal_location")
+//    private String dealLocation;
 
     public Post(Long postId) {
         this.postId = postId;
@@ -62,11 +64,35 @@ public class Post extends BaseTimeEntity {
         this.viewCount = viewCount;
         this.deal = deal;
         this.dealState = dealState;
+//        this.dealLocation = dealLocation;
     }
-    public void update(String title, String contents, String deal){
+    public void update(String title, String contents, String deal,String dealState){
         this.title = title;
         this.contents = contents;
         this.deal = deal;
+        this.dealState=dealState;
+    }
+    public void update(Long viewCount){
+        this.viewCount = viewCount;
+    }
+    public void update(Boolean isBuy){
+        this.isBuy = isBuy;
+    }
+
+    @Override
+    public String toString() {
+        return "Post{" +
+                "postId=" + postId +
+                ", user=" + user +
+                ", userId=" + userId +
+                ", isBuy=" + isBuy +
+                ", title='" + title + '\'' +
+                ", saleDate=" + saleDate +
+                ", contents='" + contents + '\'' +
+                ", viewCount=" + viewCount +
+                ", deal='" + deal + '\'' +
+                ", dealState='" + dealState + '\'' +
+                '}';
     }
 }
 

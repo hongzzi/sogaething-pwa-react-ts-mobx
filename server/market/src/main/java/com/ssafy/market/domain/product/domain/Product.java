@@ -21,25 +21,35 @@ public class Product extends BaseTimeEntity {
     @JoinColumn(name="postId")
     private Post post;
 
-//    private Long postId;
     private String name;
     private Long price;
     private String category;
-    private Boolean state;
+//    private String state;
 
-    public Product(Long productId, Post post, String name, Long price, String category,boolean state){
+    public Product(Long productId, Post post, String name, Long price, String category){
         this.productId = productId;
         this.post = post;
         this.name = name;
         this.price = price;
         this.category = category;
-        this.state = state;
+//        this.state = state;
     }
-    public void update(Post post, String name, Long price, String category, boolean state){
+    public void update(Post post, String name, Long price, String category){
         this.post = post;
         this.name = name;
         this.price = price;
         this.category = category;
-        this.state = state;
+//        this.state = state;
+    }
+
+    @Override
+    public String toString() {
+        return "Product{" +
+                "productId=" + productId +
+                ", post=" + post +
+                ", name='" + name + '\'' +
+                ", price=" + price +
+                ", category='" + category + '\'' +
+                '}';
     }
 }

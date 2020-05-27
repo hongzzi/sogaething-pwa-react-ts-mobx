@@ -32,12 +32,20 @@ type UserInfoOutput {
     numOfPosts : Int
 }
 
+type UserInfoResponse {
+    name: String
+    address: String
+    trust: Int
+    numOfPosts: Int
+    imgurl: String
+}
+
 input LoginUserInput {
     provider : String!
     token : String!
 }
+
 input UpdateUserInput{
-    userId : ID!
     imageUrl : String
     phone : String!
     address : String!
@@ -47,7 +55,7 @@ input UpdateUserInput{
 extend type Query {
     findAllUsers: [User]
     findAllUser: [UserOutput]
-    findUserInfo: UserInfoOutput
+    findUserInfo: UserInfoResponse
 }
 
 extend type Mutation {
