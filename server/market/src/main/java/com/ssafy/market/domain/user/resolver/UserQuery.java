@@ -6,12 +6,9 @@ import com.ssafy.market.domain.post.repository.PostRepository;
 import com.ssafy.market.domain.product.domain.Product;
 import com.ssafy.market.domain.product.dto.ProductOutput;
 import com.ssafy.market.domain.user.domain.User;
+import com.ssafy.market.domain.user.dto.*;
 import com.ssafy.market.domain.user.dto.LoginUserOutput;
-import com.ssafy.market.domain.user.dto.LoginUserInput;
-import com.ssafy.market.domain.user.dto.LoginUserOutput;
-import com.ssafy.market.domain.user.dto.UserOutput;
 import com.ssafy.market.domain.user.domain.User;
-import com.ssafy.market.domain.user.dto.UserInfoOutput;
 import com.ssafy.market.domain.user.repository.UserRepository;
 import com.ssafy.market.domain.user.security.TokenProvider;
 import graphql.schema.DataFetchingEnvironment;
@@ -61,18 +58,18 @@ public class UserQuery implements GraphQLQueryResolver {
         return outputs;
     }
     @Transactional
-    public UserInfoOutput findUserInfo(DataFetchingEnvironment env){
+    public UserInfoResponse findUserInfo(DataFetchingEnvironment env){
         Long userId = tokenProvider.getUserIdFromHeader(env);
 
         User user = userRepository.findById(userId).get();
         Long numOfPosts = postRepository.countPostByUserId(userId);
 
-        UserInfoOutput output = new UserInfoOutput();
+        UserInfoResponse output = new UserInfoResponse();
         output.setName(user.getName());
         output.setAddress(user.getAddress());
         output.setTrust(user.getTrust());
         output.setNumOfPosts(numOfPosts);
-
+        output.setImgurl(user.getImageUrl());
         return output;
     }
 }

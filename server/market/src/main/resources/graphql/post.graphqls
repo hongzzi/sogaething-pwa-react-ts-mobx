@@ -34,6 +34,20 @@ type PostOutput{
     deal : String!
 }
 
+type RecentPostResponse {
+    postId: String!
+    user: User!
+    hashTags: [Hashtag]!
+    isBuy: Boolean!
+    price: Int!
+    saleDate: String!
+    imgUrls: [File]!
+    category: String!
+    deal: String!
+    createdDate: String
+    modifiedDate: String
+}
+
 extend type Mutation{
     createPost(input: CreatePostInput!): PostOutput
     updatePost(input: UpdatePostInput!) : PostOutput
@@ -45,6 +59,7 @@ type Query{
     findPostByPostId(id: Int): PostOutput
     #    findAllPostsByUploaderId(uploader_id: Int):[Post]
 #    findPostByPostId(id: Int): Post
-    findRecentPosts: [Post]
+    findRecentPosts: [RecentPostResponse]
 #    findAllPostsByUploaderId(uploader_id: Int):[Post]
+#    findElAllPosts: [Post]
 }

@@ -11,5 +11,4 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     int deleteByPostId(Long id);
     long countPostByUserId(Long UserId);
     List<Post> findTop6ByOrderByCreatedDateDesc();
-
 }
