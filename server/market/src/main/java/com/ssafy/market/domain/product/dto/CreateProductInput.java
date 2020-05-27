@@ -12,5 +12,5 @@ public class CreateProductInput {
     private Long price;
     private String name;
     private String category;
-    private Boolean state;
+    private String state;
 }

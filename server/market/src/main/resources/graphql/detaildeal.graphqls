@@ -2,39 +2,24 @@ type DetailDeal {
     dealId : ID!
     post : Post!
     user : User!
-    hashtag : Hashtag!
     createdDate : String
     modifiedDate : String
 }
 
 input CreateDetailDealInput {
     postId : Int!
-    userId : Int!
-    hashtagId : Int!
 }
-input UpdateDetailDealInput {
-    dealId : ID!
-    postId: Int!
-    Title: String!
-    Contents : String!
-    price : Int!
-    deal : String!
-    dealState:String!
-    imgPath: String!
-    category : String!
-    hashtagId:Int!
-    hashtag : String!
-}
+
 input DeleteDetailDealInput{
     dealId : Int!
 }
 type FileArr{
     imgPath: String!
 }
-type DetailDealOutput{
+type DetailOutput{
     dealId:ID!
-    postId: Int!
-    imgPaths: [FileArr]
+    postId : Int!
+    imgPaths: [FileArr!]
     title: String!
     category : String!
     hashtag : String!
@@ -42,18 +27,17 @@ type DetailDealOutput{
     price : Int!
     buyerId : Int!
     sellerId : Int!
-    address : String!
+    writer : UserInfoOutput!
 
 }
 extend type Mutation {
-    createDetailDeal(input: CreateDetailDealInput!): DetailDealOutput
+    createDetailDeal(input: CreateDetailDealInput!): DetailOutput
     deleteDetailDeal(id : Int!): Int!
 }
 
 extend type Query {
     findAllDetailDeals: [DetailDeal]
-    findAllDetailDeal: [DetailDealOutput]
-#    findDetailDealByPosts(postId: Int): [DetailDealOutput]
-    findDetailDealByPost(postId: Int): DetailDealOutput
+    findAllDetailDeal: [DetailOutput]
+    findDetailDealByPost(postId: Int): DetailOutput
 
 }

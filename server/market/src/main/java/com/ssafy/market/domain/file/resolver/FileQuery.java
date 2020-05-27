@@ -5,6 +5,7 @@ import com.ssafy.market.domain.file.domain.File;
 import com.ssafy.market.domain.file.dto.FileOutput;
 import com.ssafy.market.domain.file.repository.FileRepository;
 import com.ssafy.market.domain.post.domain.Post;
+import com.ssafy.market.global.exception.SelectNotDataException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -19,9 +20,11 @@ public class FileQuery implements GraphQLQueryResolver {
     public List<FileOutput> findAllFile() {
         List<FileOutput> fileOutputList = new ArrayList<>();
         List<File> fileList = fileRepository.findAll();
+        if(fileList.size()==0){
+            throw new SelectNotDataException("file 조회 결과 : ");
+        }
         for(int i =0; i<fileList.size(); i++){
             fileOutputList.add(new FileOutput(fileList.get(i).getFileId(),fileList.get(i).getProduct().getProductId(),fileList.get(i).getImgPath()));
-
         }
         return fileOutputList;
     }
@@ -29,7 +32,10 @@ public class FileQuery implements GraphQLQueryResolver {
         return fileRepository.findAll();
     }
     public FileOutput findFileById(Long id) {
-        File file = fileRepository.findById(id).get();
+        File file = fileRepository.findByFileId(id);
+        if(file==null){
+            throw new SelectNotDataException("file 조회 결과 : ");
+        }
         FileOutput output = new FileOutput(id,file.getProduct().getProductId(), file.getImgPath());
         return output;
     }

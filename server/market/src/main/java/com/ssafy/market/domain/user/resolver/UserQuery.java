@@ -31,6 +31,7 @@ public class UserQuery implements GraphQLQueryResolver {
 
     @Transactional
     public Iterable<User> findAllUsers(){
+
         return userRepository.findAll();
     }
 
@@ -63,16 +64,9 @@ public class UserQuery implements GraphQLQueryResolver {
     @Transactional
     public UserInfoOutput findUserInfo(DataFetchingEnvironment env){
         Long userId = tokenProvider.getUserIdFromHeader(env);
-
         User user = userRepository.findById(userId).get();
         Long numOfPosts = postRepository.countPostByUserId(userId);
-
-        UserInfoOutput output = new UserInfoOutput();
-        output.setName(user.getName());
-        output.setAddress(user.getAddress());
-        output.setTrust(user.getTrust());
-        output.setNumOfPosts(numOfPosts);
-
+        UserInfoOutput output = new UserInfoOutput(user.getName(),user.getAddress(),user.getTrust(),numOfPosts);
         return output;
     }
 }

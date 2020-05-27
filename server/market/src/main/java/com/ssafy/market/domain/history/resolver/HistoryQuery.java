@@ -33,7 +33,7 @@ public class HistoryQuery implements GraphQLQueryResolver {
         List<History> histories = historyRepository.findTop7ByUserIdOrderByCreatedDateDesc(userId);
         List<Post> posts = new ArrayList<>();
         for (int i = 0; i < histories.size(); i++) {
-            posts.add(postRepository.findByPostId(histories.get(i).getPostId()).get());
+            posts.add(postRepository.findByPostId(histories.get(i).getPostId()));
         }
         return posts;
     }

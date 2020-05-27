@@ -11,9 +11,15 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CreatePostInput {
-    private Long uploaderId;
     private String title;
     private Date saleDate;
     private String contents;
     private String deal;
+    private String dealState;
+    private String category;
+    private String productname;
+    private String productState;
+    private Long price;
+    private String hashtag;
+    private String imgPath;
 }

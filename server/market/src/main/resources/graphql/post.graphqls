@@ -15,14 +15,26 @@ input UpdatePostInput{
     title : String!
     contents : String!
     deal : String!
+    dealState : String!
+    category : String!
+    productname : String!
+    productState : String!
+    price : Int!
+    hashtag : String!
 }
 
 input CreatePostInput{
-    uploaderId : Int!
     title : String!
     saleDate : String!
     contents : String!
     deal : String!
+    dealState : String!
+    category : String!
+    productname : String!
+    productState : String!
+    price : Int!
+    hashtag : String!
+    imgPath:String!
 }
 type PostOutput{
     postId : ID!
@@ -32,6 +44,10 @@ type PostOutput{
     contents : String!
     viewCount : Int!
     deal : String!
+    dealState : String!
+#    category : String!
+#    name : String!
+#    hashtag : String!
 }
 
 extend type Mutation{
@@ -40,11 +56,11 @@ extend type Mutation{
     deletePost(id : Int!) : Int!
 }
 type Query{
-    findAllPosts: [Post]
+    findAllPosts : [Post]
     findAllPost : [PostOutput]
     findPostByPostId(id: Int): PostOutput
-    #    findAllPostsByUploaderId(uploader_id: Int):[Post]
-#    findPostByPostId(id: Int): Post
+    # findAllPostsByUploaderId(uploader_id: Int):[Post]
+    # findPostByPostId(id: Int): Post
     findRecentPosts: [Post]
-#    findAllPostsByUploaderId(uploader_id: Int):[Post]
+    # findAllPostsByUploaderId(uploader_id: Int):[Post]
 }

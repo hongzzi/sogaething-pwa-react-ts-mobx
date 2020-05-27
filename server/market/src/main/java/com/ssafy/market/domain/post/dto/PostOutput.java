@@ -1,8 +1,11 @@
 package com.ssafy.market.domain.post.dto;
 
+import com.ssafy.market.domain.detaildeal.dto.FileArr;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -15,4 +18,9 @@ public class PostOutput {
     private String contents;
     private Long viewCount;
     private String deal;
+    private String dealState;
+//    private String category;
+//    private String name;
+//    private String hashtag;
+//    private List<FileArr> imgPaths; // file
 }

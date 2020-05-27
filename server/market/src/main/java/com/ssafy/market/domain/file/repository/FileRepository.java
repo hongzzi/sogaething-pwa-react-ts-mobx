@@ -11,6 +11,7 @@ import java.util.Optional;
 public interface FileRepository extends JpaRepository<File, Long> {
 
 //    File findByProduct(Product product);
+    File findByFileId(Long id);
     int deleteByFileId(Long id);
     List<File> findByProduct(Product product);
 

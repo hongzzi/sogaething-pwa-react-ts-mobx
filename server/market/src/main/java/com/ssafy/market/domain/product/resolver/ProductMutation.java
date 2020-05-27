@@ -8,9 +8,11 @@ import com.ssafy.market.domain.product.dto.CreateProductInput;
 import com.ssafy.market.domain.product.dto.ProductOutput;
 import com.ssafy.market.domain.product.dto.UpdateProductInput;
 import com.ssafy.market.domain.product.repository.ProductRepository;
+import com.ssafy.market.global.exception.DomainNotFoundException;
+import com.ssafy.market.global.exception.DuplicateProductException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import javax.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 
 @Component
 @RequiredArgsConstructor
@@ -19,24 +21,37 @@ public class ProductMutation implements GraphQLMutationResolver {
     private final PostRepository postRepository;
 
     @Transactional
-    public ProductOutput createProduct(CreateProductInput input){
-        Post post = postRepository.findByPostId(input.getPostId()).get();
+    public ProductOutput createProduct(CreateProductInput input) {
+        Post post =  postRepository.findByPostId(input.getPostId());
+        if(post == null) {
+            throw new DomainNotFoundException("postId", input.getPostId());
+        }
+        if(post.getPostId() == input.getPostId()){
+            throw new DuplicateProductException("postId" , input.getPostId());
+        }
         Product product = productRepository.save(new Product(null,post, input.getName(),input.getPrice(),input.getCategory(),input.getState()));
         ProductOutput productOutput = new ProductOutput(product.getProductId(),post.getPostId(),product.getName(),product.getPrice(),product.getCategory(),product.getState());
         return productOutput;
     }
     @Transactional
     public int deleteProduct(Long id){
-//        Product product = productRepository.findById(input.getProductId()).get();
+        Product product = productRepository.findById(id).get();
+        if(product==null){
+            throw new DomainNotFoundException("productId " , id);
+        }
         return productRepository.deleteByProductId(id);
-//       return product;
     }
+
     @Transactional
     public ProductOutput updateProduct(UpdateProductInput input){
-        Post post = postRepository.findByPostId(input.getPostId()).get();
+        Post post= postRepository.findByPostId(input.getPostId());
         Product product = productRepository.findById(input.getProductId()).get();
+        if(product==null){
+            throw new DomainNotFoundException("productId", input.getProductId());
+        }else if(post == null){
+            throw new DomainNotFoundException("postId" , input.getPostId());
+        }
         product.update(post,input.getName(),input.getPrice(),input.getCategory(), input.getState());
-//        productRepository.save(product);
         ProductOutput po = new ProductOutput(product.getProductId(),product.getPost().getPostId(), product.getName(), product.getPrice(), product.getCategory(),product.getState());
         return po;
     }

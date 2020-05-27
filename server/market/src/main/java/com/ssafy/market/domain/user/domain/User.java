@@ -41,6 +41,9 @@ public class User {
     @Column(nullable = false)
     private Role role;
 
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
 
     public User(Long userId) {
         this.userId = userId;

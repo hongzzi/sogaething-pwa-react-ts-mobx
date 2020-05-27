@@ -21,13 +21,12 @@ public class Product extends BaseTimeEntity {
     @JoinColumn(name="postId")
     private Post post;
 
-//    private Long postId;
     private String name;
     private Long price;
     private String category;
-    private Boolean state;
+    private String state;
 
-    public Product(Long productId, Post post, String name, Long price, String category,boolean state){
+    public Product(Long productId, Post post, String name, Long price, String category,String state){
         this.productId = productId;
         this.post = post;
         this.name = name;
@@ -35,7 +34,7 @@ public class Product extends BaseTimeEntity {
         this.category = category;
         this.state = state;
     }
-    public void update(Post post, String name, Long price, String category, boolean state){
+    public void update(Post post, String name, Long price, String category, String state){
         this.post = post;
         this.name = name;
         this.price = price;
