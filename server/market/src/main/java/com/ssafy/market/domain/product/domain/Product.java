@@ -41,4 +41,15 @@ public class Product extends BaseTimeEntity {
         this.category = category;
 //        this.state = state;
     }
+
+    @Override
+    public String toString() {
+        return "Product{" +
+                "productId=" + productId +
+                ", post=" + post +
+                ", name='" + name + '\'' +
+                ", price=" + price +
+                ", category='" + category + '\'' +
+                '}';
+    }
 }

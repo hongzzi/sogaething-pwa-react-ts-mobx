@@ -10,10 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface HashtagRepository extends JpaRepository<Hashtag, Long> {
-
     Hashtag findByHashtagId(Long hashtagId);
     int deleteByHashtagId(Long id);
     List<Hashtag> findByProduct(Product product);
-
-
 }

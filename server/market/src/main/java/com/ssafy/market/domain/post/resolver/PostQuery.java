@@ -8,6 +8,7 @@ import com.ssafy.market.domain.hashtag.domain.Hashtag;
 import com.ssafy.market.domain.hashtag.repository.HashtagRepository;
 import com.ssafy.market.domain.post.domain.Post;
 import com.ssafy.market.domain.post.dto.PostOutput;
+import com.ssafy.market.domain.post.dto.RecentPostResponse;
 import com.ssafy.market.domain.post.repository.PostRepository;
 import com.ssafy.market.domain.product.domain.Product;
 import com.ssafy.market.domain.product.repository.ProductRepository;
@@ -15,11 +16,9 @@ import com.ssafy.market.domain.user.repository.UserRepository;
 import com.ssafy.market.global.exception.SelectNotDataException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import org.springframework.web.socket.server.HandshakeHandler;
-
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
+
 
 @Component
 @RequiredArgsConstructor
@@ -85,7 +84,31 @@ public class PostQuery implements GraphQLQueryResolver {
         return output;
     }
 
-    public List<Post> findRecentPosts(){
-        return postRepository.findTop6ByOrderByCreatedDateDesc();
+    public List<RecentPostResponse> findRecentPosts(){
+        List<RecentPostResponse> recentPostResponses = new ArrayList<>();
+        List<Post> posts = postRepository.findTop6ByOrderByCreatedDateDesc();
+
+        for (int i = 0; i < posts.size(); i++) {
+            Post post = posts.get(i);
+            Product product = productRepository.findByPost(post);
+
+            RecentPostResponse response = new RecentPostResponse();
+            response.setPostId(post.getPostId());
+            response.setUser(userRepository.findByUserId(post.getUserId()));
+            response.setHashTags(hashtagRepository.findByProduct(product));
+            response.setIsBuy(post.isBuy());
+            response.setPrice((long)12345);
+            response.setSaleDate(post.getSaleDate());
+            response.setImgUrls(fileRepository.findByProduct(product));
+            response.setCategory(product.getCategory());
+            response.setDeal(post.getDeal());
+            response.setCreatedDate(post.getCreatedDate());
+            response.setSaleDate(post.getSaleDate());
+
+            recentPostResponses.add(response);
+        }
+
+        return recentPostResponses;
     }
+
 }

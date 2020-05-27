@@ -13,8 +13,24 @@ type HistoryOutput{
     modifiedDate : String
 }
 
+type UserHistoryResponse{
+    user: User!
+    postId: ID!
+    isBuy: Boolean!
+    title: String!
+    saleDate: String!
+    contents: String!
+    viewCount: Int
+    deal: String!
+    createdDate: String
+    modifiedDate: String
+    hashTags: [Hashtag]!
+    price: Int!
+    imgUrls: [File]!
+}
+
 extend type Query {
-    findUserHistoryByUserId: [Post]
+    findUserHistoryByUserId: [UserHistoryResponse]
 }
 
 extend type Mutation {

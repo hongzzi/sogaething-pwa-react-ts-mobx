@@ -78,5 +78,21 @@ public class Post extends BaseTimeEntity {
     public void update(Boolean isBuy){
         this.isBuy = isBuy;
     }
+
+    @Override
+    public String toString() {
+        return "Post{" +
+                "postId=" + postId +
+                ", user=" + user +
+                ", userId=" + userId +
+                ", isBuy=" + isBuy +
+                ", title='" + title + '\'' +
+                ", saleDate=" + saleDate +
+                ", contents='" + contents + '\'' +
+                ", viewCount=" + viewCount +
+                ", deal='" + deal + '\'' +
+                ", dealState='" + dealState + '\'' +
+                '}';
+    }
 }
 

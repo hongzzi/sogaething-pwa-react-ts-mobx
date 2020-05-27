@@ -50,6 +50,20 @@ type PostOutput{
     imgPaths: [FileArr!] # 나중에 바뀔 부분
 }
 
+type RecentPostResponse {
+    postId: String!
+    user: User!
+    hashTags: [Hashtag]!
+    isBuy: Boolean!
+    price: Int!
+    saleDate: String!
+    imgUrls: [File]!
+    category: String!
+    deal: String!
+    createdDate: String
+    modifiedDate: String
+}
+
 extend type Mutation{
     updateViewcount(postId : Int!) : Int!
     updateIsBuy(postId : Int!) : Int!
@@ -62,7 +76,10 @@ type Query{
     findAllPost : [PostOutput]
     findPostByPostId(id: Int): PostOutput
     # findAllPostsByUploaderId(uploader_id: Int):[Post]
-    # findPostByPostId(id: Int): Post
-    findRecentPosts: [Post]
-    # findAllPostsByUploaderId(uploader_id: Int):[Post]
+    #    findAllPostsByUploaderId(uploader_id: Int):[Post]
+#    findPostByPostId(id: Int): Post
+    findRecentPosts: [RecentPostResponse]
+#    findAllPostsByUploaderId(uploader_id: Int):[Post]
+#    findElAllPosts: [Post]
+
 }
