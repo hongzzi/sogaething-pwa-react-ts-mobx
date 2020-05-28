@@ -12,6 +12,6 @@ export default (props: IImageView) => {
 
 const Wrapper = styled.img <Pick<IImageView, 'size'>>`
     width: 100%;
-    height: ${props => props.size !== null ? props.size : '30vw'};
+    height: ${props => props.size !== undefined ? props.size : '120px'};
     object-fit: cover;
 `;
