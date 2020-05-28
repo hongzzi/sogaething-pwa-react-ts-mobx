@@ -19,15 +19,15 @@ type FileArr{
 type DetailOutput{
     dealId:ID!
     postId : Int!
-    imgPaths: [FileArr!]
+    imgPaths: [File]!
     title: String!
     category : String!
-    hashtag : String!
+    hashtag : [Hashtag]!
     contents : String!
     price : Int!
     buyerId : Int!
     sellerId : Int!
-    user : UserInfoOutput!
+    user : UserInfoResponse!
 
 }
 extend type Mutation {
