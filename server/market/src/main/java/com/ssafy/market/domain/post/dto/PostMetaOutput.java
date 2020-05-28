@@ -16,7 +16,7 @@ public class PostMetaOutput {
     private String category;
     private String imgPath;
     private Long price;
-    private List<Hashtag> hashtag;
+    private List<String> hashtag;
     private String createdDate;
     private String modifiedDate;
 }

@@ -16,11 +16,11 @@ import java.util.List;
 public class DetailOutput {
     private Long dealId;
     private Long postId;
-    private List<File> imgPaths; // file
+    private List<String> imgPaths; // file
     private String title; // post
     private String category; // product
-    private List<Hashtag> hashtag; // hashtag
-//    private List<String> hashtag; // hashtag
+//    private List<Hashtag> hashtag; // hashtag
+    private List<String> hashtag; // hashtag
     private String contents; // post
     private Long price; // product
     private Long buyerId;

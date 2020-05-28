@@ -64,11 +64,15 @@ public class DetailDealQuery implements GraphQLQueryResolver {
             }
             List<String> hash = new ArrayList<>(hs);
             List<File> files = fileRepository.findByProduct(pro);
-
+            HashSet<String> fs = new HashSet<>();
+            for (int j = 0; j<files.size(); j++){
+                fs.add(files.get(j).getImgPath());
+            }
+            List<String> file = new ArrayList<>(fs);
             UserInfoResponse userInfoResponse = new UserInfoResponse(writer.getName(),writer.getAddress(),writer.getTrust(),numOfPosts,writer.getImageUrl());
 
-            outputList.add(new DetailOutput(id,po.getPostId(),files,po.getTitle(),pro.getCategory(),
-                    hashtagList,po.getContents(),pro.getPrice(),
+            outputList.add(new DetailOutput(id,po.getPostId(),file,po.getTitle(),pro.getCategory(),
+                    hash,po.getContents(),pro.getPrice(),
                     po.getUser().getUserId(),user.getUserId(),userInfoResponse,detailDeal.getCreatedDate().toString(), detailDeal.getModifiedDate().toString() ));
         }
         return outputList;
@@ -100,11 +104,15 @@ public class DetailDealQuery implements GraphQLQueryResolver {
             throw new DomainNotFoundException("product : ");
         }
         List<File> files = fileRepository.findByProduct(product);
-
+        HashSet<String> fs = new HashSet<>();
+        for (int j = 0; j<files.size(); j++){
+            fs.add(files.get(j).getImgPath());
+        }
+        List<String> file = new ArrayList<>(fs);
         UserInfoResponse userInfoResponse = new UserInfoResponse(writer.getName(),writer.getAddress(),writer.getTrust(),numOfPosts,writer.getImageUrl());
         DetailOutput output = new DetailOutput(
-                deal.getDealId(),postId,files, post.getTitle(), product.getCategory(),
-                hashtagList, post.getContents(), product.getPrice(),
+                deal.getDealId(),postId,file, post.getTitle(), product.getCategory(),
+                hash, post.getContents(), product.getPrice(),
                 post.getUser().getUserId(), user.getUserId(), userInfoResponse
                 ,deal.getCreatedDate().toString(),deal.getModifiedDate().toString()
         );

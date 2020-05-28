@@ -19,10 +19,10 @@ type FileArr{
 type DetailOutput{
     dealId:ID
     postId : Int
-    imgPaths: [File]
+    imgPaths: [String]
     title: String
     category : String
-    hashtag : [Hashtag]
+    hashtag : [String]
     contents : String
     price : Int
     buyerId : Int

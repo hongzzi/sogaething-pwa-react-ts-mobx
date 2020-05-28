@@ -116,8 +116,13 @@ public class PostQuery implements GraphQLQueryResolver {
             Product product = productRepository.findByPost(post);
             File files = fileRepository.findByProduct(product).get(0);
             List<Hashtag> hashtagList = hashtagRepository.findByProduct(product);
+            HashSet<String> hs = new HashSet<>();
+            for (int j = 0; j<hashtagList.size(); j++){
+                hs.add(hashtagList.get(j).getHashtag());
+            }
+            List<String> hash = new ArrayList<>(hs);
             metaOutputList.add(new PostMetaOutput(post.getPostId(),post.getTitle(),product.getCategory(),files.getImgPath(),product.getPrice()
-                    ,hashtagList,post.getCreatedDate().toString(), post.getModifiedDate().toString()));
+                    ,hash,post.getCreatedDate().toString(), post.getModifiedDate().toString()));
         }
         return metaOutputList;
     }

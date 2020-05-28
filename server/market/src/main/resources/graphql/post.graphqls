@@ -56,7 +56,7 @@ type PostMetaOutput {
     category: String
     imgPath: String
     price: Int
-    hashtag :[Hashtag]
+    hashtag :[String]
     createdDate: String
     modifiedDate: String
 }
