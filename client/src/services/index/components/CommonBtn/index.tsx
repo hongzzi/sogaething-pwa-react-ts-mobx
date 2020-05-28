@@ -2,7 +2,7 @@ import * as React from 'react';
 import styled from '~/styled';
 
 interface IBtnProps {
-  type: 'common' | 'primary' | 'disable';
+  type: 'common' | 'primary' | 'disable' | 'chatting';
   text: string;
 }
 

@@ -1,14 +1,18 @@
 package com.ssafy.market.domain.chat.controller;
 
 import com.ssafy.market.domain.chat.domain.ChatMessage;
-import com.ssafy.market.domain.chat.domain.ChatRoom;
 import com.ssafy.market.domain.chat.domain.MessageType;
-import com.ssafy.market.domain.chat.repository.ChatMongoRepository;
+import com.ssafy.market.domain.chat.service.ChatRoomService;
 import com.ssafy.market.domain.chat.service.ChatService;
-import com.ssafy.market.domain.chat.service.RedisExample;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -17,46 +21,19 @@ import java.util.List;
 @RequestMapping("/chat")
 public class ChatController {
 
-    private final ChatMongoRepository chatRoomRepository;
+    private static final Logger logger = LoggerFactory.getLogger(ChatController.class);
+
     private final ChatService chatService;
-    private final RedisExample redisExample;
-
-//    // 채팅방 생성
-//    @PostMapping("/room")
-//    public Object createChatRoom(@RequestParam String name) {
-//        ChatRoom chatRoom = chatService.createChatRoom(name);
-//        return chatRoom;
-//    }
-
-    // 채팅방 생성
-    @PostMapping("/room")
-    public Object createChatRoom(@RequestBody ChatRoom chatRoom) {
-        System.out.println(chatRoom);
-        ChatRoom result = chatService.createChatRoom(chatRoom);
-        System.out.println(result);
-        return chatRoom;
-    }
-
-    // 모든 채팅방 목록 반환
-    @GetMapping("/rooms")
-    public List<ChatRoom> room() {
-        return chatService.findAllRoom();
-    }
-
-    // 특정 채팅방 조회
-    @GetMapping("/room/{postId}")
-    public ChatRoom roomInfo(@PathVariable String postId) {
-        return chatService.findRoomById(postId);
-    }
+    private final ChatRoomService chatRoomService;
 
     /**
      * websocket "/pub/chat/message"로 들어오는 메시징을 처리한다.
      */
     @MessageMapping("/chat/message")
-    public void message(ChatMessage message) {
+    public void sendMessage(ChatMessage message) {
+        System.out.println("message: " + message);
         if (MessageType.ENTER.equals(message.getType())) {
-            chatService.enterChatRoom(message.getRoomId());
-//            chatRoomRepository.enterChatRoom(message.getRoomId());
+            chatRoomService.enterChatRoom(message.getRoomId());
             message.setMessage(message.getSender() + "님이 입장하셨습니다.");
         }
         // WebSocket 에 발행된 메시지를 redis로 발행한다.(publish)
@@ -64,12 +41,10 @@ public class ChatController {
         chatService.sendMessage(message);
     }
 
-    // redis 예제
-    @GetMapping("/redis")
-    public Boolean redisTest(){
-        redisExample.setGetValuesExam();
-
-//        redisExample.hashExam();
-        return true;
+    @ApiOperation(value = "특정 방의 채팅메시지를 가져온다.", response=List.class)
+    @GetMapping("/message/{roomId}")
+    public List<ChatMessage> findChatMessagesByRoomId(@PathVariable String roomId){
+        List<ChatMessage> result = chatService.findChatMessagesByRoomId(roomId);
+        return result;
     }
 }
