@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useGetFindRecentPostsQuery } from '~/generated/graphql';
+import { useGetRecentQuery } from '~/generated/graphql';
 import styled from '~/styled';
 import Card from './ProductCard';
 
@@ -22,7 +22,7 @@ export interface IRecentPost {
 }
 
 export default () => {
-  const { data, loading, error } = useGetFindRecentPostsQuery();
+  const { data, loading, error } = useGetRecentQuery();
   
   const handleClickCard = () => {
     console.log(data);

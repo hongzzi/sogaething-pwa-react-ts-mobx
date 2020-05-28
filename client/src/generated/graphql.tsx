@@ -13,13 +13,13 @@ export type ICreateDetailDealInput = {
 };
 
 export type ICreateFileInput = {
-  productId: Scalars["Int"];
-  imgPath: Scalars["String"];
+  productId?: Maybe<Scalars["Int"]>;
+  imgPath?: Maybe<Scalars["String"]>;
 };
 
 export type ICreateHashtagInput = {
-  productId: Scalars["Int"];
-  hashtag: Scalars["String"];
+  productId?: Maybe<Scalars["Int"]>;
+  hashtag?: Maybe<Scalars["String"]>;
 };
 
 export type ICreatePostInput = {
@@ -65,9 +65,9 @@ export type IDetailOutput = {
 };
 
 export type IFile = {
-  fileId: Scalars["ID"];
-  product: IProduct;
-  imgPath: Scalars["String"];
+  fileId?: Maybe<Scalars["ID"]>;
+  product?: Maybe<IProduct>;
+  imgPath?: Maybe<Scalars["String"]>;
 };
 
 export type IFileArr = {
@@ -75,21 +75,21 @@ export type IFileArr = {
 };
 
 export type IFileOutput = {
-  fileId: Scalars["Int"];
-  productId: Scalars["Int"];
-  imgPath: Scalars["String"];
+  fileId?: Maybe<Scalars["Int"]>;
+  productId?: Maybe<Scalars["Int"]>;
+  imgPath?: Maybe<Scalars["String"]>;
 };
 
 export type IHashtag = {
-  hashtagId: Scalars["ID"];
-  product: IProduct;
-  hashtag: Scalars["String"];
+  hashtagId?: Maybe<Scalars["ID"]>;
+  product?: Maybe<IProduct>;
+  hashtag?: Maybe<Scalars["String"]>;
 };
 
 export type IHashtagOutput = {
-  hashtagId: Scalars["ID"];
-  productId: Scalars["Int"];
-  hashtag: Scalars["String"];
+  hashtagId?: Maybe<Scalars["ID"]>;
+  productId?: Maybe<Scalars["Int"]>;
+  hashtag?: Maybe<Scalars["String"]>;
 };
 
 export type IHistoryOutput = {
@@ -100,8 +100,8 @@ export type IHistoryOutput = {
 };
 
 export type ILoginUserInput = {
-  provider: Scalars["String"];
-  token: Scalars["String"];
+  provider?: Maybe<Scalars["String"]>;
+  token?: Maybe<Scalars["String"]>;
 };
 
 export type ILoginUserOutput = {
@@ -109,12 +109,14 @@ export type ILoginUserOutput = {
 };
 
 export type IMutation = {
-  updateProduct?: Maybe<IProductOutput>;
-  createProduct?: Maybe<IProductOutput>;
-  deleteProduct: Scalars["Int"];
+  updateViewcount: Scalars["Int"];
+  updateIsBuy: Scalars["Int"];
+  createPost?: Maybe<IPostOutput>;
+  updatePost?: Maybe<IPostOutput>;
+  deletePost: Scalars["Int"];
   createFile?: Maybe<IFileOutput>;
   updateFile?: Maybe<IFileOutput>;
-  deleteFile: Scalars["Int"];
+  deleteFile?: Maybe<Scalars["Int"]>;
   createDetailDeal?: Maybe<IDetailOutput>;
   deleteDetailDeal: Scalars["Int"];
   loginUser?: Maybe<ILoginUserOutput>;
@@ -123,24 +125,30 @@ export type IMutation = {
   createHashtag?: Maybe<IHashtagOutput>;
   updateHashtag?: Maybe<IHashtagOutput>;
   deleteHashtag?: Maybe<Scalars["Int"]>;
-  updateViewcount: Scalars["Int"];
-  updateIsBuy: Scalars["Int"];
-  createPost?: Maybe<IPostOutput>;
-  updatePost?: Maybe<IPostOutput>;
-  deletePost: Scalars["Int"];
+  updateProduct?: Maybe<IProductOutput>;
+  createProduct?: Maybe<IProductOutput>;
+  deleteProduct?: Maybe<Scalars["Int"]>;
   createHistory?: Maybe<IHistoryOutput>;
 };
 
-export type IMutationUpdateProductArgs = {
-  input: IUpdateProductInput;
+export type IMutationUpdateViewcountArgs = {
+  postId: Scalars["Int"];
 };
 
-export type IMutationCreateProductArgs = {
-  input: ICreateProductInput;
+export type IMutationUpdateIsBuyArgs = {
+  postId: Scalars["Int"];
 };
 
-export type IMutationDeleteProductArgs = {
-  id: Scalars["Int"];
+export type IMutationCreatePostArgs = {
+  input: ICreatePostInput;
+};
+
+export type IMutationUpdatePostArgs = {
+  input: IUpdatePostInput;
+};
+
+export type IMutationDeletePostArgs = {
+  postId: Scalars["Int"];
 };
 
 export type IMutationCreateFileArgs = {
@@ -187,24 +195,16 @@ export type IMutationDeleteHashtagArgs = {
   id: Scalars["Int"];
 };
 
-export type IMutationUpdateViewcountArgs = {
-  postId: Scalars["Int"];
+export type IMutationUpdateProductArgs = {
+  input: IUpdateProductInput;
 };
 
-export type IMutationUpdateIsBuyArgs = {
-  postId: Scalars["Int"];
+export type IMutationCreateProductArgs = {
+  input: ICreateProductInput;
 };
 
-export type IMutationCreatePostArgs = {
-  input: ICreatePostInput;
-};
-
-export type IMutationUpdatePostArgs = {
-  input: IUpdatePostInput;
-};
-
-export type IMutationDeletePostArgs = {
-  postId: Scalars["Int"];
+export type IMutationDeleteProductArgs = {
+  id: Scalars["Int"];
 };
 
 export type IMutationCreateHistoryArgs = {
@@ -212,15 +212,15 @@ export type IMutationCreateHistoryArgs = {
 };
 
 export type IPost = {
-  postId: Scalars["ID"];
+  postId?: Maybe<Scalars["ID"]>;
   userId?: Maybe<Scalars["Int"]>;
-  isBuy: Scalars["Boolean"];
-  title: Scalars["String"];
-  saleDate: Scalars["String"];
-  contents: Scalars["String"];
+  isBuy?: Maybe<Scalars["Boolean"]>;
+  title?: Maybe<Scalars["String"]>;
+  saleDate?: Maybe<Scalars["String"]>;
+  contents?: Maybe<Scalars["String"]>;
   viewCount?: Maybe<Scalars["Int"]>;
-  deal: Scalars["String"];
-  dealState: Scalars["String"];
+  deal?: Maybe<Scalars["String"]>;
+  dealState?: Maybe<Scalars["String"]>;
   createdDate?: Maybe<Scalars["String"]>;
   modifiedDate?: Maybe<Scalars["String"]>;
 };
@@ -242,24 +242,25 @@ export type IPostOutput = {
 };
 
 export type IProduct = {
-  productId: Scalars["ID"];
-  post: IPost;
-  name: Scalars["String"];
-  price: Scalars["Int"];
-  category: Scalars["String"];
+  productId?: Maybe<Scalars["ID"]>;
+  post?: Maybe<IPost>;
+  name?: Maybe<Scalars["String"]>;
+  price?: Maybe<Scalars["Int"]>;
+  category?: Maybe<Scalars["String"]>;
 };
 
 export type IProductOutput = {
-  productId: Scalars["ID"];
-  postId: Scalars["Int"];
-  name: Scalars["String"];
-  price: Scalars["Int"];
-  category: Scalars["String"];
+  productId?: Maybe<Scalars["ID"]>;
+  postId?: Maybe<Scalars["Int"]>;
+  name?: Maybe<Scalars["String"]>;
+  price?: Maybe<Scalars["Int"]>;
+  category?: Maybe<Scalars["String"]>;
 };
 
 export type IQuery = {
   findAllPosts?: Maybe<Array<Maybe<IPost>>>;
   findAllPost?: Maybe<Array<Maybe<IPostOutput>>>;
+  /** findByUser : [PostOutput] */
   findPostByPostId?: Maybe<IPostOutput>;
   /** findAllPostsByUploaderId(uploader_id: Int):[Post]
    *    findAllPostsByUploaderId(uploader_id: Int):[Post]
@@ -305,27 +306,27 @@ export type IQueryFindByProductIdArgs = {
 };
 
 export type IRecentPostResponse = {
-  postId: Scalars["String"];
-  user: IUser;
-  hashTags: Array<Maybe<IHashtag>>;
-  isBuy: Scalars["Boolean"];
-  price: Scalars["Int"];
-  saleDate: Scalars["String"];
-  imgUrls: Array<Maybe<IFile>>;
-  category: Scalars["String"];
-  deal: Scalars["String"];
+  postId?: Maybe<Scalars["String"]>;
+  user?: Maybe<IUser>;
+  hashTags?: Maybe<Array<Maybe<IHashtag>>>;
+  isBuy?: Maybe<Scalars["Boolean"]>;
+  price?: Maybe<Scalars["Int"]>;
+  saleDate?: Maybe<Scalars["String"]>;
+  imgUrls?: Maybe<Array<Maybe<IFile>>>;
+  category?: Maybe<Scalars["String"]>;
+  deal?: Maybe<Scalars["String"]>;
   createdDate?: Maybe<Scalars["String"]>;
   modifiedDate?: Maybe<Scalars["String"]>;
 };
 
 export type IUpdateFileInput = {
-  fileId: Scalars["Int"];
-  imgPath: Scalars["String"];
+  fileId?: Maybe<Scalars["Int"]>;
+  imgPath?: Maybe<Scalars["String"]>;
 };
 
 export type IUpdateHashtagInput = {
-  hashtagId: Scalars["Int"];
-  hashtag: Scalars["String"];
+  hashtagId?: Maybe<Scalars["Int"]>;
+  hashtag?: Maybe<Scalars["String"]>;
 };
 
 export type IUpdatePostInput = {
@@ -351,37 +352,37 @@ export type IUpdateProductInput = {
 
 export type IUpdateUserInput = {
   imageUrl?: Maybe<Scalars["String"]>;
-  phone: Scalars["String"];
-  address: Scalars["String"];
-  trust: Scalars["Int"];
+  phone?: Maybe<Scalars["String"]>;
+  address?: Maybe<Scalars["String"]>;
+  trust?: Maybe<Scalars["Int"]>;
 };
 
 export type IUser = {
-  userId: Scalars["ID"];
-  name: Scalars["String"];
+  userId?: Maybe<Scalars["ID"]>;
+  name?: Maybe<Scalars["String"]>;
   email?: Maybe<Scalars["String"]>;
-  imageUrl: Scalars["String"];
-  provider: Scalars["String"];
-  providerId: Scalars["Int"];
-  phone: Scalars["String"];
-  address: Scalars["String"];
-  trust: Scalars["Int"];
+  imageUrl?: Maybe<Scalars["String"]>;
+  provider?: Maybe<Scalars["String"]>;
+  providerId?: Maybe<Scalars["Int"]>;
+  phone?: Maybe<Scalars["String"]>;
+  address?: Maybe<Scalars["String"]>;
+  trust?: Maybe<Scalars["Int"]>;
 };
 
 export type IUserHistoryResponse = {
-  user: IUser;
-  postId: Scalars["ID"];
-  isBuy: Scalars["Boolean"];
-  title: Scalars["String"];
-  saleDate: Scalars["String"];
-  contents: Scalars["String"];
+  user?: Maybe<IUser>;
+  postId?: Maybe<Scalars["ID"]>;
+  isBuy?: Maybe<Scalars["Boolean"]>;
+  title?: Maybe<Scalars["String"]>;
+  saleDate?: Maybe<Scalars["String"]>;
+  contents?: Maybe<Scalars["String"]>;
   viewCount?: Maybe<Scalars["Int"]>;
-  deal: Scalars["String"];
+  deal?: Maybe<Scalars["String"]>;
   createdDate?: Maybe<Scalars["String"]>;
   modifiedDate?: Maybe<Scalars["String"]>;
-  hashTags: Array<Maybe<IHashtag>>;
-  price: Scalars["Int"];
-  imgUrls: Array<Maybe<IFile>>;
+  hashTags?: Maybe<Array<Maybe<IHashtag>>>;
+  price?: Maybe<Scalars["Int"]>;
+  imgUrls?: Maybe<Array<Maybe<IFile>>>;
 };
 
 export type IUserInfoResponse = {
@@ -393,15 +394,15 @@ export type IUserInfoResponse = {
 };
 
 export type IUserOutput = {
-  userId: Scalars["ID"];
-  name: Scalars["String"];
+  userId?: Maybe<Scalars["ID"]>;
+  name?: Maybe<Scalars["String"]>;
   email?: Maybe<Scalars["String"]>;
   imageUrl?: Maybe<Scalars["String"]>;
-  provider: Scalars["String"];
-  providerId: Scalars["Int"];
-  phone: Scalars["String"];
-  address: Scalars["String"];
-  trust: Scalars["Int"];
+  provider?: Maybe<Scalars["String"]>;
+  providerId?: Maybe<Scalars["Int"]>;
+  phone?: Maybe<Scalars["String"]>;
+  address?: Maybe<Scalars["String"]>;
+  trust?: Maybe<Scalars["Int"]>;
 };
 export type IGetLoginMutationVariables = {
   input: ILoginUserInput;
@@ -436,77 +437,19 @@ export type IGetHistoryQuery = { __typename?: "Query" } & {
           | "isBuy"
           | "title"
           | "saleDate"
-          | "contents"
           | "viewCount"
           | "deal"
           | "createdDate"
           | "modifiedDate"
           | "price"
         > & {
-            user: { __typename?: "User" } & Pick<
-              IUser,
-              | "userId"
-              | "name"
-              | "email"
-              | "imageUrl"
-              | "provider"
-              | "providerId"
-              | "phone"
-              | "address"
-              | "trust"
-            >;
-            hashTags: Array<
-              Maybe<
-                { __typename?: "Hashtag" } & Pick<
-                  IHashtag,
-                  "hashtagId" | "hashtag"
-                > & {
-                    product: { __typename?: "Product" } & Pick<
-                      IProduct,
-                      "productId" | "name" | "price" | "category"
-                    > & {
-                        post: { __typename?: "Post" } & Pick<
-                          IPost,
-                          | "postId"
-                          | "userId"
-                          | "isBuy"
-                          | "title"
-                          | "saleDate"
-                          | "contents"
-                          | "viewCount"
-                          | "deal"
-                          | "dealState"
-                          | "createdDate"
-                          | "modifiedDate"
-                        >;
-                      };
-                  }
+            hashTags: Maybe<
+              Array<
+                Maybe<{ __typename?: "Hashtag" } & Pick<IHashtag, "hashtag">>
               >
             >;
-            imgUrls: Array<
-              Maybe<
-                { __typename?: "File" } & Pick<IFile, "fileId" | "imgPath"> & {
-                    product: { __typename?: "Product" } & Pick<
-                      IProduct,
-                      "productId" | "name" | "price" | "category"
-                    > & {
-                        post: { __typename?: "Post" } & Pick<
-                          IPost,
-                          | "postId"
-                          | "userId"
-                          | "isBuy"
-                          | "title"
-                          | "saleDate"
-                          | "contents"
-                          | "viewCount"
-                          | "deal"
-                          | "dealState"
-                          | "createdDate"
-                          | "modifiedDate"
-                        >;
-                      };
-                  }
-              >
+            imgUrls: Maybe<
+              Array<Maybe<{ __typename?: "File" } & Pick<IFile, "imgPath">>>
             >;
           }
       >
@@ -514,9 +457,9 @@ export type IGetHistoryQuery = { __typename?: "Query" } & {
   >;
 };
 
-export type IGetFindRecentPostsQueryVariables = {};
+export type IGetRecentQueryVariables = {};
 
-export type IGetFindRecentPostsQuery = { __typename?: "Query" } & {
+export type IGetRecentQuery = { __typename?: "Query" } & {
   findRecentPosts: Maybe<
     Array<
       Maybe<
@@ -531,70 +474,19 @@ export type IGetFindRecentPostsQuery = { __typename?: "Query" } & {
           | "createdDate"
           | "modifiedDate"
         > & {
-            user: { __typename?: "User" } & Pick<
-              IUser,
-              | "userId"
-              | "name"
-              | "email"
-              | "imageUrl"
-              | "provider"
-              | "providerId"
-              | "phone"
-              | "address"
-              | "trust"
-            >;
-            hashTags: Array<
-              Maybe<
-                { __typename?: "Hashtag" } & Pick<
-                  IHashtag,
-                  "hashtagId" | "hashtag"
-                > & {
-                    product: { __typename?: "Product" } & Pick<
-                      IProduct,
-                      "productId" | "name" | "price" | "category"
-                    > & {
-                        post: { __typename?: "Post" } & Pick<
-                          IPost,
-                          | "postId"
-                          | "userId"
-                          | "isBuy"
-                          | "title"
-                          | "saleDate"
-                          | "contents"
-                          | "viewCount"
-                          | "deal"
-                          | "dealState"
-                          | "createdDate"
-                          | "modifiedDate"
-                        >;
-                      };
-                  }
+            user: Maybe<
+              { __typename?: "User" } & Pick<
+                IUser,
+                "userId" | "name" | "imageUrl" | "address" | "trust"
               >
             >;
-            imgUrls: Array<
-              Maybe<
-                { __typename?: "File" } & Pick<IFile, "fileId" | "imgPath"> & {
-                    product: { __typename?: "Product" } & Pick<
-                      IProduct,
-                      "productId" | "name" | "price" | "category"
-                    > & {
-                        post: { __typename?: "Post" } & Pick<
-                          IPost,
-                          | "postId"
-                          | "userId"
-                          | "isBuy"
-                          | "title"
-                          | "saleDate"
-                          | "contents"
-                          | "viewCount"
-                          | "deal"
-                          | "dealState"
-                          | "createdDate"
-                          | "modifiedDate"
-                        >;
-                      };
-                  }
+            hashTags: Maybe<
+              Array<
+                Maybe<{ __typename?: "Hashtag" } & Pick<IHashtag, "hashtag">>
               >
+            >;
+            imgUrls: Maybe<
+              Array<Maybe<{ __typename?: "File" } & Pick<IFile, "imgPath">>>
             >;
           }
       >
@@ -730,71 +622,19 @@ export function useGetUserInfoQuery(
 export const GetHistoryDocument = gql`
   query getHistory {
     findUserHistoryByUserId {
-      user {
-        userId
-        name
-        email
-        imageUrl
-        provider
-        providerId
-        phone
-        address
-        trust
-      }
       postId
       isBuy
       title
       saleDate
-      contents
       viewCount
       deal
       createdDate
       modifiedDate
       hashTags {
-        hashtagId
-        product {
-          productId
-          post {
-            postId
-            userId
-            isBuy
-            title
-            saleDate
-            contents
-            viewCount
-            deal
-            dealState
-            createdDate
-            modifiedDate
-          }
-          name
-          price
-          category
-        }
         hashtag
       }
       price
       imgUrls {
-        fileId
-        product {
-          productId
-          post {
-            postId
-            userId
-            isBuy
-            title
-            saleDate
-            contents
-            viewCount
-            deal
-            dealState
-            createdDate
-            modifiedDate
-          }
-          name
-          price
-          category
-        }
         imgPath
       }
     }
@@ -847,68 +687,24 @@ export function useGetHistoryQuery(
     baseOptions
   );
 }
-export const GetFindRecentPostsDocument = gql`
-  query getFindRecentPosts {
+export const GetRecentDocument = gql`
+  query getRecent {
     findRecentPosts {
       postId
       user {
         userId
         name
-        email
         imageUrl
-        provider
-        providerId
-        phone
         address
         trust
       }
       hashTags {
-        hashtagId
-        product {
-          productId
-          post {
-            postId
-            userId
-            isBuy
-            title
-            saleDate
-            contents
-            viewCount
-            deal
-            dealState
-            createdDate
-            modifiedDate
-          }
-          name
-          price
-          category
-        }
         hashtag
       }
       isBuy
       price
       saleDate
       imgUrls {
-        fileId
-        product {
-          productId
-          post {
-            postId
-            userId
-            isBuy
-            title
-            saleDate
-            contents
-            viewCount
-            deal
-            dealState
-            createdDate
-            modifiedDate
-          }
-          name
-          price
-          category
-        }
         imgPath
       }
       category
@@ -919,60 +715,49 @@ export const GetFindRecentPostsDocument = gql`
   }
 `;
 
-export const GetFindRecentPostsComponent = (
+export const GetRecentComponent = (
   props: Omit<
     Omit<
-      ReactApollo.QueryProps<
-        IGetFindRecentPostsQuery,
-        IGetFindRecentPostsQueryVariables
-      >,
+      ReactApollo.QueryProps<IGetRecentQuery, IGetRecentQueryVariables>,
       "query"
     >,
     "variables"
-  > & { variables?: IGetFindRecentPostsQueryVariables }
+  > & { variables?: IGetRecentQueryVariables }
 ) => (
-  <ReactApollo.Query<
-    IGetFindRecentPostsQuery,
-    IGetFindRecentPostsQueryVariables
-  >
-    query={GetFindRecentPostsDocument}
+  <ReactApollo.Query<IGetRecentQuery, IGetRecentQueryVariables>
+    query={GetRecentDocument}
     {...props}
   />
 );
 
-export type IGetFindRecentPostsProps<TChildProps = {}> = Partial<
-  ReactApollo.DataProps<
-    IGetFindRecentPostsQuery,
-    IGetFindRecentPostsQueryVariables
-  >
+export type IGetRecentProps<TChildProps = {}> = Partial<
+  ReactApollo.DataProps<IGetRecentQuery, IGetRecentQueryVariables>
 > &
   TChildProps;
-export function withGetFindRecentPosts<TProps, TChildProps = {}>(
+export function withGetRecent<TProps, TChildProps = {}>(
   operationOptions?: ReactApollo.OperationOption<
     TProps,
-    IGetFindRecentPostsQuery,
-    IGetFindRecentPostsQueryVariables,
-    IGetFindRecentPostsProps<TChildProps>
+    IGetRecentQuery,
+    IGetRecentQueryVariables,
+    IGetRecentProps<TChildProps>
   >
 ) {
   return ReactApollo.withQuery<
     TProps,
-    IGetFindRecentPostsQuery,
-    IGetFindRecentPostsQueryVariables,
-    IGetFindRecentPostsProps<TChildProps>
-  >(GetFindRecentPostsDocument, {
-    alias: "withGetFindRecentPosts",
+    IGetRecentQuery,
+    IGetRecentQueryVariables,
+    IGetRecentProps<TChildProps>
+  >(GetRecentDocument, {
+    alias: "withGetRecent",
     ...operationOptions
   });
 }
 
-export function useGetFindRecentPostsQuery(
-  baseOptions?: ReactApolloHooks.QueryHookOptions<
-    IGetFindRecentPostsQueryVariables
-  >
+export function useGetRecentQuery(
+  baseOptions?: ReactApolloHooks.QueryHookOptions<IGetRecentQueryVariables>
 ) {
-  return ReactApolloHooks.useQuery<
-    IGetFindRecentPostsQuery,
-    IGetFindRecentPostsQueryVariables
-  >(GetFindRecentPostsDocument, baseOptions);
+  return ReactApolloHooks.useQuery<IGetRecentQuery, IGetRecentQueryVariables>(
+    GetRecentDocument,
+    baseOptions
+  );
 }

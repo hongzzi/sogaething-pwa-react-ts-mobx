@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styled, { keyframes } from '~/styled';
-import ImageView from '../ImageView';
 import { IRecentPost } from '.';
+import ImageView from '../ImageView';
 import { TextLoader } from '../LoaderPlaceholder';
 
 interface IProductCard {
@@ -53,7 +53,7 @@ const Wrapper = styled.div<Pick<IProductCard, 'idx' | 'loading'>>`
   display: block;
   float: ${(props) => (props.idx % 2 === 1 ? 'left' : 'right')};
   margin-bottom: 15px;
-  background-color: ${props => props.loading ? 'lightgray' : ''};
+  background-color: ${(props) => props.loading ? 'lightgray' : ''};
   animation: ${boxFade} ${(props) => props.loading ? '1.5s infinite ease-in-out' : ''} ;
 `;
 

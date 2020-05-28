@@ -1,5 +1,5 @@
 # source: http://3.34.131.20:8080/graphql
-# timestamp: Thu May 28 2020 00:00:51 GMT+0900 (대한민국 표준시)
+# timestamp: Thu May 28 2020 15:17:43 GMT+0900 (대한민국 표준시)
 
 """This directive allows results to be deferred during execution"""
 directive @defer on FIELD
@@ -9,13 +9,13 @@ input CreateDetailDealInput {
 }
 
 input CreateFileInput {
-  productId: Int!
-  imgPath: String!
+  productId: Int
+  imgPath: String
 }
 
 input CreateHashtagInput {
-  productId: Int!
-  hashtag: String!
+  productId: Int
+  hashtag: String
 }
 
 input CreatePostInput {
@@ -63,9 +63,9 @@ type DetailOutput {
 }
 
 type File {
-  fileId: ID!
-  product: Product!
-  imgPath: String!
+  fileId: ID
+  product: Product
+  imgPath: String
 }
 
 type FileArr {
@@ -73,21 +73,21 @@ type FileArr {
 }
 
 type FileOutput {
-  fileId: Int!
-  productId: Int!
-  imgPath: String!
+  fileId: Int
+  productId: Int
+  imgPath: String
 }
 
 type Hashtag {
-  hashtagId: ID!
-  product: Product!
-  hashtag: String!
+  hashtagId: ID
+  product: Product
+  hashtag: String
 }
 
 type HashtagOutput {
-  hashtagId: ID!
-  productId: Int!
-  hashtag: String!
+  hashtagId: ID
+  productId: Int
+  hashtag: String
 }
 
 type HistoryOutput {
@@ -98,8 +98,8 @@ type HistoryOutput {
 }
 
 input LoginUserInput {
-  provider: String!
-  token: String!
+  provider: String
+  token: String
 }
 
 type LoginUserOutput {
@@ -107,12 +107,14 @@ type LoginUserOutput {
 }
 
 type Mutation {
-  updateProduct(input: UpdateProductInput!): ProductOutput
-  createProduct(input: CreateProductInput!): ProductOutput
-  deleteProduct(id: Int!): Int!
+  updateViewcount(postId: Int!): Int!
+  updateIsBuy(postId: Int!): Int!
+  createPost(input: CreatePostInput!): PostOutput
+  updatePost(input: UpdatePostInput!): PostOutput
+  deletePost(postId: Int!): Int!
   createFile(input: CreateFileInput!): FileOutput
   updateFile(input: UpdateFileInput!): FileOutput
-  deleteFile(id: Int!): Int!
+  deleteFile(id: Int!): Int
   createDetailDeal(input: CreateDetailDealInput!): DetailOutput
   deleteDetailDeal(id: Int!): Int!
   loginUser(input: LoginUserInput!): LoginUserOutput
@@ -121,24 +123,22 @@ type Mutation {
   createHashtag(input: CreateHashtagInput!): HashtagOutput
   updateHashtag(input: UpdateHashtagInput!): HashtagOutput
   deleteHashtag(id: Int!): Int
-  updateViewcount(postId: Int!): Int!
-  updateIsBuy(postId: Int!): Int!
-  createPost(input: CreatePostInput!): PostOutput
-  updatePost(input: UpdatePostInput!): PostOutput
-  deletePost(postId: Int!): Int!
+  updateProduct(input: UpdateProductInput!): ProductOutput
+  createProduct(input: CreateProductInput!): ProductOutput
+  deleteProduct(id: Int!): Int
   createHistory(postId: Int!): HistoryOutput
 }
 
 type Post {
-  postId: ID!
+  postId: ID
   userId: Int
-  isBuy: Boolean!
-  title: String!
-  saleDate: String!
-  contents: String!
+  isBuy: Boolean
+  title: String
+  saleDate: String
+  contents: String
   viewCount: Int
-  deal: String!
-  dealState: String!
+  deal: String
+  dealState: String
   createdDate: String
   modifiedDate: String
 }
@@ -162,24 +162,26 @@ type PostOutput {
 }
 
 type Product {
-  productId: ID!
-  post: Post!
-  name: String!
-  price: Int!
-  category: String!
+  productId: ID
+  post: Post
+  name: String
+  price: Int
+  category: String
 }
 
 type ProductOutput {
-  productId: ID!
-  postId: Int!
-  name: String!
-  price: Int!
-  category: String!
+  productId: ID
+  postId: Int
+  name: String
+  price: Int
+  category: String
 }
 
 type Query {
   findAllPosts: [Post]
   findAllPost: [PostOutput]
+
+  """findByUser : [PostOutput]"""
   findPostByPostId(id: Int): PostOutput
 
   """
@@ -207,27 +209,27 @@ type Query {
 }
 
 type RecentPostResponse {
-  postId: String!
-  user: User!
-  hashTags: [Hashtag]!
-  isBuy: Boolean!
-  price: Int!
-  saleDate: String!
-  imgUrls: [File]!
-  category: String!
-  deal: String!
+  postId: String
+  user: User
+  hashTags: [Hashtag]
+  isBuy: Boolean
+  price: Int
+  saleDate: String
+  imgUrls: [File]
+  category: String
+  deal: String
   createdDate: String
   modifiedDate: String
 }
 
 input UpdateFileInput {
-  fileId: Int!
-  imgPath: String!
+  fileId: Int
+  imgPath: String
 }
 
 input UpdateHashtagInput {
-  hashtagId: Int!
-  hashtag: String!
+  hashtagId: Int
+  hashtag: String
 }
 
 input UpdatePostInput {
@@ -253,37 +255,37 @@ input UpdateProductInput {
 
 input UpdateUserInput {
   imageUrl: String
-  phone: String!
-  address: String!
-  trust: Int!
+  phone: String
+  address: String
+  trust: Int
 }
 
 type User {
-  userId: ID!
-  name: String!
+  userId: ID
+  name: String
   email: String
-  imageUrl: String!
-  provider: String!
-  providerId: Int!
-  phone: String!
-  address: String!
-  trust: Int!
+  imageUrl: String
+  provider: String
+  providerId: Int
+  phone: String
+  address: String
+  trust: Int
 }
 
 type UserHistoryResponse {
-  user: User!
-  postId: ID!
-  isBuy: Boolean!
-  title: String!
-  saleDate: String!
-  contents: String!
+  user: User
+  postId: ID
+  isBuy: Boolean
+  title: String
+  saleDate: String
+  contents: String
   viewCount: Int
-  deal: String!
+  deal: String
   createdDate: String
   modifiedDate: String
-  hashTags: [Hashtag]!
-  price: Int!
-  imgUrls: [File]!
+  hashTags: [Hashtag]
+  price: Int
+  imgUrls: [File]
 }
 
 type UserInfoResponse {
@@ -295,13 +297,13 @@ type UserInfoResponse {
 }
 
 type UserOutput {
-  userId: ID!
-  name: String!
+  userId: ID
+  name: String
   email: String
   imageUrl: String
-  provider: String!
-  providerId: Int!
-  phone: String!
-  address: String!
-  trust: Int!
+  provider: String
+  providerId: Int
+  phone: String
+  address: String
+  trust: Int
 }
