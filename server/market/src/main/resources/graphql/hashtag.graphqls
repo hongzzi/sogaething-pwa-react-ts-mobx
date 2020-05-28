@@ -1,20 +1,20 @@
 type Hashtag{
-    hashtagId : ID!
-    product : Product!
-    hashtag : String!
+    hashtagId : ID
+    product : Product
+    hashtag : String
 }
 input CreateHashtagInput{
-    productId : Int!
-    hashtag : String!
+    productId : Int
+    hashtag : String
 }
 input UpdateHashtagInput{
-    hashtagId : Int!
-    hashtag : String!
+    hashtagId : Int
+    hashtag : String
 }
 type HashtagOutput{
-    hashtagId : ID!
-    productId : Int!
-    hashtag : String!
+    hashtagId : ID
+    productId : Int
+    hashtag : String
 }
 extend type Mutation{
     createHashtag(input : CreateHashtagInput!) : HashtagOutput

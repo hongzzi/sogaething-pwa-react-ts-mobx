@@ -1,9 +1,9 @@
 type Product{
-    productId : ID!
-    post : Post!
-    name : String!
-    price : Int!
-    category :String!
+    productId : ID
+    post : Post
+    name : String
+    price : Int
+    category :String
 }
 input CreateProductInput{
     postId : Int!
@@ -20,16 +20,16 @@ input UpdateProductInput{
 }
 
 type ProductOutput{
-    productId : ID!
-    postId : Int!
-    name : String!
-    price : Int!
-    category :String!
+    productId : ID
+    postId : Int
+    name : String
+    price : Int
+    category :String
 }
-type Mutation{
+extend type Mutation{
     updateProduct(input: UpdateProductInput!) : ProductOutput
     createProduct(input : CreateProductInput!) : ProductOutput
-    deleteProduct(id : Int!) : Int!
+    deleteProduct(id : Int!) : Int
 }
 extend type Query{
     findAllProduct: [ProductOutput]
