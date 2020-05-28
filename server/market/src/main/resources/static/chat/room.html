@@ -29,8 +29,8 @@
         </div>
     </div>
     <ul class="list-group">
-        <li class="list-group-item list-group-item-action" v-for="item in chatrooms" v-bind:key="item.postId" v-on:click="enterRoom(item.postId)">
-            {{item.postId}}
+        <li class="list-group-item list-group-item-action" v-for="item in chatrooms" v-bind:key="item.roomId" v-on:click="enterRoom(item.roomId)">
+            {{item.roomId}}
         </li>
     </ul>
 </div>
@@ -69,11 +69,12 @@
                         data: {
                             sellerId: "3",
                             buyerId: "4",
-                            postId: this.room_name
+                            roomId: this.room_name
                         }
                     }).then(
                         response => {
-                            alert(response.data.sellerId+"님과의 방 개설에 성공하였습니다.")
+                            console.log(response);
+                            alert(response.data.content+"님과의 방 개설에 성공하였습니다.");
                             this.room_name = '';
                             this.findAllRoom();
                         }
