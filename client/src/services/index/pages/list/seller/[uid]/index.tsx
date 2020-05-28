@@ -10,15 +10,21 @@ export interface IPostListSellerProps {
 
 export default (props: IPostListSellerProps) => {
     return (
-        <Layout>
+        <Wrapper>
             <Categoryheader type={'normal'} text={'판매내역'}/>
             <PostList />
             <Nav />
-        </Layout>
+        </Wrapper>
     )
 }
 
-const Layout = styled.div`
-  position: relative;
-  padding-bottom: 48px;
+const Wrapper = styled.div`
+    display: grid;
+    grid-auto-rows: 56px minmax(75vh, 85vh) 60px;
+    height: 100%;
+    grid-template-areas:
+    "CH"
+    "CC"
+    "CI"
+    ;
 `;
