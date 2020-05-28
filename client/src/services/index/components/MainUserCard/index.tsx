@@ -14,13 +14,16 @@ export interface IFindUserInfo {
   name: string;
   numOfPosts: number;
   trust: number;
+  imgurl: string;
 }
 
 export default () => {
   const { data, loading, error } = useGetUserInfoQuery();
   const {findUserInfo} = data as IQueryData;
   const handleClickMatch = () => {
+    console.log(data);
     console.log(findUserInfo);
+    console.log(error);
   }
   return (
     <Wrapper>

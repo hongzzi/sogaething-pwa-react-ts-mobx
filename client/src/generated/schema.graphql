@@ -1,5 +1,5 @@
 # source: http://3.34.131.20:8080/graphql
-# timestamp: Thu May 28 2020 15:17:43 GMT+0900 (대한민국 표준시)
+# timestamp: Thu May 28 2020 21:21:05 GMT+0900 (대한민국 표준시)
 
 """This directive allows results to be deferred during execution"""
 directive @defer on FIELD
@@ -49,27 +49,25 @@ type DetailDeal {
 }
 
 type DetailOutput {
-  dealId: ID!
-  postId: Int!
-  imgPaths: [File]!
-  title: String!
-  category: String!
-  hashtag: [Hashtag]!
-  contents: String!
-  price: Int!
-  buyerId: Int!
-  sellerId: Int!
-  user: UserInfoResponse!
+  dealId: ID
+  postId: Int
+  imgPaths: [String]
+  title: String
+  category: String
+  hashtag: [String]
+  contents: String
+  price: Int
+  buyerId: Int
+  sellerId: Int
+  user: UserInfoResponse
+  createdDate: String
+  modifiedDate: String
 }
 
 type File {
   fileId: ID
   product: Product
   imgPath: String
-}
-
-type FileArr {
-  imgPath: String!
 }
 
 type FileOutput {
@@ -143,22 +141,33 @@ type Post {
   modifiedDate: String
 }
 
+type PostMetaOutput {
+  postId: Int
+  title: String
+  category: String
+  imgPath: String
+  price: Int
+  hashtag: [String]
+  createdDate: String
+  modifiedDate: String
+}
+
 type PostOutput {
   postId: ID!
-  userId: Int!
+  userId: Int
 
   """게시자 id"""
-  isBuy: Boolean!
+  isBuy: Boolean
 
   """구매 or 판매"""
-  title: String!
-  contents: String!
-  deal: String!
-  dealState: String!
-  category: String!
-  name: String!
-  hashtag: String!
-  imgPaths: [FileArr!]
+  title: String
+  contents: String
+  deal: String
+  dealState: String
+  category: String
+  name: String
+  hashtag: [String]
+  imgPaths: [File]
 }
 
 type Product {
@@ -181,7 +190,7 @@ type Query {
   findAllPosts: [Post]
   findAllPost: [PostOutput]
 
-  """findByUser : [PostOutput]"""
+  """findByUser(userId : Int) : [PostOutput]"""
   findPostByPostId(id: Int): PostOutput
 
   """
@@ -190,6 +199,7 @@ type Query {
      findPostByPostId(id: Int): Post
   """
   findRecentPosts: [RecentPostResponse]
+  findPostListByUserId(userId: Int): [PostMetaOutput]
   findAllFile: [FileOutput]
   findAllFiles: [File]
   findFileById(id: Int): FileOutput

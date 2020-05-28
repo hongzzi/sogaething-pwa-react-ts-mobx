@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { useGetUserInfoQuery } from '~/generated/graphql';
 import styled from '~/styled';
 import CardList from '../components/CardList';
 import CategoryHeader from '../components/CategoryHeader';

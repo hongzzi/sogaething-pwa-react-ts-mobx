@@ -8,14 +8,14 @@ interface IQueryData {
 }
 
 export interface IRecentPost {
+  category: string
   postId: string
   user: any
-  hashTags: any
+  hashTags: object[] | any
   isBuy: boolean
   price: number
   saleDate: string
-  imgUrls: any
-  category: string
+  imgUrls: object[] | any
   deal: string
   createdDate: string
   modifiedDate: string
@@ -23,9 +23,11 @@ export interface IRecentPost {
 
 export default () => {
   const { data, loading, error } = useGetRecentQuery();
-  
+
+  const {findRecentPosts} = data as IQueryData;
+
   const handleClickCard = () => {
-    console.log(data);
+    console.log(findRecentPosts);
     console.log(error);
   };
 
@@ -33,8 +35,7 @@ export default () => {
     if (loading) {
       return <Card key={i} idx={i} cardData={null} loading />;
     } else {
-      const {findRecentPosts} = data as IQueryData;
-      return <Card key={i} idx={i} cardData={null} loading={false} />;
+      return <Card key={i} idx={i} cardData={findRecentPosts[i]} loading={false} />;
     }
   });
   return <Wrapper onClick={handleClickCard}>{Cards}</Wrapper>;

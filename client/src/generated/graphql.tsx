@@ -51,27 +51,25 @@ export type IDetailDeal = {
 };
 
 export type IDetailOutput = {
-  dealId: Scalars["ID"];
-  postId: Scalars["Int"];
-  imgPaths: Array<Maybe<IFile>>;
-  title: Scalars["String"];
-  category: Scalars["String"];
-  hashtag: Array<Maybe<IHashtag>>;
-  contents: Scalars["String"];
-  price: Scalars["Int"];
-  buyerId: Scalars["Int"];
-  sellerId: Scalars["Int"];
-  user: IUserInfoResponse;
+  dealId?: Maybe<Scalars["ID"]>;
+  postId?: Maybe<Scalars["Int"]>;
+  imgPaths?: Maybe<Array<Maybe<Scalars["String"]>>>;
+  title?: Maybe<Scalars["String"]>;
+  category?: Maybe<Scalars["String"]>;
+  hashtag?: Maybe<Array<Maybe<Scalars["String"]>>>;
+  contents?: Maybe<Scalars["String"]>;
+  price?: Maybe<Scalars["Int"]>;
+  buyerId?: Maybe<Scalars["Int"]>;
+  sellerId?: Maybe<Scalars["Int"]>;
+  user?: Maybe<IUserInfoResponse>;
+  createdDate?: Maybe<Scalars["String"]>;
+  modifiedDate?: Maybe<Scalars["String"]>;
 };
 
 export type IFile = {
   fileId?: Maybe<Scalars["ID"]>;
   product?: Maybe<IProduct>;
   imgPath?: Maybe<Scalars["String"]>;
-};
-
-export type IFileArr = {
-  imgPath: Scalars["String"];
 };
 
 export type IFileOutput = {
@@ -225,20 +223,31 @@ export type IPost = {
   modifiedDate?: Maybe<Scalars["String"]>;
 };
 
+export type IPostMetaOutput = {
+  postId?: Maybe<Scalars["Int"]>;
+  title?: Maybe<Scalars["String"]>;
+  category?: Maybe<Scalars["String"]>;
+  imgPath?: Maybe<Scalars["String"]>;
+  price?: Maybe<Scalars["Int"]>;
+  hashtag?: Maybe<Array<Maybe<Scalars["String"]>>>;
+  createdDate?: Maybe<Scalars["String"]>;
+  modifiedDate?: Maybe<Scalars["String"]>;
+};
+
 export type IPostOutput = {
   postId: Scalars["ID"];
-  userId: Scalars["Int"];
+  userId?: Maybe<Scalars["Int"]>;
   /** 게시자 id */
-  isBuy: Scalars["Boolean"];
+  isBuy?: Maybe<Scalars["Boolean"]>;
   /** 구매 or 판매 */
-  title: Scalars["String"];
-  contents: Scalars["String"];
-  deal: Scalars["String"];
-  dealState: Scalars["String"];
-  category: Scalars["String"];
-  name: Scalars["String"];
-  hashtag: Scalars["String"];
-  imgPaths?: Maybe<Array<IFileArr>>;
+  title?: Maybe<Scalars["String"]>;
+  contents?: Maybe<Scalars["String"]>;
+  deal?: Maybe<Scalars["String"]>;
+  dealState?: Maybe<Scalars["String"]>;
+  category?: Maybe<Scalars["String"]>;
+  name?: Maybe<Scalars["String"]>;
+  hashtag?: Maybe<Array<Maybe<Scalars["String"]>>>;
+  imgPaths?: Maybe<Array<Maybe<IFile>>>;
 };
 
 export type IProduct = {
@@ -260,13 +269,14 @@ export type IProductOutput = {
 export type IQuery = {
   findAllPosts?: Maybe<Array<Maybe<IPost>>>;
   findAllPost?: Maybe<Array<Maybe<IPostOutput>>>;
-  /** findByUser : [PostOutput] */
+  /** findByUser(userId : Int) : [PostOutput] */
   findPostByPostId?: Maybe<IPostOutput>;
   /** findAllPostsByUploaderId(uploader_id: Int):[Post]
    *    findAllPostsByUploaderId(uploader_id: Int):[Post]
    *    findPostByPostId(id: Int): Post
    */
   findRecentPosts?: Maybe<Array<Maybe<IRecentPostResponse>>>;
+  findPostListByUserId?: Maybe<Array<Maybe<IPostMetaOutput>>>;
   findAllFile?: Maybe<Array<Maybe<IFileOutput>>>;
   findAllFiles?: Maybe<Array<Maybe<IFile>>>;
   findFileById?: Maybe<IFileOutput>;
@@ -287,6 +297,10 @@ export type IQuery = {
 
 export type IQueryFindPostByPostIdArgs = {
   id?: Maybe<Scalars["Int"]>;
+};
+
+export type IQueryFindPostListByUserIdArgs = {
+  userId?: Maybe<Scalars["Int"]>;
 };
 
 export type IQueryFindFileByIdArgs = {
