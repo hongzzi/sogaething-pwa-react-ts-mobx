@@ -19,15 +19,16 @@ public class ChatMessage implements Serializable {
     private String sender;
     private String message;
 
-//    private String createdDateTime = LocalDateTime.now().toString();
+    private String createdDateTime = LocalDateTime.now().toString();
 
     @Override
     public String toString() {
         return "ChatMessage{" +
                 "type=" + type +
-                ", content='" + message + '\'' +
+                ", roomId='" + roomId + '\'' +
                 ", sender='" + sender + '\'' +
-//                ", createdDateTime=" + createdDateTime +
+                ", message='" + message + '\'' +
+                ", createdDateTime='" + createdDateTime + '\'' +
                 '}';
     }
 }

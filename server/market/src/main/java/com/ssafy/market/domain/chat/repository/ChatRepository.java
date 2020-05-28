@@ -39,11 +39,16 @@ public class ChatRepository {
     }
 
     public List<ChatRoom> findAllRoom() {
-        return opsHashChatRoom.values(CHAT_ROOMS);
+        List<ChatRoom> result = opsHashChatRoom.values(CHAT_ROOMS);
+        return result;
+//        return opsHashChatRoom.values(CHAT_ROOMS);
     }
 
     public ChatRoom findRoomById(String id) {
-        return opsHashChatRoom.get(CHAT_ROOMS, id);
+//        System.out.println((ChatRoom)opsHashChatRoom.get(CHAT_ROOMS, id));
+//        System.out.println(id);
+//        return opsHashChatRoom.get(CHAT_ROOMS, id);
+        return new ChatRoom();
     }
 
     /**
@@ -73,12 +78,12 @@ public class ChatRepository {
     public void sendMessage(ChatMessage chatMessage) {
         ChannelTopic channelTopic = getTopic(chatMessage.getRoomId());
         redisPublisher.publish(channelTopic, chatMessage);
-        System.out.println("들어오는 거: " + chatMessage);
+//        System.out.println("들어오는 거: " + chatMessage);
 
-        String messageKey = String.valueOf(opsHashChatMessage.increment("CHAT_MESSAGES", chatMessage.getRoomId(), 1));
+//        String messageKey = String.valueOf(opsHashChatMessage.increment("CHAT_MESSAGES", "Room"+chatMessage.getRoomId(), 1));
+//        System.out.println(messageKey);
 //        System.out.println(opsHashChatMessage.increment("CHAT_MESSAGES", chatMessage.getRoomId(), 1).getClass().getName());
-        System.out.println(opsHashChatRoom.entries(CHAT_MESSAGES));
-        opsHashChatMessage.put(CHAT_MESSAGES, messageKey, chatMessage);
+//        opsHashChatMessage.put(CHAT_MESSAGES, messageKey, chatMessage);
     }
 
     public ChannelTopic getTopic(String roomId) {
