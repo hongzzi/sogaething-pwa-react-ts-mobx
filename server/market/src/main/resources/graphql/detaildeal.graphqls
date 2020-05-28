@@ -28,6 +28,8 @@ type DetailOutput{
     buyerId : Int
     sellerId : Int
     user : UserInfoResponse
+    createdDate :String
+    modifiedDate :String
 
 }
 extend type Mutation {

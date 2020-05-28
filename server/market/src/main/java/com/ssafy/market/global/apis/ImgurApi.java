@@ -64,8 +64,6 @@
 //                jobUrlLists.getPending().remove(imageLink);
 //                jobUrlLists.getCompleted().add(responseBody.getLink());
 //                if(jobUrlLists.getPending().isEmpty()) {
-//                    TimeZone dateTime = new TimeZone();
-//                    jobUrlLists.setFinished(dateTime.getTimeNow());
 //                    jobUrlLists.setStatus("processed");
 //                }
 //            } else {

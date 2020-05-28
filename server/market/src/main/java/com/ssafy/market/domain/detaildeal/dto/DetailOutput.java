@@ -26,4 +26,6 @@ public class DetailOutput {
     private Long buyerId;
     private Long sellerId;
     private UserInfoResponse user;
+    private String createdDate;
+    private String modifiedDate;
 }

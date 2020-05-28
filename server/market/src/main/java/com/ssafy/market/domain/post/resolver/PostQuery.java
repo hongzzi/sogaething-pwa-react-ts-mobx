@@ -7,11 +7,13 @@ import com.ssafy.market.domain.file.repository.FileRepository;
 import com.ssafy.market.domain.hashtag.domain.Hashtag;
 import com.ssafy.market.domain.hashtag.repository.HashtagRepository;
 import com.ssafy.market.domain.post.domain.Post;
+import com.ssafy.market.domain.post.dto.PostMetaOutput;
 import com.ssafy.market.domain.post.dto.PostOutput;
 import com.ssafy.market.domain.post.dto.RecentPostResponse;
 import com.ssafy.market.domain.post.repository.PostRepository;
 import com.ssafy.market.domain.product.domain.Product;
 import com.ssafy.market.domain.product.repository.ProductRepository;
+import com.ssafy.market.domain.user.domain.User;
 import com.ssafy.market.domain.user.repository.UserRepository;
 import com.ssafy.market.global.exception.SelectNotDataException;
 import lombok.RequiredArgsConstructor;
@@ -103,5 +105,20 @@ public class PostQuery implements GraphQLQueryResolver {
         }
 
         return recentPostResponses;
+    }
+
+    public List<PostMetaOutput> findPostListByUserId(Long userId){
+        List<PostMetaOutput> metaOutputList = new ArrayList<>();
+        User user = userRepository.findByUserId(userId);
+        List<Post> postList = postRepository.findPostByUser(user);
+        for (int i = 0; i< postList.size(); i++){
+            Post post = postList.get(i);
+            Product product = productRepository.findByPost(post);
+            File files = fileRepository.findByProduct(product).get(0);
+            List<Hashtag> hashtagList = hashtagRepository.findByProduct(product);
+            metaOutputList.add(new PostMetaOutput(post.getPostId(),post.getTitle(),product.getCategory(),files.getImgPath(),product.getPrice()
+                    ,hashtagList,post.getCreatedDate().toString(), post.getModifiedDate().toString()));
+        }
+        return metaOutputList;
     }
 }

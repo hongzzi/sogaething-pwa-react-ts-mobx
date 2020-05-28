@@ -65,7 +65,7 @@ public class DetailDealMutation implements GraphQLMutationResolver {
         List<String> hash = new ArrayList<>(hs);
         UserInfoResponse userInfoResponse = new UserInfoResponse(writer.getName(),writer.getAddress(),writer.getTrust(),numOfPosts,writer.getImageUrl());
         DetailOutput output = new DetailOutput(detailDeal.getDealId(),
-                input.getPostId(),files,post.getTitle(),pro.getCategory(),hashtagList,post.getContents(), pro.getPrice(),post.getUser().getUserId(), userId,userInfoResponse);
+                input.getPostId(),files,post.getTitle(),pro.getCategory(),hashtagList,post.getContents(), pro.getPrice(),post.getUser().getUserId(), userId,userInfoResponse,detailDeal.getCreatedDate().toString(),detailDeal.getModifiedDate().toString());
         return output;
     }
     @Transactional

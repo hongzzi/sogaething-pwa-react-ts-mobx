@@ -69,7 +69,7 @@ public class DetailDealQuery implements GraphQLQueryResolver {
 
             outputList.add(new DetailOutput(id,po.getPostId(),files,po.getTitle(),pro.getCategory(),
                     hashtagList,po.getContents(),pro.getPrice(),
-                    po.getUser().getUserId(),user.getUserId(),userInfoResponse));
+                    po.getUser().getUserId(),user.getUserId(),userInfoResponse,detailDeal.getCreatedDate().toString(), detailDeal.getModifiedDate().toString() ));
         }
         return outputList;
     }
@@ -106,6 +106,7 @@ public class DetailDealQuery implements GraphQLQueryResolver {
                 deal.getDealId(),postId,files, post.getTitle(), product.getCategory(),
                 hashtagList, post.getContents(), product.getPrice(),
                 post.getUser().getUserId(), user.getUserId(), userInfoResponse
+                ,deal.getCreatedDate().toString(),deal.getModifiedDate().toString()
         );
         return output;
     }
