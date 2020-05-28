@@ -9,6 +9,4 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class CreateDetailDealInput{
     private Long postId;
-    private Long userId;
-    private Long hashtagId;
 }

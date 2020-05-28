@@ -30,6 +30,11 @@ const theme = {
       google: { bg: '#ffffff', border: '#ff6b6b'},
       naver: { bg: '#5dcb50', border: 'none' },
     },
+    chatting: {
+      bodyColor: '#ff3d71',
+      borderColor: '#ff3d71',
+      color: '#fff',
+    },
   },
 };
 

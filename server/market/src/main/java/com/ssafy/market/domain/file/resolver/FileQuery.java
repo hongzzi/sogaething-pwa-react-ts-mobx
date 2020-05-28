@@ -1,35 +1,43 @@
 package com.ssafy.market.domain.file.resolver;
 
 import com.coxautodev.graphql.tools.GraphQLQueryResolver;
-import com.ssafy.market.domain.detaildeal.domain.DetailDeal;
-import com.ssafy.market.domain.detaildeal.repository.DetailDealRepository;
 import com.ssafy.market.domain.file.domain.File;
+import com.ssafy.market.domain.file.dto.FileOutput;
 import com.ssafy.market.domain.file.repository.FileRepository;
-import com.ssafy.market.domain.post.respository.PostRepository;
+import com.ssafy.market.domain.post.domain.Post;
+import com.ssafy.market.global.exception.SelectNotDataException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.Optional;
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
 public class FileQuery implements GraphQLQueryResolver {
     private final FileRepository fileRepository;
 
-    public Iterable<File> findAllFiles() {
+    public List<FileOutput> findAllFile() {
+        List<FileOutput> fileOutputList = new ArrayList<>();
+        List<File> fileList = fileRepository.findAll();
+        if(fileList.size()==0){
+            throw new SelectNotDataException("file 조회 결과 : ");
+        }
+        for(int i =0; i<fileList.size(); i++){
+            fileOutputList.add(new FileOutput(fileList.get(i).getFileId(),fileList.get(i).getProduct().getProductId(),fileList.get(i).getImgPath()));
+        }
+        return fileOutputList;
+    }
+    public Iterable<File> findAllFiles(){
         return fileRepository.findAll();
     }
-
-//    public Optional<Post> findPostByPostId(Long id) {
-//        return postRepository.findByPost_id(id);
-//    }
-
-    public Optional<File> findFileById(Long id) {
-        return fileRepository.findById(id);
+    public FileOutput findFileById(Long id) {
+        File file = fileRepository.findByFileId(id);
+        if(file==null){
+            throw new SelectNotDataException("file 조회 결과 : ");
+        }
+        FileOutput output = new FileOutput(id,file.getProduct().getProductId(), file.getImgPath());
+        return output;
     }
 
-//    public Iterable<Post> findAllPostsByUploaderId() {
-//        return postRepository.findAll();
-//    }
 }

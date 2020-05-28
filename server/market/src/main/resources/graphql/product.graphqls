@@ -1,22 +1,38 @@
 type Product{
-    productId : ID!
+    productId : ID
     post : Post
-    name : String!
-    price : Int!
-    category :String!
-    state : Boolean
+    name : String
+    price : Int
+    category :String
 }
 input CreateProductInput{
     postId : Int!
     price : Int!
     name : String!
     category : String!
-    state : Boolean!
+}
+input UpdateProductInput{
+    productId : ID!
+    postId : Int!
+    price : Int!
+    name : String!
+    category : String!
+}
+
+type ProductOutput{
+    productId : ID
+    postId : Int
+    name : String
+    price : Int
+    category :String
 }
 extend type Mutation{
-    createProduct(input : CreateProductInput!) : Product
+    updateProduct(input: UpdateProductInput!) : ProductOutput
+    createProduct(input : CreateProductInput!) : ProductOutput
+    deleteProduct(id : Int!) : Int
 }
 extend type Query{
+    findAllProduct: [ProductOutput]
     findAllProducts: [Product]
-    findProductById(productId:Int) : Product
+    findByProductId(id:Int) : ProductOutput
 }

@@ -1,59 +1,49 @@
 package com.ssafy.market.domain.chat.service;
 
 import com.ssafy.market.domain.chat.domain.ChatMessage;
-import com.ssafy.market.domain.chat.domain.ChatRoom;
 import com.ssafy.market.domain.chat.redis.RedisPublisher;
-import com.ssafy.market.domain.chat.repository.ChatRepository;
+import com.ssafy.market.domain.chat.repository.ChatMongoRepository;
+import com.ssafy.market.domain.chat.util.TopicUtil;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.redis.listener.ChannelTopic;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
-import java.util.*;
+import java.util.List;
+import java.util.Map;
 
 @RequiredArgsConstructor
 @Service
 public class ChatService {
     private static final Logger logger = LoggerFactory.getLogger(ChatService.class);
 
-    private final ChatRepository chatRoomRepository;
+    private final ChatMongoRepository chatMongoRepository;
+
+
+//     채팅방(topic)에 발행되는 메시지를 처리할 Listener
+//    private final RedisMessageListenerContainer redisMessageListener;
+    // 게시 처리 서비스
     private final RedisPublisher redisPublisher;
-
-    @PostConstruct
-    private void init(){
-
-//        chatRooms = new LinkedHashMap<>();
-    }
-
-    public List<ChatRoom> findAllRoom() {
-        List<ChatRoom> chatRooms = chatRoomRepository.findAllRoom();
-        return chatRooms;
-    }
-
-    public ChatRoom findRoomById(String roomId) {
-        ChatRoom chatRoom = chatRoomRepository.findRoomById(roomId);
-        return chatRoom;
-    }
-
-    public ChatRoom createChatRoom(String name) {
-        ChatRoom chatRoom = chatRoomRepository.createChatRoom(name);
-        return chatRoom;
-    }
-
-    public boolean enterChatRoom(String roomId) {
-        chatRoomRepository.enterChatRoom(roomId);
-        return true;
-    }
+    private Map<String, ChannelTopic> topics = TopicUtil.getTopicUtil();
 
     public ChannelTopic getTopic(String roomId) {
-        ChannelTopic channelTopic = chatRoomRepository.getTopic(roomId);
-        return channelTopic;
+        return topics.get(roomId);
     }
 
-    public void sendMessage(ChatMessage message) {
-        ChannelTopic channelTopic = chatRoomRepository.getTopic(message.getRoomId());
-        redisPublisher.publish(channelTopic, message);
+    public Boolean sendMessage(ChatMessage chatMessage) {
+        ChannelTopic channelTopic = getTopic(chatMessage.getRoomId());
+        redisPublisher.publish(channelTopic, chatMessage);
+        ChatMessage result = chatMongoRepository.insertChatMessage(chatMessage);
+        if (result != null){
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public List<ChatMessage> findChatMessagesByRoomId(String roomId) {
+        List<ChatMessage> result = chatMongoRepository.getChatMessagesByRoomId(roomId);
+        return result;
     }
 }

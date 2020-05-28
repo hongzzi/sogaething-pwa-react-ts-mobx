@@ -1,17 +1,28 @@
 type User {
-    userId : ID!
-    name : String!
+    userId : ID
+    name : String
     email : String
-    imageUrl : String!
-    provider : String!
-    providerId : Int!
-    phone : String!
-    address : String!
-    trust : Int!
+    imageUrl : String
+    provider : String
+    providerId : Int
+    phone : String
+    address : String
+    trust : Int
 }
 
 type LoginUserOutput {
     token : String!
+}
+type UserOutput{
+    userId : ID
+    name : String
+    email : String
+    imageUrl : String
+    provider : String
+    providerId : Int
+    phone : String
+    address : String
+    trust : Int
 }
 
 type UserInfoOutput {
@@ -21,18 +32,34 @@ type UserInfoOutput {
     numOfPosts : Int
 }
 
+type UserInfoResponse {
+    name: String
+    address: String
+    trust: Int
+    numOfPosts: Int
+    imgurl: String
+}
+
 input LoginUserInput {
-    provider : String!
-    token : String!
+    provider : String
+    token : String
+}
+
+input UpdateUserInput{
+    imageUrl : String
+    phone : String
+    address : String
+    trust : Int
 }
 
 extend type Query {
-#    findAllUsers: [User]
-    findUserInfo: UserInfoOutput
-#    findUserHistory: [Post]
+    findAllUsers: [User]
+    findAllUser: [UserOutput]
+    findUserInfo: UserInfoResponse
 }
 
 extend type Mutation {
     loginUser(input : LoginUserInput!): LoginUserOutput
+    updateUser(input : UpdateUserInput!) : UserOutput
+    deleteUser(id : Int!) : Int
 }
-

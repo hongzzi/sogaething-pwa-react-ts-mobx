@@ -6,7 +6,7 @@ import com.ssafy.market.domain.history.dto.HistoryOutput;
 import com.ssafy.market.domain.history.respository.HistoryRepository;
 import com.ssafy.market.domain.post.domain.Post;
 import com.ssafy.market.domain.post.dto.CreatePostInput;
-import com.ssafy.market.domain.post.respository.PostRepository;
+import com.ssafy.market.domain.post.repository.PostRepository;
 import com.ssafy.market.domain.user.domain.User;
 import com.ssafy.market.domain.user.security.TokenProvider;
 import graphql.schema.DataFetchingEnvironment;
@@ -21,12 +21,15 @@ import java.util.Optional;
 public class HistoryMutation implements GraphQLMutationResolver {
     private final HistoryRepository historyRepository;
     private final TokenProvider tokenProvider;
+    private final PostRepository postRepository;
 
     @Transactional
     public HistoryOutput createHistory(long postId, DataFetchingEnvironment env) {
         Long userId = tokenProvider.getUserIdFromHeader(env);
         History history = historyRepository.save(new History(null, new User(userId), new Post(postId)));
         HistoryOutput output = new HistoryOutput(history.getUser().getUserId(), history.getPost().getPostId(), history.getCreatedDate(), history.getModifiedDate());
+        Post post = postRepository.findByPostId(postId);
+        post.updateViewCount();
         return output;
     }
 }

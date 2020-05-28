@@ -1,6 +1,7 @@
 import { useStaticRendering } from 'mobx-react';
 import AuthStore, {IAuth, initialAuth} from './AuthStore';
 import PageStore, {initialPage} from './PageStore';
+import PostStore, {initialPost} from './PostStore';
 const isServer = typeof window === 'undefined';
 
 useStaticRendering(isServer);
@@ -14,11 +15,13 @@ let store: RootStore | null = null;
 const initialRoot = {
   authStore: initialAuth,
   pageStore: initialPage,
+  postStore: initialPost,
 };
 
 export class RootStore {
   authStore: AuthStore;
   pageStore: PageStore;
+  postStore: PostStore;
   constructor(initialData: any) {
     if (isServer) {
       this.authStore = new AuthStore(initialData.authStore, this);
@@ -26,6 +29,7 @@ export class RootStore {
       this.authStore = new AuthStore({...initialData.authStore, token: window.sessionStorage.getItem('jwt')}, this);
     }
     this.pageStore = new PageStore(initialData.pageStore, this);
+    this.postStore = new PostStore(initialData.postStore, this);
   }
 }
 

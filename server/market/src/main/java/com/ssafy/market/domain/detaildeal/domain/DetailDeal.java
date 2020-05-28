@@ -27,15 +27,9 @@ public class DetailDeal extends BaseTimeEntity {
     @JoinColumn(name="userId")
     private User user;
 
-    @OneToOne(targetEntity = Hashtag.class)
-    @JoinColumn(name = "hashtagId")
-    private Hashtag hashtag;
-
-    public DetailDeal(Long dealId, Post post, User user, Hashtag hashtag){
+    public DetailDeal(Long dealId, Post post, User user){
         this.dealId = dealId;
         this.post = post;
         this.user = user;
-        this.hashtag= hashtag;
     }
-
 }
