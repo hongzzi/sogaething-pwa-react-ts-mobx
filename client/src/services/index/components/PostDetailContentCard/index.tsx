@@ -17,7 +17,7 @@ export default function PostDetailContentCard(props: IPostDetailContentCardProps
       <Title>{data.title}</Title>
       <HashTag>
         {data.hashtag
-            .map((tag, index) => (<>#{tag} </>)
+            .map((tag, index) => (<span key={index}>#{tag} </span>)
             )}
       </HashTag>
       <Category>{data.category}</Category>

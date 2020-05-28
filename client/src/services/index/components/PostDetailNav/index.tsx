@@ -62,7 +62,7 @@ const FlexBox = styled.div`
     margin: 0 0.5rem;
 `
 
-const PriceTextLine = styled.text`
+const PriceTextLine = styled.span`
     flex-basis: 45%;
     font-size: 1.3rem;
     font-weight: bold;
