@@ -1,0 +1,151 @@
+query getUserInfo {
+  findUserInfo {
+    name
+    address
+    trust
+    numOfPosts
+    imgurl
+  }
+}
+
+query getHistory {
+  findUserHistoryByUserId {
+    user {
+      userId
+      name
+      email
+      imageUrl
+      provider
+      providerId
+      phone
+      address
+      trust
+    }
+    postId
+    isBuy
+    title
+    saleDate
+    contents
+    viewCount
+    deal
+    createdDate
+    modifiedDate
+    hashTags {
+      hashtagId
+      product {
+        productId
+        post {
+          postId
+          userId
+          isBuy
+          title
+          saleDate
+          contents
+          viewCount
+          deal
+          dealState
+          createdDate
+          modifiedDate
+        }
+        name
+        price
+        category
+      }
+      hashtag
+    }
+    price
+    imgUrls {
+      fileId
+      product {
+        productId
+        post {
+          postId
+          userId
+          isBuy
+          title
+          saleDate
+          contents
+          viewCount
+          deal
+          dealState
+          createdDate
+          modifiedDate
+        }
+        name
+        price
+        category
+      }
+      imgPath
+    }
+  }
+}
+
+query getFindRecentPosts {
+  findRecentPosts {
+    postId
+    user {
+      userId
+      name
+      email
+      imageUrl
+      provider
+      providerId
+      phone
+      address
+      trust
+    }
+    hashTags {
+      hashtagId
+      product {
+        productId
+        post {
+          postId
+          userId
+          isBuy
+          title
+          saleDate
+          contents
+          viewCount
+          deal
+          dealState
+          createdDate
+          modifiedDate
+        }
+        name
+        price
+        category
+      }
+      hashtag
+    }
+    isBuy
+    price
+    saleDate
+    imgUrls {
+      fileId
+      product {
+        productId
+        post {
+          postId
+          userId
+          isBuy
+          title
+          saleDate
+          contents
+          viewCount
+          deal
+          dealState
+          createdDate
+          modifiedDate
+        }
+        name
+        price
+        category
+      }
+      imgPath
+    }
+    category
+    deal
+    createdDate
+    modifiedDate
+  }
+}

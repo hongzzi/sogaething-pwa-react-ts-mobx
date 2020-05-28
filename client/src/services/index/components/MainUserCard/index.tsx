@@ -1,23 +1,46 @@
 import * as React from 'react';
+import { useGetUserInfoQuery } from '~/generated/graphql';
 import styled from '~/styled';
 import CircleImageView from '../CircleImageView';
+import { TextLoader } from '../LoaderPlaceholder';
+import CirclePlaceHolder from '../LoaderPlaceholder/Circle';
+
+interface IQueryData {
+  findUserInfo: IFindUserInfo | null;
+}
+
+export interface IFindUserInfo {
+  address ?: string | null;
+  name: string;
+  numOfPosts: number;
+  trust: number;
+}
 
 export default () => {
+  const { data, loading, error } = useGetUserInfoQuery();
+  const {findUserInfo} = data as IQueryData;
+  const handleClickMatch = () => {
+    console.log(findUserInfo);
+  }
   return (
     <Wrapper>
       <WrapperFlex>
-        <CircleImageView
+        {loading && <CirclePlaceHolder size={3}/>}
+        {!loading && <CircleImageView
           size={3}
           src={
             'https://pngimage.net/wp-content/uploads/2018/05/default-user-profile-image-png-6.png'
           }
-        />
+        />}
         <WrapperUserInfo>
             <TextUserInfo>
-                박지홍
+                {loading && <TextLoader size={{width: 50, height: 18}} />}
+                {!loading && findUserInfo!.name}
             </TextUserInfo>
             <TextuserAddr>
-                경기도 화성시 봉담읍
+                {loading && <TextLoader size={{width: 80, height: 12}} />}
+                {!loading && findUserInfo!.address && findUserInfo!.address}
+                {!loading && !findUserInfo!.address && '주소를 등록해주세요'}
             </TextuserAddr>
         </WrapperUserInfo>
       </WrapperFlex>
@@ -25,7 +48,7 @@ export default () => {
             <MainButton>
                 <p>판매 현황</p>
             </MainButton>
-            <MainButton>
+            <MainButton onClick={handleClickMatch}>
                 <p>구매 현황</p>
             </MainButton>
         </WrapperMainButton>
