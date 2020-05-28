@@ -1,0 +1,12 @@
+query getMyPosts($userId: Int){
+    findPostListByUserId(userId: $userId) {
+        postId
+        title
+        category
+        imgPath
+        price
+        hashtag
+        createdDate
+        modifiedDate
+    }
+}

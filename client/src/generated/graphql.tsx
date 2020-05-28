@@ -508,6 +508,30 @@ export type IGetRecentQuery = { __typename?: "Query" } & {
   >;
 };
 
+export type IGetMyPostsQueryVariables = {
+  userId?: Maybe<Scalars["Int"]>;
+};
+
+export type IGetMyPostsQuery = { __typename?: "Query" } & {
+  findPostListByUserId: Maybe<
+    Array<
+      Maybe<
+        { __typename?: "PostMetaOutput" } & Pick<
+          IPostMetaOutput,
+          | "postId"
+          | "title"
+          | "category"
+          | "imgPath"
+          | "price"
+          | "hashtag"
+          | "createdDate"
+          | "modifiedDate"
+        >
+      >
+    >
+  >;
+};
+
 export type IGetPostQueryVariables = {
   postId?: Maybe<Scalars["Int"]>;
 };
@@ -801,6 +825,67 @@ export function useGetRecentQuery(
 ) {
   return ReactApolloHooks.useQuery<IGetRecentQuery, IGetRecentQueryVariables>(
     GetRecentDocument,
+    baseOptions
+  );
+}
+export const GetMyPostsDocument = gql`
+  query getMyPosts($userId: Int) {
+    findPostListByUserId(userId: $userId) {
+      postId
+      title
+      category
+      imgPath
+      price
+      hashtag
+      createdDate
+      modifiedDate
+    }
+  }
+`;
+
+export const GetMyPostsComponent = (
+  props: Omit<
+    Omit<
+      ReactApollo.QueryProps<IGetMyPostsQuery, IGetMyPostsQueryVariables>,
+      "query"
+    >,
+    "variables"
+  > & { variables?: IGetMyPostsQueryVariables }
+) => (
+  <ReactApollo.Query<IGetMyPostsQuery, IGetMyPostsQueryVariables>
+    query={GetMyPostsDocument}
+    {...props}
+  />
+);
+
+export type IGetMyPostsProps<TChildProps = {}> = Partial<
+  ReactApollo.DataProps<IGetMyPostsQuery, IGetMyPostsQueryVariables>
+> &
+  TChildProps;
+export function withGetMyPosts<TProps, TChildProps = {}>(
+  operationOptions?: ReactApollo.OperationOption<
+    TProps,
+    IGetMyPostsQuery,
+    IGetMyPostsQueryVariables,
+    IGetMyPostsProps<TChildProps>
+  >
+) {
+  return ReactApollo.withQuery<
+    TProps,
+    IGetMyPostsQuery,
+    IGetMyPostsQueryVariables,
+    IGetMyPostsProps<TChildProps>
+  >(GetMyPostsDocument, {
+    alias: "withGetMyPosts",
+    ...operationOptions
+  });
+}
+
+export function useGetMyPostsQuery(
+  baseOptions?: ReactApolloHooks.QueryHookOptions<IGetMyPostsQueryVariables>
+) {
+  return ReactApolloHooks.useQuery<IGetMyPostsQuery, IGetMyPostsQueryVariables>(
+    GetMyPostsDocument,
     baseOptions
   );
 }

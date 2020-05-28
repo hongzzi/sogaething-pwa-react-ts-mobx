@@ -1,36 +1,46 @@
 import * as React from 'react';
 import styled from '~/styled';
 
+import Link from 'next/link';
+import { numberWithCommas } from '../../helpers/comma';
+import { IMetaData } from '../../pages/list/seller/[uid]/index';
 import CustomIcont from '../CustomIcon'
 
 import clockIcon from '../../assets/img/clock.png';
 import heartIcon from '../../assets/img/heart.png';
 import moreIcon from '../../assets/img/moreVertical.png';
-import TestImg from '../../assets/img/Rectangle.png';
 
 export interface IPostRowCardProps {
+    data: IMetaData;
 }
 
 export default function PostRowCard(props: IPostRowCardProps) {
+    const { data } = props;
     return (
         <Wrapper>
-            <ProductImg src={TestImg} />
-            <ProductInfo>
-                <TitleText>맥북 13인치 팝니다.</TitleText>
-                <PriceText>200,000 원</PriceText>
-                <StatusBar>
-                    <SmallIcon src={heartIcon} />
-                    <SpanStyle> 4 </SpanStyle>
-                    <SmallIcon src={clockIcon} />
-                    <SpanStyle> 23 시간 전 </SpanStyle>
-                </StatusBar>
-            </ProductInfo>
+            <ProductImg src={data.imgPath} />
+            <Link key={data.postId} href='/post/[pid]' as={`/post/${data.postId}`} >
+                <ProductInfo>
+                    <TitleText>{data.title}</TitleText>
+                    <PriceText>{numberWithCommas(data.price)} 원</PriceText>
+                    <StatusBar>
+                        <SmallIcon src={heartIcon} />
+                        <SpanStyle> 4 </SpanStyle>
+                        <SmallIcon src={clockIcon} />
+                        <SpanStyle> 23 시간 전 </SpanStyle>
+                    </StatusBar>
+                </ProductInfo>
+            </Link>
             <ProductSettingArea>
                 <CustomIcont url={moreIcon} />
             </ProductSettingArea>
         </Wrapper>
     );
 }
+
+const LinkWrapper = styled.a`
+    position: relative;
+`
 
 const Wrapper = styled.div`
     position: relative;
@@ -46,6 +56,7 @@ const ProductImg = styled.img`
     width: 6rem;
     height: 6rem;
     border-radius: 5px;
+    object-fit: cover;
 `
 
 const ProductInfo = styled.div`
@@ -60,6 +71,11 @@ const ProductInfo = styled.div`
 const TitleText = styled.div`
     color: #888;
     font-size: 16px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 45vw;
+    height: 2.2rem;
 `
 
 const PriceText = styled.div`
