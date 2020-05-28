@@ -20,5 +20,4 @@ export default () => {
 
 const Wrapper = styled.div`
     display: block;
-    
 `;
