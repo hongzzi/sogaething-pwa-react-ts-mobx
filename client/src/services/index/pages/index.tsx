@@ -17,11 +17,11 @@ export default function PageIndex() {
         <SearchBar />
         <StyledMainUserCard />
         <Line>
-          <CategoryText>'Category'</CategoryText>의 인기글
+          <CategoryText>'내가 본'</CategoryText> 매물
         </Line>
         <CardList />
         <Line>
-          <CategoryText>'띵'</CategoryText>한 중고매물
+          <CategoryText>'최신'</CategoryText> 중고매물
         </Line>
         <ProductCardList />
 
