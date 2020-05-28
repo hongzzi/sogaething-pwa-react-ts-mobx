@@ -31,10 +31,15 @@ public class ChatService {
         return topics.get(roomId);
     }
 
-    public void sendMessage(ChatMessage chatMessage) {
+    public Boolean sendMessage(ChatMessage chatMessage) {
         ChannelTopic channelTopic = getTopic(chatMessage.getRoomId());
         redisPublisher.publish(channelTopic, chatMessage);
-        chatMongoRepository.insertChatMessage(chatMessage);
+        ChatMessage result = chatMongoRepository.insertChatMessage(chatMessage);
+        if (result != null){
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public List<ChatMessage> findChatMessagesByRoomId(String roomId) {
