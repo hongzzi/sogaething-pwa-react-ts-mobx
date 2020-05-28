@@ -1,5 +1,6 @@
 package com.ssafy.market.global.config;
 
+import com.ssafy.market.domain.chat.domain.ChatRoom;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -61,10 +62,10 @@ public class RedisConfig {
         redisTemplate.setConnectionFactory(connectionFactory());
         redisTemplate.setKeySerializer(new StringRedisSerializer());
 //        redisTemplate.setValueSerializer(new StringRedisSerializer());
-        redisTemplate.setValueSerializer(new Jackson2JsonRedisSerializer<>(String.class));
+        redisTemplate.setValueSerializer(new Jackson2JsonRedisSerializer<>(ChatRoom.class));
         redisTemplate.setHashKeySerializer(new StringRedisSerializer());
-        redisTemplate.setHashValueSerializer(new StringRedisSerializer());
-//        redisTemplate.setHashValueSerializer(new Jackson2JsonRedisSerializer<>(String.class));
+//        redisTemplate.setHashValueSerializer(new StringRedisSerializer());
+        redisTemplate.setHashValueSerializer(new Jackson2JsonRedisSerializer<>(Object.class));
         redisTemplate.setEnableDefaultSerializer(false);
         redisTemplate.setEnableTransactionSupport(true);
         return redisTemplate;

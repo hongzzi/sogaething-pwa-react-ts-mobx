@@ -31,9 +31,7 @@ public class ChatController {
     // 채팅방 생성
     @PostMapping("/room")
     public Object createChatRoom(@RequestBody ChatRoom chatRoom) {
-        System.out.println(chatRoom);
         ChatRoom result = chatService.createChatRoom(chatRoom);
-        System.out.println(result);
         return chatRoom;
     }
 

@@ -31,7 +31,9 @@ public class RedisExample {
             // set
 //            values.set("chatMessage", new ChatMessage(MessageType.ENTER, "id01", "박동준", "테스트", LocalDateTime.now().toString()));
 //            values.set("chatMessage", new ChatMessage(MessageType.ENTER, "id01", "박동준", "테스트"));
-//            values.set("chatRoom", new ChatRoom("01"));
+            ChatRoom chatRoom = new ChatRoom();
+            chatRoom.setPostId("32323");
+            values.set("chatRoom", chatRoom);
 
             // get
             System.out.println("ChatMessaged added : " + values.get("chatRoom"));
