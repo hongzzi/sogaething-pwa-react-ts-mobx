@@ -1,20 +1,24 @@
 import * as React from 'react';
 import styled from '~/styled'
 
+import Link from 'next/link';
+
+import { IMetaData } from '../../pages/list/seller/[uid]/index';
 import PostRowCard from '../PostRowCard';
 
 export interface IPostListProps {
+    data: IMetaData[],
 }
 
-
 export default function PostList(props: IPostListProps) {
-    const item = [1, 2, 3, 4];
+    const { data } = props;
     return (
+        // tslint:disable-next-line: jsx-wrap-multiline
         <Wrapper>
             <CardContainer>
-                <PostCount>총 <SpanStyle>{item.length}</SpanStyle> 개의 상품</PostCount>
-                {item.map((index) => (
-                    <PostRowCard key={index} />
+                <PostCount>총 <SpanStyle>{data.length}</SpanStyle> 개의 상품</PostCount>
+                {data.map((item, index) => (
+                    <PostRowCard data={item} key={index} />
                 ))}
             </CardContainer>
         </Wrapper>
