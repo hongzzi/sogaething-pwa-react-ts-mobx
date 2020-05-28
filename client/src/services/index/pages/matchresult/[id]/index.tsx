@@ -10,12 +10,12 @@ export default () => {
   return (
     <Wrapper>
       <CategoryHeader type={'normal'} text={'매칭결과'} />
-      <MainContainer>
+      <MarginTopCategoryHeaderContainer>
           <HashTagHeader>
             #맥북
           </HashTagHeader>
           <FeedCardList />
-      </MainContainer>
+      </MarginTopCategoryHeaderContainer>
     </Wrapper>
   );
 };
@@ -24,7 +24,7 @@ const Wrapper = styled.div`
 
 `;
 
-const MainContainer = styled.div`
+export const MarginTopCategoryHeaderContainer = styled.div`
     margin-top: 56px;
     padding: 16px;
 `;

@@ -18,7 +18,7 @@ export default class CircleImageView extends React.Component<ICircleImageViewPro
 }
 
 const Wrapper = styled.img<Pick<ICircleImageViewProps, 'size'|'radius'>>`
-    border-radius: ${(props) => props.radius !== null ? props.radius + 'px' : '50%'};
+    border-radius: ${(props) => props.radius !== undefined ? props.radius + 'px' : '50%'};
     height : ${(props: {size: number}) => props.size * 20 + 'px'};
     width : ${(props: {size: number}) => props.size * 20 + 'px'};
     background-color: white;

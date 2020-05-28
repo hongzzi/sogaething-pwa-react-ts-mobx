@@ -1,18 +1,17 @@
 import * as React from 'react';
 import styled from '~/styled';
-import { Container } from '..';
 import CategoryHeader from '../../components/CategoryHeader';
-import CircleImageView from '../../components/CircleImageView';
-import Nav from '../../components/Nav';
 import ChatList from '../../components/ChatList';
+import Nav from '../../components/Nav';
+import { MarginTopCategoryHeaderContainer } from '../matchresult/[id]';
 
 export default () => {
   return (
     <Wrapper>
       <CategoryHeader type={'chat'} />
-      <Container>
+      <MarginTopCategoryHeaderContainer>
         <ChatList />
-      </Container>
+      </MarginTopCategoryHeaderContainer>
       <Nav />
     </Wrapper>
   );
@@ -46,5 +45,5 @@ interface IText {
 
 const Line = styled.div<IText>`
   font-size: ${(props) => props.fontSize + 'px'};
-  float: ${props => props.float};
+  float: ${(props) => props.float};
 `;
