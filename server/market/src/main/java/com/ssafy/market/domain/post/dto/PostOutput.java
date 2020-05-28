@@ -1,6 +1,7 @@
 package com.ssafy.market.domain.post.dto;
 
 import com.ssafy.market.domain.detaildeal.dto.FileArr;
+import com.ssafy.market.domain.file.domain.File;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -21,6 +22,6 @@ public class PostOutput {
     private String category;
     private String name;
     private Long price;
-    private String hashtag;
-    private List<FileArr> imgPaths; // file
+    private List<String> hashtag;
+    private List<File> imgPaths; // file
 }

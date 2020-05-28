@@ -20,6 +20,7 @@ public class DetailOutput {
     private String title; // post
     private String category; // product
     private List<Hashtag> hashtag; // hashtag
+//    private List<String> hashtag; // hashtag
     private String contents; // post
     private Long price; // product
     private Long buyerId;

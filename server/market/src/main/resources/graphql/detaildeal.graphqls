@@ -17,17 +17,17 @@ type FileArr{
     imgPath: String!
 }
 type DetailOutput{
-    dealId:ID!
-    postId : Int!
-    imgPaths: [File]!
-    title: String!
-    category : String!
-    hashtag : [Hashtag]!
-    contents : String!
-    price : Int!
-    buyerId : Int!
-    sellerId : Int!
-    user : UserInfoResponse!
+    dealId:ID
+    postId : Int
+    imgPaths: [File]
+    title: String
+    category : String
+    hashtag : [Hashtag]
+    contents : String
+    price : Int
+    buyerId : Int
+    sellerId : Int
+    user : UserInfoResponse
 
 }
 extend type Mutation {

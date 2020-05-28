@@ -38,16 +38,16 @@ input CreatePostInput{
 }
 type PostOutput{
     postId : ID!
-    userId : Int! #게시자 id
-    isBuy : Boolean! # 구매 or 판매
-    title : String!
-    contents : String!
-    deal : String!
-    dealState : String!
-    category : String!
-    name : String!
-    hashtag : String!
-    imgPaths: [FileArr!] # 나중에 바뀔 부분
+    userId : Int #게시자 id
+    isBuy : Boolean # 구매 or 판매
+    title : String
+    contents : String
+    deal : String
+    dealState : String
+    category : String
+    name : String
+    hashtag : [String]
+    imgPaths: [File] # 나중에 바뀔 부분
 }
 
 type RecentPostResponse {
@@ -74,7 +74,7 @@ extend type Mutation{
 type Query{
     findAllPosts : [Post]
     findAllPost : [PostOutput]
-#    findByUser : [PostOutput]
+#    findByUser(userId : Int) : [PostOutput]
     findPostByPostId(id: Int): PostOutput
     # findAllPostsByUploaderId(uploader_id: Int):[Post]
     #    findAllPostsByUploaderId(uploader_id: Int):[Post]

@@ -17,6 +17,7 @@ import com.ssafy.market.global.exception.SelectNotDataException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 
@@ -39,17 +40,15 @@ public class PostQuery implements GraphQLQueryResolver {
             Post post = postList.get(i);
             Product product = productRepository.findByPost(post);
             List<Hashtag> hashtagList = hashtagRepository.findByProduct(product);
-            String hashtag = "";
-            for (int j = 0; j<hashtagList.size();j++){
-                hashtag = hashtag +hashtagList.get(j).getHashtag()+" ";
+            HashSet<String> hs = new HashSet<>();
+            for (int j = 0; j<hashtagList.size(); j++){
+                hs.add(hashtagList.get(j).getHashtag());
             }
+            List<String> hash = new ArrayList<>(hs);
             List<File> files = fileRepository.findByProduct(product);
-            List<FileArr> fileArr = new ArrayList<>();
-            for (int j = 0; j < files.size(); j++) {
-                fileArr.add(new FileArr(files.get(j).getImgPath()));
-            }
+
             outputs.add(new PostOutput(post.getPostId(),post.getUser().getUserId(), post.isBuy(),post.getTitle(),post.getContents(),post.getDeal()
-            ,post.getDealState(),product.getCategory(),product.getName(),product.getPrice(),hashtag,fileArr
+            ,post.getDealState(),product.getCategory(),product.getName(),product.getPrice(),hash,files
             ));
         }
         return outputs;
@@ -62,25 +61,20 @@ public class PostQuery implements GraphQLQueryResolver {
 
     public PostOutput findPostByPostId(Long id) {
         Post post = postRepository.findByPostId(id);
-//        Product product = productRepository.findByPost(post);
-//        Hashtag hashtag = hashtagRepository.findByProduct(product);
         if(post==null){
             throw new SelectNotDataException("post 조회 결과 : ");
         }
         Product product = productRepository.findByPost(post);
         List<Hashtag> hashtagList = hashtagRepository.findByProduct(product);
-        String hashtag = "";
-        for (int j = 0; j<hashtagList.size();j++){
-            hashtag = hashtag +hashtagList.get(j).getHashtag()+" ";
+        HashSet<String> hs = new HashSet<>();
+        for (int j = 0; j<hashtagList.size(); j++){
+            hs.add(hashtagList.get(j).getHashtag());
         }
+        List<String> hash = new ArrayList<>(hs);
         List<File> files = fileRepository.findByProduct(product);
-        List<FileArr> fileArr = new ArrayList<>();
-        for (int j = 0; j < files.size(); j++) {
-            fileArr.add(new FileArr(files.get(j).getImgPath()));
-        }
+
         PostOutput output = new PostOutput(post.getPostId(),post.getUser().getUserId(), post.isBuy(),post.getTitle(),post.getContents(),post.getDeal()
-                ,post.getDealState(),product.getCategory(),product.getName(),product.getPrice(),hashtag,fileArr
-                );
+                ,post.getDealState(),product.getCategory(),product.getName(),product.getPrice(),hash,files                );
         return output;
     }
 
@@ -110,5 +104,4 @@ public class PostQuery implements GraphQLQueryResolver {
 
         return recentPostResponses;
     }
-
 }

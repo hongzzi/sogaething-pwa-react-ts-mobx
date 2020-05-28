@@ -24,6 +24,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 @Component
@@ -57,7 +58,11 @@ public class DetailDealQuery implements GraphQLQueryResolver {
             User writer = userRepository.findByUserId(po.getUser().getUserId());
             Long numOfPosts = postRepository.countPostByUserId(writer.getUserId());
             List<Hashtag> hashtagList = hashtagRepository.findByProduct(pro);
-
+            HashSet<String> hs = new HashSet<>();
+            for (int j = 0; j<hashtagList.size(); j++){
+                hs.add(hashtagList.get(j).getHashtag());
+            }
+            List<String> hash = new ArrayList<>(hs);
             List<File> files = fileRepository.findByProduct(pro);
 
             UserInfoResponse userInfoResponse = new UserInfoResponse(writer.getName(),writer.getAddress(),writer.getTrust(),numOfPosts,writer.getImageUrl());
@@ -79,6 +84,12 @@ public class DetailDealQuery implements GraphQLQueryResolver {
         }
         Product product = productRepository.findByPost(post);
         List<Hashtag> hashtagList = hashtagRepository.findByProduct(product);
+
+        HashSet<String> hs = new HashSet<>();
+        for (int j = 0; j<hashtagList.size(); j++){
+            hs.add(hashtagList.get(j).getHashtag());
+        }
+        List<String> hash = new ArrayList<>(hs);
 
         User user = userRepository.findByUserId(deal.getUser().getUserId());
         User writer = userRepository.findByUserId(post.getUser().getUserId());

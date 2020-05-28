@@ -27,6 +27,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 
@@ -57,9 +58,12 @@ public class DetailDealMutation implements GraphQLMutationResolver {
 
         DetailDeal detailDeal = detailDealRepository.save(new DetailDeal(null, post,user));
         List<Hashtag> hashtagList = hashtagRepository.findByProduct(pro);
-
+        HashSet<String> hs = new HashSet<>();
+        for (int j = 0; j<hashtagList.size(); j++){
+            hs.add(hashtagList.get(j).getHashtag());
+        }
+        List<String> hash = new ArrayList<>(hs);
         UserInfoResponse userInfoResponse = new UserInfoResponse(writer.getName(),writer.getAddress(),writer.getTrust(),numOfPosts,writer.getImageUrl());
-//        UserInfoOutput userInfoOutput = new UserInfoOutput(writer.getName(),writer.getAddress(),writer.getTrust(),numOfPosts);
         DetailOutput output = new DetailOutput(detailDeal.getDealId(),
                 input.getPostId(),files,post.getTitle(),pro.getCategory(),hashtagList,post.getContents(), pro.getPrice(),post.getUser().getUserId(), userId,userInfoResponse);
         return output;
