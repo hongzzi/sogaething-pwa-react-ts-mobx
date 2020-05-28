@@ -1,9 +1,31 @@
 import * as React from 'react';
+import { useGetUserInfoQuery } from '~/generated/graphql';
 import styled from '~/styled';
 import Pin from '../../assets/img/pin-fill.png?url';
 import CircleImageView from '../CircleImageView';
+import { TextLoader } from '../LoaderPlaceholder';
+import CirclePlaceHolder from '../LoaderPlaceholder/Circle';
+
+interface IQueryData {
+  findUserInfo: IFindUserInfo | null;
+}
+
+export interface IFindUserInfo {
+  address ?: string | null;
+  name: string;
+  numOfPosts: number;
+  trust: number;
+  imgurl: string;
+}
 
 export default () => {
+  const { data, loading, error } = useGetUserInfoQuery();
+  const {findUserInfo} = data as IQueryData;
+  const handleClickMatch = () => {
+    console.log(data);
+    console.log(findUserInfo);
+    console.log(error);
+  }
   return (
     <Wrapper>
       <WrapperFlex>
@@ -16,7 +38,8 @@ export default () => {
         />
         <WrapperUserInfo>
             <TextUserInfo>
-                박지홍
+                {loading && <TextLoader size={{width: 50, height: 18}} />}
+                {!loading && findUserInfo!.name}
             </TextUserInfo>
             <TextuserAddr>
               <SmallIcon src={Pin} />

@@ -13,6 +13,7 @@ export interface IAuthResponseDto {
 }
 
 export const initialAuth = {
+  token: '',
 };
 
 export type Provider = 'kakao' | 'google' | 'naver';
@@ -28,6 +29,10 @@ class AuthStore {
   constructor(initialData = initialAuth, root: any) {
     if (this.token) {
       this.auth = jwtDecode(this.token) as IAuth;
+    }
+
+    if(initialData.token !== ''){
+      this.setToken(initialData.token);
     }
 
     reaction(
@@ -106,7 +111,7 @@ class AuthStore {
 
   @action
   getAuth() {
-    if(this.token){
+    if (this.token) {
       return this.auth;
     }
   }

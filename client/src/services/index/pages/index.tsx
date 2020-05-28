@@ -1,3 +1,4 @@
+import * as React from 'react';
 import styled from '~/styled';
 import CardList from '../components/CardList';
 import CategoryHeader from '../components/CategoryHeader';
@@ -8,9 +9,15 @@ import Pikachu from '../components/Pikachu';
 import ProductCardList from '../components/ProductCardList';
 import SearchBar from '../components/SearchBar';
 import useStores from '../helpers/useStores';
+import ChatService from '../service/ChatService';
 
 export default function PageIndex() {
   const store = useStores();
+
+  const handleMoreCards = () => {
+    console.log(store.authStore.token);
+  };
+
   return (
     <Layout>
       <Container>
@@ -24,8 +31,7 @@ export default function PageIndex() {
           <CategoryText>'최신'</CategoryText> 중고매물
         </Line>
         <ProductCardList />
-
-        <WrapperAlignCenter>
+        <WrapperAlignCenter onClick={handleMoreCards}>
           <CommonBtn type={'common'} text={'더보기'} />
         </WrapperAlignCenter>
       </Container>
@@ -39,7 +45,7 @@ const Layout = styled.div`
   padding-bottom: 48px;
 `;
 
-const Container = styled.div`
+export const Container = styled.div`
   padding: 1rem;
 `;
 
