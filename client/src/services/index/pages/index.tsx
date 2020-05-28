@@ -1,5 +1,4 @@
 import styled from '~/styled';
-import styled2 from 'styled-components';
 import CardList from '../components/CardList';
 import CategoryHeader from '../components/CategoryHeader';
 import CommonBtn from '../components/CommonBtn';
