@@ -1,13 +1,13 @@
 type Post{
-    postId : ID!
+    postId : ID
     userId : Int
-    isBuy : Boolean!
-    title : String!
-    saleDate : String!
-    contents : String!
+    isBuy : Boolean
+    title : String
+    saleDate : String
+    contents : String
     viewCount : Int
-    deal : String!
-    dealState : String!
+    deal : String
+    dealState : String
     createdDate : String
     modifiedDate : String
 }
@@ -51,20 +51,20 @@ type PostOutput{
 }
 
 type RecentPostResponse {
-    postId: String!
-    user: User!
-    hashTags: [Hashtag]!
-    isBuy: Boolean!
-    price: Int!
-    saleDate: String!
-    imgUrls: [File]!
-    category: String!
-    deal: String!
+    postId: String
+    user: User
+    hashTags: [Hashtag]
+    isBuy: Boolean
+    price: Int
+    saleDate: String
+    imgUrls: [File]
+    category: String
+    deal: String
     createdDate: String
     modifiedDate: String
 }
 
-extend type Mutation{
+type Mutation{
     updateViewcount(postId : Int!) : Int!
     updateIsBuy(postId : Int!) : Int!
     createPost(input: CreatePostInput!): PostOutput

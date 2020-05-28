@@ -78,7 +78,9 @@ public class Post extends BaseTimeEntity {
     public void update(Boolean isBuy){
         this.isBuy = isBuy;
     }
-
+    public void updateViewCount(){
+        this.viewCount = this.viewCount + 1;
+    }
     @Override
     public String toString() {
         return "Post{" +
