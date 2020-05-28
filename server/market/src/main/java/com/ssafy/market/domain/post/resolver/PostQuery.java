@@ -64,7 +64,7 @@ public class PostQuery implements GraphQLQueryResolver {
             response.setUser(userRepository.findByUserId(post.getUserId()));
             response.setHashTags(hashtagRepository.findByProduct(product));
             response.setIsBuy(post.isBuy());
-            response.setPrice((long)12345);
+            response.setPrice(productRepository.totalPriceByPostId(post));
             response.setSaleDate(post.getSaleDate());
             response.setImgUrls(fileRepository.findByProduct(product));
             response.setCategory(product.getCategory());

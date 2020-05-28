@@ -1,28 +1,28 @@
 type User {
-    userId : ID!
-    name : String!
+    userId : ID
+    name : String
     email : String
-    imageUrl : String!
-    provider : String!
-    providerId : Int!
-    phone : String!
-    address : String!
-    trust : Int!
+    imageUrl : String
+    provider : String
+    providerId : Int
+    phone : String
+    address : String
+    trust : Int
 }
 
 type LoginUserOutput {
-    token : String!
+    token : String
 }
 type UserOutput{
-    userId : ID!
-    name : String!
+    userId : ID
+    name : String
     email : String
     imageUrl : String
-    provider : String!
-    providerId : Int!
-    phone : String!
-    address : String!
-    trust : Int!
+    provider : String
+    providerId : Int
+    phone : String
+    address : String
+    trust : Int
 }
 
 type UserInfoOutput {
@@ -41,16 +41,16 @@ type UserInfoResponse {
 }
 
 input LoginUserInput {
-    provider : String!
-    token : String!
+    provider : String
+    token : String
 }
 
 input UpdateUserInput{
-    userId : ID!
+    userId : ID
     imageUrl : String
-    phone : String!
-    address : String!
-    trust : Int!
+    phone : String
+    address : String
+    trust : Int
 }
 
 extend type Query {

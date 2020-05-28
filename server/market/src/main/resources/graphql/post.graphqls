@@ -1,49 +1,49 @@
 type Post{
-    postId : ID!
+    postId : ID
     userId : Int
-    isBuy : Boolean!
-    title : String!
-    saleDate : String!
-    contents : String!
+    isBuy : Boolean
+    title : String
+    saleDate : String
+    contents : String
     viewCount : Int
-    deal : String!
+    deal : String
     createdDate : String
     modifiedDate : String
 }
 input UpdatePostInput{
-    postId : Int!
-    title : String!
-    contents : String!
-    deal : String!
+    postId : Int
+    title : String
+    contents : String
+    deal : String
 }
 
 input CreatePostInput{
-    uploaderId : Int!
-    title : String!
-    saleDate : String!
-    contents : String!
-    deal : String!
+    uploaderId : Int
+    title : String
+    saleDate : String
+    contents : String
+    deal : String
 }
 type PostOutput{
-    postId : ID!
-    userId : Int!
-    isBuy : Boolean!
-    title : String!
-    contents : String!
-    viewCount : Int!
-    deal : String!
+    postId : ID
+    userId : Int
+    isBuy : Boolean
+    title : String
+    contents : String
+    viewCount : Int
+    deal : String
 }
 
 type RecentPostResponse {
-    postId: String!
-    user: User!
-    hashTags: [Hashtag]!
-    isBuy: Boolean!
-    price: Int!
-    saleDate: String!
-    imgUrls: [File]!
-    category: String!
-    deal: String!
+    postId: String
+    user: User
+    hashTags: [Hashtag]
+    isBuy: Boolean
+    price: Int
+    saleDate: String
+    imgUrls: [File]
+    category: String
+    deal: String
     createdDate: String
     modifiedDate: String
 }

@@ -58,7 +58,7 @@ public class HistoryQuery implements GraphQLQueryResolver {
             response.setCreatedDate(post.getCreatedDate());
             response.setModifiedDate(post.getModifiedDate());
             response.setHashTags(hashtagRepository.findByProduct(product));
-            response.setPrice((long)123);
+            response.setPrice(productRepository.totalPriceByPostId(post));
             response.setImgUrls(fileRepository.findByProduct(product));
             userHistoryResponses.add(response);
         }

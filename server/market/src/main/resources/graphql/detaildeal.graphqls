@@ -1,8 +1,8 @@
 type DetailDeal {
-    dealId : ID!
-    post : Post!
-    user : User!
-    hashtag : Hashtag!
+    dealId : ID
+    post : Post
+    user : User
+    hashtag : Hashtag
     createdDate : String
     modifiedDate : String
 }
@@ -13,36 +13,36 @@ input CreateDetailDealInput {
     hashtagId : Int!
 }
 input UpdateDetailDealInput {
-    dealId : ID!
-    postId: Int!
-    Title: String!
-    Contents : String!
-    price : Int!
-    deal : String!
-    dealState:String!
-    imgPath: String!
-    category : String!
-    hashtagId:Int!
-    hashtag : String!
+    dealId : ID
+    postId: Int
+    Title: String
+    Contents : String
+    price : Int
+    deal : String
+    dealState:String
+    imgPath: String
+    category : String
+    hashtagId:Int
+    hashtag : String
 }
 input DeleteDetailDealInput{
     dealId : Int!
 }
 type FileArr{
-    imgPath: String!
+    imgPath: String
 }
 type DetailDealOutput{
-    dealId:ID!
-    postId: Int!
+    dealId:ID
+    postId: Int
     imgPaths: [FileArr]
-    title: String!
-    category : String!
-    hashtag : String!
-    contents : String!
-    price : Int!
-    buyerId : Int!
-    sellerId : Int!
-    address : String!
+    title: String
+    category : String
+    hashtag : String
+    contents : String
+    price : Int
+    buyerId : Int
+    sellerId : Int
+    address : String
 
 }
 extend type Mutation {
@@ -54,6 +54,6 @@ extend type Query {
     findAllDetailDeals: [DetailDeal]
     findAllDetailDeal: [DetailDealOutput]
 #    findDetailDealByPosts(postId: Int): [DetailDealOutput]
-    findDetailDealByPost(postId: Int): DetailDealOutput
+    findDetailDealByPost(postId: Int!): DetailDealOutput
 
 }

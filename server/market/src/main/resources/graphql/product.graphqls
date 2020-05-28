@@ -1,33 +1,33 @@
 type Product{
-    productId : ID!
-    post : Post!
-    name : String!
-    price : Int!
-    category :String!
+    productId : ID
+    post : Post
+    name : String
+    price : Int
+    category :String
     state : Boolean
 }
 input CreateProductInput{
-    postId : Int!
-    price : Int!
-    name : String!
-    category : String!
-    state : Boolean!
+    postId : Int
+    price : Int
+    name : String
+    category : String
+    state : Boolean
 }
 input UpdateProductInput{
-    productId : ID!
-    postId : Int!
-    price : Int!
-    name : String!
-    category : String!
-    state : Boolean!
+    productId : ID
+    postId : Int
+    price : Int
+    name : String
+    category : String
+    state : Boolean
 }
 
 type ProductOutput{
-    productId : ID!
-    postId : Int!
-    name : String!
-    price : Int!
-    category :String!
+    productId : ID
+    postId : Int
+    name : String
+    price : Int
+    category :String
     state : Boolean
 }
 type Mutation{
