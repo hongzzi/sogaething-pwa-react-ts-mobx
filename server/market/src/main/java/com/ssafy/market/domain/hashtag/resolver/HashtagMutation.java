@@ -8,6 +8,7 @@ import com.ssafy.market.domain.hashtag.dto.UpdateHashtagInput;
 import com.ssafy.market.domain.hashtag.repository.HashtagRepository;
 import com.ssafy.market.domain.product.domain.Product;
 import com.ssafy.market.domain.product.repository.ProductRepository;
+import com.ssafy.market.global.exception.DomainNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -21,22 +22,31 @@ public class HashtagMutation implements GraphQLMutationResolver {
 
     @Transactional
     public HashtagOutput createHashtag(CreateHashtagInput input){
-        Product product = productRepository.findById(input.getProductId()).get();
+        Product product = productRepository.findByProductId(input.getProductId());
+        if(product == null) {
+            throw new DomainNotFoundException("productId", input.getProductId());
+        }
         Hashtag hashtag = hashtagRepository.save(new Hashtag(null, product, input.getHashtag()));
         HashtagOutput output = new HashtagOutput(hashtag.getHashtagId(), product.getProductId(),input.getHashtag());
         return output;
     }
     @Transactional
     public HashtagOutput updateHashtag(UpdateHashtagInput input){
-
-        Hashtag hashtag = hashtagRepository.findById(input.getHashtagId()).get();
+        Hashtag hashtag = hashtagRepository.findByHashtagId(input.getHashtagId());
+        if(hashtag==null){
+            throw new DomainNotFoundException("hashtagId " , input.getHashtagId());
+        }
         hashtag.update(input.getHashtag());
         HashtagOutput output = new HashtagOutput(hashtag.getHashtagId(),hashtag.getProduct().getProductId(),hashtag.getHashtag());
         return output;
-//        return hashtagRepository.save(hashtag);
     }
+
     @Transactional
     public int deleteHashtag(Long id){
+        Hashtag hashtag = hashtagRepository.findByHashtagId(id);
+        if(hashtag==null){
+            throw new DomainNotFoundException("hashtagId " , id);
+        }
         return hashtagRepository.deleteByHashtagId(id);
     }
 }

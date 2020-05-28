@@ -44,7 +44,7 @@ public class HistoryQuery implements GraphQLQueryResolver {
         List<UserHistoryResponse> userHistoryResponses = new ArrayList<>();
         for (int i = 0; i < histories.size(); i++) {
             UserHistoryResponse response = new UserHistoryResponse();
-            Post post = postRepository.findByPostId(histories.get(i).getPostId()).get();
+            Post post = postRepository.findByPostId(histories.get(i).getPostId());
             Product product = productRepository.findByPost(post);
 
             response.setUser(userRepository.findByUserId(userId));

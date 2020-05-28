@@ -11,7 +11,7 @@ type User {
 }
 
 type LoginUserOutput {
-    token : String
+    token : String!
 }
 type UserOutput{
     userId : ID
@@ -46,7 +46,6 @@ input LoginUserInput {
 }
 
 input UpdateUserInput{
-    userId : ID
     imageUrl : String
     phone : String
     address : String

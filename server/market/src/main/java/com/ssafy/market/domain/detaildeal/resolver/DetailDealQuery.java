@@ -2,7 +2,7 @@ package com.ssafy.market.domain.detaildeal.resolver;
 
 import com.coxautodev.graphql.tools.GraphQLQueryResolver;
 import com.ssafy.market.domain.detaildeal.domain.DetailDeal;
-import com.ssafy.market.domain.detaildeal.dto.DetailDealOutput;
+import com.ssafy.market.domain.detaildeal.dto.DetailOutput;
 import com.ssafy.market.domain.detaildeal.dto.FileArr;
 import com.ssafy.market.domain.detaildeal.repository.DetailDealRepository;
 import com.ssafy.market.domain.file.domain.File;
@@ -14,14 +14,17 @@ import com.ssafy.market.domain.post.repository.PostRepository;
 import com.ssafy.market.domain.product.domain.Product;
 import com.ssafy.market.domain.product.repository.ProductRepository;
 import com.ssafy.market.domain.user.domain.User;
+import com.ssafy.market.domain.user.dto.UserInfoOutput;
+import com.ssafy.market.domain.user.dto.UserInfoResponse;
 import com.ssafy.market.domain.user.repository.UserRepository;
+import com.ssafy.market.global.exception.DomainNotFoundException;
+import com.ssafy.market.global.exception.SelectNotDataException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import org.springframework.web.socket.server.HandshakeHandler;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
@@ -33,73 +36,65 @@ public class DetailDealQuery implements GraphQLQueryResolver {
     private final ProductRepository productRepository;
     private final FileRepository fileRepository;
 
+    @Transactional
     public Iterable<DetailDeal> findAllDetailDeals() {
         return detailDealRepository.findAll();
     }
 
-//    public Optional<DetailDeal> findPostById(Long id) {
-//        return detailDealRepository.findById(id);
-//    }
-
-
-    public List<DetailDealOutput> findAllDetailDeal(){
-        List<DetailDealOutput> outputList = new ArrayList<>();
+    @Transactional
+    public List<DetailOutput> findAllDetailDeal(){
+        List<DetailOutput> outputList = new ArrayList<>();
         List<DetailDeal> dealList = detailDealRepository.findAll();
+        if(dealList.size()==0){
+            throw new SelectNotDataException("");
+        }
         for(int i =0; i<dealList.size();i++){
-            Long id = dealList.get(i).getDealId();
-            Post po = dealList.get(i).getPost();
-            User user = dealList.get(i).getUser();
-            Hashtag hashtag = dealList.get(i).getHashtag();
+            DetailDeal detailDeal = dealList.get(i);
+            Long id = detailDeal.getDealId();
+            Post po = detailDeal.getPost();
+            User user = detailDeal.getUser();
             Product pro = productRepository.findByPost(po);
+            User writer = userRepository.findByUserId(po.getUser().getUserId());
+            Long numOfPosts = postRepository.countPostByUserId(writer.getUserId());
+            List<Hashtag> hashtagList = hashtagRepository.findByProduct(pro);
+
             List<File> files = fileRepository.findByProduct(pro);
-            List<FileArr> fileArr = new ArrayList<>();
-            for(int j = 0; j<files.size(); j++){
-                fileArr.add(new FileArr(files.get(j).getImgPath()));
-            }
-            outputList.add(new DetailDealOutput(id,po.getPostId(),fileArr,po.getTitle(),pro.getCategory(),
-                    hashtag.getHashtag(),po.getContents(),pro.getPrice(),
-                    po.getUser().getUserId(),user.getUserId(),user.getAddress()));
+
+            UserInfoResponse userInfoResponse = new UserInfoResponse(writer.getName(),writer.getAddress(),writer.getTrust(),numOfPosts,writer.getImageUrl());
+
+            outputList.add(new DetailOutput(id,po.getPostId(),files,po.getTitle(),pro.getCategory(),
+                    hashtagList,po.getContents(),pro.getPrice(),
+                    po.getUser().getUserId(),user.getUserId(),userInfoResponse));
         }
         return outputList;
     }
 
-//    public List<DetailDealOutput> findDetailDealByPosts(Long postId) {
-//        List<DetailDealOutput> outputList = new ArrayList<>();
-//        Post post = postRepository.findById(postId).get();
-//        List<DetailDeal> dealList = detailDealRepository.findByPost(post);
-//        List<FileArr> fileArr = new ArrayList<>();
-//        for(int i = 0; i<dealList.size();i++){
-//            Long id = dealList.get(i).getDealId();
-//            Product product = productRepository.findByPost(post);
-//            List<File> files = fileRepository.findByProduct(product);
-//            Hashtag hashtag = hashtagRepository.findById(dealList.get(i).getHashtag().getHashtagId()).get();
-//            for(int j = 0; j<files.size(); j++){
-//                fileArr.add(new FileArr(files.get(j).getImgPath()));
-//            }
-//            User user = userRepository.findById(dealList.get(i).getUser().getUserId()).get();
-//            outputList.add(new DetailDealOutput(id,postId,fileArr,post.getTitle(),product.getCategory(),
-//                    hashtag.getHashtag(),post.getContents(),product.getPrice(),
-//                    post.getUser().getUserId(),user.getUserId(),user.getAddress()));
-//        }
-//
-//        return outputList;
-//    }
-
-    public DetailDealOutput findDetailDealByPost(Long postId) {
-        Post post = postRepository.findById(postId).get();
+    @Transactional
+    public DetailOutput findDetailDealByPost(Long postId) {
+        Post post = postRepository.findByPostId(postId);
         DetailDeal deal = detailDealRepository.findByPost(post);
-        Product product = productRepository.findByPost(post);
-        Hashtag hashtag = hashtagRepository.findById(deal.getHashtag().getHashtagId()).get();
-        User user = userRepository.findById(deal.getUser().getUserId()).get();
-        List<FileArr> fileArr = new ArrayList<>();
-        List<File> files = fileRepository.findByProduct(product);
-        for (int j = 0; j < files.size(); j++) {
-            fileArr.add(new FileArr(files.get(j).getImgPath()));
+        System.out.println(deal.getDealId());
+        if(deal==null){
+            throw new SelectNotDataException("");
         }
-        DetailDealOutput output = new DetailDealOutput(
-                deal.getDealId(),postId,fileArr, post.getTitle(), product.getCategory(),
-                hashtag.getHashtag(), post.getContents(), product.getPrice(),
-                post.getUser().getUserId(), user.getUserId(), user.getAddress()
+        Product product = productRepository.findByPost(post);
+        List<Hashtag> hashtagList = hashtagRepository.findByProduct(product);
+
+        User user = userRepository.findByUserId(deal.getUser().getUserId());
+        User writer = userRepository.findByUserId(post.getUser().getUserId());
+        Long numOfPosts = postRepository.countPostByUserId(writer.getUserId());
+        if(post == null){
+            throw new DomainNotFoundException("post : ");
+        }else if(product==null){
+            throw new DomainNotFoundException("product : ");
+        }
+        List<File> files = fileRepository.findByProduct(product);
+
+        UserInfoResponse userInfoResponse = new UserInfoResponse(writer.getName(),writer.getAddress(),writer.getTrust(),numOfPosts,writer.getImageUrl());
+        DetailOutput output = new DetailOutput(
+                deal.getDealId(),postId,files, post.getTitle(), product.getCategory(),
+                hashtagList, post.getContents(), product.getPrice(),
+                post.getUser().getUserId(), user.getUserId(), userInfoResponse
         );
         return output;
     }

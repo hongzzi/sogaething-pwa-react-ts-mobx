@@ -28,6 +28,7 @@ public class UserQuery implements GraphQLQueryResolver {
 
     @Transactional
     public Iterable<User> findAllUsers(){
+
         return userRepository.findAll();
     }
 
@@ -72,4 +73,5 @@ public class UserQuery implements GraphQLQueryResolver {
         output.setImgurl(user.getImageUrl());
         return output;
     }
+
 }

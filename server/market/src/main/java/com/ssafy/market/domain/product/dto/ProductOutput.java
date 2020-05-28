@@ -13,5 +13,5 @@ public class ProductOutput {
     private String name;
     private Long price;
     private String category;
-    private Boolean state;
+//    private String state;
 }

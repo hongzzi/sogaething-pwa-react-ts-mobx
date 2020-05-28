@@ -1,23 +1,22 @@
 package com.ssafy.market.domain.chat.domain;
 
 import lombok.Data;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.io.Serializable;
-import java.util.UUID;
 
 @Data
+@Document(collection = "chatRoom")
 public class ChatRoom implements Serializable {
     private static final long serializableUID = 6494678977089006639L;
 
+    @Id
     private String roomId;
-    private String name;
-//    private Long sellerId;
-//    private Long buyerId;
-
-    public static ChatRoom create(String name) {
-        ChatRoom chatRoom = new ChatRoom();
-        chatRoom.roomId = UUID.randomUUID().toString();
-        chatRoom.name = name;
-        return chatRoom;
-    }
+    private String sellerId;
+    private String buyerId;
+    private boolean isBuyerExit;
+    private boolean isSellerExit;
+    private String createdDateTime;
+    private String modifiedDateTime;
 }

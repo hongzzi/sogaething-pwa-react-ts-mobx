@@ -1,5 +1,9 @@
 package com.ssafy.market.domain.detaildeal.dto;
 
+import com.ssafy.market.domain.file.domain.File;
+import com.ssafy.market.domain.hashtag.domain.Hashtag;
+import com.ssafy.market.domain.user.dto.UserInfoOutput;
+import com.ssafy.market.domain.user.dto.UserInfoResponse;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,19 +13,16 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class DetailDealOutput {
+public class DetailOutput {
     private Long dealId;
     private Long postId;
-    private List<FileArr> imgPaths; // file
+    private List<File> imgPaths; // file
     private String title; // post
     private String category; // product
-    private String hashtag; // hashtag
+    private List<Hashtag> hashtag; // hashtag
     private String contents; // post
     private Long price; // product
     private Long buyerId;
     private Long sellerId;
-    private String address; //user
+    private UserInfoResponse user;
 }
-
-//게시글id, 게시글 사진, 게시글 명, 카테고리, 해시태그, 게시글 내용, 가격,
-//        작성자, 작성자 이미지, 작성자 위치
