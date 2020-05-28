@@ -2,14 +2,10 @@ query getPost($postId: Int) {
     findDetailDealByPost(postId: $postId) {
         dealId
         postId
-        imgPaths{
-            imgPath
-        }
+        imgPaths
         title
         category
-        hashtag{
-            hashtag
-        }
+        hashtag
         contents
         price
         buyerId
@@ -22,32 +18,4 @@ query getPost($postId: Int) {
             imgurl
         }
     }
-}
-
-mutation setHistory($input: Int) {
-    createHistory(postId: $input) {
-        userId
-        postId
-        createdDate
-        modifiedDate
-    }
-}
-
-
-type PostMetaOutput {
-    postId: Int
-    title: String
-    category: String
-    """
-    imgpath 맨처음 한개만
-    """
-    hashtag: [hashtag]
-    imgPath: String
-    price: Int
-    createdDate: String
-    modifiedDate: String
-}
-
-type Query {
-    findPostListByUserId(userId: Int): [PostMetaOutput]
 }

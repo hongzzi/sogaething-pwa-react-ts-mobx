@@ -1,0 +1,319 @@
+# source: http://3.34.131.20:8080/graphql
+# timestamp: Thu May 28 2020 22:09:56 GMT+0900 (대한민국 표준시)
+
+"""This directive allows results to be deferred during execution"""
+directive @defer on FIELD
+
+input CreateDetailDealInput {
+  postId: Int!
+}
+
+input CreateFileInput {
+  productId: Int
+  imgPath: String
+}
+
+input CreateHashtagInput {
+  productId: Int
+  hashtag: String
+}
+
+input CreatePostInput {
+  title: String!
+  contents: String!
+  deal: String!
+
+  """dealLocation:String!"""
+  category: String!
+  productname: String!
+
+  """productState : String!"""
+  price: Int!
+  hashtag: String!
+  imgPaths: String!
+}
+
+input CreateProductInput {
+  postId: Int!
+  price: Int!
+  name: String!
+  category: String!
+}
+
+type DetailDeal {
+  dealId: ID!
+  post: Post!
+  user: User!
+  createdDate: String
+  modifiedDate: String
+}
+
+type DetailOutput {
+  dealId: ID
+  postId: Int
+  imgPaths: [String]
+  title: String
+  category: String
+  hashtag: [String]
+  contents: String
+  price: Int
+  buyerId: Int
+  sellerId: Int
+  user: UserInfoResponse
+  createdDate: String
+  modifiedDate: String
+}
+
+type File {
+  fileId: ID
+  product: Product
+  imgPath: String
+}
+
+type FileOutput {
+  fileId: Int
+  productId: Int
+  imgPath: String
+}
+
+type Hashtag {
+  hashtagId: ID
+  product: Product
+  hashtag: String
+}
+
+type HashtagOutput {
+  hashtagId: ID
+  productId: Int
+  hashtag: String
+}
+
+type HistoryOutput {
+  userId: Int
+  postId: Int
+  createdDate: String
+  modifiedDate: String
+}
+
+input LoginUserInput {
+  provider: String
+  token: String
+}
+
+type LoginUserOutput {
+  token: String!
+}
+
+type Mutation {
+  updateViewcount(postId: Int!): Int!
+  updateIsBuy(postId: Int!): Int!
+  createPost(input: CreatePostInput!): PostOutput
+  updatePost(input: UpdatePostInput!): PostOutput
+  deletePost(postId: Int!): Int!
+  createFile(input: CreateFileInput!): FileOutput
+  updateFile(input: UpdateFileInput!): FileOutput
+  deleteFile(id: Int!): Int
+  createDetailDeal(input: CreateDetailDealInput!): DetailOutput
+  deleteDetailDeal(id: Int!): Int!
+  loginUser(input: LoginUserInput!): LoginUserOutput
+  updateUser(input: UpdateUserInput!): UserOutput
+  deleteUser(id: Int!): Int
+  createHashtag(input: CreateHashtagInput!): HashtagOutput
+  updateHashtag(input: UpdateHashtagInput!): HashtagOutput
+  deleteHashtag(id: Int!): Int
+  updateProduct(input: UpdateProductInput!): ProductOutput
+  createProduct(input: CreateProductInput!): ProductOutput
+  deleteProduct(id: Int!): Int
+  createHistory(postId: Int!): HistoryOutput
+}
+
+type Post {
+  postId: ID
+  userId: Int
+  isBuy: Boolean
+  title: String
+  saleDate: String
+  contents: String
+  viewCount: Int
+  deal: String
+  dealState: String
+  createdDate: String
+  modifiedDate: String
+}
+
+type PostMetaOutput {
+  postId: Int
+  title: String
+  category: String
+  imgPath: String
+  price: Int
+  hashtag: [String]
+  createdDate: String
+  modifiedDate: String
+}
+
+type PostOutput {
+  postId: ID!
+  userId: Int
+
+  """게시자 id"""
+  isBuy: Boolean
+
+  """구매 or 판매"""
+  title: String
+  contents: String
+  deal: String
+  dealState: String
+  category: String
+  name: String
+  hashtag: [String]
+  imgPaths: [File]
+}
+
+type Product {
+  productId: ID
+  post: Post
+  name: String
+  price: Int
+  category: String
+}
+
+type ProductOutput {
+  productId: ID
+  postId: Int
+  name: String
+  price: Int
+  category: String
+}
+
+type Query {
+  findAllPosts: [Post]
+  findAllPost: [PostOutput]
+
+  """findByUser(userId : Int) : [PostOutput]"""
+  findPostByPostId(id: Int): PostOutput
+
+  """
+  findAllPostsByUploaderId(uploader_id: Int):[Post]
+     findAllPostsByUploaderId(uploader_id: Int):[Post]
+     findPostByPostId(id: Int): Post
+  """
+  findRecentPosts: [RecentPostResponse]
+  findPostListByUserId(userId: Int): [PostMetaOutput]
+  findAllFile: [FileOutput]
+  findAllFiles: [File]
+  findFileById(id: Int): FileOutput
+  findAllDetailDeals: [DetailDeal]
+  findAllDetailDeal: [DetailOutput]
+  findDetailDealByPost(postId: Int): DetailOutput
+  findAllUsers: [User]
+  findAllUser: [UserOutput]
+  findUserInfo: UserInfoResponse
+  findAllHashtags: [Hashtag]
+  findAllHashtag: [HashtagOutput]
+  findByHashtagId(id: Int): HashtagOutput
+  findAllProduct: [ProductOutput]
+  findAllProducts: [Product]
+  findByProductId(id: Int): ProductOutput
+  findUserHistoryByUserId: [UserHistoryResponse]
+}
+
+type RecentPostResponse {
+  postId: String
+  user: User
+  hashTags: [Hashtag]
+  isBuy: Boolean
+  price: Int
+  saleDate: String
+  imgUrls: [File]
+  category: String
+  deal: String
+  createdDate: String
+  modifiedDate: String
+}
+
+input UpdateFileInput {
+  fileId: Int
+  imgPath: String
+}
+
+input UpdateHashtagInput {
+  hashtagId: Int
+  hashtag: String
+}
+
+input UpdatePostInput {
+  postId: Int!
+  title: String!
+  contents: String!
+  deal: String!
+  dealState: String!
+  category: String!
+  productname: String!
+  price: Int!
+  hashtag: String!
+  imgPaths: String!
+}
+
+input UpdateProductInput {
+  productId: ID!
+  postId: Int!
+  price: Int!
+  name: String!
+  category: String!
+}
+
+input UpdateUserInput {
+  imageUrl: String
+  phone: String
+  address: String
+  trust: Int
+}
+
+type User {
+  userId: ID
+  name: String
+  email: String
+  imageUrl: String
+  provider: String
+  providerId: Int
+  phone: String
+  address: String
+  trust: Int
+}
+
+type UserHistoryResponse {
+  user: User
+  postId: ID
+  isBuy: Boolean
+  title: String
+  saleDate: String
+  contents: String
+  viewCount: Int
+  deal: String
+  createdDate: String
+  modifiedDate: String
+  hashTags: [Hashtag]
+  price: Int
+  imgUrls: [File]
+}
+
+type UserInfoResponse {
+  name: String
+  address: String
+  trust: Int
+  numOfPosts: Int
+  imgurl: String
+}
+
+type UserOutput {
+  userId: ID
+  name: String
+  email: String
+  imageUrl: String
+  provider: String
+  providerId: Int
+  phone: String
+  address: String
+  trust: Int
+}

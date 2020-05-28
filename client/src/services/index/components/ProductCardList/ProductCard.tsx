@@ -70,8 +70,7 @@ const Wrapper = styled.div<Pick<IProductCard, 'idx' | 'loading'>>`
   float: ${(props) => (props.idx % 2 === 1 ? 'left' : 'right')};
   margin-bottom: 15px;
   background-color: ${(props) => (props.loading ? 'lightgray' : '')};
-  animation: ${boxFade}
-    ${(props) => (props.loading ? '1.5s infinite ease-in-out' : '')};
+  animation: ${boxFade} ${props => props.loading ? '1.5s infinite ease-in-out' : ''};
 `;
 
 const TextCardContainer = styled.div`

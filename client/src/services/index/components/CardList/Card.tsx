@@ -9,7 +9,6 @@ interface ICardProps {
 }
 
 export default (props: ICardProps) => {
-  console.log(props.cardData);
   let bgImg = 'https://www.sctech.edu/wp-content/plugins/ajax-search-pro/img/default.jpg';
   let hashtags;
   let price = 0;
