@@ -4,6 +4,7 @@ import com.google.common.io.BaseEncoding;
 import com.google.gson.JsonParser;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
+import org.springframework.stereotype.Service;
 
 import javax.imageio.ImageIO;
 import java.awt.image.RenderedImage;
@@ -14,9 +15,8 @@ import java.util.concurrent.Executors;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-/**
- * Simple class to upload images to imgur.com
- */
+
+@Service
 public class ImgurUploader {
 
     public static final String CLIENT_ID = "2d1537da8393cd6";
@@ -38,6 +38,7 @@ public class ImgurUploader {
             public void run() {
                 try {
                     Connection.Response response = uploadSync(image);
+                    System.out.println(response.body());
                     uploadCallback.uploaded(response.headers(), new JsonParser().parse(response.body()));
                 } catch (Throwable throwable) {
                     uploadCallback.exception(throwable);

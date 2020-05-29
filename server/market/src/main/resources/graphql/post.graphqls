@@ -49,7 +49,18 @@ type PostOutput{
     hashtag : [String]
     imgPaths: [File] # 나중에 바뀔 부분
 }
-
+type PostDetailOutput{
+    postId : ID
+    title: String
+    category : String
+    imgPaths: [String]
+    hashtag : [String]
+    contents : String
+    price : Int
+    user : UserInfoResponse
+    createdDate :String
+    modifiedDate :String
+}
 type PostMetaOutput {
     postId: Int
     title: String
@@ -92,6 +103,7 @@ type Query{
 #    findPostByPostId(id: Int): Post
     findRecentPosts: [RecentPostResponse]
     findPostListByUserId(userId: Int): [PostMetaOutput]
+    findByDetailPost(postId:Int):PostDetailOutput
 #    findAllPostsByUploaderId(uploader_id: Int):[Post]
 #    findElAllPosts: [Post]
 
