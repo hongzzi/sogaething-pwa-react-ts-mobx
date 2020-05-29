@@ -7,8 +7,8 @@ const theme = {
   mainBGcolor: '#ffffff',
   mainCategoryTextColor: '#08979c',
   subFontColor: '#c6c6c6',
-  searchBarColor: '#ff9500',
-  mainUserCardBGColor: '#222b45',
+  searchBarColor: '#259be5',
+  mainUserCardBGColor: '#ffffff',
   button: {
     primary: {
       bodyColor: '#fef9f0',

@@ -2,14 +2,10 @@ query getPost($postId: Int) {
     findDetailDealByPost(postId: $postId) {
         dealId
         postId
-        imgPaths{
-            imgPath
-        }
+        imgPaths
         title
         category
-        hashtag{
-            hashtag
-        }
+        hashtag
         contents
         price
         buyerId

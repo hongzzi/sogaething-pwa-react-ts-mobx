@@ -12,7 +12,7 @@ export interface IEnvironments {
 
 let store: RootStore | null = null;
 
-const initialRoot = {
+export const initialRoot = {
   authStore: initialAuth,
   pageStore: initialPage,
   postStore: initialPost,

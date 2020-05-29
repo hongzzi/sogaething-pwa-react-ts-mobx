@@ -38,16 +38,38 @@ input CreatePostInput{
 }
 type PostOutput{
     postId : ID!
-    userId : Int! #게시자 id
-    isBuy : Boolean! # 구매 or 판매
-    title : String!
-    contents : String!
-    deal : String!
-    dealState : String!
-    category : String!
-    name : String!
-    hashtag : String!
-    imgPaths: [FileArr!] # 나중에 바뀔 부분
+    userId : Int #게시자 id
+    isBuy : Boolean # 구매 or 판매
+    title : String
+    contents : String
+    deal : String
+    dealState : String
+    category : String
+    name : String
+    hashtag : [String]
+    imgPaths: [File] # 나중에 바뀔 부분
+}
+type PostDetailOutput{
+    postId : ID
+    title: String
+    category : String
+    imgPaths: [String]
+    hashtag : [String]
+    contents : String
+    price : Int
+    user : UserInfoResponse
+    createdDate :String
+    modifiedDate :String
+}
+type PostMetaOutput {
+    postId: Int
+    title: String
+    category: String
+    imgPath: String
+    price: Int
+    hashtag :[String]
+    createdDate: String
+    modifiedDate: String
 }
 
 type RecentPostResponse {
@@ -74,12 +96,14 @@ type Mutation{
 type Query{
     findAllPosts : [Post]
     findAllPost : [PostOutput]
-#    findByUser : [PostOutput]
+#    findByUser(userId : Int) : [PostOutput]
     findPostByPostId(id: Int): PostOutput
     # findAllPostsByUploaderId(uploader_id: Int):[Post]
     #    findAllPostsByUploaderId(uploader_id: Int):[Post]
 #    findPostByPostId(id: Int): Post
     findRecentPosts: [RecentPostResponse]
+    findPostListByUserId(userId: Int): [PostMetaOutput]
+    findByDetailPost(postId:Int):PostDetailOutput
 #    findAllPostsByUploaderId(uploader_id: Int):[Post]
 #    findElAllPosts: [Post]
 

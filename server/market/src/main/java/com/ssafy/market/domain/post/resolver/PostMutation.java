@@ -17,6 +17,7 @@ import com.ssafy.market.domain.user.domain.User;
 import com.ssafy.market.domain.user.repository.UserRepository;
 
 import com.ssafy.market.domain.user.security.TokenProvider;
+import com.ssafy.market.global.apis.ImgurUploader;
 import com.ssafy.market.global.exception.DomainNotFoundException;
 import com.ssafy.market.global.exception.UserNotFoundException;
 import graphql.schema.DataFetchingEnvironment;
@@ -48,19 +49,19 @@ public class PostMutation implements GraphQLMutationResolver {
         Post post = postRepository.save(new Post(null, user, false, input.getTitle(), null, input.getContents(), (long) 0, input.getDeal(), "진행중"));
         Product product = productRepository.save(new Product(null,post,input.getProductname(), input.getPrice(),input.getCategory()));
         String[] hashtagarr = input.getHashtag().split(" ");
+        List<String> hash = new ArrayList<>();
         for (int i = 0; i< hashtagarr.length; i++){
             Hashtag hashtag = hashtagRepository.save(new Hashtag(null,product,hashtagarr[i]));
+            hash.add(hashtagarr[i]);
         }
+
         List<File> files = fileRepository.findByProduct(product);
-        List<FileArr> fileArr = new ArrayList<>();
-        for (int j = 0; j < files.size(); j++) {
-            fileArr.add(new FileArr(files.get(j).getImgPath()));
-        }
+
         // 링크는 url 받아서 넣어주기???
         File file = fileRepository.save(new File(null,product,input.getImgPaths()));
         PostOutput output = new PostOutput(post.getPostId(),userId,post.isBuy(),post.getTitle(),post.getContents()
                 ,post.getDeal(),post.getDealState()
-                ,product.getCategory(),product.getName(),input.getPrice(),input.getHashtag(),fileArr
+                ,product.getCategory(),product.getName(),input.getPrice(),hash,files
         );
         return  output;
     }
@@ -75,11 +76,15 @@ public class PostMutation implements GraphQLMutationResolver {
         Product product = productRepository.findByPost(post);
         product.update(post,input.getProductname(),input.getPrice(),input.getCategory());
         List<Hashtag> hashtagList = hashtagRepository.findByProduct(product);
+        String[] hashtagarr = input.getHashtag().split(" ");
+        List<String> hash = new ArrayList<>();
+        for (int i = 0; i< hashtagarr.length; i++){
+            Hashtag hashtag = hashtagRepository.save(new Hashtag(null,product,hashtagarr[i]));
+            hash.add(hashtagarr[i]);
+        }
         List<File> files = fileRepository.findByProduct(product);
         List<FileArr> fileArr = new ArrayList<>();
-        for (int j = 0; j < files.size(); j++) {
-            fileArr.add(new FileArr(files.get(j).getImgPath()));
-        }
+
 //        String hashtag = input.getHashtag();
 //        String[] hashtagarr = hashtag.split(" ");
 //        for (int j = 0; j<hashtagarr.length;j++){
@@ -89,8 +94,8 @@ public class PostMutation implements GraphQLMutationResolver {
         // 해시태그 관련 추가하기
 //        hashtag.update(input.getHashtag());
         PostOutput output = new PostOutput(post.getPostId(),userId,post.isBuy(),post.getTitle(),post.getContents(),post.getDeal(),post.getDealState()
-                ,product.getCategory(),product.getName(),product.getPrice(),input.getHashtag(),
-                fileArr
+                ,product.getCategory(),product.getName(),product.getPrice(),hash,
+                files
         );
         return output;
     }

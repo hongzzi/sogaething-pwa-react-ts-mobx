@@ -39,6 +39,10 @@ const Wrapper = styled.div`
   height: 56px;
   padding: 2vh;
   box-shadow: 0 2px 4px 0 rgba(244, 244, 244, 0.5);
+  position: fixed;
+  top: 0;
+  background-color: white;
+  z-index: 100;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -55,6 +59,8 @@ const StyledCustomIcon = styled(CustomIcon)`
 
 const PointText = styled.div`
   font-size: 34px;
+  font-family: GmarketSansTTF;
+  font-weight: bold;
   display: inline;
   color: ${(props) => props.theme.pointFontColor};
 `;

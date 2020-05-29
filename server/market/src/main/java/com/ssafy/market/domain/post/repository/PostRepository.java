@@ -10,7 +10,7 @@ import java.util.Optional;
 public interface PostRepository extends JpaRepository<Post, Long> {
     Post findByPostId(Long id);
     List<Post> findByUser(User user);
-    List<Post> findByUserId(Long userId);
+    List<Post> findPostByUser(User user);
     int deleteByPostId(Long id);
     long countPostByUserId(Long UserId);
     List<Post> findTop6ByOrderByCreatedDateDesc();

@@ -7,9 +7,7 @@ import styled from '~/styled';
 
 export default () => {
   const router = useRouter();
-
-  console.log(router);
-
+  
   return (
     <Wrapper>
       <CategoryHeader type={'normal'} text={router.query.id} />
