@@ -16,6 +16,7 @@ export default function PageIndex() {
 
   const handleMoreCards = () => {
     console.log(store.authStore.token);
+    console.log(store.authStore.signOut());
   };
 
   return (

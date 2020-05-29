@@ -3,6 +3,7 @@ import pickBy from 'lodash/pickBy';
 import { Provider } from 'mobx-react';
 import { Container, default as NextApp } from 'next/app';
 import Head from 'next/head';
+import Router from 'next/router'
 import React, { Fragment } from 'react';
 import {
   ApolloProvider as ApolloHookProvider,
@@ -77,6 +78,13 @@ export default class extends React.Component {
 }
 
 class App extends NextApp<any> {
+
+  componentDidMount() {
+    if (!window.sessionStorage.getItem('jwt')) {
+      Router.push('/signin');
+    }
+  }
+
   render() {
     const { Component, pageProps } = this.props;
 
@@ -113,7 +121,7 @@ function getRouteNavIndex(path: string): number {
     return 1;
   } else if (path.startsWith('/user')) {
     return 4;
-  } else if (path.startsWith('/')) {
+  } else if (path.startsWith('')) {
     return 0;
   }
   return 0;
