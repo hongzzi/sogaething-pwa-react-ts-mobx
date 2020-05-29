@@ -1,0 +1,21 @@
+query getPost($postId: Int) {
+    findDetailDealByPost(postId: $postId) {
+        dealId
+        postId
+        imgPaths
+        title
+        category
+        hashtag
+        contents
+        price
+        buyerId
+        sellerId
+        user{
+            name
+            address
+            trust
+            numOfPosts
+            imgurl
+        }
+    }
+}

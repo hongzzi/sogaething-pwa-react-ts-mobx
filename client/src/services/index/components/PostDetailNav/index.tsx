@@ -1,6 +1,7 @@
 import * as React from 'react';
 import styled from '~/styled';
 
+import { numberWithCommas } from '../../helpers/comma';
 import CommonBtn from '../CommonBtn';
 import CustomIcon from '../CustomIcon';
 
@@ -25,7 +26,7 @@ export default function PostDetailNav(props: IPostDetailNavProps) {
             <IconBorder>
               <CustomIcon url={HeartIcon} />
             </IconBorder>
-            <PriceTextLine>{data.price} 원</PriceTextLine>
+            <PriceTextLine>{numberWithCommas(data.price)} 원</PriceTextLine>
             <CommonBtn type={'chatting'} text={'연락하기'} />
           </FlexBox>
         </Wrapper>
@@ -61,7 +62,7 @@ const FlexBox = styled.div`
     margin: 0 0.5rem;
 `
 
-const PriceTextLine = styled.text`
+const PriceTextLine = styled.span`
     flex-basis: 45%;
     font-size: 1.3rem;
     font-weight: bold;

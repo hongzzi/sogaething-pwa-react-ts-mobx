@@ -4,7 +4,6 @@ import styled from '~/styled';
 import CircleImageView from '../CircleImageView';
 
 import Pin from '../../assets/img/pin-fill.png?url';
-import Profile from '../../assets/img/Profile.jpg?url';
 
 export interface IPostDetailUserCardProps {
   user: IUser,
@@ -15,23 +14,29 @@ export interface IUser {
   address: string | null,
   trust: number,
   numOfPosts: number,
+  imgurl: string,
 }
 
 export default class PostDetailUserCard extends React.Component<IPostDetailUserCardProps> {
   public render() {
     const { user } = this.props;
+    const nullImgUrl = 'https://pngimage.net/wp-content/uploads/2018/05/default-user-profile-image-png-6.png';
     return (
       <Wrapper>
         <GridImgWrapper>
-          <CircleImageView src={Profile} size={2.4} />
+          <CircleImageView src={user.imgurl == null ? nullImgUrl : user.imgurl} size={2.4} radius={50} />
         </GridImgWrapper>
         <GridTopLineWrapper>
           <UserNameTextLine>{user.name}</UserNameTextLine>
           <UserLevelTextLine>lv.1</UserLevelTextLine>
         </GridTopLineWrapper>
         <GridBottomLineWrapper>
-          <LocationIcon src={Pin} />
-          <UserLocationTextLine>{user.address}</UserLocationTextLine>
+          {user.address && (
+          <>
+            <LocationIcon src={Pin} />
+            <UserLocationTextLine>{user.address}</UserLocationTextLine>
+          </>
+          )}
         </GridBottomLineWrapper>
       </Wrapper>
     );

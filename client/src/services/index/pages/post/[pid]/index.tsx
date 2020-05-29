@@ -12,10 +12,10 @@ import PostDetailNav from '../../../components/PostDetailNav';
 export interface IPost {
     dealId: string,
     postId: number,
-    imgPaths: IImg[],
+    imgPaths: string[],
     title: string,
     category: string,
-    hashtag: IHashtag[],
+    hashtag: string[],
     contents: string,
     price: number,
     buyerId: number,
@@ -31,14 +31,6 @@ export interface IUser {
     imgurl: string,
 }
 
-export interface IHashtag {
-    hashtag: string,
-}
-
-export interface IImg {
-    imgPath: string;
-}
-
 export default function Detail(props: any) {
     const store = useStores()
     const router = useRouter()
@@ -48,7 +40,7 @@ export default function Detail(props: any) {
     useEffect(() => {
        if ( data ) {
         //    store.postStore.setDeal(data.findDetailDealByPost);
-        console.log(data.findDetailDealByPost);
+        // console.log(data.findDetailDealByPost);
        }
     }, [data])
 
@@ -65,7 +57,7 @@ export default function Detail(props: any) {
             {
                 data && data.findDetailDealByPost && (
                     <Layout>
-                        <ImageSlider images={data.findDetailDealByPost.imgPaths as IImg[]} />
+                        <ImageSlider images={data.findDetailDealByPost.imgPaths as string[]} />
                         <PostDetail data={data.findDetailDealByPost as IPost} loading={loading} />
                         <PostDetailNav data={data.findDetailDealByPost as IPost} loading={loading} />
                     </Layout>
