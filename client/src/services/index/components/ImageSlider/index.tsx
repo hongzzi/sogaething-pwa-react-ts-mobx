@@ -8,11 +8,7 @@ import PrevIcon from '../../assets/img/arrow-ios-left.png?url';
 import RightIcon from '../../assets/img/arrow-ios-right.png?url';
 
 export interface IImageSliderProps {
-    images?: IImg[] | null,
-}
-
-export interface IImg {
-    imgPath?: string;
+    images?: string[] | null,
 }
 
 export default class ImageSlider extends React.Component<IImageSliderProps> {
@@ -32,8 +28,8 @@ export default class ImageSlider extends React.Component<IImageSliderProps> {
                         <button onClick={nextSlide}><BtnIcon src={RightIcon} /></button>
                     )}
                 >
-                    {images && images.map((url: any, index: number) => (
-                        <RectangleImageView key={index} src={url.imgPath} />
+                    {images && images.map((url: string, index: number) => (
+                        <RectangleImageView key={index} src={url} />
                     ))}
                 </Carousel>
             </ImageContainer>

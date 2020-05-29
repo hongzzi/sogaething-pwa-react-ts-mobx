@@ -1,5 +1,5 @@
+import * as React from 'react';
 import styled from '~/styled';
-import styled2 from 'styled-components';
 import CardList from '../components/CardList';
 import CategoryHeader from '../components/CategoryHeader';
 import CommonBtn from '../components/CommonBtn';
@@ -9,24 +9,29 @@ import Pikachu from '../components/Pikachu';
 import ProductCardList from '../components/ProductCardList';
 import SearchBar from '../components/SearchBar';
 import useStores from '../helpers/useStores';
+import ChatService from '../service/ChatService';
 
 export default function PageIndex() {
   const store = useStores();
+
+  const handleMoreCards = () => {
+    console.log(store.authStore.token);
+  };
+
   return (
     <Layout>
       <Container>
         <SearchBar />
         <StyledMainUserCard />
         <Line>
-          <CategoryText>'Category'</CategoryText>의 인기글
+          <CategoryText>'내가 본'</CategoryText> 매물
         </Line>
         <CardList />
         <Line>
-          <CategoryText>'띵'</CategoryText>한 중고매물
+          <CategoryText>'최신'</CategoryText> 중고매물
         </Line>
         <ProductCardList />
-
-        <WrapperAlignCenter>
+        <WrapperAlignCenter onClick={handleMoreCards}>
           <CommonBtn type={'common'} text={'더보기'} />
         </WrapperAlignCenter>
       </Container>
@@ -40,7 +45,7 @@ const Layout = styled.div`
   padding-bottom: 48px;
 `;
 
-const Container = styled.div`
+export const Container = styled.div`
   padding: 1rem;
 `;
 

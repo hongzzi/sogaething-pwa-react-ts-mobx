@@ -24,6 +24,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 @Component
@@ -57,14 +58,22 @@ public class DetailDealQuery implements GraphQLQueryResolver {
             User writer = userRepository.findByUserId(po.getUser().getUserId());
             Long numOfPosts = postRepository.countPostByUserId(writer.getUserId());
             List<Hashtag> hashtagList = hashtagRepository.findByProduct(pro);
-
+            HashSet<String> hs = new HashSet<>();
+            for (int j = 0; j<hashtagList.size(); j++){
+                hs.add(hashtagList.get(j).getHashtag());
+            }
+            List<String> hash = new ArrayList<>(hs);
             List<File> files = fileRepository.findByProduct(pro);
-
+            HashSet<String> fs = new HashSet<>();
+            for (int j = 0; j<files.size(); j++){
+                fs.add(files.get(j).getImgPath());
+            }
+            List<String> file = new ArrayList<>(fs);
             UserInfoResponse userInfoResponse = new UserInfoResponse(writer.getName(),writer.getAddress(),writer.getTrust(),numOfPosts,writer.getImageUrl());
 
-            outputList.add(new DetailOutput(id,po.getPostId(),files,po.getTitle(),pro.getCategory(),
-                    hashtagList,po.getContents(),pro.getPrice(),
-                    po.getUser().getUserId(),user.getUserId(),userInfoResponse));
+            outputList.add(new DetailOutput(id,po.getPostId(),file,po.getTitle(),pro.getCategory(),
+                    hash,po.getContents(),pro.getPrice(),
+                    po.getUser().getUserId(),user.getUserId(),userInfoResponse,detailDeal.getCreatedDate().toString(), detailDeal.getModifiedDate().toString() ));
         }
         return outputList;
     }
@@ -80,6 +89,12 @@ public class DetailDealQuery implements GraphQLQueryResolver {
         Product product = productRepository.findByPost(post);
         List<Hashtag> hashtagList = hashtagRepository.findByProduct(product);
 
+        HashSet<String> hs = new HashSet<>();
+        for (int j = 0; j<hashtagList.size(); j++){
+            hs.add(hashtagList.get(j).getHashtag());
+        }
+        List<String> hash = new ArrayList<>(hs);
+
         User user = userRepository.findByUserId(deal.getUser().getUserId());
         User writer = userRepository.findByUserId(post.getUser().getUserId());
         Long numOfPosts = postRepository.countPostByUserId(writer.getUserId());
@@ -89,12 +104,17 @@ public class DetailDealQuery implements GraphQLQueryResolver {
             throw new DomainNotFoundException("product : ");
         }
         List<File> files = fileRepository.findByProduct(product);
-
+        HashSet<String> fs = new HashSet<>();
+        for (int j = 0; j<files.size(); j++){
+            fs.add(files.get(j).getImgPath());
+        }
+        List<String> file = new ArrayList<>(fs);
         UserInfoResponse userInfoResponse = new UserInfoResponse(writer.getName(),writer.getAddress(),writer.getTrust(),numOfPosts,writer.getImageUrl());
         DetailOutput output = new DetailOutput(
-                deal.getDealId(),postId,files, post.getTitle(), product.getCategory(),
-                hashtagList, post.getContents(), product.getPrice(),
+                deal.getDealId(),postId,file, post.getTitle(), product.getCategory(),
+                hash, post.getContents(), product.getPrice(),
                 post.getUser().getUserId(), user.getUserId(), userInfoResponse
+                ,deal.getCreatedDate().toString(),deal.getModifiedDate().toString()
         );
         return output;
     }

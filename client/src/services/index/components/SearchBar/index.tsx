@@ -15,11 +15,12 @@ export default () => {
 const Wrapper = styled.div`
   width: 100%;
   height: 56px;
-  border-radius: 18px;
+  border-radius: 29px;
   border: solid 2px ${(props) => props.theme.searchBarColor};
   display: flex;
   align-items: center;
   justify-content: space-between;
+  box-shadow: 0 2px 4px 0 #bfbfbf;
 `;
 
 const StyledInput = styled.input`

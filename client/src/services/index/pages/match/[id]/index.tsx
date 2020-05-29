@@ -1,8 +1,8 @@
 import { useRouter } from 'next/router';
 import * as React from 'react';
 import CategoryHeader from '~/services/index/components/CategoryHeader';
-import styled from '~/styled';
 import MatchCardList from '~/services/index/components/MatchCardList';
+import styled from '~/styled';
 
 export default () => {
   const router = useRouter();
@@ -17,7 +17,7 @@ export default () => {
 };
 
 const Wrapper = styled.div`
-    
+
 `;
 
 const MainContainer = styled.div`
