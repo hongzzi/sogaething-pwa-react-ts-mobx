@@ -7,6 +7,7 @@ import com.ssafy.market.domain.file.repository.FileRepository;
 import com.ssafy.market.domain.hashtag.domain.Hashtag;
 import com.ssafy.market.domain.hashtag.repository.HashtagRepository;
 import com.ssafy.market.domain.post.domain.Post;
+import com.ssafy.market.domain.post.dto.PostDetailOutput;
 import com.ssafy.market.domain.post.dto.PostMetaOutput;
 import com.ssafy.market.domain.post.dto.PostOutput;
 import com.ssafy.market.domain.post.dto.RecentPostResponse;
@@ -14,10 +15,19 @@ import com.ssafy.market.domain.post.repository.PostRepository;
 import com.ssafy.market.domain.product.domain.Product;
 import com.ssafy.market.domain.product.repository.ProductRepository;
 import com.ssafy.market.domain.user.domain.User;
+import com.ssafy.market.domain.user.dto.UserInfoResponse;
 import com.ssafy.market.domain.user.repository.UserRepository;
+import com.ssafy.market.global.apis.ImgurUploader;
+import com.ssafy.market.global.apis.UploadCallback;
 import com.ssafy.market.global.exception.SelectNotDataException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import sun.text.SupplementaryCharacterData;
+
+import javax.imageio.ImageIO;
+import java.awt.image.RenderedImage;
+import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -31,6 +41,8 @@ public class PostQuery implements GraphQLQueryResolver {
     private final ProductRepository productRepository;
     private final HashtagRepository hashtagRepository;
     private final FileRepository fileRepository;
+//    private final ImgurUploader uploader;
+//    private final UploadCallback callback;
 
     public List<PostOutput> findAllPost() {
         List<PostOutput> outputs = new ArrayList<>();
@@ -62,6 +74,7 @@ public class PostQuery implements GraphQLQueryResolver {
 
 
     public PostOutput findPostByPostId(Long id) {
+
         Post post = postRepository.findByPostId(id);
         if(post==null){
             throw new SelectNotDataException("post 조회 결과 : ");
@@ -125,5 +138,31 @@ public class PostQuery implements GraphQLQueryResolver {
                     ,hash,post.getCreatedDate().toString(), post.getModifiedDate().toString()));
         }
         return metaOutputList;
+    }
+    public PostDetailOutput findByDetailPost(Long postId){
+
+        Post post = postRepository.findByPostId(postId);
+        Product product = productRepository.findByPost(post);
+        User writer = userRepository.findByUserId(post.getUser().getUserId());
+        List<Hashtag> hashtagList = hashtagRepository.findByProduct(product);
+        HashSet<String> hs = new HashSet<>();
+        for (int j = 0; j<hashtagList.size(); j++){
+            hs.add(hashtagList.get(j).getHashtag());
+        }
+        List<String> hash = new ArrayList<>(hs);
+        List<File> files = fileRepository.findByProduct(product);
+        HashSet<String> fs = new HashSet<>();
+        for (int j = 0; j<files.size(); j++){
+            fs.add(files.get(j).getImgPath());
+        }
+        List<String> file = new ArrayList<>(fs);
+        Long numOfPosts = postRepository.countPostByUserId(writer.getUserId());
+        UserInfoResponse user = new UserInfoResponse(writer.getName(),writer.getAddress(),writer.getTrust(),
+                numOfPosts,writer.getImageUrl());
+        PostDetailOutput detailOutput = new PostDetailOutput(
+                postId,post.getTitle(),product.getCategory(),file,hash,
+                post.getContents(),product.getPrice(),user, post.getCreatedDate().toString(),post.getModifiedDate().toString()
+        );
+        return detailOutput;
     }
 }
