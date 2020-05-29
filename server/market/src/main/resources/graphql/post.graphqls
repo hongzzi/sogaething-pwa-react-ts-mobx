@@ -71,16 +71,16 @@ type Mutation{
     updatePost(input: UpdatePostInput!) : PostOutput
     deletePost(postId : Int!) : Int!
 }
+
 type Query{
     findAllPosts : [Post]
     findAllPost : [PostOutput]
 #    findByUser : [PostOutput]
-    findPostByPostId(id: Int): PostOutput
+    findPostByPostId(id : Int) : PostOutput
     # findAllPostsByUploaderId(uploader_id: Int):[Post]
     #    findAllPostsByUploaderId(uploader_id: Int):[Post]
 #    findPostByPostId(id: Int): Post
-    findRecentPosts: [RecentPostResponse]
+    findRecentPosts : [RecentPostResponse]
 #    findAllPostsByUploaderId(uploader_id: Int):[Post]
 #    findElAllPosts: [Post]
-
 }

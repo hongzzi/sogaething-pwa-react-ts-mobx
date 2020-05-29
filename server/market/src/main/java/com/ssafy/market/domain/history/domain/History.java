@@ -12,6 +12,7 @@ import javax.persistence.*;
 @Getter
 @Entity
 @NoArgsConstructor
+@Table(name="history")
 public class History extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
