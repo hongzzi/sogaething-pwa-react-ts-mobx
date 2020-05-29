@@ -9,6 +9,7 @@ import {
 } from '../helpers/config';
 import useStores from '../helpers/useStores';
 import { IAuthResponseDto } from '../store/AuthStore';
+import { useRouter } from 'next/router';
 
 interface ISignInProps {}
 
@@ -17,7 +18,7 @@ export default (props: ISignInProps) => {
 
   // const mutate = useGetLoginMutation;
   const mutate = useGetLoginMutation();
-
+  const router = useRouter();
   const success = (res: any) => {
     mutate({
       variables: {
@@ -30,6 +31,7 @@ export default (props: ISignInProps) => {
     .then((res: {data : IAuthResponseDto}) => {
       store.authStore.setToken(res.data.loginUser.token);
       store.authStore.setProvider('kakao');
+      router.push('/');
     })
     .catch((err) => {
       console.log(err);
