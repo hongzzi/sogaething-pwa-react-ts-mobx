@@ -14,6 +14,7 @@ import java.util.Date;
 @Getter
 @NoArgsConstructor
 @Entity
+@Table(name="post")
 public class Post extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

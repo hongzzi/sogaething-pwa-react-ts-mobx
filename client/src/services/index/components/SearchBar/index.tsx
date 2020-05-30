@@ -6,7 +6,7 @@ import CustomIcon from '../CustomIcon';
 export default () => {
   return (
     <Wrapper>
-      <StyledInput placeholder='해시태그로 검색하기..' />
+      <StyledInput type='text' placeholder='해시태그로 검색하기..' />
       <StyledCustomIcon url={SearchImage} />
     </Wrapper>
   );
@@ -27,6 +27,12 @@ const StyledInput = styled.input`
   font-size: 16px;
   margin: 16px 19px 16px 19px;
   flex-grow: 8.5;
+  border: 0;
+  -webkit-appearance: none;
+       -moz-appearance: none;
+            appearance: none;
+            resize: none;
+            outline: none;
 `;
 
 const StyledCustomIcon = styled(CustomIcon)`

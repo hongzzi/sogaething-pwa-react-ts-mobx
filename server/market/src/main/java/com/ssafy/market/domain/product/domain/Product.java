@@ -12,6 +12,7 @@ import javax.persistence.*;
 @Getter
 @Setter
 @Entity
+@Table(name="product")
 public class Product extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

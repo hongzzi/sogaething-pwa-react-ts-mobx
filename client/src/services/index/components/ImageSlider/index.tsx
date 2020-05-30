@@ -21,11 +21,11 @@ export default class ImageSlider extends React.Component<IImageSliderProps> {
                     height='auto'
                     // tslint:disable-next-line:jsx-no-lambda
                     renderCenterLeftControls={({ previousSlide }) => (
-                        <button onClick={previousSlide}><BtnIcon src={PrevIcon} /></button>
+                        <Btn onClick={previousSlide}><BtnIcon src={PrevIcon} /></Btn>
                     )}
                     // tslint:disable-next-line:jsx-no-lambda
                     renderCenterRightControls={({ nextSlide }) => (
-                        <button onClick={nextSlide}><BtnIcon src={RightIcon} /></button>
+                        <Btn onClick={nextSlide}><BtnIcon src={RightIcon} /></Btn>
                     )}
                 >
                     {images && images.map((url: string, index: number) => (
@@ -49,4 +49,9 @@ const ImageContainer = styled.div`
 const BtnIcon = styled.img`
     width: 24px;
     height: 24px;
+`
+
+const Btn = styled.button`
+    background-color:transparent;
+    border:0px transparent solid;
 `

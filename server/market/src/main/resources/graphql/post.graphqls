@@ -1,27 +1,28 @@
-type Post{
-    postId : ID
-    userId : Int
-    isBuy : Boolean
-    title : String
-    saleDate : String
-    contents : String
-    viewCount : Int
-    deal : String
-    dealState : String
-    createdDate : String
-    modifiedDate : String
+type Post {
+    postId: ID
+    userId: Int
+    isBuy: Boolean
+    title: String
+    saleDate: String
+    contents: String
+    viewCount: Int
+    deal: String
+    dealState: String
+    createdDate: String
+    modifiedDate: String
 }
-input UpdatePostInput{
-    postId : Int!
-    title : String!
-    contents : String!
-    deal : String!
-    dealState : String!
-    category : String!
-    productname : String!
-    price : Int!
-    hashtag : String!
-    imgPaths :String!
+
+input UpdatePostInput {
+    postId: Int!
+    title: String!
+    contents: String!
+    deal: String!
+    dealState: String!
+    category: String!
+    productname: String!
+    price: Int!
+    hashtag: String!
+    imgPaths: String!
 }
 
 input CreatePostInput{
@@ -29,46 +30,57 @@ input CreatePostInput{
     title : String!
     contents : String!
     deal : String!
-#    dealLocation:String!
-    category : String!
-    productname : String!
-#    productState : String!
-    price : Int!
-    hashtag : String!
+    category: String!
+    productname: String!
+    price: Int!
+    hashtag: String!
     imgPaths: String! ## 좀더 고민해봐야할 부분
 }
-type PostOutput{
-    postId : ID!
-    userId : Int #게시자 id
-    isBuy : Boolean # 구매 or 판매
-    title : String
-    contents : String
-    deal : String
-    dealState : String
-    category : String
-    name : String
-    hashtag : [String]
+
+input HashtagInput {
+    hashtag: [String]
+}
+
+input MatchInput {
+    category: String
+    price: [String]
+    hashtag: [String]
+}
+
+type PostOutput {
+    postId: ID!
+    userId: Int #게시자 id
+    isBuy: Boolean # 구매 or 판매
+    title: String
+    contents: String
+    deal: String
+    dealState: String
+    category: String
+    name: String
+    hashtag: [String]
     imgPaths: [File] # 나중에 바뀔 부분
 }
-type PostDetailOutput{
-    postId : ID
+
+type PostDetailOutput {
+    postId: ID
     title: String
-    category : String
+    category: String
     imgPaths: [String]
-    hashtag : [String]
-    contents : String
-    price : Int
-    user : UserInfoResponse
-    createdDate :String
-    modifiedDate :String
+    hashtag: [String]
+    contents: String
+    price: Int
+    user: UserInfoResponse
+    createdDate: String
+    modifiedDate: String
 }
+
 type PostMetaOutput {
     postId: Int
     title: String
     category: String
     imgPath: String
     price: Int
-    hashtag :[String]
+    hashtag: [String]
     createdDate: String
     modifiedDate: String
 }
@@ -87,16 +99,17 @@ type RecentPostResponse {
     modifiedDate: String
 }
 
-type Mutation{
-    updateViewcount(postId : Int!) : Int!
-    updateIsBuy(postId : Int!) : Int!
+type Mutation {
+    updateViewcount(postId: Int!): Int!
+    updateIsBuy(postId: Int!): Int!
     createPost(input: CreatePostInput!): PostOutput
-    updatePost(input: UpdatePostInput!) : PostOutput
-    deletePost(postId : Int!) : Int!
+    updatePost(input: UpdatePostInput!): PostOutput
+    deletePost(postId: Int!): Int!
 }
-type Query{
-    findAllPosts : [Post]
-    findAllPost : [PostOutput]
+
+type Query {
+    findAllPosts: [Post]
+    findAllPost: [PostOutput]
 #    findByUser(userId : Int) : [PostOutput]
     findPostByPostId(id: Int): PostOutput
     # findAllPostsByUploaderId(uploader_id: Int):[Post]
@@ -107,5 +120,6 @@ type Query{
     findByDetailPost(postId:Int):PostDetailOutput
 #    findAllPostsByUploaderId(uploader_id: Int):[Post]
 #    findElAllPosts: [Post]
-
+    searchThings(input: HashtagInput!): [PostMetaOutput]
+#    matchThings(input: MatchInput!): [PostMetaOutput]
 }

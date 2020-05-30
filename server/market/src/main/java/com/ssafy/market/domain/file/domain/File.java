@@ -10,6 +10,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Getter
 @Entity
+@Table(name="file")
 public class File {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

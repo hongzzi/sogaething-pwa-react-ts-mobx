@@ -4,10 +4,13 @@ import com.ssafy.market.domain.chat.domain.ChatMessage;
 import com.ssafy.market.domain.chat.domain.MessageType;
 import com.ssafy.market.domain.chat.service.ChatRoomService;
 import com.ssafy.market.domain.chat.service.ChatService;
+import com.ssafy.market.domain.chat.util.StringResult;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Map;
 
 @RequiredArgsConstructor
 @RestController
@@ -41,10 +45,17 @@ public class ChatController {
         chatService.sendMessage(message);
     }
 
-    @ApiOperation(value = "특정 방의 채팅메시지를 가져온다.", response=List.class)
+    @ApiOperation(value = "특정 방의 채팅메시지를 가져온다.", response=Map.class)
     @GetMapping("/message/{roomId}")
-    public List<ChatMessage> findChatMessagesByRoomId(@PathVariable String roomId){
-        List<ChatMessage> result = chatService.findChatMessagesByRoomId(roomId);
-        return result;
+    public ResponseEntity<Object> findChatMessagesByRoomId(@PathVariable String roomId){
+        try {
+            Map<String, Object> result = chatService.findChatMessagesByRoomId(roomId);
+            return new ResponseEntity<Object>(result, HttpStatus.OK);
+        } catch (RuntimeException e) {
+            String errorMessage = e.getMessage();
+            logger.error("findChatMessagesByRoomId {}", errorMessage);
+            StringResult stringResult = new StringResult(errorMessage, "findChatMessagesByRoomId", "FAIL");
+            return new ResponseEntity<Object>(stringResult, HttpStatus.BAD_REQUEST);
+        }
     }
 }
