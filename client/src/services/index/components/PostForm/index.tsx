@@ -42,14 +42,14 @@ export default (props: IPostFormProps) => {
                     <CNarea> 해시태그</CNarea>
                     <CICarea> <CustomIcon url={ExpandIcon} /> </CICarea>
                 </InputContainer>
-                    <ContentsBox>
-                        <ContentsText>상품설명</ContentsText>
-                        <ContentsArea />
-                    </ContentsBox>
+                <ContentsBox>
+                    <ContentsText>상품설명</ContentsText>
+                    <ContentsArea />
+                </ContentsBox>
             </FormContainer>
-                <FooterContainer>
-                    <CommonBtn type={'disable'} text={'등록하기'} />
-                </FooterContainer>
+            <FooterContainer>
+                <CommonBtn type={'disable'} text={'등록하기'} />
+            </FooterContainer>
         </Wrapper>
     );
 }
