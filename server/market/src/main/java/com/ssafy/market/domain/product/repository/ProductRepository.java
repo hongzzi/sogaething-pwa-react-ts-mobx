@@ -15,6 +15,6 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     int deleteByProductId(Long id);
     Product findByProductId(Long productId);
 
-    @Query(value = "SELECT SUM(price) FROM Product WHERE post_id = :post", nativeQuery = true)
+    @Query(value = "SELECT SUM(price) FROM product WHERE post_id = :post", nativeQuery = true)
     Long totalPriceByPostId(@Param("post")Post post);
 }

@@ -1,15 +1,12 @@
 query getPost($postId: Int) {
-    findDetailDealByPost(postId: $postId) {
-        dealId
+    findByDetailPost(postId: $postId) {
         postId
-        imgPaths
         title
         category
+        imgPaths
         hashtag
         contents
         price
-        buyerId
-        sellerId
         user{
             name
             address
@@ -17,5 +14,7 @@ query getPost($postId: Int) {
             numOfPosts
             imgurl
         }
+        createdDate
+        modifiedDate
     }
 }
