@@ -14,6 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Entity
+@Table(name = "detail_deal")
 public class DetailDeal extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

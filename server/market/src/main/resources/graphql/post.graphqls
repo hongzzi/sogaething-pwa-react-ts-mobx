@@ -36,6 +36,11 @@ input CreatePostInput{
     hashtag : String!
     imgPaths: String! ## 좀더 고민해봐야할 부분
 }
+
+input HashtagInput {
+    hashtag : [String]
+}
+
 type PostOutput{
     postId : ID!
     userId : Int #게시자 id
@@ -67,7 +72,7 @@ type PostMetaOutput {
     category: String
     imgPath: String
     price: Int
-    hashtag :[String]
+    hashtag : [String]
     createdDate: String
     modifiedDate: String
 }
@@ -93,6 +98,7 @@ type Mutation{
     updatePost(input: UpdatePostInput!) : PostOutput
     deletePost(postId : Int!) : Int!
 }
+
 type Query{
     findAllPosts : [Post]
     findAllPost : [PostOutput]
@@ -106,5 +112,5 @@ type Query{
     findByDetailPost(postId:Int):PostDetailOutput
 #    findAllPostsByUploaderId(uploader_id: Int):[Post]
 #    findElAllPosts: [Post]
-
+    searchThings(input : HashtagInput!) : [PostMetaOutput]
 }
