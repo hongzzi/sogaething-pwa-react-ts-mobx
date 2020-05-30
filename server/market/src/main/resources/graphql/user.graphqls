@@ -1,35 +1,36 @@
 type User {
-    userId : ID
-    name : String
-    email : String
-    imageUrl : String
-    provider : String
-    providerId : Int
-    phone : String
-    address : String
-    trust : Int
+    userId: ID
+    name: String
+    email: String
+    imageUrl: String
+    provider: String
+    providerId: Int
+    phone: String
+    address: String
+    trust: Int
 }
 
 type LoginUserOutput {
-    token : String!
+    token: String!
 }
-type UserOutput{
-    userId : ID
-    name : String
-    email : String
-    imageUrl : String
-    provider : String
-    providerId : Int
-    phone : String
-    address : String
-    trust : Int
+
+type UserOutput {
+    userId: ID
+    name: String
+    email: String
+    imageUrl: String
+    provider: String
+    providerId: Int
+    phone: String
+    address: String
+    trust: Int
 }
 
 type UserInfoOutput {
-    name : String
-    address : String
-    trust : Int
-    numOfPosts : Int
+    name: String
+    address: String
+    trust: Int
+    numOfPosts: Int
 }
 
 type UserInfoResponse {
@@ -41,15 +42,15 @@ type UserInfoResponse {
 }
 
 input LoginUserInput {
-    provider : String
-    token : String
+    provider: String
+    token: String
 }
 
-input UpdateUserInput{
-    imageUrl : String
-    phone : String
-    address : String
-    trust : Int
+input UpdateUserInput {
+    imageUrl: String
+    phone: String
+    address: String
+    trust: Int
 }
 
 extend type Query {
@@ -59,7 +60,7 @@ extend type Query {
 }
 
 extend type Mutation {
-    loginUser(input : LoginUserInput!): LoginUserOutput
-    updateUser(input : UpdateUserInput!) : UserOutput
-    deleteUser(id : Int!) : Int
+    loginUser(input: LoginUserInput!): LoginUserOutput
+    updateUser(input: UpdateUserInput!): UserOutput
+    deleteUser(id: Int!): Int
 }

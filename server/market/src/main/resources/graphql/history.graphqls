@@ -1,19 +1,19 @@
-type History{
+type History {
     historyId: ID
     user: User
     post: Post
-    createdDate : String
-    modifiedDate : String
+    createdDate: String
+    modifiedDate: String
 }
 
-type HistoryOutput{
+type HistoryOutput {
     userId: Int
     postId: Int
-    createdDate : String
-    modifiedDate : String
+    createdDate: String
+    modifiedDate: String
 }
 
-type UserHistoryResponse{
+type UserHistoryResponse {
     user: User
     postId: ID
     isBuy: Boolean
@@ -34,5 +34,5 @@ extend type Query {
 }
 
 extend type Mutation {
-    createHistory(postId:Int!) : HistoryOutput
+    createHistory(postId: Int!): HistoryOutput
 }
