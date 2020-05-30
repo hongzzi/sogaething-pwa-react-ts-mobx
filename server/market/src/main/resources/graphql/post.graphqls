@@ -25,6 +25,7 @@ input UpdatePostInput{
 }
 
 input CreatePostInput{
+    imgs : [String]
     title : String!
     contents : String!
     deal : String!

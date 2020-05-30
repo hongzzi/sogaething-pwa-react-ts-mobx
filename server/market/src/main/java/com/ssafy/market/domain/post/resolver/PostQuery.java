@@ -1,7 +1,6 @@
 package com.ssafy.market.domain.post.resolver;
 
 import com.coxautodev.graphql.tools.GraphQLQueryResolver;
-import com.ssafy.market.domain.detaildeal.dto.FileArr;
 import com.ssafy.market.domain.file.domain.File;
 import com.ssafy.market.domain.file.repository.FileRepository;
 import com.ssafy.market.domain.hashtag.domain.Hashtag;
@@ -17,17 +16,10 @@ import com.ssafy.market.domain.product.repository.ProductRepository;
 import com.ssafy.market.domain.user.domain.User;
 import com.ssafy.market.domain.user.dto.UserInfoResponse;
 import com.ssafy.market.domain.user.repository.UserRepository;
-import com.ssafy.market.global.apis.ImgurUploader;
-import com.ssafy.market.global.apis.UploadCallback;
 import com.ssafy.market.global.exception.SelectNotDataException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import sun.text.SupplementaryCharacterData;
 
-import javax.imageio.ImageIO;
-import java.awt.image.RenderedImage;
-import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -41,8 +33,6 @@ public class PostQuery implements GraphQLQueryResolver {
     private final ProductRepository productRepository;
     private final HashtagRepository hashtagRepository;
     private final FileRepository fileRepository;
-//    private final ImgurUploader uploader;
-//    private final UploadCallback callback;
 
     public List<PostOutput> findAllPost() {
         List<PostOutput> outputs = new ArrayList<>();
@@ -100,7 +90,6 @@ public class PostQuery implements GraphQLQueryResolver {
         for (int i = 0; i < posts.size(); i++) {
             Post post = posts.get(i);
             Product product = productRepository.findByPost(post);
-
             RecentPostResponse response = new RecentPostResponse();
             response.setPostId(post.getPostId());
             response.setUser(userRepository.findByUserId(post.getUserId()));

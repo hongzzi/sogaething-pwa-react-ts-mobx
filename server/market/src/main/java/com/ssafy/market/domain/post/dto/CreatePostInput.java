@@ -13,6 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CreatePostInput {
+    private String[] imgs;
     private String title;
 //    private Date saleDate;
     private String contents;
