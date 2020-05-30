@@ -84,6 +84,12 @@
                 console.log(vm.$data.roomId+"를 구독");
             });
             ws.send("/pub/chat/message", {}, JSON.stringify({type:'ENTER', roomId:vm.$data.roomId, sender:vm.$data.sender}));
+
+            axios.get('/chat/message/'+vm.$data.roomId)
+            .then(response => {
+                vm.$data.messages = response.data;
+            })
+
         }, function(error) {
             if(reconnect++ <= 5) {
                 setTimeout(function() {

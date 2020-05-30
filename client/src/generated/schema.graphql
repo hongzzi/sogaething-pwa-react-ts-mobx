@@ -1,5 +1,5 @@
 # source: http://3.34.131.20:8080/graphql
-# timestamp: Thu May 28 2020 22:09:56 GMT+0900 (대한민국 표준시)
+# timestamp: Fri May 29 2020 14:40:19 GMT+0900 (GMT+09:00)
 
 """This directive allows results to be deferred during execution"""
 directive @defer on FIELD
@@ -141,6 +141,19 @@ type Post {
   modifiedDate: String
 }
 
+type PostDetailOutput {
+  postId: ID
+  title: String
+  category: String
+  imgPaths: [String]
+  hashtag: [String]
+  contents: String
+  price: Int
+  user: UserInfoResponse
+  createdDate: String
+  modifiedDate: String
+}
+
 type PostMetaOutput {
   postId: Int
   title: String
@@ -200,6 +213,7 @@ type Query {
   """
   findRecentPosts: [RecentPostResponse]
   findPostListByUserId(userId: Int): [PostMetaOutput]
+  findByDetailPost(postId: Int): PostDetailOutput
   findAllFile: [FileOutput]
   findAllFiles: [File]
   findFileById(id: Int): FileOutput

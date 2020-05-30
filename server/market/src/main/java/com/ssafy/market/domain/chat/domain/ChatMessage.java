@@ -11,10 +11,10 @@ import java.time.LocalDateTime;
 public class ChatMessage implements Serializable {
     private static final long serialVersionUID = 1L;
     private MessageType type;
-    private String roomId;
+    private Long roomId;
     private String sender;
     private String message;
-    private String createdDateTime = LocalDateTime.now().toString();
+    private String createdDateTime;
 
 
     @Override

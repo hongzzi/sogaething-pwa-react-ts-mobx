@@ -8,6 +8,7 @@ import com.ssafy.market.domain.hashtag.domain.Hashtag;
 import com.ssafy.market.domain.hashtag.dto.HashtagInput;
 import com.ssafy.market.domain.hashtag.repository.HashtagRepository;
 import com.ssafy.market.domain.post.domain.Post;
+import com.ssafy.market.domain.post.dto.PostDetailOutput;
 import com.ssafy.market.domain.post.dto.PostMetaOutput;
 import com.ssafy.market.domain.post.dto.PostOutput;
 import com.ssafy.market.domain.post.dto.RecentPostResponse;
@@ -15,11 +16,19 @@ import com.ssafy.market.domain.post.repository.PostRepository;
 import com.ssafy.market.domain.product.domain.Product;
 import com.ssafy.market.domain.product.repository.ProductRepository;
 import com.ssafy.market.domain.user.domain.User;
+import com.ssafy.market.domain.user.dto.UserInfoResponse;
 import com.ssafy.market.domain.user.repository.UserRepository;
+import com.ssafy.market.global.apis.ImgurUploader;
+import com.ssafy.market.global.apis.UploadCallback;
 import com.ssafy.market.global.exception.SelectNotDataException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import sun.text.SupplementaryCharacterData;
 
+import javax.imageio.ImageIO;
+import java.awt.image.RenderedImage;
+import java.io.IOException;
+import java.net.URL;
 import java.util.*;
 
 
@@ -31,6 +40,8 @@ public class PostQuery implements GraphQLQueryResolver {
     private final ProductRepository productRepository;
     private final HashtagRepository hashtagRepository;
     private final FileRepository fileRepository;
+//    private final ImgurUploader uploader;
+//    private final UploadCallback callback;
 
     public List<PostOutput> findAllPost() {
         List<PostOutput> outputs = new ArrayList<>();
@@ -62,6 +73,7 @@ public class PostQuery implements GraphQLQueryResolver {
 
 
     public PostOutput findPostByPostId(Long id) {
+
         Post post = postRepository.findByPostId(id);
         if(post==null){
             throw new SelectNotDataException("post 조회 결과 : ");
@@ -127,11 +139,11 @@ public class PostQuery implements GraphQLQueryResolver {
         return metaOutputList;
     }
 
-    public List<PostMetaOutput> searchThings(HashtagInput input){
+    public List<PostMetaOutput> searchThings(HashtagInput input) {
         String[] hashtags = input.getHashtag();
         List<PostMetaOutput> outputs = new ArrayList<>();
         HashMap<Long, Post> hashMap = new HashMap<>();
-        long[] postIdArr = new long[(int) postRepository.count()+1];
+        long[] postIdArr = new long[(int) postRepository.count() + 1];
         for (int i = 0; i < hashtags.length; i++) {
             List<Hashtag> hashtagList = hashtagRepository.findDistinctByHashtagStartingWith(hashtags[i]);
             for (int j = 0; j < hashtagList.size(); j++) {
@@ -140,29 +152,56 @@ public class PostQuery implements GraphQLQueryResolver {
                 postIdArr[(int) PostId]++;
             }
         }
-        long[]temp = postIdArr.clone();
+        long[] temp = postIdArr.clone();
         Arrays.sort(temp);
-        boolean[]visited = new boolean[postIdArr.length];
+        boolean[] visited = new boolean[postIdArr.length];
         for (int i = 0; i < temp.length; i++) {
-            if(temp[i] == 0) continue;
+            if (temp[i] == 0) continue;
             for (int j = 0; j < postIdArr.length; j++) {
-                if(!visited[j] && temp[i]==postIdArr[j]){
+                if (!visited[j] && temp[i] == postIdArr[j]) {
                     visited[j] = true;
-                    Post post = hashMap.get((long)j);
+                    Post post = hashMap.get((long) j);
                     Product product = productRepository.findByPost(post);
                     File files = fileRepository.findByProduct(product).get(0);
                     List<Hashtag> hashtagList = hashtagRepository.findByProduct(product);
                     HashSet<String> hs = new HashSet<>();
-                    for (int k = 0; k<hashtagList.size(); k++){
+                    for (int k = 0; k < hashtagList.size(); k++) {
                         hs.add(hashtagList.get(k).getHashtag());
                     }
                     List<String> hash = new ArrayList<>(hs);
-                    outputs.add(new PostMetaOutput(post.getPostId(),post.getTitle(),product.getCategory(),files.getImgPath(),product.getPrice()
-                            ,hash,post.getCreatedDate().toString(), post.getModifiedDate().toString()));
+                    outputs.add(new PostMetaOutput(post.getPostId(), post.getTitle(), product.getCategory(), files.getImgPath(), product.getPrice()
+                            , hash, post.getCreatedDate().toString(), post.getModifiedDate().toString()));
                     break;
                 }
             }
         }
         return outputs;
+    }
+
+    public PostDetailOutput findByDetailPost(Long postId){
+
+        Post post = postRepository.findByPostId(postId);
+        Product product = productRepository.findByPost(post);
+        User writer = userRepository.findByUserId(post.getUser().getUserId());
+        List<Hashtag> hashtagList = hashtagRepository.findByProduct(product);
+        HashSet<String> hs = new HashSet<>();
+        for (int j = 0; j<hashtagList.size(); j++){
+            hs.add(hashtagList.get(j).getHashtag());
+        }
+        List<String> hash = new ArrayList<>(hs);
+        List<File> files = fileRepository.findByProduct(product);
+        HashSet<String> fs = new HashSet<>();
+        for (int j = 0; j<files.size(); j++){
+            fs.add(files.get(j).getImgPath());
+        }
+        List<String> file = new ArrayList<>(fs);
+        Long numOfPosts = postRepository.countPostByUserId(writer.getUserId());
+        UserInfoResponse user = new UserInfoResponse(writer.getName(),writer.getAddress(),writer.getTrust(),
+                numOfPosts,writer.getImageUrl());
+        PostDetailOutput detailOutput = new PostDetailOutput(
+                postId,post.getTitle(),product.getCategory(),file,hash,
+                post.getContents(),product.getPrice(),user, post.getCreatedDate().toString(),post.getModifiedDate().toString()
+        );
+        return detailOutput;
     }
 }

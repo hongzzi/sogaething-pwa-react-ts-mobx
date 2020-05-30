@@ -223,6 +223,19 @@ export type IPost = {
   modifiedDate?: Maybe<Scalars["String"]>;
 };
 
+export type IPostDetailOutput = {
+  postId?: Maybe<Scalars["ID"]>;
+  title?: Maybe<Scalars["String"]>;
+  category?: Maybe<Scalars["String"]>;
+  imgPaths?: Maybe<Array<Maybe<Scalars["String"]>>>;
+  hashtag?: Maybe<Array<Maybe<Scalars["String"]>>>;
+  contents?: Maybe<Scalars["String"]>;
+  price?: Maybe<Scalars["Int"]>;
+  user?: Maybe<IUserInfoResponse>;
+  createdDate?: Maybe<Scalars["String"]>;
+  modifiedDate?: Maybe<Scalars["String"]>;
+};
+
 export type IPostMetaOutput = {
   postId?: Maybe<Scalars["Int"]>;
   title?: Maybe<Scalars["String"]>;
@@ -277,6 +290,7 @@ export type IQuery = {
    */
   findRecentPosts?: Maybe<Array<Maybe<IRecentPostResponse>>>;
   findPostListByUserId?: Maybe<Array<Maybe<IPostMetaOutput>>>;
+  findByDetailPost?: Maybe<IPostDetailOutput>;
   findAllFile?: Maybe<Array<Maybe<IFileOutput>>>;
   findAllFiles?: Maybe<Array<Maybe<IFile>>>;
   findFileById?: Maybe<IFileOutput>;
@@ -301,6 +315,10 @@ export type IQueryFindPostByPostIdArgs = {
 
 export type IQueryFindPostListByUserIdArgs = {
   userId?: Maybe<Scalars["Int"]>;
+};
+
+export type IQueryFindByDetailPostArgs = {
+  postId?: Maybe<Scalars["Int"]>;
 };
 
 export type IQueryFindFileByIdArgs = {
@@ -537,19 +555,18 @@ export type IGetPostQueryVariables = {
 };
 
 export type IGetPostQuery = { __typename?: "Query" } & {
-  findDetailDealByPost: Maybe<
-    { __typename?: "DetailOutput" } & Pick<
-      IDetailOutput,
-      | "dealId"
+  findByDetailPost: Maybe<
+    { __typename?: "PostDetailOutput" } & Pick<
+      IPostDetailOutput,
       | "postId"
-      | "imgPaths"
       | "title"
       | "category"
+      | "imgPaths"
       | "hashtag"
       | "contents"
       | "price"
-      | "buyerId"
-      | "sellerId"
+      | "createdDate"
+      | "modifiedDate"
     > & {
         user: Maybe<
           { __typename?: "UserInfoResponse" } & Pick<
@@ -891,17 +908,14 @@ export function useGetMyPostsQuery(
 }
 export const GetPostDocument = gql`
   query getPost($postId: Int) {
-    findDetailDealByPost(postId: $postId) {
-      dealId
+    findByDetailPost(postId: $postId) {
       postId
-      imgPaths
       title
       category
+      imgPaths
       hashtag
       contents
       price
-      buyerId
-      sellerId
       user {
         name
         address
@@ -909,6 +923,8 @@ export const GetPostDocument = gql`
         numOfPosts
         imgurl
       }
+      createdDate
+      modifiedDate
     }
   }
 `;

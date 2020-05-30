@@ -51,6 +51,7 @@ public class KakaoApi {
 
             String id = element.getAsJsonObject().get("id").getAsString();
             String nickname = properties.getAsJsonObject().get("nickname").getAsString();
+//            String profile_image_url = kakao_account.getAsJsonObject().get("profile_image_url").getAsString(); // 카카오 프사 이미지 url
 //            String email = kakao_account.getAsJsonObject().get("email").getAsString();
 
             user = new User(null, nickname, null, null, "Kakao", Long.parseLong(id), null, null, 0, Role.MEMBER);

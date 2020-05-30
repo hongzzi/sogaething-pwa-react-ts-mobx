@@ -10,17 +10,16 @@ import PostDetail from '../../../components/PostDetail';
 import PostDetailNav from '../../../components/PostDetailNav';
 
 export interface IPost {
-    dealId: string,
     postId: number,
-    imgPaths: string[],
     title: string,
     category: string,
+    imgPaths: string[],
     hashtag: string[],
     contents: string,
     price: number,
-    buyerId: number,
-    sellerId: number,
     user: IUser,
+    createdDate: string,
+    modifiedDate: string,
 }
 
 export interface IUser {
@@ -32,7 +31,7 @@ export interface IUser {
 }
 
 export default function Detail(props: any) {
-    const store = useStores()
+    // const store = useStores()
     const router = useRouter()
     const { pid } = router.query
     const { data, loading, error } = useGetPostQuery({ variables: { postId: pid } });
@@ -40,7 +39,7 @@ export default function Detail(props: any) {
     useEffect(() => {
        if ( data ) {
         //    store.postStore.setDeal(data.findDetailDealByPost);
-        // console.log(data.findDetailDealByPost);
+        console.log(data.findByDetailPost);
        }
     }, [data])
 
@@ -55,11 +54,11 @@ export default function Detail(props: any) {
                 <p>error</p>
             }
             {
-                data && data.findDetailDealByPost && (
+                data && data.findByDetailPost && (
                     <Layout>
-                        <ImageSlider images={data.findDetailDealByPost.imgPaths as string[]} />
-                        <PostDetail data={data.findDetailDealByPost as IPost} loading={loading} />
-                        <PostDetailNav data={data.findDetailDealByPost as IPost} loading={loading} />
+                        <ImageSlider images={data.findByDetailPost.imgPaths as string[]} />
+                        <PostDetail data={data.findByDetailPost} loading={loading} />
+                        <PostDetailNav data={data.findByDetailPost} loading={loading} />
                     </Layout>
                 )
             }

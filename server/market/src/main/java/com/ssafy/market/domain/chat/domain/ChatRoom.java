@@ -5,6 +5,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 @Data
 @Document(collection = "chatRoom")
@@ -12,7 +13,7 @@ public class ChatRoom implements Serializable {
     private static final long serializableUID = 6494678977089006639L;
 
     @Id
-    private String roomId;
+    private Long roomId;
     private String sellerId;
     private String buyerId;
     private boolean isBuyerExit;

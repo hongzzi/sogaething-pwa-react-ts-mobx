@@ -2,16 +2,16 @@ import * as React from 'react';
 import styled from '~/styled';
 
 import Categoryheader from '../../../components/CategoryHeader';
-import SellingForm from '../../../components/SellingForm';
+import PostForm from '../../../components/SellingForm';
 
-export interface ISellingFormPageProps {
+export interface IPostFormPageProps {
 }
 
-export default (props: ISellingFormPageProps) => {
+export default (props: IPostFormPageProps) => {
     return (
         <Wrapper>
             <Categoryheader type={'normal'} text={'판매글 작성하기'}/>
-            <SellingForm />
+            <PostForm />
         </Wrapper>
     )
 }
@@ -23,6 +23,5 @@ const Wrapper = styled.div`
     grid-template-areas:
     "CH"
     "CC"
-    "CI"
     ;
 `;
