@@ -17,7 +17,6 @@ import com.ssafy.market.domain.user.domain.User;
 import com.ssafy.market.domain.user.repository.UserRepository;
 
 import com.ssafy.market.domain.user.security.TokenProvider;
-import com.ssafy.market.global.apis.ImgurUploader;
 import com.ssafy.market.global.exception.DomainNotFoundException;
 import com.ssafy.market.global.exception.UserNotFoundException;
 import graphql.schema.DataFetchingEnvironment;

@@ -1,7 +1,6 @@
 package com.ssafy.market.domain.post.resolver;
 
 import com.coxautodev.graphql.tools.GraphQLQueryResolver;
-import com.ssafy.market.domain.detaildeal.dto.FileArr;
 import com.ssafy.market.domain.file.domain.File;
 import com.ssafy.market.domain.file.repository.FileRepository;
 import com.ssafy.market.domain.hashtag.domain.Hashtag;
@@ -17,17 +16,10 @@ import com.ssafy.market.domain.product.repository.ProductRepository;
 import com.ssafy.market.domain.user.domain.User;
 import com.ssafy.market.domain.user.dto.UserInfoResponse;
 import com.ssafy.market.domain.user.repository.UserRepository;
-import com.ssafy.market.global.apis.ImgurUploader;
-import com.ssafy.market.global.apis.UploadCallback;
 import com.ssafy.market.global.exception.SelectNotDataException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import sun.text.SupplementaryCharacterData;
 
-import javax.imageio.ImageIO;
-import java.awt.image.RenderedImage;
-import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
