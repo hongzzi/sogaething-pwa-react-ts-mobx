@@ -127,7 +127,7 @@ public class PostQuery implements GraphQLQueryResolver {
             }
             List<String> hash = new ArrayList<>(hs);
             metaOutputList.add(new PostMetaOutput(post.getPostId(),post.getTitle(),product.getCategory(),files.getImgPath(),product.getPrice()
-                    ,hash,post.getCreatedDate().toString(), post.getModifiedDate().toString()));
+                    ,hash,post.isBuy(),post.getViewCount(),post.getDeal(), post.getDealState(),post.getSaleDate().toString(),post.getTransaction(),post.getCreatedDate().toString(), post.getModifiedDate().toString()));
         }
         return metaOutputList;
     }
@@ -163,7 +163,7 @@ public class PostQuery implements GraphQLQueryResolver {
                     }
                     List<String> hash = new ArrayList<>(hs);
                     outputs.add(new PostMetaOutput(post.getPostId(), post.getTitle(), product.getCategory(), files.getImgPath(), product.getPrice()
-                            , hash, post.getCreatedDate().toString(), post.getModifiedDate().toString()));
+                            , hash,post.isBuy(),post.getViewCount(),post.getDeal(),post.getDealState(),post.getSaleDate().toString(),post.getTransaction(), post.getCreatedDate().toString(), post.getModifiedDate().toString()));
                     break;
                 }
             }
@@ -193,7 +193,7 @@ public class PostQuery implements GraphQLQueryResolver {
                 numOfPosts,writer.getImageUrl());
         PostDetailOutput detailOutput = new PostDetailOutput(
                 postId,post.getTitle(),product.getCategory(),file,hash,
-                post.getContents(),product.getPrice(),user, post.getCreatedDate().toString(),post.getModifiedDate().toString()
+                post.getContents(),product.getPrice(),user,post.getViewCount(),post.isBuy(),post.getDeal(),post.getDealState(),post.getSaleDate().toString(),post.getTransaction(), post.getCreatedDate().toString(),post.getModifiedDate().toString()
         );
         return detailOutput;
     }

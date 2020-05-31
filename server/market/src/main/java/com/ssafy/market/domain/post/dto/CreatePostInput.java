@@ -22,6 +22,7 @@ public class CreatePostInput {
     private String category;
     private String productname;
 //    private String productState;
+    private String transaction;
     private Long price;
     private String hashtag;
     private String imgPaths; // file

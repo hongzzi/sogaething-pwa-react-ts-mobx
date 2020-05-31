@@ -48,14 +48,15 @@ public class Post extends BaseTimeEntity {
 
     @Column(name = "deal_state")
     private String dealState;
-//    @Column(name = "deal_location")
-//    private String dealLocation;
+
+    @Column(name = "transaction")
+    private String transaction;
 
     public Post(Long postId) {
         this.postId = postId;
     }
 
-    public Post(Long postId, User user, boolean isBuy, String title, Date saleDate, String contents, Long viewCount, String deal, String dealState) {
+    public Post(Long postId, User user, boolean isBuy, String title, Date saleDate, String contents, Long viewCount, String deal, String dealState,String transaction) {
         this.postId = postId;
         this.user = user;
         this.isBuy = isBuy;
@@ -65,7 +66,7 @@ public class Post extends BaseTimeEntity {
         this.viewCount = viewCount;
         this.deal = deal;
         this.dealState = dealState;
-//        this.dealLocation = dealLocation;
+        this.transaction = transaction;
     }
     public void update(String title, String contents, String deal,String dealState){
         this.title = title;
