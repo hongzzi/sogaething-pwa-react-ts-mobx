@@ -17,6 +17,12 @@ public class PostMetaOutput {
     private String imgPath;
     private Long price;
     private List<String> hashtag;
+    private Boolean isBuy;
+    private Long viewCount;
+    private String deal;
+    private String dealState;
+    private String saleDate;
+    private String transaction;
     private String createdDate;
     private String modifiedDate;
 }

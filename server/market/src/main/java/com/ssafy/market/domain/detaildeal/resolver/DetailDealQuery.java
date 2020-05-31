@@ -3,7 +3,6 @@ package com.ssafy.market.domain.detaildeal.resolver;
 import com.coxautodev.graphql.tools.GraphQLQueryResolver;
 import com.ssafy.market.domain.detaildeal.domain.DetailDeal;
 import com.ssafy.market.domain.detaildeal.dto.DetailOutput;
-import com.ssafy.market.domain.detaildeal.dto.FileArr;
 import com.ssafy.market.domain.detaildeal.repository.DetailDealRepository;
 import com.ssafy.market.domain.file.domain.File;
 import com.ssafy.market.domain.file.repository.FileRepository;
@@ -14,7 +13,6 @@ import com.ssafy.market.domain.post.repository.PostRepository;
 import com.ssafy.market.domain.product.domain.Product;
 import com.ssafy.market.domain.product.repository.ProductRepository;
 import com.ssafy.market.domain.user.domain.User;
-import com.ssafy.market.domain.user.dto.UserInfoOutput;
 import com.ssafy.market.domain.user.dto.UserInfoResponse;
 import com.ssafy.market.domain.user.repository.UserRepository;
 import com.ssafy.market.global.exception.DomainNotFoundException;
@@ -22,6 +20,7 @@ import com.ssafy.market.global.exception.SelectNotDataException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -80,6 +79,7 @@ public class DetailDealQuery implements GraphQLQueryResolver {
 
     @Transactional
     public DetailOutput findDetailDealByPost(Long postId) {
+
         Post post = postRepository.findByPostId(postId);
         DetailDeal deal = detailDealRepository.findByPost(post);
         System.out.println(deal.getDealId());

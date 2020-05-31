@@ -615,19 +615,18 @@ export type IGetPostQueryVariables = {
 };
 
 export type IGetPostQuery = { __typename?: "Query" } & {
-  findDetailDealByPost: Maybe<
-    { __typename?: "DetailOutput" } & Pick<
-      IDetailOutput,
-      | "dealId"
+  findByDetailPost: Maybe<
+    { __typename?: "PostDetailOutput" } & Pick<
+      IPostDetailOutput,
       | "postId"
-      | "imgPaths"
       | "title"
       | "category"
+      | "imgPaths"
       | "hashtag"
       | "contents"
       | "price"
-      | "buyerId"
-      | "sellerId"
+      | "createdDate"
+      | "modifiedDate"
     > & {
         user: Maybe<
           { __typename?: "UserInfoResponse" } & Pick<
@@ -969,17 +968,14 @@ export function useGetMyPostsQuery(
 }
 export const GetPostDocument = gql`
   query getPost($postId: Int) {
-    findDetailDealByPost(postId: $postId) {
-      dealId
+    findByDetailPost(postId: $postId) {
       postId
-      imgPaths
       title
       category
+      imgPaths
       hashtag
       contents
       price
-      buyerId
-      sellerId
       user {
         name
         address
@@ -987,6 +983,8 @@ export const GetPostDocument = gql`
         numOfPosts
         imgurl
       }
+      createdDate
+      modifiedDate
     }
   }
 `;

@@ -10,6 +10,7 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -21,7 +22,7 @@ public class ChatRoomMongoRepository {
         return mongoTemplate.findAll(ChatRoom.class, "chatRoom");
     }
 
-    public ChatRoom getChaRoomByRoomId(String roomId){
+    public ChatRoom getChaRoomByRoomId(Long roomId){
         return mongoTemplate.findById(roomId, ChatRoom.class, "chatRoom");
     }
 
@@ -36,10 +37,20 @@ public class ChatRoomMongoRepository {
         return mongoTemplate.find(query, ChatRoom.class, "chatRoom");
     }
 
+    public List<ChatRoom> getChatRoomsByUserId(String userId) {
+        Query query = new Query(Criteria.where("buyerId").is(userId).andOperator(Criteria.where("isBuyerExit").is(false)));
+        List<ChatRoom> result = mongoTemplate.find(query, ChatRoom.class, "chatRoom");
+        query = new Query(Criteria.where("sellerId").is(userId).andOperator(Criteria.where("isSellerExit").is(false)));
+        result.addAll(mongoTemplate.find(query, ChatRoom.class, "chatRoom"));
+        return result;
+    }
+
     public ChatRoom insertChatRoom(ChatRoom chatRoom) throws DuplicateKeyException {
         try {
             chatRoom.setBuyerExit(false);
             chatRoom.setSellerExit(false);
+            chatRoom.setCreatedDateTime(LocalDateTime.now().toString());
+            chatRoom.setModifiedDateTime(LocalDateTime.now().toString());
             return mongoTemplate.insert(chatRoom, "chatRoom");
         } catch (DuplicateKeyException e){
             throw e;
@@ -54,7 +65,7 @@ public class ChatRoomMongoRepository {
             Update update = new Update();
             update.set("isBuyerExit", chatRoom.isBuyerExit());
             update.set("isSellerExit", chatRoom.isSellerExit());
-            update.set("modifiedDateTime", chatRoom.getModifiedDateTime());
+            update.set("modifiedDateTime", LocalDateTime.now().toString());
 
             // 쿼리 조건, update 변경 내용, 컬렉션 네임
             Object updateResult = mongoTemplate.findAndModify(query, update, ChatRoom.class, "chatRoom");

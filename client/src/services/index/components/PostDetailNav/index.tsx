@@ -11,7 +11,7 @@ import { IPost } from '../../pages/post/[pid]/index';
 
 export interface IPostDetailNavProps {
   loading: boolean,
-  data: IPost,
+  data: any,
 }
 
 export default function PostDetailNav(props: IPostDetailNavProps) {

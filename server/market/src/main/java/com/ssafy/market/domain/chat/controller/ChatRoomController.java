@@ -1,6 +1,7 @@
 package com.ssafy.market.domain.chat.controller;
 
 import com.ssafy.market.domain.chat.domain.ChatRoom;
+import com.ssafy.market.domain.chat.dto.ChatRoomDto;
 import com.ssafy.market.domain.chat.service.ChatRoomService;
 import com.ssafy.market.domain.chat.util.BoolResult;
 import com.ssafy.market.domain.chat.util.StringResult;
@@ -27,13 +28,12 @@ public class ChatRoomController {
     @PostMapping("/room")
     @ApiOperation(value = "채팅방을 생성한다.", response= ChatRoom.class)
     public ResponseEntity<Object> createChatRoom(@RequestBody ChatRoom chatRoom) {
-        BoolResult boolResult = null;
         StringResult stringResult = null;
         try {
             logger.debug("createChatRoom {}", chatRoom);
             ChatRoom result = chatRoomService.createChatRoom(chatRoom);
             if (result != null) {
-                stringResult = new StringResult(result.getRoomId(), "createChatRoom", "SUCCESS");
+                stringResult = new StringResult(String.valueOf(result.getRoomId()), "createChatRoom", "SUCCESS");
                 return new ResponseEntity<Object>(stringResult, HttpStatus.CREATED);
             } else { // 이미 있는 방
                 stringResult = new StringResult("-1", "createChatRoom", "SUCCESS");
@@ -64,7 +64,7 @@ public class ChatRoomController {
     // 특정 채팅방 조회
     @GetMapping("/room/{roomId}")
     @ApiOperation(value = "특정 방의 정보를 가져온다.", response= ChatRoom.class)
-    public ResponseEntity<Object> findRoomByRoomId(@PathVariable String roomId) {
+    public ResponseEntity<Object> findRoomByRoomId(@PathVariable Long roomId) {
         try {
             ChatRoom chatRoom = chatRoomService.findRoomByRoomId(roomId);
             return new ResponseEntity<Object>(chatRoom, HttpStatus.OK);
@@ -79,13 +79,14 @@ public class ChatRoomController {
     // 유저별 채팅방 리스트 조회
     @GetMapping("/rooms/{userId}")
     @ApiOperation(value = "특정 유저의 채팅방 목록을 가져온다.", response=List.class)
-    public ResponseEntity<Object> findRoomsPerPositionByUserId(@PathVariable String userId) {
+    public ResponseEntity<Object> findRoomsByUserId(@PathVariable String userId) {
         try {
-            Map<String, List<ChatRoom>> result = chatRoomService.findRoomsPerPositionByUserId(userId);
+//            Map<String, List<ChatRoom>> result = chatRoomService.findRoomsPerPositionByUserId(userId);
+            List<ChatRoomDto> result = chatRoomService.findRoomsByUserId(userId);
             return new ResponseEntity<Object>(result, HttpStatus.OK);
         } catch (RuntimeException e) {
             String errorMessage = e.getMessage();
-            logger.error("findRoomsPerPositionByUserId {}", errorMessage);
+            logger.error("findRoomsByUserId {}", errorMessage);
             StringResult stringResult = new StringResult(errorMessage, "findRoomsPerPositionByUserId", "FAIL");
             return new ResponseEntity<Object>(stringResult, HttpStatus.BAD_REQUEST);
         }

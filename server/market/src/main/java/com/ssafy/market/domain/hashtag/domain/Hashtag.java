@@ -11,6 +11,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Getter
 @Entity
+@Table(name="hashtag")
 public class Hashtag {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -30,5 +31,14 @@ public class Hashtag {
     }
     public void update(String hashtag){
         this.hashtag = hashtag;
+    }
+
+    @Override
+    public String toString() {
+        return "Hashtag{" +
+                "hashtagId=" + hashtagId +
+                ", product=" + product +
+                ", hashtag='" + hashtag + '\'' +
+                '}';
     }
 }
