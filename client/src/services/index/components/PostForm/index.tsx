@@ -3,6 +3,7 @@ import styled from '~/styled';
 
 import CommonBtn from '../CommonBtn';
 
+import CameraFillIcon from '../../assets/img/form-camera.png';
 import DropdownIcon from '../../assets/img/form-dropdown.png';
 import ExpandIcon from '../../assets/img/form-expand.png';
 
@@ -16,6 +17,16 @@ export default (props: IPostFormProps) => {
     return (
         <Wrapper>
             <FormContainer>
+                <ImageSelector>
+                    <CameraBtn>
+                        <CameraIcon src={CameraFillIcon} />
+                        <CameraSpan>0/10</CameraSpan>
+                    </CameraBtn>
+                    {/* <Input type={'file'} multiple accept={'image/png, image/jpeg, image/jpg'} /> */}
+                </ImageSelector>
+                <InputContainer>
+                    <Input type={'text'} placeholder={'제목'} />
+                </InputContainer>
                 <InputContainer>
                     <Select> <Option selected> 카테고리 </Option>
                         {
@@ -36,6 +47,10 @@ export default (props: IPostFormProps) => {
                         해시태그
                     </HashTag>
                 </InputContainer>
+                <ContentsBox>
+                    <ContentsText>상품설명</ContentsText>
+                    <ContentsArea />
+                </ContentsBox>
             </FormContainer>
             <FooterContainer>
                 <CommonBtn type={'disable'} text={'등록하기'} />
@@ -58,6 +73,33 @@ const Wrapper = styled.div`
 const FormContainer = styled.div`
     width: 100%;
     height: 100%;
+`
+
+const ImageSelector = styled.div`
+    width: 100%;
+    height: 4rem;
+    margin: 0 0 1.6rem 0;
+`
+
+const CameraBtn = styled.div`
+    display: flex;
+    flex-direction: column;
+    width: 4.5rem;
+    height: 4.5rem;
+    border: solid 1px #ddd;
+    border-radius: 5px;
+`
+
+const CameraSpan = styled.span`
+    font-size: 8px;
+    color: #b3b3b3;
+    margin: 0 auto auto auto;
+`
+
+const CameraIcon = styled.img`
+    width: 34px;
+    height: 34px;
+    margin: auto auto 0 auto;
 `
 
 const InputContainer = styled.div`
@@ -118,6 +160,24 @@ const HashTag = styled.div`
     font-weight: bold;
     border: solid 0;
     padding: 0.5rem;
+`
+
+const ContentsBox = styled.div`
+    width: 100%;
+    height: auto;
+`
+
+const ContentsText = styled.div`
+    padding: 0.8rem 0;
+    color: #666;
+    font-weight: bold;
+`
+
+const ContentsArea = styled.textarea`
+    width: 100%;
+    height: 6rem;
+    border: solid 1px #ddd;
+    border-radius: 5px;
 `
 
 const FooterContainer = styled.div`

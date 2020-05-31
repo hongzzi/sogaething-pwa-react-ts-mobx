@@ -52,9 +52,9 @@ const Wrapper = styled.div`
 		"img bottom";
     column-gap: 0.8rem;
     width: 100%;
-    height: 4rem;
+    height: 4.5rem;
     border-bottom: solid 1px #ccc;
-    padding: 0.5rem;
+    padding: 1rem 0.5rem;
 `
 
 const GridImgWrapper = styled.div`
