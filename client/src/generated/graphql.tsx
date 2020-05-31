@@ -8,6 +8,11 @@ export type Scalars = {
   Float: number;
 };
 
+export type IAutocomplete = {
+  hashtag?: Maybe<Scalars["String"]>;
+  count?: Maybe<Scalars["Int"]>;
+};
+
 export type ICreateDetailDealInput = {
   postId: Scalars["Int"];
 };
@@ -22,14 +27,18 @@ export type ICreateHashtagInput = {
   hashtag?: Maybe<Scalars["String"]>;
 };
 
+export type ICreateJjimInput = {
+  postId: Scalars["Int"];
+};
+
 export type ICreatePostInput = {
+  imgs?: Maybe<Array<Maybe<Scalars["String"]>>>;
   title: Scalars["String"];
   contents: Scalars["String"];
   deal: Scalars["String"];
-  /** dealLocation:String! */
   category: Scalars["String"];
   productname: Scalars["String"];
-  /** productState : String! */
+  transaction: Scalars["String"];
   price: Scalars["Int"];
   hashtag: Scalars["String"];
   imgPaths: Scalars["String"];
@@ -84,6 +93,10 @@ export type IHashtag = {
   hashtag?: Maybe<Scalars["String"]>;
 };
 
+export type IHashtagInput = {
+  hashtag?: Maybe<Array<Maybe<Scalars["String"]>>>;
+};
+
 export type IHashtagOutput = {
   hashtagId?: Maybe<Scalars["ID"]>;
   productId?: Maybe<Scalars["Int"]>;
@@ -93,6 +106,26 @@ export type IHashtagOutput = {
 export type IHistoryOutput = {
   userId?: Maybe<Scalars["Int"]>;
   postId?: Maybe<Scalars["Int"]>;
+  createdDate?: Maybe<Scalars["String"]>;
+  modifiedDate?: Maybe<Scalars["String"]>;
+};
+
+export type IJjim = {
+  jjimId?: Maybe<Scalars["ID"]>;
+  user?: Maybe<IUser>;
+  post?: Maybe<IPost>;
+  createdDate?: Maybe<Scalars["String"]>;
+  modifiedDate?: Maybe<Scalars["String"]>;
+};
+
+export type IJjimOutput = {
+  jjimId?: Maybe<Scalars["Int"]>;
+  postId?: Maybe<Scalars["Int"]>;
+  title?: Maybe<Scalars["String"]>;
+  category?: Maybe<Scalars["String"]>;
+  imgPath?: Maybe<Scalars["String"]>;
+  price?: Maybe<Scalars["Int"]>;
+  /** hashtag :[String] */
   createdDate?: Maybe<Scalars["String"]>;
   modifiedDate?: Maybe<Scalars["String"]>;
 };
@@ -126,6 +159,8 @@ export type IMutation = {
   updateProduct?: Maybe<IProductOutput>;
   createProduct?: Maybe<IProductOutput>;
   deleteProduct?: Maybe<Scalars["Int"]>;
+  createJjim?: Maybe<IJjim>;
+  deleteJjim?: Maybe<Scalars["Int"]>;
   createHistory?: Maybe<IHistoryOutput>;
 };
 
@@ -205,6 +240,14 @@ export type IMutationDeleteProductArgs = {
   id: Scalars["Int"];
 };
 
+export type IMutationCreateJjimArgs = {
+  input: ICreateJjimInput;
+};
+
+export type IMutationDeleteJjimArgs = {
+  jjimId?: Maybe<Scalars["Int"]>;
+};
+
 export type IMutationCreateHistoryArgs = {
   postId: Scalars["Int"];
 };
@@ -232,6 +275,12 @@ export type IPostDetailOutput = {
   contents?: Maybe<Scalars["String"]>;
   price?: Maybe<Scalars["Int"]>;
   user?: Maybe<IUserInfoResponse>;
+  viewCount?: Maybe<Scalars["Int"]>;
+  isBuy?: Maybe<Scalars["Boolean"]>;
+  deal?: Maybe<Scalars["String"]>;
+  dealState?: Maybe<Scalars["String"]>;
+  saleDate?: Maybe<Scalars["String"]>;
+  transaction?: Maybe<Scalars["String"]>;
   createdDate?: Maybe<Scalars["String"]>;
   modifiedDate?: Maybe<Scalars["String"]>;
 };
@@ -243,6 +292,12 @@ export type IPostMetaOutput = {
   imgPath?: Maybe<Scalars["String"]>;
   price?: Maybe<Scalars["Int"]>;
   hashtag?: Maybe<Array<Maybe<Scalars["String"]>>>;
+  isBuy?: Maybe<Scalars["Boolean"]>;
+  viewCount?: Maybe<Scalars["Int"]>;
+  deal?: Maybe<Scalars["String"]>;
+  dealState?: Maybe<Scalars["String"]>;
+  saleDate?: Maybe<Scalars["String"]>;
+  transaction?: Maybe<Scalars["String"]>;
   createdDate?: Maybe<Scalars["String"]>;
   modifiedDate?: Maybe<Scalars["String"]>;
 };
@@ -291,6 +346,10 @@ export type IQuery = {
   findRecentPosts?: Maybe<Array<Maybe<IRecentPostResponse>>>;
   findPostListByUserId?: Maybe<Array<Maybe<IPostMetaOutput>>>;
   findByDetailPost?: Maybe<IPostDetailOutput>;
+  /** findAllPostsByUploaderId(uploader_id: Int):[Post]
+   * findElAllPosts: [Post]
+   */
+  searchThings?: Maybe<Array<Maybe<IPostMetaOutput>>>;
   findAllFile?: Maybe<Array<Maybe<IFileOutput>>>;
   findAllFiles?: Maybe<Array<Maybe<IFile>>>;
   findFileById?: Maybe<IFileOutput>;
@@ -303,9 +362,11 @@ export type IQuery = {
   findAllHashtags?: Maybe<Array<Maybe<IHashtag>>>;
   findAllHashtag?: Maybe<Array<Maybe<IHashtagOutput>>>;
   findByHashtagId?: Maybe<IHashtagOutput>;
+  autocomplete?: Maybe<Array<Maybe<IAutocomplete>>>;
   findAllProduct?: Maybe<Array<Maybe<IProductOutput>>>;
   findAllProducts?: Maybe<Array<Maybe<IProduct>>>;
   findByProductId?: Maybe<IProductOutput>;
+  findPostByUserId?: Maybe<Array<Maybe<IJjimOutput>>>;
   findUserHistoryByUserId?: Maybe<Array<Maybe<IUserHistoryResponse>>>;
 };
 
@@ -321,6 +382,10 @@ export type IQueryFindByDetailPostArgs = {
   postId?: Maybe<Scalars["Int"]>;
 };
 
+export type IQuerySearchThingsArgs = {
+  input: IHashtagInput;
+};
+
 export type IQueryFindFileByIdArgs = {
   id?: Maybe<Scalars["Int"]>;
 };
@@ -333,8 +398,16 @@ export type IQueryFindByHashtagIdArgs = {
   id?: Maybe<Scalars["Int"]>;
 };
 
+export type IQueryAutocompleteArgs = {
+  hashtag: Scalars["String"];
+};
+
 export type IQueryFindByProductIdArgs = {
   id?: Maybe<Scalars["Int"]>;
+};
+
+export type IQueryFindPostByUserIdArgs = {
+  userId?: Maybe<Scalars["Int"]>;
 };
 
 export type IRecentPostResponse = {

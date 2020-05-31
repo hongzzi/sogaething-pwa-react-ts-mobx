@@ -1,8 +1,6 @@
 import * as React from 'react';
 import styled from '~/styled'
 
-import Link from 'next/link';
-
 import { IMetaData } from '../../pages/list/seller/[uid]/index';
 import PostRowCard from '../PostRowCard';
 
@@ -13,7 +11,6 @@ export interface IPostListProps {
 export default function PostList(props: IPostListProps) {
     const { data } = props;
     return (
-        // tslint:disable-next-line: jsx-wrap-multiline
         <Wrapper>
             <CardContainer>
                 <PostCount>총 <SpanStyle>{data.length}</SpanStyle> 개의 상품</PostCount>
