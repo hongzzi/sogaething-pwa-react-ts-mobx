@@ -32,6 +32,7 @@ input CreatePostInput{
     deal : String!
     category: String!
     productname: String!
+    transaction : String!
     price: Int!
     hashtag: String!
     imgPaths: String! ## 좀더 고민해봐야할 부분
@@ -70,6 +71,12 @@ type PostDetailOutput {
     contents: String
     price: Int
     user: UserInfoResponse
+    viewCount: Int
+    isBuy: Boolean
+    deal: String
+    dealState: String
+    saleDate: String
+    transaction: String
     createdDate: String
     modifiedDate: String
 }
@@ -81,6 +88,12 @@ type PostMetaOutput {
     imgPath: String
     price: Int
     hashtag: [String]
+    isBuy: Boolean
+    viewCount: Int
+    deal: String
+    dealState: String
+    saleDate: String
+    transaction: String
     createdDate: String
     modifiedDate: String
 }

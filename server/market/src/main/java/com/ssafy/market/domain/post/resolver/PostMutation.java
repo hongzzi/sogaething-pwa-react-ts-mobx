@@ -57,7 +57,7 @@ public class PostMutation implements GraphQLMutationResolver {
         if(user==null){
             throw new UserNotFoundException("User");
         }
-        Post post = postRepository.save(new Post(null, user, false, input.getTitle(), null, input.getContents(), (long) 0, input.getDeal(), "진행중"));
+        Post post = postRepository.save(new Post(null, user, false, input.getTitle(), null, input.getContents(), (long) 0, input.getDeal(), "진행중",input.getTransaction()));
         Product product = productRepository.save(new Product(null,post,input.getProductname(), input.getPrice(),input.getCategory(),(long)0));
         String[] hashtagarr = input.getHashtag().split(" ");
         List<String> hash = new ArrayList<>();
