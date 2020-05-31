@@ -1,5 +1,6 @@
 import { toJS } from 'mobx';
 import moment from 'moment';
+import { useRouter } from 'next/router';
 import * as React from 'react';
 import styled from '~/styled';
 import useStores from '../../helpers/useStores';
@@ -12,10 +13,14 @@ interface IChatCardProps {
 
 export default (props: IChatCardProps) => {
   const {authStore} = useStores();
+  const router = useRouter();
   const mnt = moment(props.chatData!.modifiedDateTime);
   const diffTime = moment.duration(mnt.diff(moment())).asHours();
+  const handleClickChatItem = () => {
+    router.push(`/chat/${props.chatData!.roomId}`);
+  }
   return(
-        <ChatListItem>
+        <ChatListItem onClick={handleClickChatItem}>
           <CircleImageView
             size={2}
             src={
