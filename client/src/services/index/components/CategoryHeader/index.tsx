@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useRouter } from 'next/router';
 import styled from '~/styled';
 import HeaderBack from '../../assets/img/header-back.png?url';
 import HeaderCheck from '../../assets/img/header-check.png?url';
@@ -11,6 +12,10 @@ interface ICategoryHeader {
 }
 
 export default (props: ICategoryHeader) => {
+  const router = useRouter();
+  const handleBackIconClick = () => {
+    router.back();
+  }
   return (
     <Wrapper>
       {props.type === 'check' && <div>check</div>}
@@ -18,7 +23,9 @@ export default (props: ICategoryHeader) => {
       {props.type === 'normal' && (
         <>
           <TextWrapper>
-            <StyledCustomIcon url={HeaderBack} />
+            <WrapperIcon onClick={handleBackIconClick}>
+              <CustomIcon url={HeaderBack} />
+            </WrapperIcon>
             <Text>{props.text ? props.text : '소개띵'}</Text>
           </TextWrapper>
           <StyledCustomIcon url={HeacerMenu} />
@@ -47,6 +54,8 @@ const Wrapper = styled.div`
   justify-content: space-between;
   align-items: center;
 `;
+
+const WrapperIcon = styled.div``;
 
 const TextWrapper = styled.div`
   display: flex;

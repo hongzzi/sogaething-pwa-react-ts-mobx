@@ -615,6 +615,12 @@ export type IGetMyPostsQuery = { __typename?: "Query" } & {
           | "imgPath"
           | "price"
           | "hashtag"
+          | "isBuy"
+          | "viewCount"
+          | "deal"
+          | "dealState"
+          | "saleDate"
+          | "transaction"
           | "createdDate"
           | "modifiedDate"
         >
@@ -638,6 +644,12 @@ export type IGetPostQuery = { __typename?: "Query" } & {
       | "hashtag"
       | "contents"
       | "price"
+      | "viewCount"
+      | "isBuy"
+      | "deal"
+      | "dealState"
+      | "saleDate"
+      | "transaction"
       | "createdDate"
       | "modifiedDate"
     > & {
@@ -927,6 +939,12 @@ export const GetMyPostsDocument = gql`
       imgPath
       price
       hashtag
+      isBuy
+      viewCount
+      deal
+      dealState
+      saleDate
+      transaction
       createdDate
       modifiedDate
     }
@@ -996,6 +1014,12 @@ export const GetPostDocument = gql`
         numOfPosts
         imgurl
       }
+      viewCount
+      isBuy
+      deal
+      dealState
+      saleDate
+      transaction
       createdDate
       modifiedDate
     }
