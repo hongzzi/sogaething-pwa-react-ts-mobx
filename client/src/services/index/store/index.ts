@@ -1,5 +1,7 @@
 import { useStaticRendering } from 'mobx-react';
+import ChatService from '../service/ChatService';
 import AuthStore, {IAuth, initialAuth} from './AuthStore';
+import ChatStore from './ChatStore';
 import PageStore, {initialPage} from './PageStore';
 import PostStore, {initialPost} from './PostStore';
 const isServer = typeof window === 'undefined';
@@ -22,6 +24,8 @@ export class RootStore {
   authStore: AuthStore;
   pageStore: PageStore;
   postStore: PostStore;
+  chatStore: ChatStore;
+
   constructor(initialData: any) {
     if (isServer) {
       this.authStore = new AuthStore(initialData.authStore, this);
@@ -30,6 +34,7 @@ export class RootStore {
     }
     this.pageStore = new PageStore(initialData.pageStore, this);
     this.postStore = new PostStore(initialData.postStore, this);
+    this.chatStore = new ChatStore(new ChatService(), this);
   }
 }
 
