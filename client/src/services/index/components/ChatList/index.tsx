@@ -1,5 +1,6 @@
 import * as React from 'react';
 import styled from '~/styled';
+import { ChatRoomListItemDto } from '../../service/ChatService';
 import Card from './ChatItem';
 
 const dump = [
@@ -18,9 +19,14 @@ const dump = [
   { name: '#맥북', chat: '1.000,000' },
 ];
 
-export default () => {
-  const Cards = dump.map((item, i) => {
-    return <Card key={i} />;
+interface IChatCardProps {
+  chatData: ChatRoomListItemDto[];
+  loading: boolean;
+}
+
+export default (props: IChatCardProps) => {
+  const Cards = props.chatData.map((item, i) => {
+    return <Card key={i} chatData={item} />;
   });
   return <Wrapper>{Cards}</Wrapper>;
 };

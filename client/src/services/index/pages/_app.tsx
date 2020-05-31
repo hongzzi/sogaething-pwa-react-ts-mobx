@@ -1,6 +1,7 @@
 import ApolloClient from 'apollo-client';
 import pickBy from 'lodash/pickBy';
 import { Provider } from 'mobx-react';
+import 'moment/locale/ko';
 import { Container, default as NextApp } from 'next/app';
 import Head from 'next/head';
 import Router from 'next/router'
@@ -21,14 +22,21 @@ import {initialRoot } from '../store';
 export default class extends React.Component {
   static async getInitialProps(appContext: any) {
     const appProps = await App.getInitialProps(appContext);
-    const { Component, router } = appContext;
+    const { Component, router, ctx } = appContext;
+
+    let pageProps: {pageProps: any} = {pageProps : {}};
+    if (Component.getInitialProps) {
+      pageProps = await Component.getInitialProps(appContext);
+    }
+
     const navState = getRouteNavIndex(router.asPath);
     const mobxStore = initializeStore({...initialRoot, pageStore: {
-      clikedIdx: navState,
+      clickedIdx: navState,
       nav: true,
     }});
     appContext.ctx.mobxStore = mobxStore;
     const apolloClient = createApolloClient(mobxStore);
+
     try {
       await getMarkupFromTree({
         tree: (
@@ -44,7 +52,8 @@ export default class extends React.Component {
       });
     } catch (error) {
       // tslint:disable-next-line:no-console
-      // console.error('[Error 29948] Operating queries for SSR failed');
+      // console.error(error);
+      console.error('[Error 29948] Operating queries for SSR failed');
     }
 
     Head.rewind();

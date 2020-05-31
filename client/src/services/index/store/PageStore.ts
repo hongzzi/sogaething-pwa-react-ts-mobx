@@ -3,12 +3,12 @@ import { action, observable, reaction } from 'mobx';
 
 export interface IPage {
   nav: boolean;
-  clikedIdx: number
+  clickedIdx: number
 }
 
 export const initialPage: IPage = {
   nav : true,
-  clikedIdx: 0,
+  clickedIdx: 0,
 };
 
 @autobind
@@ -18,7 +18,7 @@ class PageStore {
 
   constructor(initialData = initialPage, root: any) {
       this.nav = initialData.nav;
-      this.clickedIdx = initialData.clikedIdx;
+      this.clickedIdx = initialData.clickedIdx;
   }
 
   @action
