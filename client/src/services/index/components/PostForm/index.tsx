@@ -2,45 +2,50 @@ import * as React from 'react';
 import styled from '~/styled';
 
 import CommonBtn from '../CommonBtn';
-import CustomIcon from '../CustomIcon';
 
 import CameraFillIcon from '../../assets/img/form-camera.png';
+import DropdownIcon from '../../assets/img/form-dropdown.png';
 import ExpandIcon from '../../assets/img/form-expand.png';
 
 export interface IPostFormProps {
 }
 
 export default (props: IPostFormProps) => {
+
+    const category = ['디지털/가전', '가구/인테리어', '유아동/유아도서', '생활/가공식품', '스포츠/레저', '여성잡화', '여성의류', '남성패션/잡화', '게임/취미', '뷰티/미용', '반려동물용품', '도서/티켓/음반', '기타 중고물품'];
+
     return (
         <Wrapper>
             <FormContainer>
-                <CameraSelector>
+                <ImageSelector>
                     <CameraBtn>
                         <CameraIcon src={CameraFillIcon} />
                         <CameraSpan>0/10</CameraSpan>
                     </CameraBtn>
-                </CameraSelector>
+                    {/* <Input type={'file'} multiple accept={'image/png, image/jpeg, image/jpg'} /> */}
+                </ImageSelector>
                 <InputContainer>
-                    <CSarea>*</CSarea>
-                    <CNarea>제목</CNarea>
-                    <Input type={'text'} />
+                    <Input type={'text'} placeholder={'제목'} />
                 </InputContainer>
                 <InputContainer>
-                    <CSarea>*</CSarea>
-                    <CNarea> 카테고리</CNarea>
+                    <Select> <Option selected> 카테고리 </Option>
+                        {
+                            category.map((category, index) => (
+                                <Option key={index}>{category}</Option>
+                            ))
+                        }
+                    </Select>
                 </InputContainer>
                 <InputContainer>
-                    <CSarea>*</CSarea>
-                    <CNarea> 금액</CNarea>
-                    <Input type={'number'} />
-                    <CICarea>원</CICarea>
+                    <Input type={'number'} placeholder={'금액'} min={0} />
                 </InputContainer>
                 <InputContainer>
-                    <CNarea> 거래방법</CNarea>
+                    <Select> <Option selected> 거래방법 </Option> <Option>직거래</Option> <Option>택배거래</Option></Select>
                 </InputContainer>
                 <InputContainer>
-                    <CNarea> 해시태그</CNarea>
-                    <CICarea> <CustomIcon url={ExpandIcon} /> </CICarea>
+                    <HashTag>
+                        해시태그
+                    </HashTag>
                 </InputContainer>
                 <ContentsBox>
                     <ContentsText>상품설명</ContentsText>
@@ -70,7 +75,7 @@ const FormContainer = styled.div`
     height: 100%;
 `
 
-const CameraSelector = styled.div`
+const ImageSelector = styled.div`
     width: 100%;
     height: 4rem;
     margin: 0 0 1.6rem 0;
@@ -98,10 +103,7 @@ const CameraIcon = styled.img`
 `
 
 const InputContainer = styled.div`
-    display: grid;
-    grid-auto-columns: 1rem 4.8rem auto 3rem;
-    grid-template:
-    "CS CN CIN CIC";
+    display: flex;
     align-items: center;
     width: 100%;
     height: 3.5rem;
@@ -111,29 +113,53 @@ const InputContainer = styled.div`
 `
 
 const Input = styled.input`
-    grid-area: CIN;
-    width: 11rem;
+    width: 98%;
     height: 2rem;
-    font-size: 14px;
-`
-
-const CSarea = styled.div`
-    grid-area: CS;
-    color: #ff2d55;
-    padding: 3px;
-`
-
-const CNarea = styled.div`
-    grid-area: CN;
-    font-size: 14px;
-    display: inline;
+    font-size: 15px;
     font-weight: bold;
+    border: solid 0;
     color: #929292;
+    padding: 0.5rem;
+    ::placeholder {
+        color: #929292;
+        font-weight: bold;
+    }
+    :focus {
+        outline: none !important;
+    }
 `
 
-const CICarea = styled.div`
-    grid-area: CIC;
-    margin: auto;
+const Select = styled.select`
+    background: url(${DropdownIcon}) no-repeat 95% 50%;
+    width: 100%;
+    height: 2rem;
+    font-size: 15px;
+    color: #929292;
+    font-weight: bold;
+    border: solid 0;
+    padding: 0.2rem;
+    :focus {
+        outline: none !important;
+    }
+    ::selection {
+        color: pink;
+    }
+`
+
+const Option = styled.option`
+    color: #929292;
+    font-weight: bold;
+`
+
+const HashTag = styled.div`
+    background: url(${ExpandIcon}) no-repeat 95% 50%;
+    width: 100%;
+    height: 2rem;
+    font-size: 15px;
+    color: #929292;
+    font-weight: bold;
+    border: solid 0;
+    padding: 0.5rem;
 `
 
 const ContentsBox = styled.div`
