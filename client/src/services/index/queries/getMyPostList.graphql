@@ -6,6 +6,12 @@ query getMyPosts($userId: Int){
         imgPath
         price
         hashtag
+        isBuy
+        viewCount
+        deal
+        dealState
+        saleDate
+        transaction
         createdDate
         modifiedDate
     }

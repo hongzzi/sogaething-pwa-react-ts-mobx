@@ -6,8 +6,8 @@ import { numberWithCommas } from '../../helpers/comma';
 import { IMetaData } from '../../pages/list/seller/[uid]/index';
 import CustomIcont from '../CustomIcon'
 
-import clockIcon from '../../assets/img/clock.png';
-import heartIcon from '../../assets/img/heart.png';
+import clockIcon from '../../assets/img/list-clock.png';
+import heartIcon from '../../assets/img/list-like.png';
 import moreIcon from '../../assets/img/moreVertical.png';
 
 export interface IPostRowCardProps {
