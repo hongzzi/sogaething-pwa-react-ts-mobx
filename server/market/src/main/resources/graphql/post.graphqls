@@ -26,16 +26,14 @@ input UpdatePostInput {
 }
 
 input CreatePostInput{
-    imgs : [String]
     title : String!
-    contents : String!
-    deal : String!
     category: String!
-    productname: String!
+    imgPaths : [String]
+    hashtag: [String]
+    contents : String!
     transaction : String!
     price: Int!
-    hashtag: String!
-    imgPaths: String! ## 좀더 고민해봐야할 부분
+
 }
 
 input HashtagInput {
@@ -47,7 +45,10 @@ input MatchInput {
     price: [String]
     hashtag: [String]
 }
-
+type CreateOutput{
+    state: String
+    postId : Int
+}
 type PostOutput {
     postId: ID!
     userId: Int #게시자 id
@@ -113,9 +114,9 @@ type RecentPostResponse {
 }
 
 type Mutation {
-    updateViewcount(postId: Int!): Int!
+    updateviewcount(postId: Int!): Int!
     updateIsBuy(postId: Int!): Int!
-    createPost(input: CreatePostInput!): PostOutput
+    createPost(input: CreatePostInput!): CreateOutput
     updatePost(input: UpdatePostInput!): PostOutput
     deletePost(postId: Int!): Int!
 }
