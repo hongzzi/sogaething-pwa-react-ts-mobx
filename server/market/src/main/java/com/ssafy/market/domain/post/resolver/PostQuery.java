@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.*;
 
 
+
 @Component
 @RequiredArgsConstructor
 public class PostQuery implements GraphQLQueryResolver {
@@ -35,8 +36,6 @@ public class PostQuery implements GraphQLQueryResolver {
     private final ProductRepository productRepository;
     private final HashtagRepository hashtagRepository;
     private final FileRepository fileRepository;
-//    private final ImgurUploader uploader;
-//    private final UploadCallback callback;
 
     public List<PostOutput> findAllPost() {
         List<PostOutput> outputs = new ArrayList<>();
@@ -94,7 +93,6 @@ public class PostQuery implements GraphQLQueryResolver {
         for (int i = 0; i < posts.size(); i++) {
             Post post = posts.get(i);
             Product product = productRepository.findByPost(post);
-
             RecentPostResponse response = new RecentPostResponse();
             response.setPostId(post.getPostId());
             response.setUser(userRepository.findByUserId(post.getUserId()));

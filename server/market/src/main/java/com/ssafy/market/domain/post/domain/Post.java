@@ -18,7 +18,7 @@ import java.util.Date;
 public class Post extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "post_id")
+    @Column(name = "postId")
     private Long postId;
 
     @ManyToOne

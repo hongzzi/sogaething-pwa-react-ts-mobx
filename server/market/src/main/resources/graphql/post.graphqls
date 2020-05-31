@@ -25,14 +25,13 @@ input UpdatePostInput {
     imgPaths: String!
 }
 
-input CreatePostInput {
-    title: String!
-    contents: String!
-    deal: String!
-#    dealLocation:String!
+input CreatePostInput{
+    imgs : [String]
+    title : String!
+    contents : String!
+    deal : String!
     category: String!
     productname: String!
-#    productState : String!
     price: Int!
     hashtag: String!
     imgPaths: String! ## 좀더 고민해봐야할 부분

@@ -17,6 +17,7 @@ import com.ssafy.market.domain.user.domain.User;
 import com.ssafy.market.domain.user.repository.UserRepository;
 
 import com.ssafy.market.domain.user.security.TokenProvider;
+import com.ssafy.market.global.apis.ImgurApi;
 import com.ssafy.market.global.exception.DomainNotFoundException;
 import com.ssafy.market.global.exception.UserNotFoundException;
 import graphql.schema.DataFetchingEnvironment;
@@ -24,6 +25,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,33 +39,45 @@ public class PostMutation implements GraphQLMutationResolver {
     private final HashtagRepository hashtagRepository;
     private final FileRepository fileRepository;
     private final TokenProvider tokenProvider;
+    private final ImgurApi api;
+
 
     @Transactional
-    public PostOutput createPost(CreatePostInput input, DataFetchingEnvironment env ){
+    public PostOutput createPost(CreatePostInput input, DataFetchingEnvironment env ) throws IOException {
+//        String[] arr = input.getImgs();
+//        byte[] byteData = (arr[0].getBytes());
+//        String base64 = Base64.getEncoder().encodeToString(byteData);
+//        System.out.println(base64);
+//        String result = api.uploadimgtest(base64);
+//        String result = api.uploadimgtest(arr[0]);
+//        System.out.println(result);
+
         Long userId = tokenProvider.getUserIdFromHeader(env);
         User user = (userRepository.findByUserId(userId));
         if(user==null){
             throw new UserNotFoundException("User");
         }
         Post post = postRepository.save(new Post(null, user, false, input.getTitle(), null, input.getContents(), (long) 0, input.getDeal(), "진행중"));
-        Product product = productRepository.save(new Product(null,post,input.getProductname(), input.getPrice(),input.getCategory()));
+        Product product = productRepository.save(new Product(null,post,input.getProductname(), input.getPrice(),input.getCategory(),(long)0));
         String[] hashtagarr = input.getHashtag().split(" ");
         List<String> hash = new ArrayList<>();
         for (int i = 0; i< hashtagarr.length; i++){
             Hashtag hashtag = hashtagRepository.save(new Hashtag(null,product,hashtagarr[i]));
             hash.add(hashtagarr[i]);
         }
-
+        String[] arr = input.getImgs();
+        for (int k = 0; k< arr.length; k++){
+            String imgur = api.uploadimgtest(arr[k]);
+            File file = fileRepository.save(new File(null,product,imgur));
+        }
         List<File> files = fileRepository.findByProduct(product);
-
-        // 링크는 url 받아서 넣어주기???
-        File file = fileRepository.save(new File(null,product,input.getImgPaths()));
         PostOutput output = new PostOutput(post.getPostId(),userId,post.isBuy(),post.getTitle(),post.getContents()
                 ,post.getDeal(),post.getDealState()
                 ,product.getCategory(),product.getName(),input.getPrice(),hash,files
         );
         return  output;
     }
+
     @Transactional
     public PostOutput updatePost(UpdatePostInput input, DataFetchingEnvironment env ){
         Long userId = tokenProvider.getUserIdFromHeader(env);
