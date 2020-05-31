@@ -1,5 +1,5 @@
 # source: http://3.34.131.20:8080/graphql
-# timestamp: Sun May 31 2020 16:01:25 GMT+0900 (대한민국 표준시)
+# timestamp: Sun May 31 2020 20:03:05 GMT+0900 (대한민국 표준시)
 
 """This directive allows results to be deferred during execution"""
 directive @defer on FIELD
@@ -34,6 +34,7 @@ input CreatePostInput {
   deal: String!
   category: String!
   productname: String!
+  transaction: String!
   price: Int!
   hashtag: String!
   imgPaths: String!
@@ -183,6 +184,12 @@ type PostDetailOutput {
   contents: String
   price: Int
   user: UserInfoResponse
+  viewCount: Int
+  isBuy: Boolean
+  deal: String
+  dealState: String
+  saleDate: String
+  transaction: String
   createdDate: String
   modifiedDate: String
 }
@@ -194,6 +201,12 @@ type PostMetaOutput {
   imgPath: String
   price: Int
   hashtag: [String]
+  isBuy: Boolean
+  viewCount: Int
+  deal: String
+  dealState: String
+  saleDate: String
+  transaction: String
   createdDate: String
   modifiedDate: String
 }

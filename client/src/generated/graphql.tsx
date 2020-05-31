@@ -38,6 +38,7 @@ export type ICreatePostInput = {
   deal: Scalars["String"];
   category: Scalars["String"];
   productname: Scalars["String"];
+  transaction: Scalars["String"];
   price: Scalars["Int"];
   hashtag: Scalars["String"];
   imgPaths: Scalars["String"];
@@ -274,6 +275,12 @@ export type IPostDetailOutput = {
   contents?: Maybe<Scalars["String"]>;
   price?: Maybe<Scalars["Int"]>;
   user?: Maybe<IUserInfoResponse>;
+  viewCount?: Maybe<Scalars["Int"]>;
+  isBuy?: Maybe<Scalars["Boolean"]>;
+  deal?: Maybe<Scalars["String"]>;
+  dealState?: Maybe<Scalars["String"]>;
+  saleDate?: Maybe<Scalars["String"]>;
+  transaction?: Maybe<Scalars["String"]>;
   createdDate?: Maybe<Scalars["String"]>;
   modifiedDate?: Maybe<Scalars["String"]>;
 };
@@ -285,6 +292,12 @@ export type IPostMetaOutput = {
   imgPath?: Maybe<Scalars["String"]>;
   price?: Maybe<Scalars["Int"]>;
   hashtag?: Maybe<Array<Maybe<Scalars["String"]>>>;
+  isBuy?: Maybe<Scalars["Boolean"]>;
+  viewCount?: Maybe<Scalars["Int"]>;
+  deal?: Maybe<Scalars["String"]>;
+  dealState?: Maybe<Scalars["String"]>;
+  saleDate?: Maybe<Scalars["String"]>;
+  transaction?: Maybe<Scalars["String"]>;
   createdDate?: Maybe<Scalars["String"]>;
   modifiedDate?: Maybe<Scalars["String"]>;
 };
