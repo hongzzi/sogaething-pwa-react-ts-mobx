@@ -87,7 +87,9 @@
 
             axios.get('/chat/message/'+vm.$data.roomId)
             .then(response => {
-                vm.$data.messages = response.data;
+                console.log(response.data);
+                console.log(response.data.chatMessages);
+                vm.$data.messages = response.data.chatMessages;
             })
 
         }, function(error) {

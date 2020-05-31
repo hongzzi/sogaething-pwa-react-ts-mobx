@@ -1,21 +1,25 @@
 package com.ssafy.market.domain.chat.service;
 
-import com.ssafy.market.domain.chat.domain.ChatMessage;
 import com.ssafy.market.domain.chat.domain.ChatRoom;
 import com.ssafy.market.domain.chat.dto.ChatRoomDto;
 import com.ssafy.market.domain.chat.redis.RedisSubscriber;
 import com.ssafy.market.domain.chat.repository.ChatMongoRepository;
 import com.ssafy.market.domain.chat.repository.ChatRoomMongoRepository;
+import com.ssafy.market.domain.chat.util.CacheKey;
 import com.ssafy.market.domain.chat.util.TopicUtil;
 import com.ssafy.market.domain.user.domain.User;
 import com.ssafy.market.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.data.redis.listener.ChannelTopic;
 import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -38,6 +42,8 @@ public class ChatRoomService {
     // 구독 처리 서비스
     private final RedisSubscriber redisSubscriber;
 
+    @CachePut(value = CacheKey.ROOM, key = "#chatRoom.postId+#chatRoom.buyerId+#chatRoom.sellerId")
+    @Transactional
     public ChatRoom createChatRoom(ChatRoom chatRoom) {
         ChatRoom result;
         try {
@@ -59,26 +65,28 @@ public class ChatRoomService {
         return true;
     }
 
+    @Transactional(readOnly = true)
     public List<ChatRoom> findAllRoom() {
         List<ChatRoom> chatRooms = chatRoomMongoRepository.getChatRooms();
         return chatRooms;
     }
 
-    public ChatRoom findRoomByRoomId(String roomId) {
+    @Cacheable(value = CacheKey.ROOM, key = "#roomId", unless = "#result == null")
+    @Transactional(readOnly = true)
+    public ChatRoom findRoomByRoomId(Long roomId) {
         ChatRoom chatRoom = chatRoomMongoRepository.getChaRoomByRoomId(roomId);
         return chatRoom;
     }
 
+//    @Cacheable(value = CacheKey.ROOMS, key = "#userId", unless = "#result.size() < 10")
+    @Transactional(readOnly = true)
     public List<ChatRoomDto> findRoomsByUserId(String userId) {
         try {
             List<ChatRoom> searchedChatRoom = chatRoomMongoRepository.getChatRoomsByUserId(userId);
             List<ChatRoomDto> result = new ArrayList<>();
             for (ChatRoom chatRoom : searchedChatRoom) {
-//                System.out.println(chatRoom);
                 User buyer = userRepository.findByUserId(Long.parseLong(chatRoom.getBuyerId()));
-//                System.out.println("buyer:" + buyer);
                 User seller = userRepository.findByUserId(Long.parseLong(chatRoom.getSellerId()));
-//                System.out.println("seller:" + seller);
                 Map<String, String> sellerUser = new HashMap<>();
                 sellerUser.put("userId", String.valueOf(seller.getUserId()));
                 sellerUser.put("userName", seller.getName());
@@ -94,11 +102,6 @@ public class ChatRoomService {
                 ChatRoomDto chatRoomDto = new ChatRoomDto(chatRoom.getRoomId(), sellerUser, buyerUser, createdDateTime, modifiedDateTime, isSellerExit, isBuyerExit, lastMessage);
                 result.add(chatRoomDto);
             }
-//        Map<String, List<ChatRoom>> result = new HashMap<>();
-//        List<ChatRoom> roomsAsSeller = chatRoomMongoRepository.getChatRoomsByUserIdAsSeller(userId);
-//        List<ChatRoom> roomsAsBuyer = chatRoomMongoRepository.getChatRoomsByUserIdAsBuyer(userId);
-//        result.put("roomsAsSeller", roomsAsSeller);
-//        result.put("roomsAsBuyer", roomsAsBuyer);
             return result;
         } catch (RuntimeException e) {
             e.printStackTrace();
@@ -106,6 +109,8 @@ public class ChatRoomService {
         }
     }
 
+    @CachePut(value = CacheKey.ROOM, key = "#chatRoom.postId+#chatRoom.buyerId+#chatRoom.sellerId")
+    @Transactional
     public Long updateChatRoom(ChatRoom chatRoom) {
         try {
             Long updatedCount = chatRoomMongoRepository.updateChatRoom(chatRoom);
@@ -116,6 +121,7 @@ public class ChatRoomService {
         }
     }
 
+    @CacheEvict(value = CacheKey.ROOM, key = "#chatRoom.postId+#chatRoom.buyerId+#chatRoom.sellerId")
     public Long deleteChatRoom(ChatRoom chatRoom) {
         try {
             Long deletedCount = chatRoomMongoRepository.deleteChatRoom(chatRoom);

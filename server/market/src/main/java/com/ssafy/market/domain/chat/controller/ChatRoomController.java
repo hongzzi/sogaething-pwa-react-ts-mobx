@@ -64,7 +64,7 @@ public class ChatRoomController {
     // 특정 채팅방 조회
     @GetMapping("/room/{roomId}")
     @ApiOperation(value = "특정 방의 정보를 가져온다.", response= ChatRoom.class)
-    public ResponseEntity<Object> findRoomByRoomId(@PathVariable String roomId) {
+    public ResponseEntity<Object> findRoomByRoomId(@PathVariable Long roomId) {
         try {
             ChatRoom chatRoom = chatRoomService.findRoomByRoomId(roomId);
             return new ResponseEntity<Object>(chatRoom, HttpStatus.OK);

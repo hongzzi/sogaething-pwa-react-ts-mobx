@@ -10,7 +10,6 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Repository;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -23,7 +22,7 @@ public class ChatRoomMongoRepository {
         return mongoTemplate.findAll(ChatRoom.class, "chatRoom");
     }
 
-    public ChatRoom getChaRoomByRoomId(String roomId){
+    public ChatRoom getChaRoomByRoomId(Long roomId){
         return mongoTemplate.findById(roomId, ChatRoom.class, "chatRoom");
     }
 

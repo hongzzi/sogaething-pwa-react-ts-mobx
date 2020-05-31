@@ -47,11 +47,13 @@ public class ChatController {
 
     @ApiOperation(value = "특정 방의 채팅메시지를 가져온다.", response=Map.class)
     @GetMapping("/message/{roomId}")
-    public ResponseEntity<Object> findChatMessagesByRoomId(@PathVariable String roomId){
+    public ResponseEntity<Object> findChatMessagesByRoomId(@PathVariable Long roomId){
         try {
             Map<String, Object> result = chatService.findChatMessagesByRoomId(roomId);
+            System.out.println("컨트롤러:"+result);
             return new ResponseEntity<Object>(result, HttpStatus.OK);
         } catch (RuntimeException e) {
+            e.printStackTrace();
             String errorMessage = e.getMessage();
             logger.error("findChatMessagesByRoomId {}", errorMessage);
             StringResult stringResult = new StringResult(errorMessage, "findChatMessagesByRoomId", "FAIL");

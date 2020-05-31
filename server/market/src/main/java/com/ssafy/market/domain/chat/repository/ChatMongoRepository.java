@@ -1,7 +1,6 @@
 package com.ssafy.market.domain.chat.repository;
 
 import com.ssafy.market.domain.chat.domain.ChatMessage;
-import com.ssafy.market.domain.chat.domain.ChatRoom;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -23,7 +22,7 @@ public class ChatMongoRepository {
         return mongoTemplate.insert(chatMessage, "chatMessage");
     }
 
-    public List<ChatMessage> getChatMessagesByRoomId(String roomId) {
+    public List<ChatMessage> getChatMessagesByRoomId(Long roomId) {
         Query query = new Query(new Criteria("roomId").is(roomId));
         return mongoTemplate.find(query, ChatMessage.class, "chatMessage");
     }
