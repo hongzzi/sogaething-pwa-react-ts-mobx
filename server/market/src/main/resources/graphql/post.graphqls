@@ -42,9 +42,11 @@ input HashtagInput {
 
 input MatchInput {
     category: String
-    price: [String]
+    price: [Int]
     hashtag: [String]
+    transaction: String
 }
+
 type CreateOutput{
     state: String
     postId : Int
@@ -114,7 +116,7 @@ type RecentPostResponse {
 }
 
 type Mutation {
-    updateviewcount(postId: Int!): Int!
+    updateView(postId: Int!): Int!
     updateIsBuy(postId: Int!): Int!
     createPost(input: CreatePostInput!): CreateOutput
     updatePost(input: UpdatePostInput!): PostOutput
@@ -135,5 +137,5 @@ type Query {
 #    findAllPostsByUploaderId(uploader_id: Int):[Post]
 #    findElAllPosts: [Post]
     searchThings(input: HashtagInput!): [PostMetaOutput]
-#    matchThings(input: MatchInput!): [PostMetaOutput]
+    matchThings(input: MatchInput!): [PostDetailOutput]
 }
