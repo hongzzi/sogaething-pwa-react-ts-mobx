@@ -1,11 +1,13 @@
 package com.ssafy.market.domain.post.resolver;
 
 import com.coxautodev.graphql.tools.GraphQLMutationResolver;
+import com.ssafy.market.domain.chat.util.StringResult;
 import com.ssafy.market.domain.detaildeal.dto.FileArr;
 import com.ssafy.market.domain.file.domain.File;
 import com.ssafy.market.domain.file.repository.FileRepository;
 import com.ssafy.market.domain.hashtag.domain.Hashtag;
 import com.ssafy.market.domain.hashtag.repository.HashtagRepository;
+import com.ssafy.market.domain.post.dto.CreateOutput;
 import com.ssafy.market.domain.post.dto.CreatePostInput;
 import com.ssafy.market.domain.post.domain.Post;
 import com.ssafy.market.domain.post.dto.PostOutput;
@@ -22,12 +24,15 @@ import com.ssafy.market.global.exception.DomainNotFoundException;
 import com.ssafy.market.global.exception.UserNotFoundException;
 import graphql.schema.DataFetchingEnvironment;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Component
 @RequiredArgsConstructor
@@ -43,38 +48,34 @@ public class PostMutation implements GraphQLMutationResolver {
 
 
     @Transactional
-    public PostOutput createPost(CreatePostInput input, DataFetchingEnvironment env ) throws IOException {
-//        String[] arr = input.getImgs();
-//        byte[] byteData = (arr[0].getBytes());
-//        String base64 = Base64.getEncoder().encodeToString(byteData);
-//        System.out.println(base64);
-//        String result = api.uploadimgtest(base64);
-//        String result = api.uploadimgtest(arr[0]);
-//        System.out.println(result);
+    public CreateOutput createPost(CreatePostInput input, DataFetchingEnvironment env ) throws IOException {
 
         Long userId = tokenProvider.getUserIdFromHeader(env);
         User user = (userRepository.findByUserId(userId));
         if(user==null){
             throw new UserNotFoundException("User");
         }
-        Post post = postRepository.save(new Post(null, user, false, input.getTitle(), null, input.getContents(), (long) 0, input.getDeal(), "진행중",input.getTransaction()));
-        Product product = productRepository.save(new Product(null,post,input.getProductname(), input.getPrice(),input.getCategory(),(long)0));
-        String[] hashtagarr = input.getHashtag().split(" ");
+        CreateOutput output = null;
+        try {
+        Post post = postRepository.save(new Post(null, user, false, input.getTitle(), null, input.getContents(), (long) 0, "판매", "진행중",input.getTransaction()));
+        Product product = productRepository.save(new Product(null,post,input.getPrice(),input.getCategory(),(long)0));
+
+        String[] hashtagarr = input.getHashtag();
         List<String> hash = new ArrayList<>();
         for (int i = 0; i< hashtagarr.length; i++){
             Hashtag hashtag = hashtagRepository.save(new Hashtag(null,product,hashtagarr[i]));
             hash.add(hashtagarr[i]);
         }
-        String[] arr = input.getImgs();
+        String[] arr = input.getImgPaths();
         for (int k = 0; k< arr.length; k++){
             String imgur = api.uploadimgtest(arr[k]);
             File file = fileRepository.save(new File(null,product,imgur));
         }
         List<File> files = fileRepository.findByProduct(product);
-        PostOutput output = new PostOutput(post.getPostId(),userId,post.isBuy(),post.getTitle(),post.getContents()
-                ,post.getDeal(),post.getDealState()
-                ,product.getCategory(),product.getName(),input.getPrice(),hash,files
-        );
+        output = new CreateOutput("SUCEESS",post.getPostId());
+        } catch (Exception e) {
+             output = new CreateOutput("FAIL",null);
+        }
         return  output;
     }
 
@@ -112,7 +113,7 @@ public class PostMutation implements GraphQLMutationResolver {
         );
         return output;
     }
-    public Long updateViewcount(Long postId){
+    public Long updateviewcount(Long postId){
         Post post = postRepository.findByPostId(postId);
         post.update(post.getViewCount()+1);
         return post.getViewCount();

@@ -22,5 +22,5 @@ export default (props: IPostDetailProps) => {
 const Wrapper = styled.div`
     position: relative;
     width: 100%;
-    min-height: 100%;
+    min-height: auto;
 `

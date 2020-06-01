@@ -24,3 +24,19 @@ query getPost($postId: Int) {
         modifiedDate
     }
 }
+
+mutation createPost($input: CreatePostInput!) {
+    createPost(input: $input) {
+        state
+        postId
+    }
+}
+
+mutation createHistory($input: Int!) {
+    createHistory(postId: $input) {
+        userId
+        postId
+        createdDate
+        modifiedDate
+    }
+}
