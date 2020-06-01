@@ -1,1 +1,1 @@
-export { default } from '~~/index/pages/hashtag';
+export { default } from '~/services/index/pages/hashtag'

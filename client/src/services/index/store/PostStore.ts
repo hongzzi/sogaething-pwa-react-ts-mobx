@@ -1,8 +1,7 @@
 import autobind from 'autobind-decorator';
-import { action, observable, reaction } from 'mobx';
+import { action, observable, reaction, toJS } from 'mobx';
 
 export interface IPost {
-    postId: number,
     title: string,
     category: string,
     imgPaths: string[],
@@ -10,11 +9,6 @@ export interface IPost {
     contents: string,
     transaction: string,
     price: number,
-    user: IUser,
-    viewCount: number,
-    isBuy: boolean,
-    deal: string,
-    dealState: string,
 }
 
 export interface IUser {
@@ -23,6 +17,11 @@ export interface IUser {
     trust: number,
     numOfPosts: number,
     imgurl: string,
+}
+
+export interface IPostResponseDto {
+    state: string,
+    postId: number,
 }
 
 export const initialPost = {
@@ -40,7 +39,15 @@ class PostStore {
     @observable price: number = 0;
 
     constructor(initialData = initialPost, root: any) {
-
+        this.post = {
+            title: '',
+            category: '',
+            imgPaths: [],
+            hashtag: [],
+            contents: '',
+            transaction: '',
+            price: 0,
+        }
     }
 
     @action
@@ -75,7 +82,7 @@ class PostStore {
 
     @action
     getImgPaths() {
-        return this.imgPaths;
+        return toJS(this.imgPaths);
     }
 
     @action
@@ -85,12 +92,12 @@ class PostStore {
 
     @action
     getHashtag() {
-        return this.hashtag;
+        return toJS(this.hashtag);
     }
 
     @action
-    setHashtag(hashtag: string[]) {
-        this.hashtag = hashtag;
+    setHashtag(hashtag: string) {
+        this.hashtag = [...this.hashtag, hashtag];
     }
 
     @action

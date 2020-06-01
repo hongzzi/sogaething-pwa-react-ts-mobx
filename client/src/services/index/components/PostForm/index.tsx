@@ -1,24 +1,32 @@
 import * as React from 'react';
 import styled from '~/styled';
 
+import { useRouter } from 'next/router';
 import CommonBtn from '../../components/CommonBtn';
 
+import { useCreatePostMutation } from '~/generated/graphql';
 import CameraFillIcon from '../../assets/img/form-camera.png';
 import DropdownIcon from '../../assets/img/form-dropdown.png';
 import ExpandIcon from '../../assets/img/form-expand.png';
 import useStores from '../../helpers/useStores';
+import { IPostResponseDto } from '../../store/PostStore';
 
 export interface IPostFormProps {
 }
 
+const category = ['디지털/가전', '가구/인테리어', '유아동/유아도서', '생활/가공식품', '스포츠/레저', '여성잡화', '여성의류', '남성패션/잡화', '게임/취미', '뷰티/미용', '반려동물용품', '도서/티켓/음반', '기타 중고물품'];
+
 export default (props: IPostFormProps) => {
+    const router = useRouter();
     const store = useStores();
     const postStore = store.postStore;
-    const category = ['디지털/가전', '가구/인테리어', '유아동/유아도서', '생활/가공식품', '스포츠/레저', '여성잡화', '여성의류', '남성패션/잡화', '게임/취미', '뷰티/미용', '반려동물용품', '도서/티켓/음반', '기타 중고물품'];
+    const mutation = useCreatePostMutation();
 
     // File[] 안됌. Array()
     const [images, setImages] = React.useState(Array());
     const [previews, setPreviews] = React.useState(Array());
+    const [post, setPost] = React.useState(postStore.getPost());
+    const [value, setValue] = React.useState('');
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         e.preventDefault();
@@ -26,12 +34,14 @@ export default (props: IPostFormProps) => {
             const files = Array.from(e.target.files);
             files.forEach((file) => {
                 const reader = new FileReader();
-                reader.onloadend = () => {
-                    setImages([...images, images.push(file)])
-                    setPreviews([...previews, previews.push(reader.result)]);
-                }
                 reader.readAsDataURL(file);
+                reader.onloadend = () => {
+                    setPreviews([...previews, previews.concat(reader.result)]);
+                }
             });
+            previews.map((img) => {
+                setImages([...images, images.concat(img.toString().slice(23))])
+            })
         }
     };
 
@@ -50,9 +60,32 @@ export default (props: IPostFormProps) => {
     const handleChangeContents = (event: any) => {
         postStore.setContents(event.target.value);
     }
-
     const handleSubmit = (event: any) => {
-
+        event.preventDefault();
+        console.log(images);
+        const postData = {
+            title: postStore.getTitle(),
+            category: postStore.getCategory(),
+            imgPaths: postStore.getImgPaths(),
+            hashtag: postStore.getHashtag(),
+            contents: postStore.getContents(),
+            transaction: postStore.getTransaction(),
+            price: postStore.getPrice(),
+        }
+        mutation({
+            variables: {
+                input: postData,
+            },
+        }).then((res: { data: IPostResponseDto }) => {
+            console.log(res.data);
+            console.log(postData);
+            if (res.data.state === 'SUCCESS') {
+                console.log(res.data.postId);
+                router.push(`/post/${res.data.postId}`);
+            }
+        }).catch((error) => {
+            console.log(error);
+        })
     }
 
     return (
