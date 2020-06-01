@@ -29,7 +29,7 @@ public class ProductMutation implements GraphQLMutationResolver {
         if(post.getPostId() == input.getPostId()){
             throw new DuplicateProductException("postId" , input.getPostId());
         }
-        Product product = productRepository.save(new Product(null,post, input.getName(),input.getPrice(),input.getCategory()));
+        Product product = productRepository.save(new Product(null,post, input.getPrice(),input.getCategory(),(long)0));
         ProductOutput productOutput = new ProductOutput(product.getProductId(),post.getPostId(),product.getName(),product.getPrice(),product.getCategory());
         return productOutput;
     }

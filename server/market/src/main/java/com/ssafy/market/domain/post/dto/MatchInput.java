@@ -13,4 +13,5 @@ public class MatchInput {
     private String category;
     private int[] price;
     private String[] hashtag;
+    private String transaction;
 }

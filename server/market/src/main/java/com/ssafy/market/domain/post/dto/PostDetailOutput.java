@@ -19,6 +19,12 @@ public class PostDetailOutput {
     private String contents;
     private Long price;
     private UserInfoResponse user;
+    private Long viewCount;
+    private Boolean isBuy;
+    private String deal;
+    private String dealState;
+    private String saleDate;
+    private String transaction;
     private String createdDate;
     private String modifiedDate;
 }

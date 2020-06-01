@@ -1,9 +1,20 @@
+import { toJS } from 'mobx';
+import moment from 'moment';
 import * as React from 'react';
 import styled from '~/styled';
+import useStores from '../../helpers/useStores';
+import { ChatRoomListItemDto } from '../../service/ChatService';
 import CircleImageView from '../CircleImageView';
 
-export default () => {
-    return(
+interface IChatCardProps {
+  chatData?: ChatRoomListItemDto;
+}
+
+export default (props: IChatCardProps) => {
+  const {authStore} = useStores();
+  const mnt = moment(props.chatData!.modifiedDateTime);
+  const diffTime = moment.duration(mnt.diff(moment())).asHours();
+  return(
         <ChatListItem>
           <CircleImageView
             size={2}
@@ -12,13 +23,15 @@ export default () => {
             }
           />
           <WrapperText>
-            <Line fontSize={14}>류일한</Line>
+            <Line fontSize={14}>{authStore.auth!.sub === props.chatData!.buyerUser.userId ? props.chatData!.sellerUser.userName : props.chatData!.buyerUser.userName}</Line>
             <WrapperInnerText>
               <Line fontSize={10} float={'left'}>
-                계좌 알려주세요..
+                {props.chatData!.lastMessage}
               </Line>
               <Line fontSize={10} float={'right'}>
-                10분 전
+                {
+                  diffTime >= -168 ? mnt.fromNow() : mnt.format('YY년 M월 D일')
+                }
               </Line>
             </WrapperInnerText>
           </WrapperText>
@@ -52,5 +65,5 @@ interface IText {
 
 const Line = styled.div<IText>`
   font-size: ${(props) => props.fontSize + 'px'};
-  float: ${props => props.float};
+  float: ${(props) => props.float};
 `;

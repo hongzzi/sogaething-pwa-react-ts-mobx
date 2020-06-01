@@ -14,14 +14,10 @@ import java.util.List;
 @AllArgsConstructor
 public class CreatePostInput {
     private String title;
-//    private Date saleDate;
-    private String contents;
-    private String deal;
-//    private String dealState;
     private String category;
-    private String productname;
-//    private String productState;
+    private String[] imgPaths;
+    private String[] hashtag;
+    private String contents;
+    private String transaction;
     private Long price;
-    private String hashtag;
-    private String imgPaths; // file
 }

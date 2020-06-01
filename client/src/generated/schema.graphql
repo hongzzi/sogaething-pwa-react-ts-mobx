@@ -1,8 +1,13 @@
 # source: http://3.34.131.20:8080/graphql
-# timestamp: Fri May 29 2020 14:40:19 GMT+0900 (GMT+09:00)
+# timestamp: Sun May 31 2020 20:03:05 GMT+0900 (대한민국 표준시)
 
 """This directive allows results to be deferred during execution"""
 directive @defer on FIELD
+
+type Autocomplete {
+  hashtag: String
+  count: Int
+}
 
 input CreateDetailDealInput {
   postId: Int!
@@ -18,16 +23,18 @@ input CreateHashtagInput {
   hashtag: String
 }
 
+input CreateJjimInput {
+  postId: Int!
+}
+
 input CreatePostInput {
+  imgs: [String]
   title: String!
   contents: String!
   deal: String!
-
-  """dealLocation:String!"""
   category: String!
   productname: String!
-
-  """productState : String!"""
+  transaction: String!
   price: Int!
   hashtag: String!
   imgPaths: String!
@@ -82,6 +89,10 @@ type Hashtag {
   hashtag: String
 }
 
+input HashtagInput {
+  hashtag: [String]
+}
+
 type HashtagOutput {
   hashtagId: ID
   productId: Int
@@ -91,6 +102,27 @@ type HashtagOutput {
 type HistoryOutput {
   userId: Int
   postId: Int
+  createdDate: String
+  modifiedDate: String
+}
+
+type Jjim {
+  jjimId: ID
+  user: User
+  post: Post
+  createdDate: String
+  modifiedDate: String
+}
+
+type JjimOutput {
+  jjimId: Int
+  postId: Int
+  title: String
+  category: String
+  imgPath: String
+  price: Int
+
+  """hashtag :[String]"""
   createdDate: String
   modifiedDate: String
 }
@@ -124,6 +156,8 @@ type Mutation {
   updateProduct(input: UpdateProductInput!): ProductOutput
   createProduct(input: CreateProductInput!): ProductOutput
   deleteProduct(id: Int!): Int
+  createJjim(input: CreateJjimInput!): Jjim
+  deleteJjim(jjimId: Int): Int
   createHistory(postId: Int!): HistoryOutput
 }
 
@@ -150,6 +184,12 @@ type PostDetailOutput {
   contents: String
   price: Int
   user: UserInfoResponse
+  viewCount: Int
+  isBuy: Boolean
+  deal: String
+  dealState: String
+  saleDate: String
+  transaction: String
   createdDate: String
   modifiedDate: String
 }
@@ -161,6 +201,12 @@ type PostMetaOutput {
   imgPath: String
   price: Int
   hashtag: [String]
+  isBuy: Boolean
+  viewCount: Int
+  deal: String
+  dealState: String
+  saleDate: String
+  transaction: String
   createdDate: String
   modifiedDate: String
 }
@@ -214,6 +260,12 @@ type Query {
   findRecentPosts: [RecentPostResponse]
   findPostListByUserId(userId: Int): [PostMetaOutput]
   findByDetailPost(postId: Int): PostDetailOutput
+
+  """
+  findAllPostsByUploaderId(uploader_id: Int):[Post]
+  findElAllPosts: [Post]
+  """
+  searchThings(input: HashtagInput!): [PostMetaOutput]
   findAllFile: [FileOutput]
   findAllFiles: [File]
   findFileById(id: Int): FileOutput
@@ -226,9 +278,11 @@ type Query {
   findAllHashtags: [Hashtag]
   findAllHashtag: [HashtagOutput]
   findByHashtagId(id: Int): HashtagOutput
+  autocomplete(hashtag: String!): [Autocomplete]
   findAllProduct: [ProductOutput]
   findAllProducts: [Product]
   findByProductId(id: Int): ProductOutput
+  findPostByUserId(userId: Int): [JjimOutput]
   findUserHistoryByUserId: [UserHistoryResponse]
 }
 

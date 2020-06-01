@@ -27,6 +27,7 @@ const Wrapper = styled.div`
 export const MarginTopCategoryHeaderContainer = styled.div`
     margin-top: 56px;
     padding: 16px;
+    height: 100px;
 `;
 
 const HashTagHeader = styled.div`

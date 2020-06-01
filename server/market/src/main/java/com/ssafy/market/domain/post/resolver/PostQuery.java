@@ -1,7 +1,6 @@
 package com.ssafy.market.domain.post.resolver;
 
 import com.coxautodev.graphql.tools.GraphQLQueryResolver;
-import com.ssafy.market.domain.detaildeal.dto.FileArr;
 import com.ssafy.market.domain.file.domain.File;
 import com.ssafy.market.domain.file.repository.FileRepository;
 import com.ssafy.market.domain.hashtag.domain.Hashtag;
@@ -15,18 +14,15 @@ import com.ssafy.market.domain.product.repository.ProductRepository;
 import com.ssafy.market.domain.user.domain.User;
 import com.ssafy.market.domain.user.dto.UserInfoResponse;
 import com.ssafy.market.domain.user.repository.UserRepository;
-import com.ssafy.market.global.apis.ImgurUploader;
-import com.ssafy.market.global.apis.UploadCallback;
 import com.ssafy.market.global.exception.SelectNotDataException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import sun.text.SupplementaryCharacterData;
 
-import javax.imageio.ImageIO;
-import java.awt.image.RenderedImage;
-import java.io.IOException;
-import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 import java.util.*;
+
 
 
 @Component
@@ -37,8 +33,6 @@ public class PostQuery implements GraphQLQueryResolver {
     private final ProductRepository productRepository;
     private final HashtagRepository hashtagRepository;
     private final FileRepository fileRepository;
-//    private final ImgurUploader uploader;
-//    private final UploadCallback callback;
 
     public List<PostOutput> findAllPost() {
         List<PostOutput> outputs = new ArrayList<>();
@@ -96,7 +90,6 @@ public class PostQuery implements GraphQLQueryResolver {
         for (int i = 0; i < posts.size(); i++) {
             Post post = posts.get(i);
             Product product = productRepository.findByPost(post);
-
             RecentPostResponse response = new RecentPostResponse();
             response.setPostId(post.getPostId());
             response.setUser(userRepository.findByUserId(post.getUserId()));
@@ -131,7 +124,7 @@ public class PostQuery implements GraphQLQueryResolver {
             }
             List<String> hash = new ArrayList<>(hs);
             metaOutputList.add(new PostMetaOutput(post.getPostId(),post.getTitle(),product.getCategory(),files.getImgPath(),product.getPrice()
-                    ,hash,post.getCreatedDate().toString(), post.getModifiedDate().toString()));
+                    ,hash,post.isBuy(),post.getViewCount(),post.getDeal(), post.getDealState(),post.getSaleDate().toString(),post.getTransaction(),post.getCreatedDate().toString(), post.getModifiedDate().toString()));
         }
         return metaOutputList;
     }
@@ -167,7 +160,7 @@ public class PostQuery implements GraphQLQueryResolver {
                     }
                     List<String> hash = new ArrayList<>(hs);
                     outputs.add(new PostMetaOutput(post.getPostId(), post.getTitle(), product.getCategory(), files.getImgPath(), product.getPrice()
-                            , hash, post.getCreatedDate().toString(), post.getModifiedDate().toString()));
+                            , hash,post.isBuy(),post.getViewCount(),post.getDeal(),post.getDealState(),post.getSaleDate().toString(),post.getTransaction(), post.getCreatedDate().toString(), post.getModifiedDate().toString()));
                     break;
                 }
             }
@@ -197,25 +190,39 @@ public class PostQuery implements GraphQLQueryResolver {
                 numOfPosts,writer.getImageUrl());
         PostDetailOutput detailOutput = new PostDetailOutput(
                 postId,post.getTitle(),product.getCategory(),file,hash,
-                post.getContents(),product.getPrice(),user, post.getCreatedDate().toString(),post.getModifiedDate().toString()
+                post.getContents(),product.getPrice(),user,post.getViewCount(),post.isBuy(),post.getDeal(),post.getDealState(),post.getSaleDate().toString(),post.getTransaction(), post.getCreatedDate().toString(),post.getModifiedDate().toString()
         );
         return detailOutput;
     }
 
-    public List<PostMetaOutput> matchThings(MatchInput input) {
-        List<PostMetaOutput> postMetaOutputs = new ArrayList<>();
+    public List<PostDetailOutput> matchThings(MatchInput input) {
+        List<PostDetailOutput> postDetailOutputs = new ArrayList<>();
         String category = input.getCategory();
-        int[] price =input.getPrice();
+        int[] price = input.getPrice();
         String[] hashtag = input.getHashtag();
-        System.out.println(category);
-        System.out.println(Arrays.toString(price));
-        System.out.println(Arrays.toString(hashtag));
+        String transaction = input.getTransaction();
+
         List<Long> postIdList = productRepository.findPostIdByCategory(category);
         List<Product> products = productRepository.findPostByPrice(price[0], price[1], postIdList);
         for (int i = 0; i < products.size(); i++) {
-            
+            if(products.get(i).getPost().getTransaction()!=null && !products.get(i).getPost().getTransaction().equals(transaction)) continue;
+
+            List<Hashtag> hashtagList = hashtagRepository.findByProduct(products.get(i));
+            HashSet<String> hs = new HashSet<>();
+            for (int j = 0; j<hashtagList.size(); j++){
+                hs.add(hashtagList.get(j).getHashtag());
+            }
+            List<String> hash = new ArrayList<>(hs);
+            int flag = 0;
+            for (int j = 0; j < hash.size(); j++) {
+                if(Arrays.toString(hashtag).contains(hash.get(j)))
+                    flag++;
+            }
+            if(flag == hashtag.length){
+                postDetailOutputs.add(findByDetailPost(products.get(i).getPost().getPostId()));
+            }
         }
-        return postMetaOutputs;
+        return postDetailOutputs;
     }
 
 }

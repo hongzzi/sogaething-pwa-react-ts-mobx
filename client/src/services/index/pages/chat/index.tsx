@@ -1,16 +1,38 @@
+import { toJS } from 'mobx';
+import { useObserver } from 'mobx-react';
 import * as React from 'react';
 import styled from '~/styled';
 import CategoryHeader from '../../components/CategoryHeader';
 import ChatList from '../../components/ChatList';
 import Nav from '../../components/Nav';
+import useStores from '../../helpers/useStores';
 import { MarginTopCategoryHeaderContainer } from '../matchresult/[id]';
 
+function useChatData() {
+  const { chatStore } = useStores()
+  return useObserver(() => ({ // useObserver를 사용해서 리턴하는 값의 업데이트를 계속 반영한다
+    chatRooms: chatStore.chatRooms,
+    loading: chatStore.loading,
+    getUserChatList: chatStore.getUserChatList,
+  }))
+}
+
 export default () => {
+  const {chatRooms, loading, getUserChatList} = useChatData();
+  const {authStore} = useStores();
+  React.useEffect(() => {
+    getUserChatList(authStore.getAuth()!.sub);
+  }, [])
+
+  const handleOnClick = () => {
+    console.log(chatRooms);
+  }
+
   return (
     <Wrapper>
       <CategoryHeader type={'chat'} />
-      <MarginTopCategoryHeaderContainer>
-        <ChatList />
+      <MarginTopCategoryHeaderContainer onClick={handleOnClick}>
+        <ChatList chatData={chatRooms} loading={loading} />
       </MarginTopCategoryHeaderContainer>
       <Nav />
     </Wrapper>
