@@ -1,8 +1,0 @@
-[core]
-	repositoryformatversion = 0
-	filemode = false
-	bare = true
-	symlinks = false
-	ignorecase = true
-[remote "origin"]
-	url = https://lab.ssafy.com/s02-final/s02p31a404.git
