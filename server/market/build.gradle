@@ -33,6 +33,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web-services'
     implementation 'org.springframework.boot:spring-boot-starter-websocket'
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+
     compileOnly 'org.projectlombok:lombok'
     compile 'org.jsoup:jsoup:1.7.3'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
@@ -46,6 +47,10 @@ dependencies {
     compile group: 'org.codehaus.groovy', name: 'groovy-json', version: '3.0.3'
     compile group: 'com.graphql-java', name: 'graphql-spring-boot-starter', version: '5.0.2'
     compile group: 'com.graphql-java', name: 'graphql-java-tools', version: '5.2.4'
+//    compile group: 'com.graphql-java-kickstart', name: 'graphql-java-tools', version: '6.0.2'
+//    compile group: 'com.graphql-java-kickstart', name: 'graphql-spring-boot-starter', version: '7.0.1'
+
+
     compile group: 'io.jsonwebtoken', name: 'jjwt', version: '0.9.1'
     // https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-data-redis
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-redis', version: '2.3.0.RELEASE'

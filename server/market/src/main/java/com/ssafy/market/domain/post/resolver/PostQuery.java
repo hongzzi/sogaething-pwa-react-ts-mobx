@@ -14,7 +14,6 @@ import com.ssafy.market.domain.product.repository.ProductRepository;
 import com.ssafy.market.domain.user.domain.User;
 import com.ssafy.market.domain.user.dto.UserInfoResponse;
 import com.ssafy.market.domain.user.repository.UserRepository;
-import com.ssafy.market.global.exception.SelectNotDataException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -37,9 +36,6 @@ public class PostQuery implements GraphQLQueryResolver {
     public List<PostOutput> findAllPost() {
         List<PostOutput> outputs = new ArrayList<>();
         List<Post> postList = postRepository.findAll();
-        if(postList.size()==0){
-            throw new SelectNotDataException("post 조회 결과 : ");
-        }
         for(int i = 0; i<postList.size();i++){
             Post post = postList.get(i);
             Product product = productRepository.findByPost(post);
@@ -66,9 +62,6 @@ public class PostQuery implements GraphQLQueryResolver {
     public PostOutput findPostByPostId(Long id) {
 
         Post post = postRepository.findByPostId(id);
-        if(post==null){
-            throw new SelectNotDataException("post 조회 결과 : ");
-        }
         Product product = productRepository.findByPost(post);
         List<Hashtag> hashtagList = hashtagRepository.findByProduct(product);
         HashSet<String> hs = new HashSet<>();

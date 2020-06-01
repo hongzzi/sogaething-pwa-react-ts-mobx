@@ -19,8 +19,6 @@ import com.ssafy.market.domain.user.repository.UserRepository;
 
 import com.ssafy.market.domain.user.security.TokenProvider;
 import com.ssafy.market.global.apis.ImgurApi;
-import com.ssafy.market.global.exception.DomainNotFoundException;
-import com.ssafy.market.global.exception.UserNotFoundException;
 import graphql.schema.DataFetchingEnvironment;
 import lombok.RequiredArgsConstructor;
 
@@ -58,43 +56,46 @@ public class PostMutation implements GraphQLMutationResolver {
 
         Long userId = tokenProvider.getUserIdFromHeader(env);
         User user = (userRepository.findByUserId(userId));
-        if(user==null){
-            throw new UserNotFoundException("User");
-        }
+
         CreateOutput output = null;
+        Boolean check = true;
         try {
             SimpleDateFormat formatter = new SimpleDateFormat ("yyyy-MM-dd hh:mm:ss");
             Calendar cal = Calendar.getInstance();
             String today = null;
             today = formatter.format(cal.getTime());
             Timestamp ts = Timestamp.valueOf(today);
-        Post post = postRepository.save(new Post(null, user, false, input.getTitle(), ts, input.getContents(), (long) 0, "판매", "진행중",input.getTransaction()));
-        Product product = productRepository.save(new Product(null,post,input.getPrice(),input.getCategory(),(long)0));
-
-        String[] hashtagarr = input.getHashtag();
-        List<String> hash = new ArrayList<>();
-        for (int i = 0; i< hashtagarr.length; i++){
-            Hashtag hashtag = hashtagRepository.save(new Hashtag(null,product,hashtagarr[i]));
-            hash.add(hashtagarr[i]);
-        }
-        String[] arr = input.getImgPaths();
-        for (int k = 0; k< arr.length; k++){
-//            InputStream inputStream = new ByteArrayInputStream(arr[k].getBytes());
-//            BufferedImage bufferedImage = ImageIO.read(inputStream);
-//            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-//            ImageIO.write(bufferedImage,"jpg",outputStream);
-//            byte[] imageByte = outputStream.toByteArray();
-//            byte[] byteData = IOUtils.toByteArray(bufferedImage);
-//            String base64 = Base64.getEncoder().encodeToString(imageByte);
-//            String imgur = api.uploadimgtest(base64);
-//            System.out.println(imgur);
-            String imgur = api.uploadimgtest(arr[k]);
-            File file = fileRepository.save(new File(null,product,imgur));
-        }
-        List<File> files = fileRepository.findByProduct(product);
-        output = new CreateOutput("SUCCESS",post.getPostId());
+            if(input.getTitle().equals("") || input.getContents().equals("") ||input.getTransaction().equals("") || input.getPrice()==null || input.getCategory().equals("")){
+                check = false;
+            }
+            if(input.getHashtag().length<0 || input.getImgPaths().length<0){
+                check =false;
+            }
+            if(check) {
+                Post post = postRepository.save(new Post(null, user, false, input.getTitle(), ts, input.getContents(), (long) 0, "판매", "진행중", input.getTransaction()));
+                Product product = productRepository.save(new Product(null, post, input.getPrice(), input.getCategory(), (long) 0));
+                String[] hashtagarr = input.getHashtag();
+                List<String> hash = new ArrayList<>();
+                if (hashtagarr.length > 0) {
+                    for (int i = 0; i < hashtagarr.length; i++) {
+                        Hashtag hashtag = hashtagRepository.save(new Hashtag(null, product, hashtagarr[i]));
+                        hash.add(hashtagarr[i]);
+                    }
+                }
+                String[] arr = input.getImgPaths();
+                if (arr.length > 0) {
+                    for (int k = 0; k < arr.length; k++) {
+                        String imgur = api.uploadimgtest(arr[k]);
+                        File file = fileRepository.save(new File(null, product, imgur));
+                    }
+                }
+                List<File> files = fileRepository.findByProduct(product);
+                output = new CreateOutput("SUCCESS", post.getPostId());
+            }else{
+                output = new CreateOutput("FAIL",null);
+            }
         } catch (Exception e) {
-            System.out.println(e);
+//            System.out.println(e);
              output = new CreateOutput("FAIL",null);
         }
         return  output;
@@ -104,9 +105,6 @@ public class PostMutation implements GraphQLMutationResolver {
     public PostOutput updatePost(UpdatePostInput input, DataFetchingEnvironment env ){
         Long userId = tokenProvider.getUserIdFromHeader(env);
         Post post = postRepository.findByPostId(input.getPostId());
-        if(post==null){
-            throw new DomainNotFoundException("postId" , input.getPostId());
-        }
         post.update(input.getTitle(),input.getContents(),input.getDeal(),input.getDealState());
         Product product = productRepository.findByPost(post);
         product.update(post,input.getProductname(),input.getPrice(),input.getCategory());
@@ -155,9 +153,6 @@ public class PostMutation implements GraphQLMutationResolver {
     @Transactional
     public int deletePost(Long postId){ // 해시태그 삭제 추가 해야함.
         Post post = postRepository.findByPostId(postId);
-        if(post==null){
-            throw new DomainNotFoundException("postId " , postId);
-        }
         Product product = productRepository.findByPost(post);
         List<File> fileList = fileRepository.findByProduct(product);
         productRepository.deleteByProductId(product.getProductId());

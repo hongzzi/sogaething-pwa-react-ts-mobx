@@ -15,8 +15,6 @@ import com.ssafy.market.domain.product.repository.ProductRepository;
 import com.ssafy.market.domain.user.domain.User;
 import com.ssafy.market.domain.user.dto.UserInfoResponse;
 import com.ssafy.market.domain.user.repository.UserRepository;
-import com.ssafy.market.global.exception.DomainNotFoundException;
-import com.ssafy.market.global.exception.SelectNotDataException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -45,9 +43,6 @@ public class DetailDealQuery implements GraphQLQueryResolver {
     public List<DetailOutput> findAllDetailDeal(){
         List<DetailOutput> outputList = new ArrayList<>();
         List<DetailDeal> dealList = detailDealRepository.findAll();
-        if(dealList.size()==0){
-            throw new SelectNotDataException("");
-        }
         for(int i =0; i<dealList.size();i++){
             DetailDeal detailDeal = dealList.get(i);
             Long id = detailDeal.getDealId();
@@ -83,9 +78,6 @@ public class DetailDealQuery implements GraphQLQueryResolver {
         Post post = postRepository.findByPostId(postId);
         DetailDeal deal = detailDealRepository.findByPost(post);
         System.out.println(deal.getDealId());
-        if(deal==null){
-            throw new SelectNotDataException("");
-        }
         Product product = productRepository.findByPost(post);
         List<Hashtag> hashtagList = hashtagRepository.findByProduct(product);
 
@@ -98,11 +90,6 @@ public class DetailDealQuery implements GraphQLQueryResolver {
         User user = userRepository.findByUserId(deal.getUser().getUserId());
         User writer = userRepository.findByUserId(post.getUser().getUserId());
         Long numOfPosts = postRepository.countPostByUserId(writer.getUserId());
-        if(post == null){
-            throw new DomainNotFoundException("post : ");
-        }else if(product==null){
-            throw new DomainNotFoundException("product : ");
-        }
         List<File> files = fileRepository.findByProduct(product);
         HashSet<String> fs = new HashSet<>();
         for (int j = 0; j<files.size(); j++){

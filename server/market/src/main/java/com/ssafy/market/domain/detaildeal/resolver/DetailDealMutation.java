@@ -4,7 +4,6 @@ import com.coxautodev.graphql.tools.GraphQLMutationResolver;
 import com.ssafy.market.domain.detaildeal.domain.DetailDeal;
 import com.ssafy.market.domain.detaildeal.dto.CreateDetailDealInput;
 import com.ssafy.market.domain.detaildeal.dto.DetailOutput;
-import com.ssafy.market.domain.detaildeal.dto.FileArr;
 import com.ssafy.market.domain.detaildeal.repository.DetailDealRepository;
 import com.ssafy.market.domain.file.domain.File;
 import com.ssafy.market.domain.file.repository.FileRepository;
@@ -15,12 +14,9 @@ import com.ssafy.market.domain.post.repository.PostRepository;
 import com.ssafy.market.domain.product.domain.Product;
 import com.ssafy.market.domain.product.repository.ProductRepository;
 import com.ssafy.market.domain.user.domain.User;
-import com.ssafy.market.domain.user.dto.UserInfoOutput;
 import com.ssafy.market.domain.user.dto.UserInfoResponse;
 import com.ssafy.market.domain.user.repository.UserRepository;
 import com.ssafy.market.domain.user.security.TokenProvider;
-import com.ssafy.market.global.exception.DomainNotFoundException;
-import com.ssafy.market.global.exception.SelectNotDataException;
 import graphql.schema.DataFetchingEnvironment;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -51,9 +47,6 @@ public class DetailDealMutation implements GraphQLMutationResolver {
         Long numOfPosts = postRepository.countPostByUserId(writer.getUserId());
         User user = userRepository.findByUserId(userId); // 현재 작성자
         Product pro = productRepository.findByPost(post);
-        if(post == null || user == null || pro == null){
-            throw new DomainNotFoundException("Post or user or hashtag, product not found");
-        }
         List<File> files = fileRepository.findByProduct(pro);
 
         DetailDeal detailDeal = detailDealRepository.save(new DetailDeal(null, post,user));
@@ -76,9 +69,6 @@ public class DetailDealMutation implements GraphQLMutationResolver {
     @Transactional
     public int deleteDetailDeal(Long id){
         DetailDeal detailDeal = detailDealRepository.findBydealId(id);
-        if(detailDeal==null){
-            throw new DomainNotFoundException("detailId " , id);
-        }
         return detailDealRepository.deleteByDealId(id);
     }
 }

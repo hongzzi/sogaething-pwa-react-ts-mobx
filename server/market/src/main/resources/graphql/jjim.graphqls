@@ -12,10 +12,10 @@ type JjimOutput{
     category: String
     imgPath: String
     price: Int
-#    hashtag :[String]
     createdDate: String
     modifiedDate: String
 }
+
 input CreateJjimInput{
     postId : Int!
 }
