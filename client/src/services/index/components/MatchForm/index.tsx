@@ -5,19 +5,34 @@ import CommonBtn from '../CommonBtn';
 
 import DropdownIcon from '../../assets/img/form-dropdown.png';
 import ExpandIcon from '../../assets/img/form-expand.png';
+import useStores from '../../helpers/useStores';
 
-export interface IPostFormProps {
+export interface IMatchFormProps {
 }
 
-export default (props: IPostFormProps) => {
-
+export default (props: IMatchFormProps) => {
+    const store = useStores();
+    const matchStore = store.matchStore;
     const category = ['디지털/가전', '가구/인테리어', '유아동/유아도서', '생활/가공식품', '스포츠/레저', '여성잡화', '여성의류', '남성패션/잡화', '게임/취미', '뷰티/미용', '반려동물용품', '도서/티켓/음반', '기타 중고물품'];
+
+    const handleChangeCategory = (event: any) => {
+        matchStore.setCategory(event.target.value);
+    }
+    const handleChangeMinPrice = (event: any) => {
+        matchStore.setMinPrice(event.target.value)
+    }
+    const handleChangeMaxPrice = (event: any) => {
+        matchStore.setMaxPrice(event.target.value)
+    }
+    const handleChangeTransaction = (event: any) => {
+        matchStore.setTransaction(event.target.value);
+    }
 
     return (
         <Wrapper>
             <FormContainer>
                 <InputContainer>
-                    <Select> <Option selected> 카테고리 </Option>
+                    <Select onChange={handleChangeCategory}> <Option selected> 카테고리 </Option>
                         {
                             category.map((category, index) => (
                                 <Option key={index}>{category}</Option>
@@ -26,10 +41,12 @@ export default (props: IPostFormProps) => {
                     </Select>
                 </InputContainer>
                 <InputContainer>
-                    <Input type={'number'} placeholder={'금액'} min={0} />
+                    <Input type={'number'} placeholder={'최소금액'} min={0} onChange={handleChangeMinPrice} />
+                    <Span>~</Span>
+                    <Input type={'number'} placeholder={'최대금액'} min={0} onChange={handleChangeMaxPrice} />
                 </InputContainer>
                 <InputContainer>
-                    <Select> <Option selected> 거래방법 </Option> <Option>직거래</Option> <Option>택배거래</Option></Select>
+                    <Select onChange={handleChangeTransaction}> <Option selected> 거래방법 </Option> <Option>직거래</Option> <Option>택배거래</Option></Select>
                 </InputContainer>
                 <InputContainer>
                     <HashTag>
@@ -71,13 +88,13 @@ const InputContainer = styled.div`
 `
 
 const Input = styled.input`
-    width: 98%;
+    width: 40%;
     height: 2rem;
     font-size: 15px;
     font-weight: bold;
     border: solid 0;
     color: #929292;
-    padding: 0.5rem;
+    margin: auto;
     ::placeholder {
         color: #929292;
         font-weight: bold;
@@ -85,6 +102,13 @@ const Input = styled.input`
     :focus {
         outline: none !important;
     }
+`
+
+const Span = styled.span`
+    padding: 1rem;
+    font-size: 15px;
+    color: #929292;
+    font-weight: bold;
 `
 
 const Select = styled.select`
@@ -111,6 +135,9 @@ const Option = styled.option`
 
 const HashTag = styled.div`
     background: url(${ExpandIcon}) no-repeat 95% 50%;
+    display: flex;
+    justify-content: start;
+    align-items: center;
     width: 100%;
     height: 2rem;
     font-size: 15px;

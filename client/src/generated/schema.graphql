@@ -1,5 +1,5 @@
 # source: http://3.34.131.20:8080/graphql
-# timestamp: Sun May 31 2020 20:03:05 GMT+0900 (대한민국 표준시)
+# timestamp: Mon Jun 01 2020 03:16:51 GMT+0900 (GMT+09:00)
 
 """This directive allows results to be deferred during execution"""
 directive @defer on FIELD
@@ -27,17 +27,19 @@ input CreateJjimInput {
   postId: Int!
 }
 
+type CreateOutput {
+  state: String
+  postId: Int
+}
+
 input CreatePostInput {
-  imgs: [String]
   title: String!
-  contents: String!
-  deal: String!
   category: String!
-  productname: String!
+  imgPaths: [String]
+  hashtag: [String]
+  contents: String!
   transaction: String!
   price: Int!
-  hashtag: String!
-  imgPaths: String!
 }
 
 input CreateProductInput {
@@ -137,9 +139,9 @@ type LoginUserOutput {
 }
 
 type Mutation {
-  updateViewcount(postId: Int!): Int!
+  updateviewcount(postId: Int!): Int!
   updateIsBuy(postId: Int!): Int!
-  createPost(input: CreatePostInput!): PostOutput
+  createPost(input: CreatePostInput!): CreateOutput
   updatePost(input: UpdatePostInput!): PostOutput
   deletePost(postId: Int!): Int!
   createFile(input: CreateFileInput!): FileOutput

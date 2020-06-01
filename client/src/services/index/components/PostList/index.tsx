@@ -24,6 +24,7 @@ export default function PostList(props: IPostListProps) {
 
 const Wrapper = styled.div`
     position: relative;
+    width: 100vw;
     grid-area: CC;
     padding-bottom: 4rem;
 `
