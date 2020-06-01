@@ -85,8 +85,14 @@ public class PostMutation implements GraphQLMutationResolver {
                 String[] arr = input.getImgPaths();
                 if (arr.length > 0) {
                     for (int k = 0; k < arr.length; k++) {
-                        String imgur = api.uploadimgtest(arr[k]);
-                        File file = fileRepository.save(new File(null, product, imgur));
+                        String[] temp = arr[k].split(",");
+                        String imgur = api.uploadimgtest(temp[1]);
+                        if(!imgur.equals("false")) {
+                            File file = fileRepository.save(new File(null, product, imgur));
+                        }
+                        else{
+                            break;
+                        }
                     }
                 }
                 List<File> files = fileRepository.findByProduct(product);

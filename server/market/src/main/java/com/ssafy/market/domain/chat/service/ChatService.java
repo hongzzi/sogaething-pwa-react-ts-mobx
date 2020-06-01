@@ -43,6 +43,7 @@ public class ChatService {
     @Transactional
     public Boolean sendMessage(ChatMessage chatMessage) {
         ChannelTopic channelTopic = getTopic(String.valueOf(chatMessage.getRoomId()));
+        // WebSocket 에 발행된 메시지를 redis로 발행한다.(publish)
         redisPublisher.publish(channelTopic, chatMessage);
         ChatMessage result = chatMongoRepository.insertChatMessage(chatMessage);
         if (result != null){

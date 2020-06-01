@@ -21,6 +21,9 @@ public class ImgurApi {
 
     public static String uploadimgtest(String base64) throws IOException {
         Connection.Response response = uploadSync(base64);
+        if(response.statusCode()==400){
+            return "false";
+        }
         JsonParser parser = new JsonParser();
         JsonElement element = parser.parse(response.body());
         JsonObject properties = element.getAsJsonObject().get("data").getAsJsonObject();
