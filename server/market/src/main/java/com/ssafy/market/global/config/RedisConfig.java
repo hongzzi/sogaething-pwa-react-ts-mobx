@@ -29,10 +29,13 @@ public class RedisConfig {
     private String redisHostName;
     @Value("${spring.redis.port}")
     private int redisPort;
+    @Value("${spring.profiles.active}")
+    private String active;
     @Bean
     public JedisConnectionFactory connectionFactory() {
         RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration(redisHostName, redisPort);
-        redisStandaloneConfiguration.setPassword(RedisPassword.of(redisPassword));
+        if (!active.equals("local"))
+            redisStandaloneConfiguration.setPassword(RedisPassword.of(redisPassword));
 
         return new JedisConnectionFactory(redisStandaloneConfiguration);
     }
