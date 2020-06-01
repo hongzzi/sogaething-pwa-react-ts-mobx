@@ -90,7 +90,7 @@ export default (props: IPostFormProps) => {
                 console.log(error);
             })
         } else {
-            alert('채워주셔야할게 많아요;');
+            alert('사진을 등록해주세요!');
         }
     }
 
@@ -123,6 +123,8 @@ export default (props: IPostFormProps) => {
                 </InputContainer>
                 <InputContainer>
                     <Input type={'number'} value={post.price} placeholder={'금액'} min={0} onChange={handleChangePrice} required />
+                    {/* <label htmlFor='currency-field'>Enter Amount</label> */}
+                    {/* <Input type='text' name='currency-field' id='currency-field' pattern='^\$\d{1,3}(,\d{3})*(\.\d+)?$' value='' data-type='currency' placeholder='$1,000,000.00' prefix={'₩'} /> */}
                 </InputContainer>
                 <InputContainer>
                     <Select value={post.transaction} onChange={handleChangeTransaction}> <Option value={''}> 거래방법 </Option> <Option value={'직거래'}>직거래</Option> <Option value={'택배거래'}>택배거래</Option></Select>
