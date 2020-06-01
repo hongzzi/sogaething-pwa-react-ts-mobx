@@ -7,10 +7,7 @@ import com.ssafy.market.domain.hashtag.domain.Hashtag;
 import com.ssafy.market.domain.hashtag.dto.HashtagInput;
 import com.ssafy.market.domain.hashtag.repository.HashtagRepository;
 import com.ssafy.market.domain.post.domain.Post;
-import com.ssafy.market.domain.post.dto.PostDetailOutput;
-import com.ssafy.market.domain.post.dto.PostMetaOutput;
-import com.ssafy.market.domain.post.dto.PostOutput;
-import com.ssafy.market.domain.post.dto.RecentPostResponse;
+import com.ssafy.market.domain.post.dto.*;
 import com.ssafy.market.domain.post.repository.PostRepository;
 import com.ssafy.market.domain.product.domain.Product;
 import com.ssafy.market.domain.product.repository.ProductRepository;
@@ -86,7 +83,7 @@ public class PostQuery implements GraphQLQueryResolver {
         return output;
     }
 
-    public List<RecentPostResponse> findRecentPosts(){
+    public List<RecentPostResponse> findRecentPosts() {
         List<RecentPostResponse> recentPostResponses = new ArrayList<>();
         List<Post> posts = postRepository.findTop6ByOrderByCreatedDateDesc();
 
@@ -199,5 +196,34 @@ public class PostQuery implements GraphQLQueryResolver {
     }
 
 
+    public List<PostDetailOutput> matchThings(MatchInput input) {
+        List<PostDetailOutput> postDetailOutputs = new ArrayList<>();
+        String category = input.getCategory();
+        int[] price = input.getPrice();
+        String[] hashtag = input.getHashtag();
+        String transaction = input.getTransaction();
+
+        List<Long> postIdList = productRepository.findPostIdByCategory(category);
+        List<Product> products = productRepository.findPostByPrice(price[0], price[1], postIdList);
+        for (int i = 0; i < products.size(); i++) {
+            if(products.get(i).getPost().getTransaction()!=null && !products.get(i).getPost().getTransaction().equals(transaction)) continue;
+
+            List<Hashtag> hashtagList = hashtagRepository.findByProduct(products.get(i));
+            HashSet<String> hs = new HashSet<>();
+            for (int j = 0; j<hashtagList.size(); j++){
+                hs.add(hashtagList.get(j).getHashtag());
+            }
+            List<String> hash = new ArrayList<>(hs);
+            int flag = 0;
+            for (int j = 0; j < hash.size(); j++) {
+                if(Arrays.toString(hashtag).contains(hash.get(j)))
+                    flag++;
+            }
+            if(flag == hashtag.length){
+                postDetailOutputs.add(findByDetailPost(products.get(i).getPost().getPostId()));
+            }
+        }
+        return postDetailOutputs;
+    }
 
 }
