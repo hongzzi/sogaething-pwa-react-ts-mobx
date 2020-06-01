@@ -1,6 +1,8 @@
 import * as React from 'react';
 import styled from '~/styled';
 
+import moment from 'moment';
+
 import Link from 'next/link';
 import { numberWithCommas } from '../../helpers/comma';
 import { IMetaData } from '../../pages/list/seller/[uid]/index';
@@ -16,6 +18,9 @@ export interface IPostRowCardProps {
 
 export default function PostRowCard(props: IPostRowCardProps) {
     const { data } = props;
+    const mnt = moment(data.modifiedDate);
+    const diffTime = moment.duration(mnt.diff(moment())).asHours();
+
     return (
         <Wrapper>
             <ProductImg src={data.imgPath} />
@@ -27,7 +32,7 @@ export default function PostRowCard(props: IPostRowCardProps) {
                         <SmallIcon src={heartIcon} />
                         <SpanStyle> 4 </SpanStyle>
                         <SmallIcon src={clockIcon} />
-                        <SpanStyle> 23 시간 전 </SpanStyle>
+                        <SpanStyle> {diffTime >= -168 ? mnt.fromNow() : mnt.format('YY년 M월 D일')} </SpanStyle>
                     </StatusBar>
                 </ProductInfo>
             </Link>
