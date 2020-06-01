@@ -3,6 +3,7 @@ import styled from '~/styled';
 
 import { useRouter } from 'next/router';
 import { useState } from 'react';
+import { useCreateMatchingMutation } from '~/generated/graphql';
 import CommonBtn from '../CommonBtn';
 
 import DropdownIcon from '../../assets/img/form-dropdown.png';
@@ -18,6 +19,7 @@ export default (props: IMatchFormProps) => {
     const router = useRouter();
     const store = useStores();
     const matchStore = store.matchStore;
+    const mutation = useCreateMatchingMutation();
     const [match, setMatch] = useState(store.matchStore.getMatch());
 
     const handleChangeCategory = (event: any) => {
@@ -37,11 +39,22 @@ export default (props: IMatchFormProps) => {
         setMatch(store.matchStore.getMatch());
     }
     const handleClickHashtag = () => {
-        router.push('/hashtag')
+        router.push('/form/match/hashtag')
     }
     const handleSubmit = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
         event.preventDefault();
-
+        mutation({
+            variables: {
+                input: {
+                    category: match.category,
+                    price: [match.minPrice, match.maxPrice],
+                    transaction: match.transaction,
+                    hashtag: match.hashtag,
+                },
+            },
+        }).then((res) => {
+            console.log(res);
+        })
     }
 
     return (

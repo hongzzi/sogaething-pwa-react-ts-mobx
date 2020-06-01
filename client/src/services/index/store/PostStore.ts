@@ -20,8 +20,10 @@ export interface IUser {
 }
 
 export interface IPostResponseDto {
-    state: string,
-    postId: number,
+    createPost: {
+        state: string,
+        postId: number,
+    },
 }
 
 export const initialPost = {
@@ -29,7 +31,7 @@ export const initialPost = {
 
 @autobind
 class PostStore {
-    @observable post: IPost | undefined;
+    post: IPost | undefined;
     @observable title: string = '';
     @observable category: string = '';
     @observable imgPaths: string[] = [];
@@ -52,12 +54,16 @@ class PostStore {
 
     @action
     getPost() {
+        this.post = {
+            title: this.title,
+            category: this.category,
+            imgPaths: toJS(this.imgPaths),
+            hashtag: toJS(this.hashtag),
+            contents: this.contents,
+            transaction: this.transaction,
+            price: this.price,
+        }
         return this.post;
-    }
-
-    @action
-    setPost(post: IPost) {
-        this.post = post;
     }
 
     @action
@@ -86,8 +92,8 @@ class PostStore {
     }
 
     @action
-    setImgPaths(imgPaths: string[]) {
-        this.imgPaths = imgPaths;
+    setImgPaths(imgPaths: string) {
+        this.imgPaths = this.imgPaths.concat(imgPaths);
     }
 
     @action
@@ -97,7 +103,7 @@ class PostStore {
 
     @action
     setHashtag(hashtag: string) {
-        this.hashtag = [...this.hashtag, hashtag];
+        this.hashtag = this.hashtag.concat(hashtag);
     }
 
     @action

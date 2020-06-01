@@ -4,11 +4,18 @@ import useStores from '../../helpers/useStores';
 import { useState } from 'react';
 
 export interface IHashTagSearchProps {
-
+    type: 'post' | 'match'
 }
 
 export default function HashTagSearch(props: IHashTagSearchProps) {
+    const { type } = props;
     const store = useStores();
+    let hStore: any;
+    if (type === 'match') {
+        hStore = store.matchStore;
+    } else if (type === 'post') {
+        hStore = store.postStore
+    }
     const [value, setValue] = useState('');
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -18,9 +25,8 @@ export default function HashTagSearch(props: IHashTagSearchProps) {
     const handleSubmit = (event: React.KeyboardEvent<HTMLInputElement>) => {
         if (event.keyCode === 13) {
             if (value !== '') {
-                store.matchStore.setHashtag(value);
+                hStore.setHashtag(value);
                 setValue('');
-                console.log(store.matchStore.hashtag);
             }
         }
     }
@@ -33,7 +39,7 @@ export default function HashTagSearch(props: IHashTagSearchProps) {
                     <Input value={value} type={'text'} onChange={handleChange} onKeyUp={handleSubmit} />
                 </SearchBar>
                 <HashTags>
-                    {store.matchStore.hashtag.map((hashtag, index) => (<Tag key={index}> {hashtag} </Tag>))}
+                    {hStore.hashtag.map((hashtag: React.ReactNode, index: string | number | undefined) => (<Tag key={index}> {hashtag} </Tag>))}
                 </HashTags>
             </Container>
         </Wrapper>

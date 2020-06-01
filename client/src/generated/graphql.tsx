@@ -636,7 +636,10 @@ export type ICreateMatchingMutationVariables = {
 
 export type ICreateMatchingMutation = { __typename?: "Mutation" } & {
   createMatching: Maybe<
-    { __typename?: "Matching" } & Pick<IMatching, "category" | "hashtag">
+    { __typename?: "Matching" } & Pick<
+      IMatching,
+      "category" | "hashtag" | "transaction"
+    >
   >;
 };
 
@@ -999,6 +1002,7 @@ export const CreateMatchingDocument = gql`
     createMatching(input: $input) {
       category
       hashtag
+      transaction
     }
   }
 `;
