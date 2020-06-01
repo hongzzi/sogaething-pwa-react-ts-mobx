@@ -14,6 +14,28 @@ query getPost($postId: Int) {
             numOfPosts
             imgurl
         }
+        viewCount
+        isBuy
+        deal
+        dealState
+        saleDate
+        transaction
+        createdDate
+        modifiedDate
+    }
+}
+
+mutation createPost($input: CreatePostInput!) {
+    createPost(input: $input) {
+        state
+        postId
+    }
+}
+
+mutation createHistory($input: Int!) {
+    createHistory(postId: $input) {
+        userId
+        postId
         createdDate
         modifiedDate
     }

@@ -8,6 +8,11 @@ export type Scalars = {
   Float: number;
 };
 
+export type IAutocomplete = {
+  hashtag?: Maybe<Scalars["String"]>;
+  count?: Maybe<Scalars["Int"]>;
+};
+
 export type ICreateDetailDealInput = {
   postId: Scalars["Int"];
 };
@@ -22,17 +27,23 @@ export type ICreateHashtagInput = {
   hashtag?: Maybe<Scalars["String"]>;
 };
 
+export type ICreateJjimInput = {
+  postId: Scalars["Int"];
+};
+
+export type ICreateOutput = {
+  state?: Maybe<Scalars["String"]>;
+  postId?: Maybe<Scalars["Int"]>;
+};
+
 export type ICreatePostInput = {
   title: Scalars["String"];
-  contents: Scalars["String"];
-  deal: Scalars["String"];
-  /** dealLocation:String! */
   category: Scalars["String"];
-  productname: Scalars["String"];
-  /** productState : String! */
+  imgPaths?: Maybe<Array<Maybe<Scalars["String"]>>>;
+  hashtag?: Maybe<Array<Maybe<Scalars["String"]>>>;
+  contents: Scalars["String"];
+  transaction: Scalars["String"];
   price: Scalars["Int"];
-  hashtag: Scalars["String"];
-  imgPaths: Scalars["String"];
 };
 
 export type ICreateProductInput = {
@@ -84,6 +95,10 @@ export type IHashtag = {
   hashtag?: Maybe<Scalars["String"]>;
 };
 
+export type IHashtagInput = {
+  hashtag?: Maybe<Array<Maybe<Scalars["String"]>>>;
+};
+
 export type IHashtagOutput = {
   hashtagId?: Maybe<Scalars["ID"]>;
   productId?: Maybe<Scalars["Int"]>;
@@ -93,6 +108,26 @@ export type IHashtagOutput = {
 export type IHistoryOutput = {
   userId?: Maybe<Scalars["Int"]>;
   postId?: Maybe<Scalars["Int"]>;
+  createdDate?: Maybe<Scalars["String"]>;
+  modifiedDate?: Maybe<Scalars["String"]>;
+};
+
+export type IJjim = {
+  jjimId?: Maybe<Scalars["ID"]>;
+  user?: Maybe<IUser>;
+  post?: Maybe<IPost>;
+  createdDate?: Maybe<Scalars["String"]>;
+  modifiedDate?: Maybe<Scalars["String"]>;
+};
+
+export type IJjimOutput = {
+  jjimId?: Maybe<Scalars["Int"]>;
+  postId?: Maybe<Scalars["Int"]>;
+  title?: Maybe<Scalars["String"]>;
+  category?: Maybe<Scalars["String"]>;
+  imgPath?: Maybe<Scalars["String"]>;
+  price?: Maybe<Scalars["Int"]>;
+  /** hashtag :[String] */
   createdDate?: Maybe<Scalars["String"]>;
   modifiedDate?: Maybe<Scalars["String"]>;
 };
@@ -107,9 +142,9 @@ export type ILoginUserOutput = {
 };
 
 export type IMutation = {
-  updateViewcount: Scalars["Int"];
+  updateviewcount: Scalars["Int"];
   updateIsBuy: Scalars["Int"];
-  createPost?: Maybe<IPostOutput>;
+  createPost?: Maybe<ICreateOutput>;
   updatePost?: Maybe<IPostOutput>;
   deletePost: Scalars["Int"];
   createFile?: Maybe<IFileOutput>;
@@ -126,10 +161,12 @@ export type IMutation = {
   updateProduct?: Maybe<IProductOutput>;
   createProduct?: Maybe<IProductOutput>;
   deleteProduct?: Maybe<Scalars["Int"]>;
+  createJjim?: Maybe<IJjim>;
+  deleteJjim?: Maybe<Scalars["Int"]>;
   createHistory?: Maybe<IHistoryOutput>;
 };
 
-export type IMutationUpdateViewcountArgs = {
+export type IMutationUpdateviewcountArgs = {
   postId: Scalars["Int"];
 };
 
@@ -205,6 +242,14 @@ export type IMutationDeleteProductArgs = {
   id: Scalars["Int"];
 };
 
+export type IMutationCreateJjimArgs = {
+  input: ICreateJjimInput;
+};
+
+export type IMutationDeleteJjimArgs = {
+  jjimId?: Maybe<Scalars["Int"]>;
+};
+
 export type IMutationCreateHistoryArgs = {
   postId: Scalars["Int"];
 };
@@ -232,6 +277,12 @@ export type IPostDetailOutput = {
   contents?: Maybe<Scalars["String"]>;
   price?: Maybe<Scalars["Int"]>;
   user?: Maybe<IUserInfoResponse>;
+  viewCount?: Maybe<Scalars["Int"]>;
+  isBuy?: Maybe<Scalars["Boolean"]>;
+  deal?: Maybe<Scalars["String"]>;
+  dealState?: Maybe<Scalars["String"]>;
+  saleDate?: Maybe<Scalars["String"]>;
+  transaction?: Maybe<Scalars["String"]>;
   createdDate?: Maybe<Scalars["String"]>;
   modifiedDate?: Maybe<Scalars["String"]>;
 };
@@ -243,6 +294,12 @@ export type IPostMetaOutput = {
   imgPath?: Maybe<Scalars["String"]>;
   price?: Maybe<Scalars["Int"]>;
   hashtag?: Maybe<Array<Maybe<Scalars["String"]>>>;
+  isBuy?: Maybe<Scalars["Boolean"]>;
+  viewCount?: Maybe<Scalars["Int"]>;
+  deal?: Maybe<Scalars["String"]>;
+  dealState?: Maybe<Scalars["String"]>;
+  saleDate?: Maybe<Scalars["String"]>;
+  transaction?: Maybe<Scalars["String"]>;
   createdDate?: Maybe<Scalars["String"]>;
   modifiedDate?: Maybe<Scalars["String"]>;
 };
@@ -291,6 +348,10 @@ export type IQuery = {
   findRecentPosts?: Maybe<Array<Maybe<IRecentPostResponse>>>;
   findPostListByUserId?: Maybe<Array<Maybe<IPostMetaOutput>>>;
   findByDetailPost?: Maybe<IPostDetailOutput>;
+  /** findAllPostsByUploaderId(uploader_id: Int):[Post]
+   * findElAllPosts: [Post]
+   */
+  searchThings?: Maybe<Array<Maybe<IPostMetaOutput>>>;
   findAllFile?: Maybe<Array<Maybe<IFileOutput>>>;
   findAllFiles?: Maybe<Array<Maybe<IFile>>>;
   findFileById?: Maybe<IFileOutput>;
@@ -303,9 +364,11 @@ export type IQuery = {
   findAllHashtags?: Maybe<Array<Maybe<IHashtag>>>;
   findAllHashtag?: Maybe<Array<Maybe<IHashtagOutput>>>;
   findByHashtagId?: Maybe<IHashtagOutput>;
+  autocomplete?: Maybe<Array<Maybe<IAutocomplete>>>;
   findAllProduct?: Maybe<Array<Maybe<IProductOutput>>>;
   findAllProducts?: Maybe<Array<Maybe<IProduct>>>;
   findByProductId?: Maybe<IProductOutput>;
+  findPostByUserId?: Maybe<Array<Maybe<IJjimOutput>>>;
   findUserHistoryByUserId?: Maybe<Array<Maybe<IUserHistoryResponse>>>;
 };
 
@@ -321,6 +384,10 @@ export type IQueryFindByDetailPostArgs = {
   postId?: Maybe<Scalars["Int"]>;
 };
 
+export type IQuerySearchThingsArgs = {
+  input: IHashtagInput;
+};
+
 export type IQueryFindFileByIdArgs = {
   id?: Maybe<Scalars["Int"]>;
 };
@@ -333,8 +400,16 @@ export type IQueryFindByHashtagIdArgs = {
   id?: Maybe<Scalars["Int"]>;
 };
 
+export type IQueryAutocompleteArgs = {
+  hashtag: Scalars["String"];
+};
+
 export type IQueryFindByProductIdArgs = {
   id?: Maybe<Scalars["Int"]>;
+};
+
+export type IQueryFindPostByUserIdArgs = {
+  userId?: Maybe<Scalars["Int"]>;
 };
 
 export type IRecentPostResponse = {
@@ -542,6 +617,12 @@ export type IGetMyPostsQuery = { __typename?: "Query" } & {
           | "imgPath"
           | "price"
           | "hashtag"
+          | "isBuy"
+          | "viewCount"
+          | "deal"
+          | "dealState"
+          | "saleDate"
+          | "transaction"
           | "createdDate"
           | "modifiedDate"
         >
@@ -565,6 +646,12 @@ export type IGetPostQuery = { __typename?: "Query" } & {
       | "hashtag"
       | "contents"
       | "price"
+      | "viewCount"
+      | "isBuy"
+      | "deal"
+      | "dealState"
+      | "saleDate"
+      | "transaction"
       | "createdDate"
       | "modifiedDate"
     > & {
@@ -575,6 +662,29 @@ export type IGetPostQuery = { __typename?: "Query" } & {
           >
         >;
       }
+  >;
+};
+
+export type ICreatePostMutationVariables = {
+  input: ICreatePostInput;
+};
+
+export type ICreatePostMutation = { __typename?: "Mutation" } & {
+  createPost: Maybe<
+    { __typename?: "CreateOutput" } & Pick<ICreateOutput, "state" | "postId">
+  >;
+};
+
+export type ICreateHistoryMutationVariables = {
+  input: Scalars["Int"];
+};
+
+export type ICreateHistoryMutation = { __typename?: "Mutation" } & {
+  createHistory: Maybe<
+    { __typename?: "HistoryOutput" } & Pick<
+      IHistoryOutput,
+      "userId" | "postId" | "createdDate" | "modifiedDate"
+    >
   >;
 };
 
@@ -854,6 +964,12 @@ export const GetMyPostsDocument = gql`
       imgPath
       price
       hashtag
+      isBuy
+      viewCount
+      deal
+      dealState
+      saleDate
+      transaction
       createdDate
       modifiedDate
     }
@@ -923,6 +1039,12 @@ export const GetPostDocument = gql`
         numOfPosts
         imgurl
       }
+      viewCount
+      isBuy
+      deal
+      dealState
+      saleDate
+      transaction
       createdDate
       modifiedDate
     }
@@ -974,4 +1096,139 @@ export function useGetPostQuery(
     GetPostDocument,
     baseOptions
   );
+}
+export const CreatePostDocument = gql`
+  mutation createPost($input: CreatePostInput!) {
+    createPost(input: $input) {
+      state
+      postId
+    }
+  }
+`;
+export type ICreatePostMutationFn = ReactApollo.MutationFn<
+  ICreatePostMutation,
+  ICreatePostMutationVariables
+>;
+
+export const CreatePostComponent = (
+  props: Omit<
+    Omit<
+      ReactApollo.MutationProps<
+        ICreatePostMutation,
+        ICreatePostMutationVariables
+      >,
+      "mutation"
+    >,
+    "variables"
+  > & { variables?: ICreatePostMutationVariables }
+) => (
+  <ReactApollo.Mutation<ICreatePostMutation, ICreatePostMutationVariables>
+    mutation={CreatePostDocument}
+    {...props}
+  />
+);
+
+export type ICreatePostProps<TChildProps = {}> = Partial<
+  ReactApollo.MutateProps<ICreatePostMutation, ICreatePostMutationVariables>
+> &
+  TChildProps;
+export function withCreatePost<TProps, TChildProps = {}>(
+  operationOptions?: ReactApollo.OperationOption<
+    TProps,
+    ICreatePostMutation,
+    ICreatePostMutationVariables,
+    ICreatePostProps<TChildProps>
+  >
+) {
+  return ReactApollo.withMutation<
+    TProps,
+    ICreatePostMutation,
+    ICreatePostMutationVariables,
+    ICreatePostProps<TChildProps>
+  >(CreatePostDocument, {
+    alias: "withCreatePost",
+    ...operationOptions
+  });
+}
+
+export function useCreatePostMutation(
+  baseOptions?: ReactApolloHooks.MutationHookOptions<
+    ICreatePostMutation,
+    ICreatePostMutationVariables
+  >
+) {
+  return ReactApolloHooks.useMutation<
+    ICreatePostMutation,
+    ICreatePostMutationVariables
+  >(CreatePostDocument, baseOptions);
+}
+export const CreateHistoryDocument = gql`
+  mutation createHistory($input: Int!) {
+    createHistory(postId: $input) {
+      userId
+      postId
+      createdDate
+      modifiedDate
+    }
+  }
+`;
+export type ICreateHistoryMutationFn = ReactApollo.MutationFn<
+  ICreateHistoryMutation,
+  ICreateHistoryMutationVariables
+>;
+
+export const CreateHistoryComponent = (
+  props: Omit<
+    Omit<
+      ReactApollo.MutationProps<
+        ICreateHistoryMutation,
+        ICreateHistoryMutationVariables
+      >,
+      "mutation"
+    >,
+    "variables"
+  > & { variables?: ICreateHistoryMutationVariables }
+) => (
+  <ReactApollo.Mutation<ICreateHistoryMutation, ICreateHistoryMutationVariables>
+    mutation={CreateHistoryDocument}
+    {...props}
+  />
+);
+
+export type ICreateHistoryProps<TChildProps = {}> = Partial<
+  ReactApollo.MutateProps<
+    ICreateHistoryMutation,
+    ICreateHistoryMutationVariables
+  >
+> &
+  TChildProps;
+export function withCreateHistory<TProps, TChildProps = {}>(
+  operationOptions?: ReactApollo.OperationOption<
+    TProps,
+    ICreateHistoryMutation,
+    ICreateHistoryMutationVariables,
+    ICreateHistoryProps<TChildProps>
+  >
+) {
+  return ReactApollo.withMutation<
+    TProps,
+    ICreateHistoryMutation,
+    ICreateHistoryMutationVariables,
+    ICreateHistoryProps<TChildProps>
+  >(CreateHistoryDocument, {
+    alias: "withCreateHistory",
+    ...operationOptions
+  });
+}
+
+export function useCreateHistoryMutation(
+  baseOptions?: ReactApolloHooks.MutationHookOptions<
+    ICreateHistoryMutation,
+    ICreateHistoryMutationVariables
+  >
+) {
+  return ReactApolloHooks.useMutation<
+    ICreateHistoryMutation,
+    ICreateHistoryMutationVariables
+  >(CreateHistoryDocument, baseOptions);
 }

@@ -4,8 +4,8 @@ import styled from '~/styled';
 import Carousel from 'nuka-carousel';
 import RectangleImageView from '../RectangleImageView';
 
-import PrevIcon from '../../assets/img/arrow-ios-left.png?url';
-import RightIcon from '../../assets/img/arrow-ios-right.png?url';
+import NextIcon from '../../assets/img/detail-imgnext.png?url';
+import PrevIcon from '../../assets/img/detail-imgprev.png?url';
 
 export interface IImageSliderProps {
     images?: string[] | null,
@@ -25,7 +25,7 @@ export default class ImageSlider extends React.Component<IImageSliderProps> {
                     )}
                     // tslint:disable-next-line:jsx-no-lambda
                     renderCenterRightControls={({ nextSlide }) => (
-                        <Btn onClick={nextSlide}><BtnIcon src={RightIcon} /></Btn>
+                        <Btn onClick={nextSlide}><BtnIcon src={NextIcon} /></Btn>
                     )}
                 >
                     {images && images.map((url: string, index: number) => (

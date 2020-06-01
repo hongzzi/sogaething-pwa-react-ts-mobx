@@ -25,15 +25,14 @@ public class Product extends BaseTimeEntity {
     private String name;
     private Long price;
     private String category;
-//    private String state;
+    private Long state;
 
-    public Product(Long productId, Post post, String name, Long price, String category){
+    public Product(Long productId, Post post, Long price, String category,Long state){
         this.productId = productId;
         this.post = post;
-        this.name = name;
         this.price = price;
         this.category = category;
-//        this.state = state;
+        this.state = state;
     }
     public void update(Post post, String name, Long price, String category){
         this.post = post;

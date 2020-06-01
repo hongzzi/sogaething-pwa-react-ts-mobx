@@ -27,12 +27,6 @@ export default (props: IPostListSellerProps) => {
     const { uid } = router.query
     const { data, loading, error } = useGetMyPostsQuery({ variables: { userId: uid } });
 
-    useEffect(() => {
-        if (data) {
-            console.log(data.findPostListByUserId);
-        }
-    }, [data])
-
     return (
         <Wrapper>
             <Categoryheader type={'normal'} text={'판매내역'} />

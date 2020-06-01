@@ -7,17 +7,13 @@ import com.ssafy.market.domain.hashtag.domain.Hashtag;
 import com.ssafy.market.domain.hashtag.dto.HashtagInput;
 import com.ssafy.market.domain.hashtag.repository.HashtagRepository;
 import com.ssafy.market.domain.post.domain.Post;
-import com.ssafy.market.domain.post.dto.PostDetailOutput;
-import com.ssafy.market.domain.post.dto.PostMetaOutput;
-import com.ssafy.market.domain.post.dto.PostOutput;
-import com.ssafy.market.domain.post.dto.RecentPostResponse;
+import com.ssafy.market.domain.post.dto.*;
 import com.ssafy.market.domain.post.repository.PostRepository;
 import com.ssafy.market.domain.product.domain.Product;
 import com.ssafy.market.domain.product.repository.ProductRepository;
 import com.ssafy.market.domain.user.domain.User;
 import com.ssafy.market.domain.user.dto.UserInfoResponse;
 import com.ssafy.market.domain.user.repository.UserRepository;
-import com.ssafy.market.global.exception.SelectNotDataException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -25,6 +21,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.*;
+
 
 
 @Component
@@ -35,15 +32,10 @@ public class PostQuery implements GraphQLQueryResolver {
     private final ProductRepository productRepository;
     private final HashtagRepository hashtagRepository;
     private final FileRepository fileRepository;
-//    private final ImgurUploader uploader;
-//    private final UploadCallback callback;
 
     public List<PostOutput> findAllPost() {
         List<PostOutput> outputs = new ArrayList<>();
         List<Post> postList = postRepository.findAll();
-        if(postList.size()==0){
-            throw new SelectNotDataException("post 조회 결과 : ");
-        }
         for(int i = 0; i<postList.size();i++){
             Post post = postList.get(i);
             Product product = productRepository.findByPost(post);
@@ -70,9 +62,6 @@ public class PostQuery implements GraphQLQueryResolver {
     public PostOutput findPostByPostId(Long id) {
 
         Post post = postRepository.findByPostId(id);
-        if(post==null){
-            throw new SelectNotDataException("post 조회 결과 : ");
-        }
         Product product = productRepository.findByPost(post);
         List<Hashtag> hashtagList = hashtagRepository.findByProduct(product);
         HashSet<String> hs = new HashSet<>();
@@ -87,14 +76,13 @@ public class PostQuery implements GraphQLQueryResolver {
         return output;
     }
 
-    public List<RecentPostResponse> findRecentPosts(){
+    public List<RecentPostResponse> findRecentPosts() {
         List<RecentPostResponse> recentPostResponses = new ArrayList<>();
         List<Post> posts = postRepository.findTop6ByOrderByCreatedDateDesc();
 
         for (int i = 0; i < posts.size(); i++) {
             Post post = posts.get(i);
             Product product = productRepository.findByPost(post);
-
             RecentPostResponse response = new RecentPostResponse();
             response.setPostId(post.getPostId());
             response.setUser(userRepository.findByUserId(post.getUserId()));
@@ -129,7 +117,7 @@ public class PostQuery implements GraphQLQueryResolver {
             }
             List<String> hash = new ArrayList<>(hs);
             metaOutputList.add(new PostMetaOutput(post.getPostId(),post.getTitle(),product.getCategory(),files.getImgPath(),product.getPrice()
-                    ,hash,post.getCreatedDate().toString(), post.getModifiedDate().toString()));
+                    ,hash,post.isBuy(),post.getViewCount(),post.getDeal(), post.getDealState(),post.getSaleDate().toString(),post.getTransaction(),post.getCreatedDate().toString(), post.getModifiedDate().toString()));
         }
         return metaOutputList;
     }
@@ -165,7 +153,7 @@ public class PostQuery implements GraphQLQueryResolver {
                     }
                     List<String> hash = new ArrayList<>(hs);
                     outputs.add(new PostMetaOutput(post.getPostId(), post.getTitle(), product.getCategory(), files.getImgPath(), product.getPrice()
-                            , hash, post.getCreatedDate().toString(), post.getModifiedDate().toString()));
+                            , hash,post.isBuy(),post.getViewCount(),post.getDeal(),post.getDealState(),post.getSaleDate().toString(),post.getTransaction(), post.getCreatedDate().toString(), post.getModifiedDate().toString()));
                     break;
                 }
             }
@@ -195,8 +183,40 @@ public class PostQuery implements GraphQLQueryResolver {
                 numOfPosts,writer.getImageUrl());
         PostDetailOutput detailOutput = new PostDetailOutput(
                 postId,post.getTitle(),product.getCategory(),file,hash,
-                post.getContents(),product.getPrice(),user, post.getCreatedDate().toString(),post.getModifiedDate().toString()
+                post.getContents(),product.getPrice(),user,post.getViewCount(),post.isBuy(),post.getDeal(),post.getDealState(),post.getSaleDate().toString(),post.getTransaction(), post.getCreatedDate().toString(),post.getModifiedDate().toString()
         );
         return detailOutput;
     }
+
+
+    public List<PostDetailOutput> matchThings(MatchInput input) {
+        List<PostDetailOutput> postDetailOutputs = new ArrayList<>();
+        String category = input.getCategory();
+        int[] price = input.getPrice();
+        String[] hashtag = input.getHashtag();
+        String transaction = input.getTransaction();
+
+        List<Long> postIdList = productRepository.findPostIdByCategory(category);
+        List<Product> products = productRepository.findPostByPrice(price[0], price[1], postIdList);
+        for (int i = 0; i < products.size(); i++) {
+            if(products.get(i).getPost().getTransaction()!=null && !products.get(i).getPost().getTransaction().equals(transaction)) continue;
+
+            List<Hashtag> hashtagList = hashtagRepository.findByProduct(products.get(i));
+            HashSet<String> hs = new HashSet<>();
+            for (int j = 0; j<hashtagList.size(); j++){
+                hs.add(hashtagList.get(j).getHashtag());
+            }
+            List<String> hash = new ArrayList<>(hs);
+            int flag = 0;
+            for (int j = 0; j < hash.size(); j++) {
+                if(Arrays.toString(hashtag).contains(hash.get(j)))
+                    flag++;
+            }
+            if(flag == hashtag.length){
+                postDetailOutputs.add(findByDetailPost(products.get(i).getPost().getPostId()));
+            }
+        }
+        return postDetailOutputs;
+    }
+
 }

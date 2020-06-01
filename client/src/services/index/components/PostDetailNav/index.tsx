@@ -5,9 +5,8 @@ import { numberWithCommas } from '../../helpers/comma';
 import CommonBtn from '../CommonBtn';
 import CustomIcon from '../CustomIcon';
 
-import HeartIcon from '../../assets/img/heart-fill1.png?url'
+import HeartIcon from '../../assets/img/detail-like.png'
 import useStores from '../../helpers/useStores';
-import { IPost } from '../../pages/post/[pid]/index';
 
 export interface IPostDetailNavProps {
   loading: boolean,

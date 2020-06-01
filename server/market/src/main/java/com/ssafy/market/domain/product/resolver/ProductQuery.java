@@ -1,12 +1,10 @@
 package com.ssafy.market.domain.product.resolver;
 
 import com.coxautodev.graphql.tools.GraphQLQueryResolver;
-import com.ssafy.market.domain.post.domain.Post;
 import com.ssafy.market.domain.post.repository.PostRepository;
 import com.ssafy.market.domain.product.domain.Product;
 import com.ssafy.market.domain.product.dto.ProductOutput;
 import com.ssafy.market.domain.product.repository.ProductRepository;
-import com.ssafy.market.global.exception.SelectNotDataException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -25,9 +23,7 @@ public class ProductQuery implements GraphQLQueryResolver {
     {
         List<ProductOutput> outputs = new ArrayList<>();
         List<Product> productList = productRepository.findAll();
-        if(productList.size()==0){
-            throw new SelectNotDataException("product 조회 결과 : ");
-        }
+
         System.out.println(productList.size());
         for(int i = 0; i< productList.size(); i++){
             outputs.add(new ProductOutput(productList.get(i).getProductId(),
@@ -46,9 +42,6 @@ public class ProductQuery implements GraphQLQueryResolver {
     @Transactional
     public ProductOutput findByProductId(Long id) {
         Product product = productRepository.findByProductId(id);
-        if(product==null){
-            throw new SelectNotDataException("product 조회 결과 : ");
-        }
         ProductOutput output = new ProductOutput(id, product.getPost().getPostId(), product.getName(),product.getPrice(), product.getCategory());
       return output;
     }
