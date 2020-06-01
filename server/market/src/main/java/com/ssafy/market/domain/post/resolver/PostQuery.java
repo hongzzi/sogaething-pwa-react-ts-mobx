@@ -197,4 +197,7 @@ public class PostQuery implements GraphQLQueryResolver {
         );
         return detailOutput;
     }
+
+
+
 }

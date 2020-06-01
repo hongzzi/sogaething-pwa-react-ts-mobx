@@ -1,7 +1,6 @@
 package com.ssafy.market.domain.post.resolver;
 
 import com.coxautodev.graphql.tools.GraphQLMutationResolver;
-import com.ssafy.market.domain.chat.util.StringResult;
 import com.ssafy.market.domain.detaildeal.dto.FileArr;
 import com.ssafy.market.domain.file.domain.File;
 import com.ssafy.market.domain.file.repository.FileRepository;
@@ -24,15 +23,22 @@ import com.ssafy.market.global.exception.DomainNotFoundException;
 import com.ssafy.market.global.exception.UserNotFoundException;
 import graphql.schema.DataFetchingEnvironment;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+
 import org.springframework.stereotype.Component;
 
+import javax.imageio.ImageIO;
 import javax.transaction.Transactional;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Base64;
+import java.util.Calendar;
 import java.util.List;
-import java.util.Map;
 
 @Component
 @RequiredArgsConstructor
@@ -48,7 +54,7 @@ public class PostMutation implements GraphQLMutationResolver {
 
 
     @Transactional
-    public CreateOutput createPost(CreatePostInput input, DataFetchingEnvironment env ) throws IOException {
+    public CreateOutput createPost(CreatePostInput input, DataFetchingEnvironment env ) throws Exception {
 
         Long userId = tokenProvider.getUserIdFromHeader(env);
         User user = (userRepository.findByUserId(userId));
@@ -57,7 +63,12 @@ public class PostMutation implements GraphQLMutationResolver {
         }
         CreateOutput output = null;
         try {
-        Post post = postRepository.save(new Post(null, user, false, input.getTitle(), null, input.getContents(), (long) 0, "판매", "진행중",input.getTransaction()));
+            SimpleDateFormat formatter = new SimpleDateFormat ("yyyy-MM-dd hh:mm:ss");
+            Calendar cal = Calendar.getInstance();
+            String today = null;
+            today = formatter.format(cal.getTime());
+            Timestamp ts = Timestamp.valueOf(today);
+        Post post = postRepository.save(new Post(null, user, false, input.getTitle(), ts, input.getContents(), (long) 0, "판매", "진행중",input.getTransaction()));
         Product product = productRepository.save(new Product(null,post,input.getPrice(),input.getCategory(),(long)0));
 
         String[] hashtagarr = input.getHashtag();
@@ -68,12 +79,22 @@ public class PostMutation implements GraphQLMutationResolver {
         }
         String[] arr = input.getImgPaths();
         for (int k = 0; k< arr.length; k++){
+//            InputStream inputStream = new ByteArrayInputStream(arr[k].getBytes());
+//            BufferedImage bufferedImage = ImageIO.read(inputStream);
+//            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+//            ImageIO.write(bufferedImage,"jpg",outputStream);
+//            byte[] imageByte = outputStream.toByteArray();
+//            byte[] byteData = IOUtils.toByteArray(bufferedImage);
+//            String base64 = Base64.getEncoder().encodeToString(imageByte);
+//            String imgur = api.uploadimgtest(base64);
+//            System.out.println(imgur);
             String imgur = api.uploadimgtest(arr[k]);
             File file = fileRepository.save(new File(null,product,imgur));
         }
         List<File> files = fileRepository.findByProduct(product);
-        output = new CreateOutput("SUCEESS",post.getPostId());
+        output = new CreateOutput("SUCCESS",post.getPostId());
         } catch (Exception e) {
+            System.out.println(e);
              output = new CreateOutput("FAIL",null);
         }
         return  output;
@@ -113,11 +134,15 @@ public class PostMutation implements GraphQLMutationResolver {
         );
         return output;
     }
-    public Long updateviewcount(Long postId){
+
+    @Transactional
+    public Long updateView(Long postId){
         Post post = postRepository.findByPostId(postId);
-        post.update(post.getViewCount()+1);
+        System.out.println(post.getPostId());
+        post.updateViewCount();
         return post.getViewCount();
     }
+    @Transactional
     public Boolean updateIsBuy(Long postsId){
         Post post = postRepository.findByPostId(postsId);
         if(post.isBuy()== true){
