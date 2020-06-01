@@ -7,8 +7,17 @@ export interface IHashTagSearchProps {
 
 export default function HashTagSearch(props: IHashTagSearchProps) {
     return(
-        <>
-            해시태그서치
-        </>
+        <Wrapper>
+            <HashTagSearch></HashTagSearch>
+        </Wrapper>
     )
 }
+
+const Wrapper = styled.div`
+    display: flex;
+`
+
+const HashtagSearchBar = styled.div`
+    width: 100%;
+    height: 3rem;
+`

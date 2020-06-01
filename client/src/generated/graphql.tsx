@@ -31,17 +31,19 @@ export type ICreateJjimInput = {
   postId: Scalars["Int"];
 };
 
+export type ICreateOutput = {
+  state?: Maybe<Scalars["String"]>;
+  postId?: Maybe<Scalars["Int"]>;
+};
+
 export type ICreatePostInput = {
-  imgs?: Maybe<Array<Maybe<Scalars["String"]>>>;
   title: Scalars["String"];
-  contents: Scalars["String"];
-  deal: Scalars["String"];
   category: Scalars["String"];
-  productname: Scalars["String"];
+  imgPaths?: Maybe<Array<Maybe<Scalars["String"]>>>;
+  hashtag?: Maybe<Array<Maybe<Scalars["String"]>>>;
+  contents: Scalars["String"];
   transaction: Scalars["String"];
   price: Scalars["Int"];
-  hashtag: Scalars["String"];
-  imgPaths: Scalars["String"];
 };
 
 export type ICreateProductInput = {
@@ -140,9 +142,9 @@ export type ILoginUserOutput = {
 };
 
 export type IMutation = {
-  updateViewcount: Scalars["Int"];
+  updateviewcount: Scalars["Int"];
   updateIsBuy: Scalars["Int"];
-  createPost?: Maybe<IPostOutput>;
+  createPost?: Maybe<ICreateOutput>;
   updatePost?: Maybe<IPostOutput>;
   deletePost: Scalars["Int"];
   createFile?: Maybe<IFileOutput>;
@@ -164,7 +166,7 @@ export type IMutation = {
   createHistory?: Maybe<IHistoryOutput>;
 };
 
-export type IMutationUpdateViewcountArgs = {
+export type IMutationUpdateviewcountArgs = {
   postId: Scalars["Int"];
 };
 
@@ -663,6 +665,29 @@ export type IGetPostQuery = { __typename?: "Query" } & {
   >;
 };
 
+export type ICreatePostMutationVariables = {
+  input: ICreatePostInput;
+};
+
+export type ICreatePostMutation = { __typename?: "Mutation" } & {
+  createPost: Maybe<
+    { __typename?: "CreateOutput" } & Pick<ICreateOutput, "state" | "postId">
+  >;
+};
+
+export type ICreateHistoryMutationVariables = {
+  input: Scalars["Int"];
+};
+
+export type ICreateHistoryMutation = { __typename?: "Mutation" } & {
+  createHistory: Maybe<
+    { __typename?: "HistoryOutput" } & Pick<
+      IHistoryOutput,
+      "userId" | "postId" | "createdDate" | "modifiedDate"
+    >
+  >;
+};
+
 import gql from "graphql-tag";
 import * as React from "react";
 import * as ReactApollo from "react-apollo";
@@ -1071,4 +1096,139 @@ export function useGetPostQuery(
     GetPostDocument,
     baseOptions
   );
+}
+export const CreatePostDocument = gql`
+  mutation createPost($input: CreatePostInput!) {
+    createPost(input: $input) {
+      state
+      postId
+    }
+  }
+`;
+export type ICreatePostMutationFn = ReactApollo.MutationFn<
+  ICreatePostMutation,
+  ICreatePostMutationVariables
+>;
+
+export const CreatePostComponent = (
+  props: Omit<
+    Omit<
+      ReactApollo.MutationProps<
+        ICreatePostMutation,
+        ICreatePostMutationVariables
+      >,
+      "mutation"
+    >,
+    "variables"
+  > & { variables?: ICreatePostMutationVariables }
+) => (
+  <ReactApollo.Mutation<ICreatePostMutation, ICreatePostMutationVariables>
+    mutation={CreatePostDocument}
+    {...props}
+  />
+);
+
+export type ICreatePostProps<TChildProps = {}> = Partial<
+  ReactApollo.MutateProps<ICreatePostMutation, ICreatePostMutationVariables>
+> &
+  TChildProps;
+export function withCreatePost<TProps, TChildProps = {}>(
+  operationOptions?: ReactApollo.OperationOption<
+    TProps,
+    ICreatePostMutation,
+    ICreatePostMutationVariables,
+    ICreatePostProps<TChildProps>
+  >
+) {
+  return ReactApollo.withMutation<
+    TProps,
+    ICreatePostMutation,
+    ICreatePostMutationVariables,
+    ICreatePostProps<TChildProps>
+  >(CreatePostDocument, {
+    alias: "withCreatePost",
+    ...operationOptions
+  });
+}
+
+export function useCreatePostMutation(
+  baseOptions?: ReactApolloHooks.MutationHookOptions<
+    ICreatePostMutation,
+    ICreatePostMutationVariables
+  >
+) {
+  return ReactApolloHooks.useMutation<
+    ICreatePostMutation,
+    ICreatePostMutationVariables
+  >(CreatePostDocument, baseOptions);
+}
+export const CreateHistoryDocument = gql`
+  mutation createHistory($input: Int!) {
+    createHistory(postId: $input) {
+      userId
+      postId
+      createdDate
+      modifiedDate
+    }
+  }
+`;
+export type ICreateHistoryMutationFn = ReactApollo.MutationFn<
+  ICreateHistoryMutation,
+  ICreateHistoryMutationVariables
+>;
+
+export const CreateHistoryComponent = (
+  props: Omit<
+    Omit<
+      ReactApollo.MutationProps<
+        ICreateHistoryMutation,
+        ICreateHistoryMutationVariables
+      >,
+      "mutation"
+    >,
+    "variables"
+  > & { variables?: ICreateHistoryMutationVariables }
+) => (
+  <ReactApollo.Mutation<ICreateHistoryMutation, ICreateHistoryMutationVariables>
+    mutation={CreateHistoryDocument}
+    {...props}
+  />
+);
+
+export type ICreateHistoryProps<TChildProps = {}> = Partial<
+  ReactApollo.MutateProps<
+    ICreateHistoryMutation,
+    ICreateHistoryMutationVariables
+  >
+> &
+  TChildProps;
+export function withCreateHistory<TProps, TChildProps = {}>(
+  operationOptions?: ReactApollo.OperationOption<
+    TProps,
+    ICreateHistoryMutation,
+    ICreateHistoryMutationVariables,
+    ICreateHistoryProps<TChildProps>
+  >
+) {
+  return ReactApollo.withMutation<
+    TProps,
+    ICreateHistoryMutation,
+    ICreateHistoryMutationVariables,
+    ICreateHistoryProps<TChildProps>
+  >(CreateHistoryDocument, {
+    alias: "withCreateHistory",
+    ...operationOptions
+  });
+}
+
+export function useCreateHistoryMutation(
+  baseOptions?: ReactApolloHooks.MutationHookOptions<
+    ICreateHistoryMutation,
+    ICreateHistoryMutationVariables
+  >
+) {
+  return ReactApolloHooks.useMutation<
+    ICreateHistoryMutation,
+    ICreateHistoryMutationVariables
+  >(CreateHistoryDocument, baseOptions);
 }
