@@ -2,6 +2,7 @@ package com.ssafy.market.domain.chat.repository;
 
 import com.mongodb.client.result.DeleteResult;
 import com.ssafy.market.domain.chat.domain.ChatRoom;
+import com.ssafy.market.domain.chat.domain.CollectionCounter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -28,7 +29,6 @@ public class ChatRoomMongoRepository {
 
     public List<ChatRoom> getChatRoomsByUserIdAsSeller(String userId) {
         Query query = new Query(Criteria.where("sellerId").is(userId).andOperator(Criteria.where("isSellerExit").is(false)));
-//        Query query = new Query(new Criteria().andOperator(Criteria.where("sellerId").is(userId)));
         return mongoTemplate.find(query, ChatRoom.class, "chatRoom");
     }
 
@@ -45,14 +45,41 @@ public class ChatRoomMongoRepository {
         return result;
     }
 
+    public Long getNextSequence(String name) {
+        Query query = new Query(new Criteria("name").is(name));
+        Update update = new Update();
+        update.inc("seq", 1);
+        CollectionCounter collectionCounter = mongoTemplate.findAndModify(query, update, CollectionCounter.class, "collectionCounter");
+        Long result;
+        if (collectionCounter == null) {
+            mongoTemplate.insert(new CollectionCounter(name, (long) 1), "collectionCounter");
+            result = (long) 1;
+            System.out.println("새로 만들기");
+        } else {
+            result = ((CollectionCounter)collectionCounter).getSeq();
+            System.out.println("걍 갖고오기");
+        }
+        System.out.println(result);
+        return result;
+    }
     public ChatRoom insertChatRoom(ChatRoom chatRoom) throws DuplicateKeyException {
         try {
+            Query query = new Query(Criteria.where("postId").is(chatRoom.getPostId()).andOperator(Criteria.where("sellerId").is(chatRoom.getSellerId()).andOperator(Criteria.where("buyerId").is(chatRoom.getBuyerId()))));
+            Boolean isChatRoomExist = mongoTemplate.exists(query, ChatRoom.class, "chatRoom");
+            if (isChatRoomExist) throw new DuplicateKeyException("That Room is already exist");
+
+            chatRoom.setRoomId(getNextSequence("roomId"));
             chatRoom.setBuyerExit(false);
             chatRoom.setSellerExit(false);
             chatRoom.setCreatedDateTime(LocalDateTime.now().toString());
             chatRoom.setModifiedDateTime(LocalDateTime.now().toString());
+
+            System.out.println(chatRoom);
             return mongoTemplate.insert(chatRoom, "chatRoom");
         } catch (DuplicateKeyException e){
+            throw e;
+        } catch (RuntimeException e) {
+            e.printStackTrace();
             throw e;
         }
     }
