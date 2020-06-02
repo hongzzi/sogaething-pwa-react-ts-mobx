@@ -681,6 +681,65 @@ export type ICreateMatchingMutation = { __typename?: "Mutation" } & {
   >;
 };
 
+export type IGetMatchingQueryVariables = {};
+
+export type IGetMatchingQuery = { __typename?: "Query" } & {
+  findMatchingByUserId: Maybe<
+    Array<
+      Maybe<
+        { __typename?: "MatchResponse" } & Pick<
+          IMatchResponse,
+          | "category"
+          | "minPrice"
+          | "maxPrice"
+          | "hashtag"
+          | "transaction"
+          | "createdDate"
+          | "possibility"
+        >
+      >
+    >
+  >;
+};
+
+export type IGetMatchResultsQueryVariables = {
+  input: IMatchInput;
+};
+
+export type IGetMatchResultsQuery = { __typename?: "Query" } & {
+  matchThings: Maybe<
+    Array<
+      Maybe<
+        { __typename?: "PostDetailOutput" } & Pick<
+          IPostDetailOutput,
+          | "postId"
+          | "title"
+          | "category"
+          | "imgPaths"
+          | "hashtag"
+          | "contents"
+          | "price"
+          | "viewCount"
+          | "isBuy"
+          | "deal"
+          | "dealState"
+          | "saleDate"
+          | "transaction"
+          | "createdDate"
+          | "modifiedDate"
+        > & {
+            user: Maybe<
+              { __typename?: "UserInfoResponse" } & Pick<
+                IUserInfoResponse,
+                "name" | "address" | "trust" | "numOfPosts" | "imgurl"
+              >
+            >;
+          }
+      >
+    >
+  >;
+};
+
 export type IGetMyPostsQueryVariables = {
   userId?: Maybe<Scalars["Int"]>;
 };
@@ -1185,6 +1244,146 @@ export function useCreateMatchingMutation(
     ICreateMatchingMutation,
     ICreateMatchingMutationVariables
   >(CreateMatchingDocument, baseOptions);
+}
+export const GetMatchingDocument = gql`
+  query getMatching {
+    findMatchingByUserId {
+      category
+      minPrice
+      maxPrice
+      hashtag
+      transaction
+      createdDate
+      possibility
+    }
+  }
+`;
+
+export const GetMatchingComponent = (
+  props: Omit<
+    Omit<
+      ReactApollo.QueryProps<IGetMatchingQuery, IGetMatchingQueryVariables>,
+      "query"
+    >,
+    "variables"
+  > & { variables?: IGetMatchingQueryVariables }
+) => (
+  <ReactApollo.Query<IGetMatchingQuery, IGetMatchingQueryVariables>
+    query={GetMatchingDocument}
+    {...props}
+  />
+);
+
+export type IGetMatchingProps<TChildProps = {}> = Partial<
+  ReactApollo.DataProps<IGetMatchingQuery, IGetMatchingQueryVariables>
+> &
+  TChildProps;
+export function withGetMatching<TProps, TChildProps = {}>(
+  operationOptions?: ReactApollo.OperationOption<
+    TProps,
+    IGetMatchingQuery,
+    IGetMatchingQueryVariables,
+    IGetMatchingProps<TChildProps>
+  >
+) {
+  return ReactApollo.withQuery<
+    TProps,
+    IGetMatchingQuery,
+    IGetMatchingQueryVariables,
+    IGetMatchingProps<TChildProps>
+  >(GetMatchingDocument, {
+    alias: "withGetMatching",
+    ...operationOptions
+  });
+}
+
+export function useGetMatchingQuery(
+  baseOptions?: ReactApolloHooks.QueryHookOptions<IGetMatchingQueryVariables>
+) {
+  return ReactApolloHooks.useQuery<
+    IGetMatchingQuery,
+    IGetMatchingQueryVariables
+  >(GetMatchingDocument, baseOptions);
+}
+export const GetMatchResultsDocument = gql`
+  query getMatchResults($input: MatchInput!) {
+    matchThings(input: $input) {
+      postId
+      title
+      category
+      imgPaths
+      hashtag
+      contents
+      price
+      user {
+        name
+        address
+        trust
+        numOfPosts
+        imgurl
+      }
+      viewCount
+      isBuy
+      deal
+      dealState
+      saleDate
+      transaction
+      createdDate
+      modifiedDate
+    }
+  }
+`;
+
+export const GetMatchResultsComponent = (
+  props: Omit<
+    Omit<
+      ReactApollo.QueryProps<
+        IGetMatchResultsQuery,
+        IGetMatchResultsQueryVariables
+      >,
+      "query"
+    >,
+    "variables"
+  > & { variables: IGetMatchResultsQueryVariables }
+) => (
+  <ReactApollo.Query<IGetMatchResultsQuery, IGetMatchResultsQueryVariables>
+    query={GetMatchResultsDocument}
+    {...props}
+  />
+);
+
+export type IGetMatchResultsProps<TChildProps = {}> = Partial<
+  ReactApollo.DataProps<IGetMatchResultsQuery, IGetMatchResultsQueryVariables>
+> &
+  TChildProps;
+export function withGetMatchResults<TProps, TChildProps = {}>(
+  operationOptions?: ReactApollo.OperationOption<
+    TProps,
+    IGetMatchResultsQuery,
+    IGetMatchResultsQueryVariables,
+    IGetMatchResultsProps<TChildProps>
+  >
+) {
+  return ReactApollo.withQuery<
+    TProps,
+    IGetMatchResultsQuery,
+    IGetMatchResultsQueryVariables,
+    IGetMatchResultsProps<TChildProps>
+  >(GetMatchResultsDocument, {
+    alias: "withGetMatchResults",
+    ...operationOptions
+  });
+}
+
+export function useGetMatchResultsQuery(
+  baseOptions?: ReactApolloHooks.QueryHookOptions<
+    IGetMatchResultsQueryVariables
+  >
+) {
+  return ReactApolloHooks.useQuery<
+    IGetMatchResultsQuery,
+    IGetMatchResultsQueryVariables
+  >(GetMatchResultsDocument, baseOptions);
 }
 export const GetMyPostsDocument = gql`
   query getMyPosts($userId: Int) {

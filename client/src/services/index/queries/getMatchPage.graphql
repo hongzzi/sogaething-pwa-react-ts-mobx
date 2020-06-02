@@ -15,3 +15,42 @@ mutation createMatching($input: MatchInput!) {
         modifiedDate
     }
 }
+
+query getMatching{
+    findMatchingByUserId{
+        category
+        minPrice
+        maxPrice
+        hashtag
+        transaction
+        createdDate
+        possibility
+    }
+}
+
+query getMatchResults($input: MatchInput!){
+    matchThings(input: $input) {
+            postId
+            title
+            category
+            imgPaths
+            hashtag
+            contents
+            price
+            user {
+                name
+                address
+                trust
+                numOfPosts
+                imgurl
+            }
+            viewCount
+            isBuy
+            deal
+            dealState
+            saleDate
+            transaction
+            createdDate
+            modifiedDate
+    }
+}

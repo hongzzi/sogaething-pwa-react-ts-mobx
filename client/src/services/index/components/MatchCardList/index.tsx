@@ -2,19 +2,14 @@ import * as React from 'react';
 import styled from '~/styled';
 import Card from './MatchCard';
 
-const dump = [
-  { title: '#맥북', price: '1.000,000' },
-  { title: '#맥북', price: '1.000,000' },
-  { title: '#맥북', price: '1.000,000' },
-  { title: '#맥북', price: '1.000,000' },
-  { title: '#맥북', price: '1.000,000' },
-  { title: '#맥북', price: '1.000,000' },
-  { title: '#맥북', price: '1.000,000' },
-];
+export interface IMatchCardListProps {
+  data: any[],
+}
 
-export default () => {
-  const Cards = dump.map((item, i) => {
-    return <Card key={i} />;
+export default (props: IMatchCardListProps) => {
+  const { data } = props;
+  const Cards = data.map((item, i) => {
+    return <Card key={i} match={item} />;
   });
   return <Wrapper>{Cards}</Wrapper>;
 };
