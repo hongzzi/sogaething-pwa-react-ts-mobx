@@ -29,7 +29,7 @@ export default () => {
 
   return (
     <Wrapper>
-      <CategoryHeader type={'chat'} />
+      <CategoryHeader type={'chat'} text={'채팅'}/>
       <MarginTopCategoryHeaderContainer>
         <ChatList chatData={chatRooms} loading={loading} />
       </MarginTopCategoryHeaderContainer>
