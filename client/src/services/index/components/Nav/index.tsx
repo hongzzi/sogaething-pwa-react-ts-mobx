@@ -90,10 +90,10 @@ export default (props: INav) => {
           </WrapperNavItem>
         </a>
       </Link>
-      <Modal onModal={modal} onClick={handleModal}>
+      <Modal modalState={modal}>
           <ModalItem>구매 하기</ModalItem>
           <ModalItem>판매 하기</ModalItem>
-          <ModalItem>닫기</ModalItem>
+          <ModalItem onClick={handleModal}>닫기</ModalItem>
       </Modal>
     </WrapprNav>
   );
@@ -111,9 +111,12 @@ const WrapprNav = styled.nav`
   align-items: center;
 `;
 
-const Modal = styled.div<any>`
-  /* display: ${(props) => props.onModal ? 'block' : 'none'}; */
-  visibility: ${(props) => props.onModal ? 'visible' : 'hidden'};
+interface IModalProps {
+  modalState: boolean;
+}
+
+const Modal = styled.div<IModalProps>`
+  visibility: ${(props) => props.modalState ? 'visible' : 'hidden'};
   position: fixed;
   bottom: 0;
   width: 100vw;
@@ -129,7 +132,7 @@ const ModalItem = styled.div`
   justify-content: space-around;
   height: 33%;
   width: 100%;
-  border-top: 1px solid ${props => props.theme.bolderColor};
+  border-top: 1px solid ${(props) => props.theme.bolderColor};
 `;
 
 const WrapperNavItem = styled.div``;

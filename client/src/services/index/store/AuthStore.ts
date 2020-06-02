@@ -29,7 +29,7 @@ class AuthStore {
   @observable provider: string = '';
 
   constructor(initialData = initialAuth, root: any) {
-    if (initialData.token !== '') {
+    if (initialData.token) {
       this.setToken(initialData.token);
       this.auth = jwtDecode(initialData.token);
     }

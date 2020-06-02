@@ -41,7 +41,7 @@ export default () => {
         <WrapperUserInfo>
           <TextUserInfo>
             {loading && <TextLoader size={{ width: 50, height: 18 }} />}
-            {!loading && findUserInfo!.name}
+            {!loading && findUserInfo && findUserInfo!.name}
           </TextUserInfo>
           <TextuserAddr>
             <SmallIcon src={Pin} />

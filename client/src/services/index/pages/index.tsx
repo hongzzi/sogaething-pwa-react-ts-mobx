@@ -13,9 +13,10 @@ import useStores from '../helpers/useStores';
 import ChatService from '../service/ChatService';
 
 export default function PageIndex() {
-  const { pageStore } = useStores();
+  const { pageStore, authStore } = useStores();
   const handleMoreCards = () => {
     console.log(pageStore.clickedIdx);
+    authStore.signOut();
   };
   return (
     <Layout>
