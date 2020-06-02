@@ -1,14 +1,19 @@
 import autobind from 'autobind-decorator';
 import { action, observable, reaction } from 'mobx';
 import ChatService from '../service/ChatService';
-import { ChatRoomListItemDto } from './../service/ChatService';
+import { ChatRoomListItemDto, IChatDto, IChatRoomAuthDto } from './../service/ChatService';
 
 @autobind
 class ChatStore {
-  @observable nav: boolean = false;
-  @observable clickedIdx: number = 0;
   @observable chatRooms: ChatRoomListItemDto[] = [];
   @observable loading: boolean = false;
+  @observable inputText: string = '';
+  @observable chatRoom: number = 0;
+  @observable chatRoomData: IChatDto[] = [];
+  @observable chatRoomAuth: IChatRoomAuthDto = {
+    seller: '',
+    buyer: '',
+  };
 
   constructor(private chatService: ChatService, root: any) {}
 
@@ -23,11 +28,47 @@ class ChatStore {
     const response = await this.chatService.getUserChatList(authId);
     const chatArr = response.data;
     this.setLoading(false);
-    this.setChatRomms(chatArr);
+    this.setChatRooms(chatArr);
   }
 
   @action
-  setChatRomms(crs: ChatRoomListItemDto[]) {
+  async getUserChatRoom(roomId: number) {
+    this.loading = true;
+    const response = await this.chatService.getUserChatRoom(roomId);
+    const data = response.data;
+    this.setChatRoomData(data.chatMessages);
+    this.setChatRoom(roomId);
+    this.setChatRoomAuth(data.chatRoom);
+    this.loading = false;
+  }
+
+  @action
+  setChatRoomAuth(cra: IChatRoomAuthDto) {
+    this.chatRoomAuth = cra;
+  }
+
+  @action
+  getChatRoomAuth() {
+    return this.chatRoomAuth;
+  }
+
+  @action
+  setChatRoom(cr: number) {
+    this.chatRoom = cr;
+  }
+
+  @action
+  setChatRoomData(crd: IChatDto[]) {
+    this.chatRoomData = crd;
+  }
+
+  @action
+  getChatRoomData() {
+    return this.chatRoomData;
+  }
+
+  @action
+  setChatRooms(crs: ChatRoomListItemDto[]) {
     this.chatRooms = crs;
   }
 

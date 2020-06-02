@@ -1,5 +1,5 @@
 # source: http://3.34.131.20:8080/graphql
-# timestamp: Mon Jun 01 2020 03:16:51 GMT+0900 (GMT+09:00)
+# timestamp: Tue Jun 02 2020 12:52:45 GMT+0900 (대한민국 표준시)
 
 """This directive allows results to be deferred during execution"""
 directive @defer on FIELD
@@ -123,8 +123,6 @@ type JjimOutput {
   category: String
   imgPath: String
   price: Int
-
-  """hashtag :[String]"""
   createdDate: String
   modifiedDate: String
 }
@@ -138,8 +136,27 @@ type LoginUserOutput {
   token: String!
 }
 
+type Matching {
+  matchingId: ID
+  user: User
+  category: String
+  hashtag: String
+  minPrice: Int
+  maxPrice: Int
+  transaction: String
+  createdDate: String
+  modifiedDate: String
+}
+
+input MatchInput {
+  category: String
+  price: [Int]
+  hashtag: [String]
+  transaction: String
+}
+
 type Mutation {
-  updateviewcount(postId: Int!): Int!
+  updateView(postId: Int!): Int!
   updateIsBuy(postId: Int!): Int!
   createPost(input: CreatePostInput!): CreateOutput
   updatePost(input: UpdatePostInput!): PostOutput
@@ -155,6 +172,7 @@ type Mutation {
   createHashtag(input: CreateHashtagInput!): HashtagOutput
   updateHashtag(input: UpdateHashtagInput!): HashtagOutput
   deleteHashtag(id: Int!): Int
+  createMatching(input: MatchInput!): Matching
   updateProduct(input: UpdateProductInput!): ProductOutput
   createProduct(input: CreateProductInput!): ProductOutput
   deleteProduct(id: Int!): Int
@@ -268,6 +286,7 @@ type Query {
   findElAllPosts: [Post]
   """
   searchThings(input: HashtagInput!): [PostMetaOutput]
+  matchThings(input: MatchInput!): [PostDetailOutput]
   findAllFile: [FileOutput]
   findAllFiles: [File]
   findFileById(id: Int): FileOutput
@@ -281,6 +300,7 @@ type Query {
   findAllHashtag: [HashtagOutput]
   findByHashtagId(id: Int): HashtagOutput
   autocomplete(hashtag: String!): [Autocomplete]
+  findMatchingByUserId: [Matching]
   findAllProduct: [ProductOutput]
   findAllProducts: [Product]
   findByProductId(id: Int): ProductOutput

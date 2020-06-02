@@ -21,7 +21,7 @@ export default () => {
   const {chatRooms, loading, getUserChatList} = useChatData();
   const {authStore} = useStores();
   React.useEffect(() => {
-    getUserChatList(authStore.getAuth()!.sub);
+    getUserChatList(authStore.getAuth()!.userId);
   }, [])
 
   const handleOnClick = () => {

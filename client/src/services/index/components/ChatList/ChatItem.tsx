@@ -28,7 +28,7 @@ export default (props: IChatCardProps) => {
             }
           />
           <WrapperText>
-            <Line fontSize={14}>{authStore.auth!.sub === props.chatData!.buyerUser.userId ? props.chatData!.sellerUser.userName : props.chatData!.buyerUser.userName}</Line>
+            <Line fontSize={14}>{authStore.auth!.userId + '' === props.chatData!.buyerUser.userId ? props.chatData!.sellerUser.userName : props.chatData!.buyerUser.userName}</Line>
             <WrapperInnerText>
               <Line fontSize={10} float={'left'}>
                 {props.chatData!.lastMessage}

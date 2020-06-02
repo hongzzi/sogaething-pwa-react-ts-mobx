@@ -127,7 +127,6 @@ export type IJjimOutput = {
   category?: Maybe<Scalars["String"]>;
   imgPath?: Maybe<Scalars["String"]>;
   price?: Maybe<Scalars["Int"]>;
-  /** hashtag :[String] */
   createdDate?: Maybe<Scalars["String"]>;
   modifiedDate?: Maybe<Scalars["String"]>;
 };
@@ -141,8 +140,27 @@ export type ILoginUserOutput = {
   token: Scalars["String"];
 };
 
+export type IMatching = {
+  matchingId?: Maybe<Scalars["ID"]>;
+  user?: Maybe<IUser>;
+  category?: Maybe<Scalars["String"]>;
+  hashtag?: Maybe<Scalars["String"]>;
+  minPrice?: Maybe<Scalars["Int"]>;
+  maxPrice?: Maybe<Scalars["Int"]>;
+  transaction?: Maybe<Scalars["String"]>;
+  createdDate?: Maybe<Scalars["String"]>;
+  modifiedDate?: Maybe<Scalars["String"]>;
+};
+
+export type IMatchInput = {
+  category?: Maybe<Scalars["String"]>;
+  price?: Maybe<Array<Maybe<Scalars["Int"]>>>;
+  hashtag?: Maybe<Array<Maybe<Scalars["String"]>>>;
+  transaction?: Maybe<Scalars["String"]>;
+};
+
 export type IMutation = {
-  updateviewcount: Scalars["Int"];
+  updateView: Scalars["Int"];
   updateIsBuy: Scalars["Int"];
   createPost?: Maybe<ICreateOutput>;
   updatePost?: Maybe<IPostOutput>;
@@ -158,6 +176,7 @@ export type IMutation = {
   createHashtag?: Maybe<IHashtagOutput>;
   updateHashtag?: Maybe<IHashtagOutput>;
   deleteHashtag?: Maybe<Scalars["Int"]>;
+  createMatching?: Maybe<IMatching>;
   updateProduct?: Maybe<IProductOutput>;
   createProduct?: Maybe<IProductOutput>;
   deleteProduct?: Maybe<Scalars["Int"]>;
@@ -166,7 +185,7 @@ export type IMutation = {
   createHistory?: Maybe<IHistoryOutput>;
 };
 
-export type IMutationUpdateviewcountArgs = {
+export type IMutationUpdateViewArgs = {
   postId: Scalars["Int"];
 };
 
@@ -228,6 +247,10 @@ export type IMutationUpdateHashtagArgs = {
 
 export type IMutationDeleteHashtagArgs = {
   id: Scalars["Int"];
+};
+
+export type IMutationCreateMatchingArgs = {
+  input: IMatchInput;
 };
 
 export type IMutationUpdateProductArgs = {
@@ -352,6 +375,7 @@ export type IQuery = {
    * findElAllPosts: [Post]
    */
   searchThings?: Maybe<Array<Maybe<IPostMetaOutput>>>;
+  matchThings?: Maybe<Array<Maybe<IPostDetailOutput>>>;
   findAllFile?: Maybe<Array<Maybe<IFileOutput>>>;
   findAllFiles?: Maybe<Array<Maybe<IFile>>>;
   findFileById?: Maybe<IFileOutput>;
@@ -365,6 +389,7 @@ export type IQuery = {
   findAllHashtag?: Maybe<Array<Maybe<IHashtagOutput>>>;
   findByHashtagId?: Maybe<IHashtagOutput>;
   autocomplete?: Maybe<Array<Maybe<IAutocomplete>>>;
+  findMatchingByUserId?: Maybe<Array<Maybe<IMatching>>>;
   findAllProduct?: Maybe<Array<Maybe<IProductOutput>>>;
   findAllProducts?: Maybe<Array<Maybe<IProduct>>>;
   findByProductId?: Maybe<IProductOutput>;
@@ -386,6 +411,10 @@ export type IQueryFindByDetailPostArgs = {
 
 export type IQuerySearchThingsArgs = {
   input: IHashtagInput;
+};
+
+export type IQueryMatchThingsArgs = {
+  input: IMatchInput;
 };
 
 export type IQueryFindFileByIdArgs = {
