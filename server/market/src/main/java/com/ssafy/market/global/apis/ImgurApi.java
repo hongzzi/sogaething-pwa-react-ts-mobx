@@ -9,16 +9,13 @@ import org.jsoup.Jsoup;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
 
 @Service
 public class ImgurApi {
 
     public static final String CLIENT_ID = "2d1537da8393cd6";
 
-    public String uploadImg(String base64) {
-
+    public String uploadImg(String base64){
         try {
             Connection.Response response = uploadSync(base64);
             if (response.statusCode() == 400) {
@@ -31,11 +28,11 @@ public class ImgurApi {
             url = url.replace("\"", "");
             return url;
         } catch (Exception e) {
-
             e.printStackTrace();
             return null;
         }
     }
+
 
 
     public Connection.Response uploadSync(String base64) throws IOException {

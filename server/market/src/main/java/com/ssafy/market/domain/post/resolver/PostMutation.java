@@ -1,6 +1,7 @@
 package com.ssafy.market.domain.post.resolver;
 
 import com.coxautodev.graphql.tools.GraphQLMutationResolver;
+import com.ssafy.market.domain.detaildeal.dto.FileArr;
 import com.ssafy.market.domain.file.domain.File;
 import com.ssafy.market.domain.file.repository.FileRepository;
 import com.ssafy.market.domain.hashtag.domain.Hashtag;
@@ -11,6 +12,7 @@ import com.ssafy.market.domain.post.repository.PostRepository;
 import com.ssafy.market.domain.product.domain.Product;
 import com.ssafy.market.domain.product.repository.ProductRepository;
 import com.ssafy.market.domain.user.domain.User;
+import com.ssafy.market.domain.user.dto.UserInfoResponse;
 import com.ssafy.market.domain.user.repository.UserRepository;
 
 import com.ssafy.market.domain.user.security.TokenProvider;
@@ -42,7 +44,7 @@ public class PostMutation implements GraphQLMutationResolver {
 
 
     @Transactional
-    public Output createPost(CreatePostInput input, DataFetchingEnvironment env ) {
+    public Output createPost(CreatePostInput input, DataFetchingEnvironment env ) throws Exception {
 
         Long userId = tokenProvider.getUserIdFromHeader(env);
         User user = (userRepository.findByUserId(userId));
@@ -68,26 +70,32 @@ public class PostMutation implements GraphQLMutationResolver {
                 List<String> hash = new ArrayList<>();
                 if (hashtagarr.length > 0) {
                     for (int i = 0; i < hashtagarr.length; i++) {
-                        hashtagRepository.save(new Hashtag(null, product, hashtagarr[i]));
+                        Hashtag hashtag = hashtagRepository.save(new Hashtag(null, product, hashtagarr[i]));
                         hash.add(hashtagarr[i]);
                     }
                 }
                 String[] arr = input.getImgPaths();
                 if (arr.length > 0) {
                     for (int k = 0; k < arr.length; k++) {
+//                        String temp = arr[k].substring(22);
                         String[] temp = arr[k].split(",");
                         String imgur = api.uploadImg(temp[1]);
                         if(!imgur.equals("false")) {
-                            fileRepository.save(new File(null, product, imgur));
+                            File file = fileRepository.save(new File(null, product, imgur));
+                        }
+                        else{
+                            break;
                         }
                     }
                 }
+                List<File> files = fileRepository.findByProduct(product);
                 output = new Output("SUCCESS", post.getPostId());
             }else{
                 output = new Output("FAIL",null);
             }
         } catch (Exception e) {
-             output = new Output("FAIL",null);
+//            System.out.println(e);
+            output = new Output("FAIL",null);
         }
         return  output;
     }
@@ -112,18 +120,20 @@ public class PostMutation implements GraphQLMutationResolver {
         HashSet<String> hs = new HashSet<>();
         if (hashtagArr.length > 0) {
             for (int i = 0; i < hashtagArr.length; i++) {
-                hashtagRepository.save(new Hashtag(null, product, hashtagArr[i]));
+                Hashtag hashtag = hashtagRepository.save(new Hashtag(null, product, hashtagArr[i]));
                 hs.add(hashtagArr[i]);
             }
         }
-        String[] arr = input.getImgPaths();
-        if (arr.length > 0) {
+        String[] Arr = input.getImgPaths();
+        if (Arr.length > 0) {
             try {
-                for (int k = 0; k < arr.length; k++) {
-                    String[] temp = arr[k].split(",");
+                for (int k = 0; k < Arr.length; k++) {
+                    String[] temp = Arr[k].split(",");
                     String imgur = api.uploadImg(temp[1]);
                     if (!imgur.equals("false")) {
                         File file = fileRepository.save(new File(null, product, imgur));
+                    } else {
+                        break;
                     }
                 }
             }catch (Exception e){
