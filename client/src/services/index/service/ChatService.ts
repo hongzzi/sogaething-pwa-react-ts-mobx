@@ -1,3 +1,4 @@
+import { ENDPOINT } from './../constants';
 import axios, { AxiosResponse } from 'axios';
 import { NEXT_APP_REST_ENDPOINT } from '../helpers/config';
 
@@ -41,7 +42,7 @@ export interface IChatRoomResponseDto {
   chatRoom: IChatRoomAuthDto;
 }
 
-const API_HOST = NEXT_APP_REST_ENDPOINT || 'http://localhost:5000/api';
+const API_HOST = NEXT_APP_REST_ENDPOINT || ENDPOINT.REST;
 
 class ChatService {
   async getTest(): Promise<AxiosResponse> {
