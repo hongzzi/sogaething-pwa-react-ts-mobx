@@ -50,6 +50,8 @@ export default function Detail(props: any) {
                 variables: {
                     input: pid,
                 },
+            }).then((res) => {
+                console.log(res);
             })
         }
     }, [data])

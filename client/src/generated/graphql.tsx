@@ -538,6 +538,23 @@ export type IUserOutput = {
   address?: Maybe<Scalars["String"]>;
   trust?: Maybe<Scalars["Int"]>;
 };
+export type IGetAutoCompleteQueryVariables = {
+  input: Scalars["String"];
+};
+
+export type IGetAutoCompleteQuery = { __typename?: "Query" } & {
+  autocomplete: Maybe<
+    Array<
+      Maybe<
+        { __typename?: "Autocomplete" } & Pick<
+          IAutocomplete,
+          "hashtag" | "count"
+        >
+      >
+    >
+  >;
+};
+
 export type IGetLoginMutationVariables = {
   input: ILoginUserInput;
 };
@@ -734,6 +751,66 @@ import * as ReactApollo from "react-apollo";
 import * as ReactApolloHooks from "react-apollo-hooks";
 export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 
+export const GetAutoCompleteDocument = gql`
+  query getAutoComplete($input: String!) {
+    autocomplete(hashtag: $input) {
+      hashtag
+      count
+    }
+  }
+`;
+
+export const GetAutoCompleteComponent = (
+  props: Omit<
+    Omit<
+      ReactApollo.QueryProps<
+        IGetAutoCompleteQuery,
+        IGetAutoCompleteQueryVariables
+      >,
+      "query"
+    >,
+    "variables"
+  > & { variables: IGetAutoCompleteQueryVariables }
+) => (
+  <ReactApollo.Query<IGetAutoCompleteQuery, IGetAutoCompleteQueryVariables>
+    query={GetAutoCompleteDocument}
+    {...props}
+  />
+);
+
+export type IGetAutoCompleteProps<TChildProps = {}> = Partial<
+  ReactApollo.DataProps<IGetAutoCompleteQuery, IGetAutoCompleteQueryVariables>
+> &
+  TChildProps;
+export function withGetAutoComplete<TProps, TChildProps = {}>(
+  operationOptions?: ReactApollo.OperationOption<
+    TProps,
+    IGetAutoCompleteQuery,
+    IGetAutoCompleteQueryVariables,
+    IGetAutoCompleteProps<TChildProps>
+  >
+) {
+  return ReactApollo.withQuery<
+    TProps,
+    IGetAutoCompleteQuery,
+    IGetAutoCompleteQueryVariables,
+    IGetAutoCompleteProps<TChildProps>
+  >(GetAutoCompleteDocument, {
+    alias: "withGetAutoComplete",
+    ...operationOptions
+  });
+}
+
+export function useGetAutoCompleteQuery(
+  baseOptions?: ReactApolloHooks.QueryHookOptions<
+    IGetAutoCompleteQueryVariables
+  >
+) {
+  return ReactApolloHooks.useQuery<
+    IGetAutoCompleteQuery,
+    IGetAutoCompleteQueryVariables
+  >(GetAutoCompleteDocument, baseOptions);
+}
 export const GetLoginDocument = gql`
   mutation getLogin($input: LoginUserInput!) {
     loginUser(input: $input) {
