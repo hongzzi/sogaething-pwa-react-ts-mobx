@@ -373,6 +373,7 @@ export type IProductOutput = {
 export type IQuery = {
   findAllPosts?: Maybe<Array<Maybe<IPost>>>;
   findAllPost?: Maybe<Array<Maybe<IPostOutput>>>;
+  countPostByUserId?: Maybe<Scalars["Int"]>;
   /** findByUser(userId : Int) : [PostOutput] */
   findPostByPostId?: Maybe<IPostOutput>;
   /** findAllPostsByUploaderId(uploader_id: Int):[Post]
@@ -406,6 +407,10 @@ export type IQuery = {
   findByProductId?: Maybe<IProductOutput>;
   findPostByUserId?: Maybe<Array<Maybe<IJjimOutput>>>;
   findUserHistoryByUserId?: Maybe<Array<Maybe<IUserHistoryResponse>>>;
+};
+
+export type IQueryCountPostByUserIdArgs = {
+  userId?: Maybe<Scalars["Int"]>;
 };
 
 export type IQueryFindPostByPostIdArgs = {
@@ -531,6 +536,7 @@ export type IUserHistoryResponse = {
 };
 
 export type IUserInfoResponse = {
+  userId?: Maybe<Scalars["Int"]>;
   name?: Maybe<Scalars["String"]>;
   address?: Maybe<Scalars["String"]>;
   trust?: Maybe<Scalars["Int"]>;
@@ -799,7 +805,7 @@ export type IGetPostQuery = { __typename?: "Query" } & {
         user: Maybe<
           { __typename?: "UserInfoResponse" } & Pick<
             IUserInfoResponse,
-            "name" | "address" | "trust" | "numOfPosts" | "imgurl"
+            "userId" | "name" | "address" | "trust" | "numOfPosts" | "imgurl"
           >
         >;
       }
@@ -1466,6 +1472,7 @@ export const GetPostDocument = gql`
       contents
       price
       user {
+        userId
         name
         address
         trust
