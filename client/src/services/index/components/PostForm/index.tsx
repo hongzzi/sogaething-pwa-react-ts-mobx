@@ -251,6 +251,9 @@ const Input = styled.input`
 `
 
 const Select = styled.select`
+    -webkit-appearance: none;
+       -moz-appearance: none;
+            appearance: none;
     background: url(${DropdownIcon}) no-repeat 95% 50%;
     width: 100%;
     height: 2rem;

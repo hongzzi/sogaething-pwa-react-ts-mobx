@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router';
 import * as React from 'react';
 import styled from '~/styled';
 import { numberWithCommas } from '../../helpers/comma';
@@ -19,8 +20,12 @@ export interface IMatchCard {
 
 export default (props: IMatchCardProps) => {
   const { match } = props;
+  const router = useRouter();
+  const handleClick = () => {
+    router.push(`/`)
+  }
   return (
-    <Wrapper>
+    <Wrapper onClick={handleClick}>
       <TopContent>
         <InnerLine>{match.category}</InnerLine> <InnerLine>{match.createdDate}</InnerLine>
         <InnerLine>
