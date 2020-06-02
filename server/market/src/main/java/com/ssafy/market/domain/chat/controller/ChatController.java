@@ -30,7 +30,6 @@ public class ChatController {
 
     private final ChatService chatService;
     private final ChatRoomService chatRoomService;
-    private final ImgurApi imgurApi;
 
     /**
      * websocket "/pub/chat/message"로 들어오는 메시징을 처리한다.
