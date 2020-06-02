@@ -8,6 +8,7 @@ query getPost($postId: Int) {
         contents
         price
         user{
+            userId
             name
             address
             trust
