@@ -48,7 +48,7 @@ export default function HashTagSearch(props: IHashTagSearchProps) {
                 <SearchBar>
                     <Shap>#</Shap>
                     <Input value={value} type={'text'} onChange={handleChange} onKeyUp={handleSubmit} />
-                    
+                    <AutoCompleteField> test </AutoCompleteField>
                 </SearchBar>
                 <HashTags>
     {hStore.hashtag.map((hashtag: string | number | undefined, index: string | number | undefined) => (<Tag onClick={handleClick} key={index} value={hashtag}>{hashtag}</Tag>))}
