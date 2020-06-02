@@ -1,5 +1,6 @@
 import { toJS } from 'mobx';
 import moment from 'moment';
+import { useRouter } from 'next/router';
 import * as React from 'react';
 import styled from '~/styled';
 import useStores from '../../helpers/useStores';
@@ -12,10 +13,14 @@ interface IChatCardProps {
 
 export default (props: IChatCardProps) => {
   const {authStore} = useStores();
+  const router = useRouter();
   const mnt = moment(props.chatData!.modifiedDateTime);
   const diffTime = moment.duration(mnt.diff(moment())).asHours();
+  const handleClickChatItem = () => {
+    router.push(`/chat/${props.chatData!.roomId}`);
+  }
   return(
-        <ChatListItem>
+        <ChatListItem onClick={handleClickChatItem}>
           <CircleImageView
             size={2}
             src={
@@ -23,7 +28,7 @@ export default (props: IChatCardProps) => {
             }
           />
           <WrapperText>
-            <Line fontSize={14}>{authStore.auth!.sub === props.chatData!.buyerUser.userId ? props.chatData!.sellerUser.userName : props.chatData!.buyerUser.userName}</Line>
+            <Line fontSize={14}>{authStore.auth!.userId + '' === props.chatData!.buyerUser.userId ? props.chatData!.sellerUser.userName : props.chatData!.buyerUser.userName}</Line>
             <WrapperInnerText>
               <Line fontSize={10} float={'left'}>
                 {props.chatData!.lastMessage}

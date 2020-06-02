@@ -25,7 +25,7 @@ export default (props: IProductCard) => {
         src={
           props.loading
             ? 'https://www.sctech.edu/wp-content/plugins/ajax-search-pro/img/default.jpg'
-            : props.cardData!.imgUrls[0].imgPath === undefined
+            : props.cardData!.imgUrls.length === 0
             ? 'https://www.sctech.edu/wp-content/plugins/ajax-search-pro/img/default.jpg'
             : props.cardData!.imgUrls[0].imgPath
         }

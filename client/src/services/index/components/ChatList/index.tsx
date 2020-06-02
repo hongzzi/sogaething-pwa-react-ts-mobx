@@ -3,22 +3,6 @@ import styled from '~/styled';
 import { ChatRoomListItemDto } from '../../service/ChatService';
 import Card from './ChatItem';
 
-const dump = [
-  { name: '#맥북', chat: '1.000,000' },
-  { name: '#맥북', chat: '1.000,000' },
-  { name: '#맥북', chat: '1.000,000' },
-  { name: '#맥북', chat: '1.000,000' },
-  { name: '#맥북', chat: '1.000,000' },
-  { name: '#맥북', chat: '1.000,000' },
-  { name: '#맥북', chat: '1.000,000' },
-  { name: '#맥북', chat: '1.000,000' },
-  { name: '#맥북', chat: '1.000,000' },
-  { name: '#맥북', chat: '1.000,000' },
-  { name: '#맥북', chat: '1.000,000' },
-  { name: '#맥북', chat: '1.000,000' },
-  { name: '#맥북', chat: '1.000,000' },
-];
-
 interface IChatCardProps {
   chatData: ChatRoomListItemDto[];
   loading: boolean;

@@ -26,7 +26,7 @@ export default (props: ICategoryHeader) => {
             <WrapperIcon onClick={handleBackIconClick}>
               <CustomIcon url={HeaderBack} />
             </WrapperIcon>
-            <Text>{props.text ? props.text : '소개띵'}</Text>
+            <Text>{props.text ? props.text : ''}</Text>
           </TextWrapper>
           <StyledCustomIcon url={HeacerMenu} />
         </>
