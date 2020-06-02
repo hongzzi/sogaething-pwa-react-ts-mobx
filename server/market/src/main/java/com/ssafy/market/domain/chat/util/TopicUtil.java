@@ -6,9 +6,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class TopicUtil {
-    private static Map<String, ChannelTopic> topics = new HashMap<>();
+    private static Map<Long, ChannelTopic> topics = new HashMap<>();
     private TopicUtil(){}
-    public static Map<String, ChannelTopic> getTopicUtil() {
+    public static Map<Long, ChannelTopic> getTopicUtil() {
         return topics;
     }
 }

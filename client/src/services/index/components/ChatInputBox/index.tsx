@@ -35,7 +35,7 @@ export default (props: IChatInputProps) => {
   const { auth } = useChatData();
   const {chatStore} = useStores();
   const [roomId, setRoomId] = React.useState(props.roomId);
-  const [sender, setSender] = React.useState(auth ? auth.sub : '');
+  const [sender, setSender] = React.useState(auth ? auth.userId : '');
   const [message, setMessage] = React.useState('');
 
   React.useEffect(() => {

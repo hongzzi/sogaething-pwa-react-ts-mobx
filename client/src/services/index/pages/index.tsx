@@ -1,3 +1,4 @@
+import { useObserver } from 'mobx-react';
 import * as React from 'react';
 import styled from '~/styled';
 import CardList from '../components/CardList';
@@ -12,12 +13,11 @@ import useStores from '../helpers/useStores';
 import ChatService from '../service/ChatService';
 
 export default function PageIndex() {
-  const store = useStores();
-
+  const { pageStore, authStore } = useStores();
   const handleMoreCards = () => {
-    console.log(store.pageStore.clickedIdx);
+    console.log(pageStore.clickedIdx);
+    authStore.signOut();
   };
-
   return (
     <Layout>
       <Container>

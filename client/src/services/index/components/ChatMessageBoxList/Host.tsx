@@ -1,8 +1,8 @@
+import moment from 'moment';
 import * as React from 'react';
 import styled from '~/styled';
 import { IChatDto } from '../../service/ChatService';
 import CircleImageView from '../CircleImageView';
-import moment from 'moment';
 
 interface IChatMessageBox {
   cardData: IChatDto;
