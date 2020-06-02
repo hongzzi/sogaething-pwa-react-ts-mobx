@@ -25,13 +25,12 @@ export default () => {
   }, [])
 
   const handleOnClick = () => {
-    console.log(chatRooms);
   }
 
   return (
     <Wrapper>
       <CategoryHeader type={'chat'} />
-      <MarginTopCategoryHeaderContainer onClick={handleOnClick}>
+      <MarginTopCategoryHeaderContainer>
         <ChatList chatData={chatRooms} loading={loading} />
       </MarginTopCategoryHeaderContainer>
       <Nav />
