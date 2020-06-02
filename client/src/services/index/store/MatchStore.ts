@@ -1,5 +1,5 @@
 import autobind from 'autobind-decorator';
-import { action, observable, reaction } from 'mobx';
+import { action, observable, reaction, toJS } from 'mobx';
 
 export interface IMatch {
     category: string,
@@ -14,6 +14,7 @@ export const initialMatch = {
 
 @autobind
 class MatchStore {
+    match: IMatch | undefined;
     @observable title: string = '';
     @observable category: string = '';
     @observable hashtag: string[] = [];
@@ -22,7 +23,25 @@ class MatchStore {
     @observable maxPrice: number = 0;
 
     constructor(initialData = initialMatch, root: any) {
+        this.match = {
+            category: '',
+            hashtag: Array(),
+            transaction: '',
+            maxPrice: 999999999,
+            minPrice: 0,
+        }
+    }
 
+    @action
+    getMatch() {
+        this.match = {
+            category: this.category,
+            hashtag: toJS(this.hashtag),
+            transaction: this.transaction,
+            maxPrice: this.maxPrice,
+            minPrice: this.minPrice,
+        }
+        return this.match;
     }
 
     @action
@@ -51,8 +70,8 @@ class MatchStore {
     }
 
     @action
-    setHashtag(hashtag: string[]) {
-        this.hashtag = hashtag;
+    setHashtag(hashtag: string) {
+        this.hashtag = this.hashtag.concat(hashtag);
     }
 
     @action

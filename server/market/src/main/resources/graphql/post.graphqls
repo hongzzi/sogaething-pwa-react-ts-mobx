@@ -116,7 +116,7 @@ type RecentPostResponse {
 }
 
 type Mutation {
-    updateviewcount(postId: Int!): Int!
+    updateView(postId: Int!): Int!
     updateIsBuy(postId: Int!): Int!
     createPost(input: CreatePostInput!): CreateOutput
     updatePost(input: UpdatePostInput!): PostOutput

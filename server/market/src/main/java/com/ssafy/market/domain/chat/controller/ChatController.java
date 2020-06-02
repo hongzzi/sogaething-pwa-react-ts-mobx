@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
 import java.util.Map;
 
 @RequiredArgsConstructor
@@ -38,11 +37,10 @@ public class ChatController {
         logger.debug("message {}", message);
         if (MessageType.ENTER.equals(message.getType())) {
             chatRoomService.enterChatRoom(message.getRoomId());
-            message.setMessage(message.getSender() + "님이 입장하셨습니다.");
+//            message.setMessage(message.getSender() + "님이 입장하셨습니다.");
+        } else {
+            chatService.sendMessage(message);
         }
-        // WebSocket 에 발행된 메시지를 redis로 발행한다.(publish)
-//        redisPublisher.publish(chatRoomRepository.getTopic(message.getRoomId()), message);
-        chatService.sendMessage(message);
     }
 
     @ApiOperation(value = "특정 방의 채팅메시지를 가져온다.", response=Map.class)

@@ -9,7 +9,6 @@ import com.ssafy.market.domain.user.dto.UserOutput;
 import com.ssafy.market.domain.user.repository.UserRepository;
 import com.ssafy.market.domain.user.security.TokenProvider;
 import com.ssafy.market.global.apis.KakaoApi;
-import com.ssafy.market.global.exception.DomainNotFoundException;
 import graphql.schema.DataFetchingEnvironment;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -49,9 +48,6 @@ public class UserMutation implements GraphQLMutationResolver {
     public UserOutput updateUser(UpdateUserInput input,DataFetchingEnvironment env ){
         Long userId = tokenProvider.getUserIdFromHeader(env);
         User user = userRepository.findByUserId(userId);
-        if(user==null){
-            throw new DomainNotFoundException("userId", userId);
-        }
         user.update(input.getImageUrl(),input.getPhone(),input.getAddress(),input.getTrust());
         UserOutput output =  new UserOutput(userId,user.getName(),user.getEmail(),user.getImageUrl(),user.getProvider(),user.getProviderId(),user.getPhone(),user.getAddress(),user.getTrust());
         return output;
@@ -59,9 +55,6 @@ public class UserMutation implements GraphQLMutationResolver {
     @Transactional
     public int deleteUser(Long id){
         User user = userRepository.findByUserId(id);
-        if(user==null){
-            throw new DomainNotFoundException("userId", id);
-        }
         return userRepository.deleteByUserId(id);
     }
 }
