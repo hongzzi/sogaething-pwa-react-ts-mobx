@@ -139,7 +139,6 @@ export type IMatching = {
   matchingId?: Maybe<Scalars["ID"]>;
   user?: Maybe<IUser>;
   category?: Maybe<Scalars["String"]>;
-  hashtag?: Maybe<Scalars["String"]>;
   minPrice?: Maybe<Scalars["Int"]>;
   maxPrice?: Maybe<Scalars["Int"]>;
   transaction?: Maybe<Scalars["String"]>;
@@ -149,9 +148,20 @@ export type IMatching = {
 
 export type IMatchInput = {
   category?: Maybe<Scalars["String"]>;
-  price?: Maybe<Array<Maybe<Scalars["Int"]>>>;
+  minPrice?: Maybe<Scalars["Int"]>;
+  maxPrice?: Maybe<Scalars["Int"]>;
   hashtag?: Maybe<Array<Maybe<Scalars["String"]>>>;
   transaction?: Maybe<Scalars["String"]>;
+};
+
+export type IMatchResponse = {
+  category?: Maybe<Scalars["String"]>;
+  minPrice?: Maybe<Scalars["Int"]>;
+  maxPrice?: Maybe<Scalars["Int"]>;
+  hashtag?: Maybe<Array<Maybe<Scalars["String"]>>>;
+  transaction?: Maybe<Scalars["String"]>;
+  createdDate?: Maybe<Scalars["String"]>;
+  possibility?: Maybe<Scalars["String"]>;
 };
 
 export type IMutation = {
@@ -389,7 +399,7 @@ export type IQuery = {
   findAllHashtag?: Maybe<Array<Maybe<IHashtagOutput>>>;
   findByHashtagId?: Maybe<IHashtagOutput>;
   autocomplete?: Maybe<Array<Maybe<IAutocomplete>>>;
-  findMatchingByUserId?: Maybe<Array<Maybe<IMatching>>>;
+  findMatchingByUserId?: Maybe<Array<Maybe<IMatchResponse>>>;
   findAllProduct?: Maybe<Array<Maybe<IProductOutput>>>;
   findAllProducts?: Maybe<Array<Maybe<IProduct>>>;
   findByProductId?: Maybe<IProductOutput>;
@@ -653,8 +663,21 @@ export type ICreateMatchingMutation = { __typename?: "Mutation" } & {
   createMatching: Maybe<
     { __typename?: "Matching" } & Pick<
       IMatching,
-      "category" | "hashtag" | "transaction"
-    >
+      | "matchingId"
+      | "category"
+      | "minPrice"
+      | "maxPrice"
+      | "transaction"
+      | "createdDate"
+      | "modifiedDate"
+    > & {
+        user: Maybe<
+          { __typename?: "User" } & Pick<
+            IUser,
+            "userId" | "name" | "imageUrl" | "trust"
+          >
+        >;
+      }
   >;
 };
 
@@ -744,6 +767,15 @@ export type ICreateHistoryMutation = { __typename?: "Mutation" } & {
     >
   >;
 };
+
+export type IUpdateViewMutationVariables = {
+  postId: Scalars["Int"];
+};
+
+export type IUpdateViewMutation = { __typename?: "Mutation" } & Pick<
+  IMutation,
+  "updateView"
+>;
 
 import gql from "graphql-tag";
 import * as React from "react";
@@ -1075,9 +1107,19 @@ export function useGetRecentQuery(
 export const CreateMatchingDocument = gql`
   mutation createMatching($input: MatchInput!) {
     createMatching(input: $input) {
+      matchingId
+      user {
+        userId
+        name
+        imageUrl
+        trust
+      }
       category
-      hashtag
+      minPrice
+      maxPrice
       transaction
+      createdDate
+      modifiedDate
     }
   }
 `;
@@ -1420,4 +1462,66 @@ export function useCreateHistoryMutation(
     ICreateHistoryMutation,
     ICreateHistoryMutationVariables
   >(CreateHistoryDocument, baseOptions);
+}
+export const UpdateViewDocument = gql`
+  mutation updateView($postId: Int!) {
+    updateView(postId: $postId)
+  }
+`;
+export type IUpdateViewMutationFn = ReactApollo.MutationFn<
+  IUpdateViewMutation,
+  IUpdateViewMutationVariables
+>;
+
+export const UpdateViewComponent = (
+  props: Omit<
+    Omit<
+      ReactApollo.MutationProps<
+        IUpdateViewMutation,
+        IUpdateViewMutationVariables
+      >,
+      "mutation"
+    >,
+    "variables"
+  > & { variables?: IUpdateViewMutationVariables }
+) => (
+  <ReactApollo.Mutation<IUpdateViewMutation, IUpdateViewMutationVariables>
+    mutation={UpdateViewDocument}
+    {...props}
+  />
+);
+
+export type IUpdateViewProps<TChildProps = {}> = Partial<
+  ReactApollo.MutateProps<IUpdateViewMutation, IUpdateViewMutationVariables>
+> &
+  TChildProps;
+export function withUpdateView<TProps, TChildProps = {}>(
+  operationOptions?: ReactApollo.OperationOption<
+    TProps,
+    IUpdateViewMutation,
+    IUpdateViewMutationVariables,
+    IUpdateViewProps<TChildProps>
+  >
+) {
+  return ReactApollo.withMutation<
+    TProps,
+    IUpdateViewMutation,
+    IUpdateViewMutationVariables,
+    IUpdateViewProps<TChildProps>
+  >(UpdateViewDocument, {
+    alias: "withUpdateView",
+    ...operationOptions
+  });
+}
+
+export function useUpdateViewMutation(
+  baseOptions?: ReactApolloHooks.MutationHookOptions<
+    IUpdateViewMutation,
+    IUpdateViewMutationVariables
+  >
+) {
+  return ReactApolloHooks.useMutation<
+    IUpdateViewMutation,
+    IUpdateViewMutationVariables
+  >(UpdateViewDocument, baseOptions);
 }

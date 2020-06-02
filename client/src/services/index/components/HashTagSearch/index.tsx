@@ -2,6 +2,7 @@ import * as React from 'react';
 import { useState } from 'react';
 import styled from '~/styled';
 import useStores from '../../helpers/useStores';
+import { useGetAutoCompleteQuery } from '~/generated/graphql';
 
 export interface IHashTagSearchProps {
     type: 'post' | 'match'
@@ -18,6 +19,7 @@ export default function HashTagSearch(props: IHashTagSearchProps) {
     }
     const [value, setValue] = useState('');
     const [hashTag, setHashTag] = useState(hStore.hashtag);
+    const [autocomplete, setAutocomplete] = useState();
 
     const handleClick = (event: any) => {
         if (confirm('해시태그를 삭제할까요?')) {
@@ -48,10 +50,10 @@ export default function HashTagSearch(props: IHashTagSearchProps) {
                 <SearchBar>
                     <Shap>#</Shap>
                     <Input value={value} type={'text'} onChange={handleChange} onKeyUp={handleSubmit} />
-                    <AutoCompleteField> test </AutoCompleteField>
+                    <AutoCompleteField> {} </AutoCompleteField>
                 </SearchBar>
                 <HashTags>
-    {hStore.hashtag.map((hashtag: string | number | undefined, index: string | number | undefined) => (<Tag onClick={handleClick} key={index} value={hashtag}>{hashtag}</Tag>))}
+    {hashTag.map((hashtag: string | number | undefined, index: string | number | undefined) => (<Tag onClick={handleClick} key={index} value={hashtag}>{hashtag}</Tag>))}
                 </HashTags>
             </Container>
         </Wrapper>
@@ -79,6 +81,8 @@ const SearchBar = styled.div`
 
 const AutoCompleteField = styled.div`
     display: absolute;
+    height: 2rem;
+    width: 80%;
 `
 
 const Shap = styled.span`

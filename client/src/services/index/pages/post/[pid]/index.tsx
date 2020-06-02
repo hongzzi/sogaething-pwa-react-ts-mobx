@@ -3,7 +3,7 @@ import styled from '~/styled';
 
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useGetPostQuery, useCreateHistoryMutation } from '~/generated/graphql';
+import { useGetPostQuery, useCreateHistoryMutation, useUpdateViewMutation } from '~/generated/graphql';
 
 import CategoryHeader from '../../../components/CategoryHeader';
 import ImageSlider from '../../../components/ImageSlider';
@@ -40,18 +40,21 @@ export interface IUser {
 export default function Detail(props: any) {
     const router = useRouter()
     const { pid } = router.query
+    const updateMutaion = useUpdateViewMutation({ variables: { postId: pid }});
     const { data, loading, error } = useGetPostQuery({ variables: { postId: pid } });
-    const mutation = useCreateHistoryMutation();
+    const createMutation = useCreateHistoryMutation();
 
     useEffect(() => {
         if (data && data.findByDetailPost) {
             // 히스토리 추가, 뷰카운트 업데이트
-            mutation({
+            createMutation({
                 variables: {
                     input: pid,
                 },
             }).then((res) => {
-                console.log(res);
+                // console.log(res);
+            }).catch((error) => {
+                // console.log(error);
             })
         }
     }, [data])

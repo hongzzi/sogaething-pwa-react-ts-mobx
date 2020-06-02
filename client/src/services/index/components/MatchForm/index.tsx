@@ -47,7 +47,8 @@ export default (props: IMatchFormProps) => {
             variables: {
                 input: {
                     category: match.category,
-                    price: [match.minPrice, match.maxPrice],
+                    minPrice: match.minPrice,
+                    maxPrice: match.maxPrice,
                     transaction: match.transaction,
                     hashtag: match.hashtag,
                 },
