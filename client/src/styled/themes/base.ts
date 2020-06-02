@@ -7,6 +7,7 @@ const theme = {
   mainBGcolor: '#ffffff',
   mainCategoryTextColor: '#08979c',
   subFontColor: '#c6c6c6',
+  bolderColor: '#c6c6c6',
   searchBarColor: '#259be5',
   mainUserCardBGColor: '#ffffff',
   button: {
