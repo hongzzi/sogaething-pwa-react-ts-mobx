@@ -14,8 +14,6 @@ import java.util.Optional;
 
 public interface MatchingRepository extends JpaRepository<Matching, Long> {
     List<Matching> findTop5ByUserId(Long userId);
-
-//    @Query(value = "DELETE FROM matching WHERE matching_id = :matchingId", nativeQuery = true)
-//    int deleteByMatchingId(@Param("matchingId") Long matchingId);
     int deleteByMatchingId(Long matchingId);
+    Matching findByMatchingId(Long matchingId);
 }
