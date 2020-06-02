@@ -47,11 +47,11 @@ export default () => {
     if(loading){
       return <Card key={i} cardData={null} loading />;
     }else {
-      // return <Card key={i} cardData={findUserHistoryByUserId[i]} loading={false} />
+      return <Card key={i} cardData={findUserHistoryByUserId[i]} loading={false} />
     }
     
   });
-  return <Wrapper onClick={handleCardClick}>123{Cards}</Wrapper>;
+  return <Wrapper onClick={handleCardClick}>{Cards}</Wrapper>;
 };
 
 const Wrapper = styled.div`
