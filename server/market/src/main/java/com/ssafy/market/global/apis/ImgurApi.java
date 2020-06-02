@@ -17,19 +17,23 @@ public class ImgurApi {
 
     public static final String CLIENT_ID = "2d1537da8393cd6";
 
-    public static Executor uploadExecutor = Executors.newCachedThreadPool();
 
-    public static String uploadimgtest(String base64) throws IOException {
-        Connection.Response response = uploadSync(base64);
-        if(response.statusCode()==400){
-            return "false";
+    public static String uploadImg(String base64)  {
+        try {
+            Connection.Response response = uploadSync(base64);
+            if (response.statusCode() == 400) {
+                return "false";
+            }
+            JsonParser parser = new JsonParser();
+            JsonElement element = parser.parse(response.body());
+            JsonObject properties = element.getAsJsonObject().get("data").getAsJsonObject();
+            String url = String.valueOf(properties.get("link"));
+            url = url.replace("\"", "");
+            return url;
+        }catch (Exception e){
+            e.printStackTrace();
+            return null;
         }
-        JsonParser parser = new JsonParser();
-        JsonElement element = parser.parse(response.body());
-        JsonObject properties = element.getAsJsonObject().get("data").getAsJsonObject();
-        String url = String.valueOf(properties.get("link"));
-        url = url.replace("\"","");
-        return url;
     }
 
 
