@@ -1,7 +1,17 @@
 mutation createMatching($input: MatchInput!) {
     createMatching(input: $input) {
+        matchingId
+        user {
+                userId
+                name
+                imageUrl
+                trust
+        }
         category
-        hashtag
+        minPrice
+        maxPrice
         transaction
+        createdDate
+        modifiedDate
     }
 }

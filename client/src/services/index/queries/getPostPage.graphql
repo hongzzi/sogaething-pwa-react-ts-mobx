@@ -40,3 +40,8 @@ mutation createHistory($input: Int!) {
         modifiedDate
     }
 }
+
+mutation updateView($postId: Int!){
+    updateView(postId: $postId)
+}
+

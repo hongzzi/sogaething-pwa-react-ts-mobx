@@ -32,6 +32,8 @@ export const initialPost = {
 @autobind
 class PostStore {
     post: IPost | undefined;
+    hashSet: Set<string> = new Set();
+    imgSet: Set<string> = new Set();
     @observable title: string = '';
     @observable category: string = '';
     @observable imgPaths: string[] = [];
@@ -103,7 +105,14 @@ class PostStore {
 
     @action
     setHashtag(hashtag: string) {
-        this.hashtag = this.hashtag.concat(hashtag);
+        this.hashSet.add(hashtag);
+        this.hashtag = Array.from(this.hashSet.values());
+    }
+
+    @action
+    removeHashtag(hashtag: string) {
+        this.hashSet.delete(hashtag);
+        this.hashtag = Array.from(this.hashSet.values());
     }
 
     @action
