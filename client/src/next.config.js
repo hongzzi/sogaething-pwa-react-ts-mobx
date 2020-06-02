@@ -31,6 +31,7 @@ module.exports = withOptimizedImages({
     );
     config.node = {
       fs: "empty",
+      net: "empty"
     };
     return config;
   },

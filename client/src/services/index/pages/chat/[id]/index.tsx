@@ -1,21 +1,40 @@
+import { useObserver } from 'mobx-react';
 import { useRouter } from 'next/router';
 import * as React from 'react';
 import CategoryHeader from '~/services/index/components/CategoryHeader';
 import ChatInputBox from '~/services/index/components/ChatInputBox';
 import ChatMessageBox from '~/services/index/components/ChatMessageBoxList';
+import useStores from '~/services/index/helpers/useStores';
 import styled from '~/styled';
+import { toJS } from 'mobx';
+
+function useChatData() {
+  const { chatStore } = useStores();
+  return useObserver(() => ({
+    // useObserver를 사용해서 리턴하는 값의 업데이트를 계속 반영한다
+    loading: chatStore.loading,
+    chatRoomData: chatStore.chatRoomData,
+  }));
+}
 
 export default () => {
+  const {chatStore, authStore} = useStores();
+  const {loading, chatRoomData} = useChatData();
   const router = useRouter();
-  
+  const [me, setMe] = React.useState('');
+  React.useEffect(() => {
+    chatStore.getUserChatRoom(router.query.id);
+    setMe(authStore.getAuth()!.userId + '');
+  }, [])
   return (
     <Wrapper>
-      <CategoryHeader type={'normal'} text={router.query.id} />
+      {loading && <CategoryHeader type={'normal'} text={''} />}
+      {!loading && <CategoryHeader type={'normal'} text={chatStore.getChatRoomAuth().buyer === me ? chatStore.getChatRoomAuth().seller : chatStore.getChatRoomAuth().buyer}/>}
       <ChatContainer>
-          <ChatMessageBox />
+          <ChatMessageBox chatRoomData={chatRoomData} me={me} />
       </ChatContainer>
       <ChatInput>
-          <ChatInputBox />
+          <ChatInputBox roomId={router.query.id} chatRoomData={chatRoomData} />
       </ChatInput>
     </Wrapper>
   );
@@ -36,6 +55,9 @@ const ChatContainer = styled.div`
     grid-area: CC;
     height: 100%;
     background-color: #f1f1f1;
+    display: flex;
+    flex-direction: column-reverse;
+    justify-content: space-between;
     padding: 3vw;
     overflow-y: scroll;
 `;

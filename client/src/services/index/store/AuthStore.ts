@@ -1,9 +1,11 @@
 import autobind from 'autobind-decorator';
 import jwtDecode from 'jwt-decode';
-import { action, observable, reaction, toJS } from 'mobx';
+import { action, observable, reaction, toJS, autorun } from 'mobx';
 
 export interface IAuth {
-  sub: number;
+  sub: string;
+  userId: number;
+  userName: string;
 }
 
 export interface IAuthResponseDto {
@@ -27,12 +29,14 @@ class AuthStore {
   @observable provider: string = '';
 
   constructor(initialData = initialAuth, root: any) {
-    if (this.token) {
-      this.auth = jwtDecode(this.token) as IAuth;
+    if (initialData.token !== '') {
+      this.setToken(initialData.token);
+      this.auth = jwtDecode(initialData.token);
+      console.log(this.auth);
     }
 
-    if(initialData.token !== ''){
-      this.setToken(initialData.token);
+    if (this.token) {
+      this.auth = jwtDecode(this.token) as IAuth;
     }
 
     reaction(
