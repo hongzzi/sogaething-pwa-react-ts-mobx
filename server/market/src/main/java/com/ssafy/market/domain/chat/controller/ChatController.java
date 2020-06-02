@@ -37,9 +37,10 @@ public class ChatController {
         logger.debug("message {}", message);
         if (MessageType.ENTER.equals(message.getType())) {
             chatRoomService.enterChatRoom(message.getRoomId());
-            message.setMessage(message.getSender() + "님이 입장하셨습니다.");
+//            message.setMessage(message.getSender() + "님이 입장하셨습니다.");
+        } else {
+            chatService.sendMessage(message);
         }
-        chatService.sendMessage(message);
     }
 
     @ApiOperation(value = "특정 방의 채팅메시지를 가져온다.", response=Map.class)
