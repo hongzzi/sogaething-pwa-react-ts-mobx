@@ -36,7 +36,7 @@ public class RedisConfig {
         RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration(redisHostName, redisPort);
 //        if (!active.equals("local"))
 //            redisStandaloneConfiguration.setPassword(RedisPassword.of(redisPassword));
-    
+
         return new JedisConnectionFactory(redisStandaloneConfiguration);
     }
 

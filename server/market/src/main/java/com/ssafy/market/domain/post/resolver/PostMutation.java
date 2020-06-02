@@ -79,7 +79,7 @@ public class PostMutation implements GraphQLMutationResolver {
                     for (int k = 0; k < arr.length; k++) {
 //                        String temp = arr[k].substring(22);
                         String[] temp = arr[k].split(",");
-                        String imgur = api.uploadimgtest(temp[1]);
+                        String imgur = api.uploadImg(temp[1]);
                         if(!imgur.equals("false")) {
                             File file = fileRepository.save(new File(null, product, imgur));
                         }
@@ -129,7 +129,7 @@ public class PostMutation implements GraphQLMutationResolver {
             try {
                 for (int k = 0; k < arr.length; k++) {
                     String[] temp = arr[k].split(",");
-                    String imgur = api.uploadimgtest(temp[1]);
+                    String imgur = api.uploadImg(temp[1]);
                     if (!imgur.equals("false")) {
                         File file = fileRepository.save(new File(null, product, imgur));
                     } else {
