@@ -37,7 +37,7 @@ public class ChatRoomService {
 
     // 채팅방(topic)에 발행되는 메시지를 처리할 Listener
     private final RedisMessageListenerContainer redisMessageListener;
-    private Map<String, ChannelTopic> topics = TopicUtil.getTopicUtil();
+    private Map<Long, ChannelTopic> topics = TopicUtil.getTopicUtil();
 
     // 구독 처리 서비스
     private final RedisSubscriber redisSubscriber;
@@ -60,11 +60,18 @@ public class ChatRoomService {
         if (topic == null) {
             topic = new ChannelTopic(String.valueOf(roomId));
             redisMessageListener.addMessageListener(redisSubscriber, topic);
-            topics.put(String.valueOf(roomId), topic);
+            topics.put(roomId, topic);
         }
         return true;
     }
 
+    public boolean leaveChatRoom(Long roomId) {
+        if (topics.containsKey(roomId)) {
+            topics.remove(roomId);
+            return true;
+        }
+        return false;
+    }
     @Transactional(readOnly = true)
     public List<ChatRoom> findAllRoom() {
         List<ChatRoom> chatRooms = chatRoomMongoRepository.getChatRooms();

@@ -38,6 +38,8 @@ public class ChatController {
         if (MessageType.ENTER.equals(message.getType())) {
             chatRoomService.enterChatRoom(message.getRoomId());
 //            message.setMessage(message.getSender() + "님이 입장하셨습니다.");
+//        } else if (MessageType.LEAVE.equals(message.getType())) {
+//            chatRoomService
         } else {
             chatService.sendMessage(message);
         }
