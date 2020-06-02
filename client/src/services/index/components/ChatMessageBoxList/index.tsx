@@ -2,12 +2,12 @@ import { useRouter } from 'next/router';
 import * as React from 'react';
 import styled from '~/styled';
 import useStores from '../../helpers/useStores';
+import { IChatDto } from '../../service/ChatService';
 import Client from './Client';
 import Host from './Host';
-import { IChatDto } from '../../service/ChatService';
 
 interface IChatMessageProps {
-  chatRoomData : IChatDto[];
+  chatRoomData: IChatDto[];
   me: string;
 }
 

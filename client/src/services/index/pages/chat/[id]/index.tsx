@@ -22,16 +22,19 @@ export default () => {
   const {loading, chatRoomData} = useChatData();
   const router = useRouter();
   const [me, setMe] = React.useState('');
+  const [userId, setUserId] = React.useState('');
   React.useEffect(() => {
     chatStore.getUserChatRoom(router.query.id);
-    setMe(authStore.getAuth()!.userId + '');
+    setMe(authStore.getAuth()!.userName);
+    setUserId(authStore.getAuth()!.userId+'');
   }, [])
+
   return (
     <Wrapper>
       {loading && <CategoryHeader type={'normal'} text={''} />}
       {!loading && <CategoryHeader type={'normal'} text={chatStore.getChatRoomAuth().buyer === me ? chatStore.getChatRoomAuth().seller : chatStore.getChatRoomAuth().buyer}/>}
       <ChatContainer>
-          <ChatMessageBox chatRoomData={chatRoomData} me={me} />
+          <ChatMessageBox chatRoomData={chatRoomData} me={userId} />
       </ChatContainer>
       <ChatInput>
           <ChatInputBox roomId={router.query.id} chatRoomData={chatRoomData} />
