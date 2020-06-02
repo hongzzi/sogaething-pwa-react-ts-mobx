@@ -1,9 +1,9 @@
 import { useRouter } from 'next/router';
 import * as React from 'react';
 import CategoryHeader from '~/services/index/components/CategoryHeader';
+import FeedCardList from '~/services/index/components/FeedCardList';
 import MatchCardList from '~/services/index/components/MatchCardList';
 import styled from '~/styled';
-import FeedCardList from '~/services/index/components/FeedCardList';
 
 export default () => {
   const router = useRouter();

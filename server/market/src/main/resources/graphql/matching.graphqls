@@ -2,7 +2,6 @@ type Matching {
     matchingId: ID
     user: User
     category: String
-    hashtag: String
     minPrice: Int
     maxPrice: Int
     transaction: String
@@ -10,10 +9,30 @@ type Matching {
     modifiedDate: String
 }
 
+type MatchResponse {
+    matchingId: Int
+    category: String
+    minPrice: Int
+    maxPrice: Int
+    hashtag: [String]
+    transaction: String
+    createdDate: String
+    possibility: String
+}
+
+input MatchInput {
+    category: String
+    minPrice: Int
+    maxPrice: Int
+    hashtag: [String]
+    transaction: String
+}
+
 extend type Query {
-    findMatchingByUserId: [Matching]
+    findMatchingByUserId: [MatchResponse]
 }
 
 extend type Mutation {
     createMatching(input: MatchInput!): Matching
+#    deleteMatching(matchingId: Int): Int
 }

@@ -1,5 +1,6 @@
 import { useObserver } from 'mobx-react';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import * as React from 'react';
 import styled from '~/styled';
 import ChatImageFocus from '../../assets/img/chat-focus.png?url';
@@ -30,8 +31,15 @@ function usePageData() {
 }
 
 export default (props: INav) => {
+  const router = useRouter();
   const { pageStore } = useStores();
   const { clickedIdx, modal } = usePageData();
+  const handleMatch = () => {
+    router.push('/form/match');
+  }
+  const handlePost = () => {
+    router.push('/form/post');
+  }
 
   const handleModal = () => {
     pageStore.toggleModal();
@@ -91,8 +99,8 @@ export default (props: INav) => {
         </a>
       </Link>
       <Modal modalState={modal}>
-          <ModalItem>구매 하기</ModalItem>
-          <ModalItem>판매 하기</ModalItem>
+          <ModalItem onClick={handleMatch}>구매하기</ModalItem>
+          <ModalItem onClick={handlePost}>판매하기</ModalItem>
           <ModalItem onClick={handleModal}>닫기</ModalItem>
       </Modal>
     </WrapprNav>

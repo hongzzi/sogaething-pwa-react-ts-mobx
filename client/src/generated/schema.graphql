@@ -1,5 +1,5 @@
 # source: http://3.34.131.20:8080/graphql
-# timestamp: Tue Jun 02 2020 17:10:02 GMT+0900 (대한민국 표준시)
+# timestamp: Tue Jun 02 2020 19:15:50 GMT+0900 (GMT+09:00)
 
 """This directive allows results to be deferred during execution"""
 directive @defer on FIELD
@@ -135,7 +135,6 @@ type Matching {
   matchingId: ID
   user: User
   category: String
-  hashtag: String
   minPrice: Int
   maxPrice: Int
   transaction: String
@@ -145,9 +144,20 @@ type Matching {
 
 input MatchInput {
   category: String
-  price: [Int]
+  minPrice: Int
+  maxPrice: Int
   hashtag: [String]
   transaction: String
+}
+
+type MatchResponse {
+  category: String
+  minPrice: Int
+  maxPrice: Int
+  hashtag: [String]
+  transaction: String
+  createdDate: String
+  possibility: String
 }
 
 type Mutation {
@@ -300,7 +310,7 @@ type Query {
   findAllHashtag: [HashtagOutput]
   findByHashtagId(id: Int): HashtagOutput
   autocomplete(hashtag: String!): [Autocomplete]
-  findMatchingByUserId: [Matching]
+  findMatchingByUserId: [MatchResponse]
   findAllProduct: [ProductOutput]
   findAllProducts: [Product]
   findByProductId(id: Int): ProductOutput

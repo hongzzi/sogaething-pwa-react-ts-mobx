@@ -9,15 +9,11 @@ import org.jsoup.Jsoup;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
 
 @Service
 public class ImgurApi {
 
     public static final String CLIENT_ID = "2d1537da8393cd6";
-
-    public static Executor uploadExecutor = Executors.newCachedThreadPool();
 
     public String uploadImg(String base64){
         try {

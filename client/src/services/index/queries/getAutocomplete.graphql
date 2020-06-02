@@ -1,0 +1,6 @@
+query getAutoComplete($input: String!) {
+    autocomplete(hashtag: $input) {
+        hashtag
+        count
+    }
+}

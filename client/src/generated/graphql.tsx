@@ -139,7 +139,6 @@ export type IMatching = {
   matchingId?: Maybe<Scalars["ID"]>;
   user?: Maybe<IUser>;
   category?: Maybe<Scalars["String"]>;
-  hashtag?: Maybe<Scalars["String"]>;
   minPrice?: Maybe<Scalars["Int"]>;
   maxPrice?: Maybe<Scalars["Int"]>;
   transaction?: Maybe<Scalars["String"]>;
@@ -149,9 +148,20 @@ export type IMatching = {
 
 export type IMatchInput = {
   category?: Maybe<Scalars["String"]>;
-  price?: Maybe<Array<Maybe<Scalars["Int"]>>>;
+  minPrice?: Maybe<Scalars["Int"]>;
+  maxPrice?: Maybe<Scalars["Int"]>;
   hashtag?: Maybe<Array<Maybe<Scalars["String"]>>>;
   transaction?: Maybe<Scalars["String"]>;
+};
+
+export type IMatchResponse = {
+  category?: Maybe<Scalars["String"]>;
+  minPrice?: Maybe<Scalars["Int"]>;
+  maxPrice?: Maybe<Scalars["Int"]>;
+  hashtag?: Maybe<Array<Maybe<Scalars["String"]>>>;
+  transaction?: Maybe<Scalars["String"]>;
+  createdDate?: Maybe<Scalars["String"]>;
+  possibility?: Maybe<Scalars["String"]>;
 };
 
 export type IMutation = {
@@ -389,7 +399,7 @@ export type IQuery = {
   findAllHashtag?: Maybe<Array<Maybe<IHashtagOutput>>>;
   findByHashtagId?: Maybe<IHashtagOutput>;
   autocomplete?: Maybe<Array<Maybe<IAutocomplete>>>;
-  findMatchingByUserId?: Maybe<Array<Maybe<IMatching>>>;
+  findMatchingByUserId?: Maybe<Array<Maybe<IMatchResponse>>>;
   findAllProduct?: Maybe<Array<Maybe<IProductOutput>>>;
   findAllProducts?: Maybe<Array<Maybe<IProduct>>>;
   findByProductId?: Maybe<IProductOutput>;
@@ -538,6 +548,23 @@ export type IUserOutput = {
   address?: Maybe<Scalars["String"]>;
   trust?: Maybe<Scalars["Int"]>;
 };
+export type IGetAutoCompleteQueryVariables = {
+  input: Scalars["String"];
+};
+
+export type IGetAutoCompleteQuery = { __typename?: "Query" } & {
+  autocomplete: Maybe<
+    Array<
+      Maybe<
+        { __typename?: "Autocomplete" } & Pick<
+          IAutocomplete,
+          "hashtag" | "count"
+        >
+      >
+    >
+  >;
+};
+
 export type IGetLoginMutationVariables = {
   input: ILoginUserInput;
 };
@@ -636,7 +663,79 @@ export type ICreateMatchingMutation = { __typename?: "Mutation" } & {
   createMatching: Maybe<
     { __typename?: "Matching" } & Pick<
       IMatching,
-      "category" | "hashtag" | "transaction"
+      | "matchingId"
+      | "category"
+      | "minPrice"
+      | "maxPrice"
+      | "transaction"
+      | "createdDate"
+      | "modifiedDate"
+    > & {
+        user: Maybe<
+          { __typename?: "User" } & Pick<
+            IUser,
+            "userId" | "name" | "imageUrl" | "trust"
+          >
+        >;
+      }
+  >;
+};
+
+export type IGetMatchingQueryVariables = {};
+
+export type IGetMatchingQuery = { __typename?: "Query" } & {
+  findMatchingByUserId: Maybe<
+    Array<
+      Maybe<
+        { __typename?: "MatchResponse" } & Pick<
+          IMatchResponse,
+          | "category"
+          | "minPrice"
+          | "maxPrice"
+          | "hashtag"
+          | "transaction"
+          | "createdDate"
+          | "possibility"
+        >
+      >
+    >
+  >;
+};
+
+export type IGetMatchResultsQueryVariables = {
+  input: IMatchInput;
+};
+
+export type IGetMatchResultsQuery = { __typename?: "Query" } & {
+  matchThings: Maybe<
+    Array<
+      Maybe<
+        { __typename?: "PostDetailOutput" } & Pick<
+          IPostDetailOutput,
+          | "postId"
+          | "title"
+          | "category"
+          | "imgPaths"
+          | "hashtag"
+          | "contents"
+          | "price"
+          | "viewCount"
+          | "isBuy"
+          | "deal"
+          | "dealState"
+          | "saleDate"
+          | "transaction"
+          | "createdDate"
+          | "modifiedDate"
+        > & {
+            user: Maybe<
+              { __typename?: "UserInfoResponse" } & Pick<
+                IUserInfoResponse,
+                "name" | "address" | "trust" | "numOfPosts" | "imgurl"
+              >
+            >;
+          }
+      >
     >
   >;
 };
@@ -728,12 +827,81 @@ export type ICreateHistoryMutation = { __typename?: "Mutation" } & {
   >;
 };
 
+export type IUpdateViewMutationVariables = {
+  postId: Scalars["Int"];
+};
+
+export type IUpdateViewMutation = { __typename?: "Mutation" } & Pick<
+  IMutation,
+  "updateView"
+>;
+
 import gql from "graphql-tag";
 import * as React from "react";
 import * as ReactApollo from "react-apollo";
 import * as ReactApolloHooks from "react-apollo-hooks";
 export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 
+export const GetAutoCompleteDocument = gql`
+  query getAutoComplete($input: String!) {
+    autocomplete(hashtag: $input) {
+      hashtag
+      count
+    }
+  }
+`;
+
+export const GetAutoCompleteComponent = (
+  props: Omit<
+    Omit<
+      ReactApollo.QueryProps<
+        IGetAutoCompleteQuery,
+        IGetAutoCompleteQueryVariables
+      >,
+      "query"
+    >,
+    "variables"
+  > & { variables: IGetAutoCompleteQueryVariables }
+) => (
+  <ReactApollo.Query<IGetAutoCompleteQuery, IGetAutoCompleteQueryVariables>
+    query={GetAutoCompleteDocument}
+    {...props}
+  />
+);
+
+export type IGetAutoCompleteProps<TChildProps = {}> = Partial<
+  ReactApollo.DataProps<IGetAutoCompleteQuery, IGetAutoCompleteQueryVariables>
+> &
+  TChildProps;
+export function withGetAutoComplete<TProps, TChildProps = {}>(
+  operationOptions?: ReactApollo.OperationOption<
+    TProps,
+    IGetAutoCompleteQuery,
+    IGetAutoCompleteQueryVariables,
+    IGetAutoCompleteProps<TChildProps>
+  >
+) {
+  return ReactApollo.withQuery<
+    TProps,
+    IGetAutoCompleteQuery,
+    IGetAutoCompleteQueryVariables,
+    IGetAutoCompleteProps<TChildProps>
+  >(GetAutoCompleteDocument, {
+    alias: "withGetAutoComplete",
+    ...operationOptions
+  });
+}
+
+export function useGetAutoCompleteQuery(
+  baseOptions?: ReactApolloHooks.QueryHookOptions<
+    IGetAutoCompleteQueryVariables
+  >
+) {
+  return ReactApolloHooks.useQuery<
+    IGetAutoCompleteQuery,
+    IGetAutoCompleteQueryVariables
+  >(GetAutoCompleteDocument, baseOptions);
+}
 export const GetLoginDocument = gql`
   mutation getLogin($input: LoginUserInput!) {
     loginUser(input: $input) {
@@ -998,9 +1166,19 @@ export function useGetRecentQuery(
 export const CreateMatchingDocument = gql`
   mutation createMatching($input: MatchInput!) {
     createMatching(input: $input) {
+      matchingId
+      user {
+        userId
+        name
+        imageUrl
+        trust
+      }
       category
-      hashtag
+      minPrice
+      maxPrice
       transaction
+      createdDate
+      modifiedDate
     }
   }
 `;
@@ -1066,6 +1244,146 @@ export function useCreateMatchingMutation(
     ICreateMatchingMutation,
     ICreateMatchingMutationVariables
   >(CreateMatchingDocument, baseOptions);
+}
+export const GetMatchingDocument = gql`
+  query getMatching {
+    findMatchingByUserId {
+      category
+      minPrice
+      maxPrice
+      hashtag
+      transaction
+      createdDate
+      possibility
+    }
+  }
+`;
+
+export const GetMatchingComponent = (
+  props: Omit<
+    Omit<
+      ReactApollo.QueryProps<IGetMatchingQuery, IGetMatchingQueryVariables>,
+      "query"
+    >,
+    "variables"
+  > & { variables?: IGetMatchingQueryVariables }
+) => (
+  <ReactApollo.Query<IGetMatchingQuery, IGetMatchingQueryVariables>
+    query={GetMatchingDocument}
+    {...props}
+  />
+);
+
+export type IGetMatchingProps<TChildProps = {}> = Partial<
+  ReactApollo.DataProps<IGetMatchingQuery, IGetMatchingQueryVariables>
+> &
+  TChildProps;
+export function withGetMatching<TProps, TChildProps = {}>(
+  operationOptions?: ReactApollo.OperationOption<
+    TProps,
+    IGetMatchingQuery,
+    IGetMatchingQueryVariables,
+    IGetMatchingProps<TChildProps>
+  >
+) {
+  return ReactApollo.withQuery<
+    TProps,
+    IGetMatchingQuery,
+    IGetMatchingQueryVariables,
+    IGetMatchingProps<TChildProps>
+  >(GetMatchingDocument, {
+    alias: "withGetMatching",
+    ...operationOptions
+  });
+}
+
+export function useGetMatchingQuery(
+  baseOptions?: ReactApolloHooks.QueryHookOptions<IGetMatchingQueryVariables>
+) {
+  return ReactApolloHooks.useQuery<
+    IGetMatchingQuery,
+    IGetMatchingQueryVariables
+  >(GetMatchingDocument, baseOptions);
+}
+export const GetMatchResultsDocument = gql`
+  query getMatchResults($input: MatchInput!) {
+    matchThings(input: $input) {
+      postId
+      title
+      category
+      imgPaths
+      hashtag
+      contents
+      price
+      user {
+        name
+        address
+        trust
+        numOfPosts
+        imgurl
+      }
+      viewCount
+      isBuy
+      deal
+      dealState
+      saleDate
+      transaction
+      createdDate
+      modifiedDate
+    }
+  }
+`;
+
+export const GetMatchResultsComponent = (
+  props: Omit<
+    Omit<
+      ReactApollo.QueryProps<
+        IGetMatchResultsQuery,
+        IGetMatchResultsQueryVariables
+      >,
+      "query"
+    >,
+    "variables"
+  > & { variables: IGetMatchResultsQueryVariables }
+) => (
+  <ReactApollo.Query<IGetMatchResultsQuery, IGetMatchResultsQueryVariables>
+    query={GetMatchResultsDocument}
+    {...props}
+  />
+);
+
+export type IGetMatchResultsProps<TChildProps = {}> = Partial<
+  ReactApollo.DataProps<IGetMatchResultsQuery, IGetMatchResultsQueryVariables>
+> &
+  TChildProps;
+export function withGetMatchResults<TProps, TChildProps = {}>(
+  operationOptions?: ReactApollo.OperationOption<
+    TProps,
+    IGetMatchResultsQuery,
+    IGetMatchResultsQueryVariables,
+    IGetMatchResultsProps<TChildProps>
+  >
+) {
+  return ReactApollo.withQuery<
+    TProps,
+    IGetMatchResultsQuery,
+    IGetMatchResultsQueryVariables,
+    IGetMatchResultsProps<TChildProps>
+  >(GetMatchResultsDocument, {
+    alias: "withGetMatchResults",
+    ...operationOptions
+  });
+}
+
+export function useGetMatchResultsQuery(
+  baseOptions?: ReactApolloHooks.QueryHookOptions<
+    IGetMatchResultsQueryVariables
+  >
+) {
+  return ReactApolloHooks.useQuery<
+    IGetMatchResultsQuery,
+    IGetMatchResultsQueryVariables
+  >(GetMatchResultsDocument, baseOptions);
 }
 export const GetMyPostsDocument = gql`
   query getMyPosts($userId: Int) {
@@ -1343,4 +1661,66 @@ export function useCreateHistoryMutation(
     ICreateHistoryMutation,
     ICreateHistoryMutationVariables
   >(CreateHistoryDocument, baseOptions);
+}
+export const UpdateViewDocument = gql`
+  mutation updateView($postId: Int!) {
+    updateView(postId: $postId)
+  }
+`;
+export type IUpdateViewMutationFn = ReactApollo.MutationFn<
+  IUpdateViewMutation,
+  IUpdateViewMutationVariables
+>;
+
+export const UpdateViewComponent = (
+  props: Omit<
+    Omit<
+      ReactApollo.MutationProps<
+        IUpdateViewMutation,
+        IUpdateViewMutationVariables
+      >,
+      "mutation"
+    >,
+    "variables"
+  > & { variables?: IUpdateViewMutationVariables }
+) => (
+  <ReactApollo.Mutation<IUpdateViewMutation, IUpdateViewMutationVariables>
+    mutation={UpdateViewDocument}
+    {...props}
+  />
+);
+
+export type IUpdateViewProps<TChildProps = {}> = Partial<
+  ReactApollo.MutateProps<IUpdateViewMutation, IUpdateViewMutationVariables>
+> &
+  TChildProps;
+export function withUpdateView<TProps, TChildProps = {}>(
+  operationOptions?: ReactApollo.OperationOption<
+    TProps,
+    IUpdateViewMutation,
+    IUpdateViewMutationVariables,
+    IUpdateViewProps<TChildProps>
+  >
+) {
+  return ReactApollo.withMutation<
+    TProps,
+    IUpdateViewMutation,
+    IUpdateViewMutationVariables,
+    IUpdateViewProps<TChildProps>
+  >(UpdateViewDocument, {
+    alias: "withUpdateView",
+    ...operationOptions
+  });
+}
+
+export function useUpdateViewMutation(
+  baseOptions?: ReactApolloHooks.MutationHookOptions<
+    IUpdateViewMutation,
+    IUpdateViewMutationVariables
+  >
+) {
+  return ReactApolloHooks.useMutation<
+    IUpdateViewMutation,
+    IUpdateViewMutationVariables
+  >(UpdateViewDocument, baseOptions);
 }

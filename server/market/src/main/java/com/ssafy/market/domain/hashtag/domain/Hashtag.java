@@ -17,10 +17,9 @@ public class Hashtag {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long hashtagId;
 
-    @ManyToOne(targetEntity = Product.class)
+    @ManyToOne
     @JoinColumn(name = "productId")
     private Product product;
-//    private Long productId;
 
     private String hashtag;
 
