@@ -68,11 +68,10 @@ public class Post extends BaseTimeEntity {
         this.dealState = dealState;
         this.transaction = transaction;
     }
-    public void update(String title, String contents, String deal,String dealState){
+    public void update(String title, String contents, String transaction){
         this.title = title;
         this.contents = contents;
-        this.deal = deal;
-        this.dealState=dealState;
+        this.transaction = transaction;
     }
     public void update(Long viewCount){
         this.viewCount = viewCount;
