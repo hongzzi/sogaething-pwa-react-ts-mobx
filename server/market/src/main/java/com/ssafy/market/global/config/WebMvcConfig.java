@@ -19,12 +19,6 @@ import java.util.List;
 public class WebMvcConfig implements WebMvcConfigurer {
 
     private final long MAX_AGE_SECS = 3600;
-    private final String uploadImagePath;
-
-    public WebMvcConfig(@Value("${custom.path.upload-images}") String uploadedImagePath) {
-        this.uploadImagePath = uploadedImagePath;
-    }
-
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
@@ -44,23 +38,4 @@ public class WebMvcConfig implements WebMvcConfigurer {
         resolver.setSuffix(".html");
         return resolver;
     }
-
-    @Override
-    public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("swagger-ui.html")
-                .addResourceLocations("classpath:/META-INF/resources/");
-
-        List<String> imageFolders = Arrays.asList("feed", "profile", "banner");
-        for (String imageFolder : imageFolders) {
-//            System.out.println("/multimedia/" + imageFolder + "/**");
-//            System.out.println("file:///" + uploadImagePath + imageFolder + "/");
-            registry.addResourceHandler("/multimedia/" + imageFolder + "/**")
-                    .addResourceLocations("file:///" + uploadImagePath + imageFolder + "/")
-                    .setCachePeriod(3600)
-                    .resourceChain(true)
-                    .addResolver(new PathResourceResolver());
-        }
-    }
-
-
 }
