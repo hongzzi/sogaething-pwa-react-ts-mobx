@@ -1,3 +1,4 @@
+import { ENDPOINT } from './../constants';
 import axios, { AxiosResponse } from 'axios';
 import { NEXT_APP_REST_ENDPOINT } from '../helpers/config';
 import { ENDPOINT } from './../constants';
