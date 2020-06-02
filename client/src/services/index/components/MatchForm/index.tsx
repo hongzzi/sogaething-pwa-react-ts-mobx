@@ -54,7 +54,10 @@ export default (props: IMatchFormProps) => {
                 },
             },
         }).then((res) => {
-            console.log(res);
+            // console.log(res);
+            router.push(`/match/${res.data.createMatching.user.userId}`);
+        }).catch((error) => {
+            // console.log(error);
         })
     }
 
