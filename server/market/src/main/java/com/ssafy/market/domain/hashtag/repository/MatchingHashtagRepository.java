@@ -12,5 +12,7 @@ import java.util.List;
 
 public interface MatchingHashtagRepository extends JpaRepository<MatchingHashtag, Long> {
     List<MatchingHashtag> findByMatching(Matching matching);
-//    int deleteByMatchingId(Long matchingId);
+
+    @Query(value = "SELECT DISTINCT hashtag FROM matching_hashtag WHERE matching_id = :matching", nativeQuery = true)
+    List<String> findHashtagByMatching(@Param("matching") Matching matching);
 }

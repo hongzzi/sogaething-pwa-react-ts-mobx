@@ -127,5 +127,5 @@ type Query {
 #    findAllPostsByUploaderId(uploader_id: Int):[Post]
 #    findElAllPosts: [Post]
     searchThings(input: HashtagInput!): [PostMetaOutput]
-    matchThings(input: MatchInput!): [PostDetailOutput]
+    matchThings(matchingId: Int!): [PostDetailOutput]
 }

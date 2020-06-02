@@ -54,8 +54,7 @@ public class MatchingQuery implements GraphQLQueryResolver {
             for (int j = 0; j < matchingHashtag.size(); j++) {
                 hashtags[j] = matchingHashtag.get(j).getHashtag();
             }
-            List<PostDetailOutput> postDetailOutputs = postQuery.matchThings(new MatchInput(matching.get(i).getCategory(),
-                    matching.get(i).getMinPrice(), matching.get(i).getMaxPrice(), hashtags, matching.get(i).getTransaction()));
+            List<PostDetailOutput> postDetailOutputs = postQuery.matchThings(matching.get(i).getMatchingId());
 
             String possibility = "";
             if(postDetailOutputs.size()<=5) {
@@ -66,6 +65,7 @@ public class MatchingQuery implements GraphQLQueryResolver {
                 possibility = "매칭확률높음";
             }
             MatchResponse matchResponse = MatchResponse.builder()
+                    .matchingId(matching.get(i).getMatchingId())
                     .category(matching.get(i).getCategory())
                     .createdDate(matching.get(i).getCreatedDate())
                     .maxPrice(matching.get(i).getMaxPrice())
