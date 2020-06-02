@@ -44,9 +44,11 @@ public class TokenProvider {
         Date expiryDate = new Date(now.getTime() + appProperties.getAuth().getTokenExpirationMsec());
 
         return Jwts.builder()
-                .setSubject(String.valueOf(user.getUserId()))
+                .setSubject("Login Token")
                 .setIssuedAt(new Date())
                 .setExpiration(expiryDate)
+                .claim("userId", user.getUserId())
+                .claim("userName", user.getName())
                 .signWith(SignatureAlgorithm.HS512, appProperties.getAuth().getTokenSecret())
                 .compact();
     }
@@ -56,7 +58,7 @@ public class TokenProvider {
                 .setSigningKey(appProperties.getAuth().getTokenSecret())
                 .parseClaimsJws(token)
                 .getBody();
-        return Long.parseLong(claims.getSubject());
+        return claims.get("userId", Long.class);
     }
 
     public boolean validateToken(String authToken) {

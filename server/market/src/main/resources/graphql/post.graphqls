@@ -14,15 +14,13 @@ type Post {
 
 input UpdatePostInput {
     postId: Int!
-    title: String!
-    contents: String!
-    deal: String!
-    dealState: String!
+    title : String!
     category: String!
-    productname: String!
+    imgPaths : [String]
+    hashtag: [String]
+    contents : String!
+    transaction : String!
     price: Int!
-    hashtag: String!
-    imgPaths: String!
 }
 
 input CreatePostInput{
@@ -33,7 +31,6 @@ input CreatePostInput{
     contents : String!
     transaction : String!
     price: Int!
-
 }
 
 input HashtagInput {
@@ -47,7 +44,7 @@ input MatchInput {
     transaction: String
 }
 
-type CreateOutput{
+type Output{
     state: String
     postId : Int
 }
@@ -116,11 +113,11 @@ type RecentPostResponse {
 }
 
 type Mutation {
-    updateviewcount(postId: Int!): Int!
+    updateView(postId: Int!): Int!
     updateIsBuy(postId: Int!): Int!
-    createPost(input: CreatePostInput!): CreateOutput
-    updatePost(input: UpdatePostInput!): PostOutput
-    deletePost(postId: Int!): Int!
+    createPost(input: CreatePostInput!): Output
+    updatePost(input: UpdatePostInput!): PostMetaOutput
+    deletePost(postId: Int!): Output
 }
 
 type Query {

@@ -1,8 +1,7 @@
 import autobind from 'autobind-decorator';
-import { action, observable, reaction } from 'mobx';
+import { action, observable, reaction, toJS } from 'mobx';
 
 export interface IPost {
-    postId: number,
     title: string,
     category: string,
     imgPaths: string[],
@@ -10,11 +9,6 @@ export interface IPost {
     contents: string,
     transaction: string,
     price: number,
-    user: IUser,
-    viewCount: number,
-    isBuy: boolean,
-    deal: string,
-    dealState: string,
 }
 
 export interface IUser {
@@ -25,12 +19,19 @@ export interface IUser {
     imgurl: string,
 }
 
+export interface IPostResponseDto {
+    createPost: {
+        state: string,
+        postId: number,
+    },
+}
+
 export const initialPost = {
 };
 
 @autobind
 class PostStore {
-    @observable post: IPost | undefined;
+    post: IPost | undefined;
     @observable title: string = '';
     @observable category: string = '';
     @observable imgPaths: string[] = [];
@@ -40,17 +41,29 @@ class PostStore {
     @observable price: number = 0;
 
     constructor(initialData = initialPost, root: any) {
-
+        this.post = {
+            title: '',
+            category: '',
+            imgPaths: [],
+            hashtag: [],
+            contents: '',
+            transaction: '',
+            price: 0,
+        }
     }
 
     @action
     getPost() {
+        this.post = {
+            title: this.title,
+            category: this.category,
+            imgPaths: toJS(this.imgPaths),
+            hashtag: toJS(this.hashtag),
+            contents: this.contents,
+            transaction: this.transaction,
+            price: this.price,
+        }
         return this.post;
-    }
-
-    @action
-    setPost(post: IPost) {
-        this.post = post;
     }
 
     @action
@@ -75,22 +88,22 @@ class PostStore {
 
     @action
     getImgPaths() {
-        return this.imgPaths;
+        return toJS(this.imgPaths);
     }
 
     @action
-    setImgPaths(imgPaths: string[]) {
-        this.imgPaths = imgPaths;
+    setImgPaths(imgPaths: string) {
+        this.imgPaths = this.imgPaths.concat(imgPaths);
     }
 
     @action
     getHashtag() {
-        return this.hashtag;
+        return toJS(this.hashtag);
     }
 
     @action
-    setHashtag(hashtag: string[]) {
-        this.hashtag = hashtag;
+    setHashtag(hashtag: string) {
+        this.hashtag = this.hashtag.concat(hashtag);
     }
 
     @action

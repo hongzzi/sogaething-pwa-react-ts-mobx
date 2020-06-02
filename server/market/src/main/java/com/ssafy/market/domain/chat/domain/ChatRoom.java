@@ -1,11 +1,11 @@
 package com.ssafy.market.domain.chat.domain;
 
 import lombok.Data;
+import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
 
 @Data
 @Document(collection = "chatRoom")
@@ -14,6 +14,7 @@ public class ChatRoom implements Serializable {
 
     @Id
     private Long roomId;
+    private String postId;
     private String sellerId;
     private String buyerId;
     private boolean isBuyerExit;

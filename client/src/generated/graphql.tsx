@@ -630,6 +630,19 @@ export type IGetRecentQuery = { __typename?: "Query" } & {
   >;
 };
 
+export type ICreateMatchingMutationVariables = {
+  input: IMatchInput;
+};
+
+export type ICreateMatchingMutation = { __typename?: "Mutation" } & {
+  createMatching: Maybe<
+    { __typename?: "Matching" } & Pick<
+      IMatching,
+      "category" | "hashtag" | "transaction"
+    >
+  >;
+};
+
 export type IGetMyPostsQueryVariables = {
   userId?: Maybe<Scalars["Int"]>;
 };
@@ -983,6 +996,78 @@ export function useGetRecentQuery(
     GetRecentDocument,
     baseOptions
   );
+}
+export const CreateMatchingDocument = gql`
+  mutation createMatching($input: MatchInput!) {
+    createMatching(input: $input) {
+      category
+      hashtag
+      transaction
+    }
+  }
+`;
+export type ICreateMatchingMutationFn = ReactApollo.MutationFn<
+  ICreateMatchingMutation,
+  ICreateMatchingMutationVariables
+>;
+
+export const CreateMatchingComponent = (
+  props: Omit<
+    Omit<
+      ReactApollo.MutationProps<
+        ICreateMatchingMutation,
+        ICreateMatchingMutationVariables
+      >,
+      "mutation"
+    >,
+    "variables"
+  > & { variables?: ICreateMatchingMutationVariables }
+) => (
+  <ReactApollo.Mutation<
+    ICreateMatchingMutation,
+    ICreateMatchingMutationVariables
+  >
+    mutation={CreateMatchingDocument}
+    {...props}
+  />
+);
+
+export type ICreateMatchingProps<TChildProps = {}> = Partial<
+  ReactApollo.MutateProps<
+    ICreateMatchingMutation,
+    ICreateMatchingMutationVariables
+  >
+> &
+  TChildProps;
+export function withCreateMatching<TProps, TChildProps = {}>(
+  operationOptions?: ReactApollo.OperationOption<
+    TProps,
+    ICreateMatchingMutation,
+    ICreateMatchingMutationVariables,
+    ICreateMatchingProps<TChildProps>
+  >
+) {
+  return ReactApollo.withMutation<
+    TProps,
+    ICreateMatchingMutation,
+    ICreateMatchingMutationVariables,
+    ICreateMatchingProps<TChildProps>
+  >(CreateMatchingDocument, {
+    alias: "withCreateMatching",
+    ...operationOptions
+  });
+}
+
+export function useCreateMatchingMutation(
+  baseOptions?: ReactApolloHooks.MutationHookOptions<
+    ICreateMatchingMutation,
+    ICreateMatchingMutationVariables
+  >
+) {
+  return ReactApolloHooks.useMutation<
+    ICreateMatchingMutation,
+    ICreateMatchingMutationVariables
+  >(CreateMatchingDocument, baseOptions);
 }
 export const GetMyPostsDocument = gql`
   query getMyPosts($userId: Int) {
