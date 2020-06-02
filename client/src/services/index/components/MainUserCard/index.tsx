@@ -40,14 +40,14 @@ export default () => {
         )}
         <WrapperUserInfo>
           <TextUserInfo>
-            {loading && <TextLoader size={{ width: 50, height: 18 }} />}
-            {!loading && findUserInfo!.name}
+            {/* {loading && <TextLoader size={{ width: 50, height: 18 }} />} */}
+            {/* {!loading && findUserInfo!.name} */}
           </TextUserInfo>
           <TextuserAddr>
             <SmallIcon src={Pin} />
-            {loading && <TextLoader size={{ width: 80, height: 12 }} />}
-            {!loading && findUserInfo!.address && findUserInfo!.address}
-            {!loading && !findUserInfo!.address && '주소를 등록해주세요'}
+            {/* {loading && <TextLoader size={{ width: 80, height: 12 }} />} */}
+            {/* {!loading && findUserInfo!.address && findUserInfo!.address} */}
+            {/* {!loading && !findUserInfo!.address && '주소를 등록해주세요'} */}
           </TextuserAddr>
         </WrapperUserInfo>
       </WrapperFlex>
@@ -55,7 +55,7 @@ export default () => {
         <MainButton>
           <div>진행중인 매칭</div> <InnerLine>3</InnerLine>
         </MainButton>
-        <MainButton>
+        <MainButton onClick={handleClickMatch}>
           <div>판매글 목록</div> <InnerLine>0</InnerLine>
         </MainButton>
       </WrapperMainButton>

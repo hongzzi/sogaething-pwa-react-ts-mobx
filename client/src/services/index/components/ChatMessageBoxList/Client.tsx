@@ -1,22 +1,27 @@
 import * as React from 'react';
 import styled from '~/styled';
-import CircleImageView from '../CircleImageView';
+import { IChatDto } from '../../service/ChatService';
+import moment from 'moment';
 
 interface IChatMessageBox {
-  cardData: {
-    userId: string | number; // will be check type
-    time: string;
-  };
+  cardData: IChatDto;
 }
 
 export default (props: IChatMessageBox) => {
-  const { userId, time } = props.cardData;
+  const { sender, createdDateTime, message, type } = props.cardData;
+  const mnt = moment(createdDateTime);
   return (
     <Wrapper>
-      <Message>123123</Message>
-      <WrapperTime>
-        <Time>{time}</Time>
-      </WrapperTime>
+      {type !== 'ENTER' ? (
+        <>
+          <Message>{message}</Message>
+          <WrapperTime>
+            <Time>{mnt.fromNow()}</Time>
+          </WrapperTime>
+        </>
+      ) : (
+        <Notice>{message}</Notice>
+      )}
     </Wrapper>
   );
 };
@@ -54,6 +59,12 @@ const Time = styled.p`
   color: #b7b7b7;
   vertical-align: bottom;
   font-size: 0.5rem;
-  margin:0;
+  margin: 0;
   margin-right: 1vw;
+`;
+
+const Notice = styled.div`
+  width: 100%;
+  text-align: center;
+  font-size: 14px;
 `;

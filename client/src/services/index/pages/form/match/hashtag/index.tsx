@@ -1,17 +1,17 @@
 import * as React from 'react';
 import styled from '~/styled';
 
-import Categoryheader from '../../components/CategoryHeader';
-import HashTagSearch from '../../components/HashTagSearch';
+import Categoryheader from '../../../../components/CategoryHeader';
+import HashTagSearch from '../../../../components/HashTagSearch';
 
-export interface IPostFormPageProps {
+export interface IMatchHashTagProps {
 }
 
-export default (props: IPostFormPageProps) => {
+export default (props: IMatchHashTagProps) => {
     return (
         <Wrapper>
             <Categoryheader type={'normal'} text={'#해시태그'}/>
-            <HashTagSearch />
+            <HashTagSearch type={'match'}/>
         </Wrapper>
     )
 }

@@ -1,58 +1,97 @@
 import * as React from 'react';
+import { useState, useEffect } from 'react';
 import styled from '~/styled';
 
+import { useRouter } from 'next/router';
 import CommonBtn from '../../components/CommonBtn';
 
+import { useCreatePostMutation } from '~/generated/graphql';
 import CameraFillIcon from '../../assets/img/form-camera.png';
 import DropdownIcon from '../../assets/img/form-dropdown.png';
 import ExpandIcon from '../../assets/img/form-expand.png';
 import useStores from '../../helpers/useStores';
+import { IPostResponseDto } from '../../store/PostStore';
 
 export interface IPostFormProps {
 }
 
+const category = ['디지털/가전', '가구/인테리어', '유아동/유아도서', '생활/가공식품', '스포츠/레저', '여성잡화', '여성의류', '남성패션/잡화', '게임/취미', '뷰티/미용', '반려동물용품', '도서/티켓/음반', '기타 중고물품'];
+
 export default (props: IPostFormProps) => {
+    const router = useRouter();
     const store = useStores();
     const postStore = store.postStore;
-    const category = ['디지털/가전', '가구/인테리어', '유아동/유아도서', '생활/가공식품', '스포츠/레저', '여성잡화', '여성의류', '남성패션/잡화', '게임/취미', '뷰티/미용', '반려동물용품', '도서/티켓/음반', '기타 중고물품'];
-
-    // File[] 안됌. Array()
-    const [images, setImages] = React.useState(Array());
-    const [previews, setPreviews] = React.useState(Array());
+    const mutation = useCreatePostMutation();
+    const [post, setPost] = useState(postStore.getPost());
+    const [previews, setPreviews] = useState(Array());
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        e.preventDefault();
         if (e.target.files) {
             const files = Array.from(e.target.files);
             files.forEach((file) => {
                 const reader = new FileReader();
                 reader.onloadend = () => {
-                    setImages([...images, images.push(file)])
-                    setPreviews([...previews, previews.push(reader.result)]);
+                    previews.push(reader.result);
+                    if (reader.result) {
+                        postStore.setImgPaths(reader.result.toString());
+                    }
+                    setPreviews([...previews]);
                 }
                 reader.readAsDataURL(file);
             });
-        }
+        };
     };
 
     const handleChangeTitle = (event: any) => {
         postStore.setTitle(event.target.value);
+        setPost(store.postStore.getPost());
     }
     const handleChangeCategory = (event: any) => {
         postStore.setCategory(event.target.value);
+        setPost(store.postStore.getPost());
     }
     const handleChangePrice = (event: any) => {
         postStore.setPrice(event.target.value)
+        setPost(store.postStore.getPost());
     }
     const handleChangeTransaction = (event: any) => {
         postStore.setTransaction(event.target.value);
+        setPost(store.postStore.getPost());
     }
     const handleChangeContents = (event: any) => {
         postStore.setContents(event.target.value);
+        setPost(store.postStore.getPost());
     }
-
+    const handleClickHashtag = () => {
+        router.push('/form/post/hashtag')
+    }
     const handleSubmit = (event: any) => {
-
+        event.preventDefault();
+        previews.map((pre) => {postStore.setImgPaths(pre.slice(23))})
+        setPost(postStore.getPost());
+        if (postStore.getImgPaths().length > 0) {
+            mutation({
+                variables: {
+                    input: {
+                        title: post.title,
+                        category: post.category,
+                        imgPaths: post.imgPaths,
+                        hashtag: post.hashtag,
+                        contents: post.contents,
+                        transaction: post.transaction,
+                        price: post.price,
+                    },
+                },
+            }).then((res: { data: IPostResponseDto }) => {
+                if (res.data.createPost.state === 'SUCCESS') {
+                    router.push(`/post/${res.data.createPost.postId}`);
+                }
+            }).catch((error) => {
+                console.log(error);
+            })
+        } else {
+            alert('사진을 등록해주세요!');
+        }
     }
 
     return (
@@ -61,20 +100,20 @@ export default (props: IPostFormProps) => {
                 <ImageSelector>
                     <ImageBtn htmlFor='img-file'>
                         <CameraIcon src={CameraFillIcon} />
-                        <ImageSpan>{!images && '0/10'} {images && images.length + '/10'}</ImageSpan>
+                        <ImageSpan>{!previews && '0/10'} {previews && previews.length + '/10'}</ImageSpan>
                     </ImageBtn>
                     <FileInput id={'img-file'} type={'file'} multiple accept={'image/png, image/jpeg, image/jpg'} capture={'camera'} onChange={handleFileChange} />
                     <PreviewContainer>
                         {
-                            previews.map((preview, index) => (<PreviewImg src={preview} key={index} />))
+                            postStore.imgPaths.map((preview, index) => (<PreviewImg src={preview} key={index} />))
                         }
                     </PreviewContainer>
                 </ImageSelector>
                 <InputContainer>
-                    <Input type={'text'} placeholder={'제목'} onChange={handleChangeTitle} required />
+                    <Input type={'text'} value={post.title} placeholder={'제목'} onChange={handleChangeTitle} required />
                 </InputContainer>
                 <InputContainer>
-                    <Select onChange={handleChangeCategory}> <Option value={''}> 카테고리 </Option>
+                    <Select value={post.category} onChange={handleChangeCategory}> <Option value={''}> 카테고리 </Option>
                         {
                             category.map((category, index) => (
                                 <Option key={index} value={category}>{category}</Option>
@@ -83,19 +122,21 @@ export default (props: IPostFormProps) => {
                     </Select>
                 </InputContainer>
                 <InputContainer>
-                    <Input type={'number'} placeholder={'금액'} min={0} onChange={handleChangePrice} required />
+                    <Input type={'number'} value={post.price} placeholder={'금액'} min={0} onChange={handleChangePrice} required />
+                    {/* <label htmlFor='currency-field'>Enter Amount</label> */}
+                    {/* <Input type='text' name='currency-field' id='currency-field' pattern='^\$\d{1,3}(,\d{3})*(\.\d+)?$' value='' data-type='currency' placeholder='$1,000,000.00' prefix={'₩'} /> */}
                 </InputContainer>
                 <InputContainer>
-                    <Select onChange={handleChangeTransaction}> <Option value={''}> 거래방법 </Option> <Option value={'직거래'}>직거래</Option> <Option value={'택배거래'}>택배거래</Option></Select>
+                    <Select value={post.transaction} onChange={handleChangeTransaction}> <Option value={''}> 거래방법 </Option> <Option value={'직거래'}>직거래</Option> <Option value={'택배거래'}>택배거래</Option></Select>
                 </InputContainer>
-                <InputContainer>
+                <InputContainer onClick={handleClickHashtag}>
                     <HashTag>
-                        해시태그 {postStore.hashtag}
+                        해시태그 {postStore.hashtag.length}
                     </HashTag>
                 </InputContainer>
                 <ContentsBox>
                     <ContentsText>상품설명</ContentsText>
-                    <ContentsArea onChange={handleChangeContents} />
+                    <ContentsArea value={post.contents} onChange={handleChangeContents} />
                 </ContentsBox>
             </FormContainer>
             <FooterContainer>
@@ -177,7 +218,7 @@ const PreviewContainer = styled.div`
 const PreviewImg = styled.img`
     width: 4.5rem;
     height: 4.5rem;
-    margin: 0 1rem;
+    margin: 0 0.5rem;
     border: solid 1px #ccc;
     border-radius: 5px;
 `

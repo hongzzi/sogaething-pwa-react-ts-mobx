@@ -1,26 +1,21 @@
+import { useRouter } from 'next/router';
 import * as React from 'react';
 import styled from '~/styled';
+import useStores from '../../helpers/useStores';
 import Client from './Client';
 import Host from './Host';
+import { IChatDto } from '../../service/ChatService';
 
-const dump = [
-  { userId: '#맥북', time: '1', type: '1' },
-  { userId: '#맥북', time: '1', type: '1' },
-  { userId: '#맥북', time: '1', type: '0' },
-  { userId: '#맥북', time: '1', type: '1' },
-  { userId: '#맥북', time: '2', type: '0' },
-  { userId: '#맥북', time: '2', type: '0' },
-  { userId: '#맥북', time: '2', type: '0' },
-];
+interface IChatMessageProps {
+  chatRoomData : IChatDto[];
+  me: string;
+}
 
-export default () => {
-  const Cards = dump.map((item, i) => {
-    return item.type === '1' ? 
-        <Host key={i} cardData={item} />:
+export default (props: IChatMessageProps) => {
+  const Cards = props.chatRoomData.map((item, i) => {
+    return item.sender !== props.me ?
+        <Host key={i} cardData={item} /> :
         <Client key={i} cardData={item} />
   });
-  return <Wrapper>{Cards}</Wrapper>;
+  return <>{Cards}</>;
 };
-
-const Wrapper = styled.div`
-`;
