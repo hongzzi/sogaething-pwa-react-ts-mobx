@@ -19,22 +19,27 @@ public class ImgurApi {
 
     public static Executor uploadExecutor = Executors.newCachedThreadPool();
 
-    public static String uploadimgtest(String base64) throws IOException {
-        Connection.Response response = uploadSync(base64);
-        if(response.statusCode()==400){
-            return "false";
+    public String uploadImg(String base64){
+        try {
+            Connection.Response response = uploadSync(base64);
+            if (response.statusCode() == 400) {
+                return "false";
+            }
+            JsonParser parser = new JsonParser();
+            JsonElement element = parser.parse(response.body());
+            JsonObject properties = element.getAsJsonObject().get("data").getAsJsonObject();
+            String url = String.valueOf(properties.get("link"));
+            url = url.replace("\"", "");
+            return url;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
         }
-        JsonParser parser = new JsonParser();
-        JsonElement element = parser.parse(response.body());
-        JsonObject properties = element.getAsJsonObject().get("data").getAsJsonObject();
-        String url = String.valueOf(properties.get("link"));
-        url = url.replace("\"","");
-        return url;
     }
 
 
 
-    public static Connection.Response uploadSync(String base64) throws IOException {
+    public Connection.Response uploadSync(String base64) throws IOException {
         Connection connection = Jsoup.connect("https://api.imgur.com/3/image");
         connection.timeout(10000).userAgent("InventiveImgurUploader").ignoreContentType(true).ignoreHttpErrors(true).method(Connection.Method.POST);
         connection.header("Authorization", "Client-ID " + CLIENT_ID);

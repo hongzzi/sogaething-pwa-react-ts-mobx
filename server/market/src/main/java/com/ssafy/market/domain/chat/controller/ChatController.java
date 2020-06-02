@@ -5,6 +5,7 @@ import com.ssafy.market.domain.chat.domain.MessageType;
 import com.ssafy.market.domain.chat.service.ChatRoomService;
 import com.ssafy.market.domain.chat.service.ChatService;
 import com.ssafy.market.domain.chat.util.StringResult;
+import com.ssafy.market.global.apis.ImgurApi;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.IOException;
 import java.util.Map;
 
 @RequiredArgsConstructor
@@ -28,6 +30,7 @@ public class ChatController {
 
     private final ChatService chatService;
     private final ChatRoomService chatRoomService;
+    private final ImgurApi imgurApi;
 
     /**
      * websocket "/pub/chat/message"로 들어오는 메시징을 처리한다.
@@ -37,9 +40,6 @@ public class ChatController {
         logger.debug("message {}", message);
         if (MessageType.ENTER.equals(message.getType())) {
             chatRoomService.enterChatRoom(message.getRoomId());
-//            message.setMessage(message.getSender() + "님이 입장하셨습니다.");
-//        } else if (MessageType.LEAVE.equals(message.getType())) {
-//            chatRoomService
         } else {
             chatService.sendMessage(message);
         }
@@ -50,7 +50,6 @@ public class ChatController {
     public ResponseEntity<Object> findChatMessagesByRoomId(@PathVariable Long roomId){
         try {
             Map<String, Object> result = chatService.findChatMessagesByRoomId(roomId);
-            System.out.println("컨트롤러:"+result);
             return new ResponseEntity<Object>(result, HttpStatus.OK);
         } catch (RuntimeException e) {
             e.printStackTrace();
