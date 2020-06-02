@@ -116,6 +116,7 @@ type Mutation {
 type Query {
     findAllPosts: [Post]
     findAllPost: [PostOutput]
+    countPostByUserId(userId : Int): Int
 #    findByUser(userId : Int) : [PostOutput]
     findPostByPostId(id: Int): PostOutput
     # findAllPostsByUploaderId(uploader_id: Int):[Post]
