@@ -95,7 +95,7 @@ public class PostMutation implements GraphQLMutationResolver {
             }
         } catch (Exception e) {
 //            System.out.println(e);
-             output = new Output("FAIL",null);
+            output = new Output("FAIL",null);
         }
         return  output;
     }
@@ -116,19 +116,19 @@ public class PostMutation implements GraphQLMutationResolver {
             hashtagRepository.deleteByHashtagId(hashtagList.get(j).getHashtagId());
         }
         // 해시 태그 및 파일 추가 하기
-        String[] hashtagarr = input.getHashtag();
+        String[] hashtagArr = input.getHashtag();
         HashSet<String> hs = new HashSet<>();
-        if (hashtagarr.length > 0) {
-            for (int i = 0; i < hashtagarr.length; i++) {
-                Hashtag hashtag = hashtagRepository.save(new Hashtag(null, product, hashtagarr[i]));
-                hs.add(hashtagarr[i]);
+        if (hashtagArr.length > 0) {
+            for (int i = 0; i < hashtagArr.length; i++) {
+                Hashtag hashtag = hashtagRepository.save(new Hashtag(null, product, hashtagArr[i]));
+                hs.add(hashtagArr[i]);
             }
         }
-        String[] arr = input.getImgPaths();
-        if (arr.length > 0) {
+        String[] Arr = input.getImgPaths();
+        if (Arr.length > 0) {
             try {
-                for (int k = 0; k < arr.length; k++) {
-                    String[] temp = arr[k].split(",");
+                for (int k = 0; k < Arr.length; k++) {
+                    String[] temp = Arr[k].split(",");
                     String imgur = api.uploadImg(temp[1]);
                     if (!imgur.equals("false")) {
                         File file = fileRepository.save(new File(null, product, imgur));

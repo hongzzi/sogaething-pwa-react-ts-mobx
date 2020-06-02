@@ -13,6 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class MatchResponse {
+    private Long matchingId;
     private String category;
     private int minPrice;
     private int maxPrice;

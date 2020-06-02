@@ -16,7 +16,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ProductQuery implements GraphQLQueryResolver {
     private final ProductRepository productRepository;
-    private final PostRepository postRepository;
 
     @Transactional
     public List<ProductOutput> findAllProduct()
