@@ -1,48 +1,74 @@
-import * as React from "react";
-import styled from "~/styled";
-import like from "../../assets/img/like.png?url";
-import pin from "../../assets/img/pin-fill.png?url";
-import CircleImageView from "../CircleImageView";
-import CustomIcon from "../CustomIcon";
-import ImageView from "../ImageView";
+import * as React from 'react';
+import styled from '~/styled';
+import like from '../../assets/img/like.png?url';
+import NoAvatar from '../../assets/img/no-avatar.png?url';
+import pin from '../../assets/img/pin-fill.png?url';
+import { numberWithCommas } from '../../helpers/comma';
+import CircleImageView from '../CircleImageView';
+import CustomIcon from '../CustomIcon';
+import ImageView from '../ImageView';
+import { useRouter } from 'next/router';
 
-export default () => {
+export interface IFeedCardProps {
+  data: IFeed,
+}
+
+export interface IFeed {
+  postId: number,
+  title: string,
+  category: string,
+  imgPaths: string[],
+  hashtag: string[],
+  contents: string,
+  price: number,
+  user: IUser,
+  viewCount: number,
+  isBuy: boolean,
+  deal: string,
+  dealState: string,
+  saleDate: string,
+  transaction: string,
+  createdDate: string,
+  modifiedDate: string,
+}
+
+export interface IUser {
+  name: string,
+  address: string,
+  trust: number,
+  numOfPosts: number,
+  imgurl: string,
+}
+
+export default (props: IFeedCardProps) => {
+  const { data } = props;
+  const router = useRouter();
+  const handleClick = () => {
+    router.push(`/post/${data.postId}`)
+  }
   return (
-    <Wrapper>
+    <Wrapper onClick={handleClick}>
       <ImageView
         size={228}
-        src={
-          "https://post-phinf.pstatic.net/MjAxOTA3MTBfMTE0/MDAxNTYyNzQ0NTMzNDEx.ks3xOJZyL3q__N9S702Z04vHYEe1cp4wOoQIgidbZrMg.O1NFAFJsyFMKGuGUTPy_4AQY-qp-26dhkyBgrTRTlQgg.JPEG/DSC4297.jpg"
-        }
+        src={data.imgPaths[0]}
       />
       <WrapperBottomContainer>
         <UserInfoCard>
-          <CircleImageView
-            size={2}
-            src={
-              "https://pngimage.net/wp-content/uploads/2018/05/default-user-profile-image-png-6.png"
-            }
-          />
+          {data.user.imgurl && <CircleImageView size={2} src={data.user.imgurl} />}
+          {!data.user.imgurl && <CircleImageView size={2} src={NoAvatar} />}
           <UserInfoNameAddress>
-            <UserName>류일한</UserName>
+            <UserName>{data.user.name}</UserName>
             <WrapperAddress>
               <Icon src={pin} />
-              <Address>경기도 수원시 영통동</Address>
+              <Address>{data.user.address}</Address>
             </WrapperAddress>
           </UserInfoNameAddress>
-          <Price>1,000,000원</Price>
+          <Price>{numberWithCommas(data.price)}원</Price>
           <LikeIcon src={like} />
         </UserInfoCard>
-        <Address>가전 / 디지털</Address>
+        <Address>{data.category}</Address>
         <Content>
-          awefhualiwefhuialwehfuialwehfuial fhauiwefhaiwuelfhia luwehfia
-          ulwehfiawuehfiauwehfialwefhialwehfui l
-          awefhualiwefhuialwehfuialwehfuial fhauiwefhaiwuelfhia luwehfia
-          ulwehfiawuehfiauwehfialwefhialwehfui
-          lawefhualiwefhuialwehfuialwehfuial fhauiwefhaiwuelfhia luwehfia
-          ulwehfiawuehfiauwehfialwefhialwehfui
-          lawefhualiwefhuialwehfuialwehfuial fhauiwefhaiwuelfhia luwehfia
-          ulwehfiawuehfiauwehfialwefhialwehfui l
+          {data.contents}
         </Content>
       </WrapperBottomContainer>
     </Wrapper>

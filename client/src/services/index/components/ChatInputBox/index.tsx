@@ -10,6 +10,7 @@ import { NEXT_APP_SOCKET_ENDPOINT } from '../../helpers/config';
 import useStores from '../../helpers/useStores';
 import { IChatDto } from '../../service/ChatService';
 import CustomIcon from '../CustomIcon';
+import { ENDPOINT } from '../../constants';
 
 interface IChatInputProps {
   roomId: string;
@@ -28,7 +29,7 @@ export default (props: IChatInputProps) => {
   if (NEXT_APP_SOCKET_ENDPOINT) {
     sockJS = new SockJS(NEXT_APP_SOCKET_ENDPOINT!);
   } else {
-    sockJS = new SockJS('http://3.34.131.20:8080/ws-stomp');
+    sockJS = new SockJS(ENDPOINT.SOCKET);
   }
   let ws = Stomp.over(sockJS);
 

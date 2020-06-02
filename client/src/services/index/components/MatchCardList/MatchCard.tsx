@@ -9,6 +9,7 @@ export interface IMatchCardProps {
 }
 
 export interface IMatchCard {
+  matchingId: number,
   category: string,
   hashtag: string[],
   transaction: string,
@@ -22,7 +23,7 @@ export default (props: IMatchCardProps) => {
   const { match } = props;
   const router = useRouter();
   const handleClick = () => {
-    router.push(`/`)
+    router.push(`/matchresult/${match.matchingId}`)
   }
   return (
     <Wrapper onClick={handleClick}>

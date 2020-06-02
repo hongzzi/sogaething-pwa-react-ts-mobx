@@ -117,6 +117,7 @@ const WrapprNav = styled.nav`
   width: 100%;
   background-color: ${(props) => props.theme.mainBGcolor};
   align-items: center;
+  border-top: solid 1px #dcdcdc;
 `;
 
 interface IModalProps {
