@@ -190,7 +190,7 @@ public class PostQuery implements GraphQLQueryResolver {
         }
         List<String> file = new ArrayList<>(fs);
         Long numOfPosts = postRepository.countPostByUserId(writer.getUserId());
-        UserInfoResponse user = new UserInfoResponse(writer.getName(),writer.getAddress(),writer.getTrust(),
+        UserInfoResponse user = new UserInfoResponse(writer.getUserId(),writer.getName(),writer.getAddress(),writer.getTrust(),
                 numOfPosts,writer.getImageUrl());
         PostDetailOutput detailOutput = new PostDetailOutput(
                 postId,post.getTitle(),product.getCategory(),file,hash,

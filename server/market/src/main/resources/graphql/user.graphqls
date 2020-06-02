@@ -34,6 +34,7 @@ type UserInfoOutput {
 }
 
 type UserInfoResponse {
+    userId: Int
     name: String
     address: String
     trust: Int
