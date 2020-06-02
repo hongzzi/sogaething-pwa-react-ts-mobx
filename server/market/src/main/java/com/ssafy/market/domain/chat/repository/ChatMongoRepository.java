@@ -1,11 +1,13 @@
 package com.ssafy.market.domain.chat.repository;
 
 import com.ssafy.market.domain.chat.domain.ChatMessage;
+import com.ssafy.market.domain.chat.domain.ChatRoom;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
@@ -19,6 +21,11 @@ public class ChatMongoRepository {
 
     public ChatMessage insertChatMessage(ChatMessage chatMessage) {
         chatMessage.setCreatedDateTime(LocalDateTime.now().toString());
+
+        Query query = new Query(new Criteria("roomId").is(chatMessage.getRoomId()));
+        Update update = new Update();
+        update.set("modifiedDateTime", LocalDateTime.now().toString());
+        mongoTemplate.findAndModify(query, update, ChatRoom.class, "chatRoom");
         return mongoTemplate.insert(chatMessage, "chatMessage");
     }
 

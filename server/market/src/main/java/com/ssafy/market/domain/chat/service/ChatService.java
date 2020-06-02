@@ -33,16 +33,16 @@ public class ChatService {
 
     // 게시 처리 서비스
     private final RedisPublisher redisPublisher;
-    private Map<String, ChannelTopic> topics = TopicUtil.getTopicUtil();
+    private Map<Long, ChannelTopic> topics = TopicUtil.getTopicUtil();
 
-    public ChannelTopic getTopic(String roomId) {
+    public ChannelTopic getTopic(Long roomId) {
         return topics.get(roomId);
     }
 
     @CacheEvict(value = CacheKey.MESSAGE, key = "#chatMessage.roomId")
     @Transactional
     public Boolean sendMessage(ChatMessage chatMessage) {
-        ChannelTopic channelTopic = getTopic(String.valueOf(chatMessage.getRoomId()));
+        ChannelTopic channelTopic = getTopic(chatMessage.getRoomId());
         // WebSocket 에 발행된 메시지를 redis로 발행한다.(publish)
         redisPublisher.publish(channelTopic, chatMessage);
         ChatMessage result = chatMongoRepository.insertChatMessage(chatMessage);
