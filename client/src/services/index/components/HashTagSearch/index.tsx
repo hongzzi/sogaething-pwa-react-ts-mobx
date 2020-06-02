@@ -1,7 +1,7 @@
 import * as React from 'react';
+import { useState } from 'react';
 import styled from '~/styled';
 import useStores from '../../helpers/useStores';
-import { useState } from 'react';
 
 export interface IHashTagSearchProps {
     type: 'post' | 'match'
@@ -17,15 +17,26 @@ export default function HashTagSearch(props: IHashTagSearchProps) {
         hStore = store.postStore
     }
     const [value, setValue] = useState('');
+    const [hashTag, setHashTag] = useState(hStore.hashtag);
 
+    const handleClick = (event: any) => {
+        if (confirm('해시태그를 삭제할까요?')) {
+            hStore.removeHashtag(event.target.value);
+            setHashTag(hStore.hashtag);
+        }
+    }
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         event.preventDefault();
         setValue(event.target.value);
     }
     const handleSubmit = (event: React.KeyboardEvent<HTMLInputElement>) => {
-        if (event.keyCode === 13) {
-            if (value !== '') {
-                hStore.setHashtag(value);
+        if ((event.keyCode === 13 ) || (event.keyCode === 32)) {
+            if (hStore.hashtag.length > 6) {
+                alert('해시태그 6개를 전부 입력하셨습니다!');
+                setValue('');
+            } else if (value !== '') {
+                hStore.setHashtag(value.trim());
+                setHashTag(hStore.hashtag);
                 setValue('');
             }
         }
@@ -37,9 +48,10 @@ export default function HashTagSearch(props: IHashTagSearchProps) {
                 <SearchBar>
                     <Shap>#</Shap>
                     <Input value={value} type={'text'} onChange={handleChange} onKeyUp={handleSubmit} />
+                    
                 </SearchBar>
                 <HashTags>
-                    {hStore.hashtag.map((hashtag: React.ReactNode, index: string | number | undefined) => (<Tag key={index}> {hashtag} </Tag>))}
+    {hStore.hashtag.map((hashtag: string | number | undefined, index: string | number | undefined) => (<Tag onClick={handleClick} key={index} value={hashtag}>{hashtag}</Tag>))}
                 </HashTags>
             </Container>
         </Wrapper>
@@ -63,6 +75,10 @@ const SearchBar = styled.div`
     border-bottom: solid 3px #333;
     display: flex;
     align-items: center;
+`
+
+const AutoCompleteField = styled.div`
+    display: absolute;
 `
 
 const Shap = styled.span`
@@ -89,12 +105,13 @@ const HashTags = styled.div`
     white-space: normal;
 `
 
-const Tag = styled.div`
-    display: inline;
-    margin: 0.5rem;
-    padding: 0.5rem 1rem;
+const Tag = styled.button`
+    display: inline-block;
+    margin: 0.3rem;
+    padding: 0.3rem 1rem;
     font-size: 12px;
     border-radius: 5px;
+    border: transparent;
     background: #9ccc;
-    line-height: 3rem;
+    line-height: 1.5rem;
 `

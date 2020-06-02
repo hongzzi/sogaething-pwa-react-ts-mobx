@@ -3,7 +3,7 @@ import styled from '~/styled';
 
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useGetPostQuery } from '~/generated/graphql';
+import { useGetPostQuery, useCreateHistoryMutation } from '~/generated/graphql';
 
 import CategoryHeader from '../../../components/CategoryHeader';
 import ImageSlider from '../../../components/ImageSlider';
@@ -41,10 +41,16 @@ export default function Detail(props: any) {
     const router = useRouter()
     const { pid } = router.query
     const { data, loading, error } = useGetPostQuery({ variables: { postId: pid } });
+    const mutation = useCreateHistoryMutation();
 
     useEffect(() => {
         if (data && data.findByDetailPost) {
             // 히스토리 추가, 뷰카운트 업데이트
+            mutation({
+                variables: {
+                    input: pid,
+                },
+            })
         }
     }, [data])
 
