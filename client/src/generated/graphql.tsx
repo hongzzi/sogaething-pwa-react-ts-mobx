@@ -31,11 +31,6 @@ export type ICreateJjimInput = {
   postId: Scalars["Int"];
 };
 
-export type ICreateOutput = {
-  state?: Maybe<Scalars["String"]>;
-  postId?: Maybe<Scalars["Int"]>;
-};
-
 export type ICreatePostInput = {
   title: Scalars["String"];
   category: Scalars["String"];
@@ -162,9 +157,9 @@ export type IMatchInput = {
 export type IMutation = {
   updateView: Scalars["Int"];
   updateIsBuy: Scalars["Int"];
-  createPost?: Maybe<ICreateOutput>;
-  updatePost?: Maybe<IPostOutput>;
-  deletePost: Scalars["Int"];
+  createPost?: Maybe<IOutput>;
+  updatePost?: Maybe<IPostMetaOutput>;
+  deletePost?: Maybe<IOutput>;
   createFile?: Maybe<IFileOutput>;
   updateFile?: Maybe<IFileOutput>;
   deleteFile?: Maybe<Scalars["Int"]>;
@@ -275,6 +270,11 @@ export type IMutationDeleteJjimArgs = {
 
 export type IMutationCreateHistoryArgs = {
   postId: Scalars["Int"];
+};
+
+export type IOutput = {
+  state?: Maybe<Scalars["String"]>;
+  postId?: Maybe<Scalars["Int"]>;
 };
 
 export type IPost = {
@@ -468,14 +468,12 @@ export type IUpdateHashtagInput = {
 export type IUpdatePostInput = {
   postId: Scalars["Int"];
   title: Scalars["String"];
-  contents: Scalars["String"];
-  deal: Scalars["String"];
-  dealState: Scalars["String"];
   category: Scalars["String"];
-  productname: Scalars["String"];
+  imgPaths?: Maybe<Array<Maybe<Scalars["String"]>>>;
+  hashtag?: Maybe<Array<Maybe<Scalars["String"]>>>;
+  contents: Scalars["String"];
+  transaction: Scalars["String"];
   price: Scalars["Int"];
-  hashtag: Scalars["String"];
-  imgPaths: Scalars["String"];
 };
 
 export type IUpdateProductInput = {
@@ -713,7 +711,7 @@ export type ICreatePostMutationVariables = {
 
 export type ICreatePostMutation = { __typename?: "Mutation" } & {
   createPost: Maybe<
-    { __typename?: "CreateOutput" } & Pick<ICreateOutput, "state" | "postId">
+    { __typename?: "Output" } & Pick<IOutput, "state" | "postId">
   >;
 };
 

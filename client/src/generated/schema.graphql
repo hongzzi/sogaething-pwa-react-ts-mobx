@@ -1,5 +1,5 @@
 # source: http://3.34.131.20:8080/graphql
-# timestamp: Mon Jun 01 2020 20:30:58 GMT+0900 (GMT+09:00)
+# timestamp: Tue Jun 02 2020 17:10:02 GMT+0900 (대한민국 표준시)
 
 """This directive allows results to be deferred during execution"""
 directive @defer on FIELD
@@ -25,11 +25,6 @@ input CreateHashtagInput {
 
 input CreateJjimInput {
   postId: Int!
-}
-
-type CreateOutput {
-  state: String
-  postId: Int
 }
 
 input CreatePostInput {
@@ -158,9 +153,9 @@ input MatchInput {
 type Mutation {
   updateView(postId: Int!): Int!
   updateIsBuy(postId: Int!): Int!
-  createPost(input: CreatePostInput!): CreateOutput
-  updatePost(input: UpdatePostInput!): PostOutput
-  deletePost(postId: Int!): Int!
+  createPost(input: CreatePostInput!): Output
+  updatePost(input: UpdatePostInput!): PostMetaOutput
+  deletePost(postId: Int!): Output
   createFile(input: CreateFileInput!): FileOutput
   updateFile(input: UpdateFileInput!): FileOutput
   deleteFile(id: Int!): Int
@@ -179,6 +174,11 @@ type Mutation {
   createJjim(input: CreateJjimInput!): Jjim
   deleteJjim(jjimId: Int): Int
   createHistory(postId: Int!): HistoryOutput
+}
+
+type Output {
+  state: String
+  postId: Int
 }
 
 type Post {
@@ -335,14 +335,12 @@ input UpdateHashtagInput {
 input UpdatePostInput {
   postId: Int!
   title: String!
-  contents: String!
-  deal: String!
-  dealState: String!
   category: String!
-  productname: String!
+  imgPaths: [String]
+  hashtag: [String]
+  contents: String!
+  transaction: String!
   price: Int!
-  hashtag: String!
-  imgPaths: String!
 }
 
 input UpdateProductInput {
