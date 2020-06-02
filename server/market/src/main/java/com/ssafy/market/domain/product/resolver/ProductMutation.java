@@ -37,7 +37,7 @@ public class ProductMutation implements GraphQLMutationResolver {
     public ProductOutput updateProduct(UpdateProductInput input){
         Post post= postRepository.findByPostId(input.getPostId());
         Product product = productRepository.findById(input.getProductId()).get();
-        product.update(post,input.getName(),input.getPrice(),input.getCategory());
+        product.update(post,input.getPrice(),input.getCategory());
         ProductOutput po = new ProductOutput(product.getProductId(),product.getPost().getPostId(), product.getName(), product.getPrice(), product.getCategory());
         return po;
     }

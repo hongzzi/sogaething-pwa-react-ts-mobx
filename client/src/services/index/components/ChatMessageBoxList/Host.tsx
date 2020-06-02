@@ -1,25 +1,31 @@
 import * as React from 'react';
 import styled from '~/styled';
+import { IChatDto } from '../../service/ChatService';
 import CircleImageView from '../CircleImageView';
+import moment from 'moment';
 
 interface IChatMessageBox {
-  cardData: {
-    userId: string | number; // will be check type
-    time: string;
-  };
+  cardData: IChatDto;
 }
 
 export default (props: IChatMessageBox) => {
-  const { userId, time } = props.cardData;
+  const { sender, createdDateTime, message, type } = props.cardData;
+  const mnt = moment(createdDateTime);
   return (
     <Wrapper>
-      <CircleImageView
-        size={1.8}
-        src='https://pngimage.net/wp-content/uploads/2018/05/default-user-profile-image-png-6.png'
-      />
-      <Message>123123</Message>
+      {type !== 'ENTER' && (
+        <CircleImageView
+          size={1.8}
+          src='https://pngimage.net/wp-content/uploads/2018/05/default-user-profile-image-png-6.png'
+        />
+      )}
+      {type === 'ENTER' ? (
+        <Notice>{message}</Notice>
+      ) : (
+        <Message>{message}</Message>
+      )}
       <WrapperTime>
-        <Time>{time}</Time>
+        {type !== 'ENTER' && <Time>{mnt.fromNow()}</Time>}
       </WrapperTime>
     </Wrapper>
   );
@@ -59,6 +65,12 @@ const Time = styled.p`
   color: #b7b7b7;
   vertical-align: bottom;
   font-size: 0.5rem;
-  margin:0;
+  margin: 0;
   margin-left: 1vw;
+`;
+
+const Notice = styled.div`
+  width: 100%;
+  text-align: center;
+  font-size: 14px;
 `;

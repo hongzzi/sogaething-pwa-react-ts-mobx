@@ -87,10 +87,11 @@ export default class extends React.Component {
 }
 
 class App extends NextApp<any> {
-
   componentDidMount() {
     if (!window.sessionStorage.getItem('jwt')) {
       Router.push('/signin');
+    }else {
+      this.props.store.authStore.setAuth();
     }
   }
 
