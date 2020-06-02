@@ -25,13 +25,17 @@ function usePageData() {
   return useObserver(() => ({
     // useObserver를 사용해서 리턴하는 값의 업데이트를 계속 반영한다
     clickedIdx: pageStore.clickedIdx,
+    modal: pageStore.modal,
   }));
 }
 
 export default (props: INav) => {
   const { pageStore } = useStores();
-  const { clickedIdx } = usePageData();
+  const { clickedIdx, modal } = usePageData();
 
+  const handleModal = () => {
+    pageStore.toggleModal();
+  }
   return (
     <WrapprNav size={props.size}>
       <Link href='/'>
@@ -57,7 +61,7 @@ export default (props: INav) => {
           </WrapperNavItem>
         </a>
       </Link>
-      <WrapperNavItem onClick={() => pageStore.setClickedIdx(2)}>
+      <WrapperNavItem onClick={handleModal}>
         {clickedIdx === 2 ? (
           <CustomIcon url={CircleImageFocus} />
         ) : (
@@ -86,6 +90,11 @@ export default (props: INav) => {
           </WrapperNavItem>
         </a>
       </Link>
+      <Modal modalState={modal}>
+          <ModalItem>구매 하기</ModalItem>
+          <ModalItem>판매 하기</ModalItem>
+          <ModalItem onClick={handleModal}>닫기</ModalItem>
+      </Modal>
     </WrapprNav>
   );
 };
@@ -100,6 +109,30 @@ const WrapprNav = styled.nav`
   width: 100%;
   background-color: ${(props) => props.theme.mainBGcolor};
   align-items: center;
+`;
+
+interface IModalProps {
+  modalState: boolean;
+}
+
+const Modal = styled.div<IModalProps>`
+  visibility: ${(props) => props.modalState ? 'visible' : 'hidden'};
+  position: fixed;
+  bottom: 0;
+  width: 100vw;
+  height: 150px;
+  background-color: rgba( 255, 255, 255, 0.95 );
+  /* transition: visibility 1s ease-in; */
+`;
+
+const ModalItem = styled.div`
+  display: flex;
+  align-items: center;
+  text-align: center;
+  justify-content: space-around;
+  height: 33%;
+  width: 100%;
+  border-top: 1px solid ${(props) => props.theme.bolderColor};
 `;
 
 const WrapperNavItem = styled.div``;

@@ -37,13 +37,6 @@ input HashtagInput {
     hashtag: [String]
 }
 
-input MatchInput {
-    category: String
-    price: [Int]
-    hashtag: [String]
-    transaction: String
-}
-
 type Output{
     state: String
     postId : Int
@@ -123,6 +116,7 @@ type Mutation {
 type Query {
     findAllPosts: [Post]
     findAllPost: [PostOutput]
+    countPostByUserId(userId : Int): Int
 #    findByUser(userId : Int) : [PostOutput]
     findPostByPostId(id: Int): PostOutput
     # findAllPostsByUploaderId(uploader_id: Int):[Post]

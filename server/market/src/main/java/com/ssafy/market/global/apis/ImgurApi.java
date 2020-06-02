@@ -17,8 +17,8 @@ public class ImgurApi {
 
     public static final String CLIENT_ID = "2d1537da8393cd6";
 
+    public String uploadImg(String base64) {
 
-    public static String uploadImg(String base64)  {
         try {
             Connection.Response response = uploadSync(base64);
             if (response.statusCode() == 400) {
@@ -30,15 +30,15 @@ public class ImgurApi {
             String url = String.valueOf(properties.get("link"));
             url = url.replace("\"", "");
             return url;
-        }catch (Exception e){
+        } catch (Exception e) {
+
             e.printStackTrace();
             return null;
         }
     }
 
 
-
-    public static Connection.Response uploadSync(String base64) throws IOException {
+    public Connection.Response uploadSync(String base64) throws IOException {
         Connection connection = Jsoup.connect("https://api.imgur.com/3/image");
         connection.timeout(10000).userAgent("InventiveImgurUploader").ignoreContentType(true).ignoreHttpErrors(true).method(Connection.Method.POST);
         connection.header("Authorization", "Client-ID " + CLIENT_ID);

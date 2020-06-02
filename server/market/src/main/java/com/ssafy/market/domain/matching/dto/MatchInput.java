@@ -1,4 +1,4 @@
-package com.ssafy.market.domain.post.dto;
+package com.ssafy.market.domain.matching.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -11,7 +11,8 @@ import java.util.List;
 @AllArgsConstructor
 public class MatchInput {
     private String category;
-    private int[] price;
+    private int minPrice;
+    private int maxPrice;
     private String[] hashtag;
     private String transaction;
 }

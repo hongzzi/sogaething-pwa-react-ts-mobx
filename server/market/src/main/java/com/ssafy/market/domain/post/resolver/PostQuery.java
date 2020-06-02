@@ -6,6 +6,7 @@ import com.ssafy.market.domain.file.repository.FileRepository;
 import com.ssafy.market.domain.hashtag.domain.Hashtag;
 import com.ssafy.market.domain.hashtag.dto.HashtagInput;
 import com.ssafy.market.domain.hashtag.repository.HashtagRepository;
+import com.ssafy.market.domain.matching.dto.MatchInput;
 import com.ssafy.market.domain.post.domain.Post;
 import com.ssafy.market.domain.post.dto.*;
 import com.ssafy.market.domain.post.repository.PostRepository;
@@ -35,7 +36,7 @@ public class PostQuery implements GraphQLQueryResolver {
 
     public List<PostOutput> findAllPost() {
         List<PostOutput> outputs = new ArrayList<>();
-        List<Post> postList = postRepository.findAll();
+        List<Post> postList = postRepository.findAllByOrderByPostIdDesc();
         for(int i = 0; i<postList.size();i++){
             Post post = postList.get(i);
             Product product = productRepository.findByPost(post);
@@ -58,6 +59,9 @@ public class PostQuery implements GraphQLQueryResolver {
         return postRepository.findAll();
     }
 
+    public Long countPostByUserId(Long userId){
+        return postRepository.countPostByUserId(userId);
+    }
 
     public PostOutput findPostByPostId(Long id) {
 
@@ -105,7 +109,8 @@ public class PostQuery implements GraphQLQueryResolver {
     public List<PostMetaOutput> findPostListByUserId(Long userId){
         List<PostMetaOutput> metaOutputList = new ArrayList<>();
         User user = userRepository.findByUserId(userId);
-        List<Post> postList = postRepository.findPostByUser(user);
+        List<Post> postList = postRepository.findByUserIdOrderByPostIdDesc(userId);
+
         for (int i = 0; i< postList.size(); i++){
             Post post = postList.get(i);
             Product product = productRepository.findByPost(post);
@@ -192,12 +197,11 @@ public class PostQuery implements GraphQLQueryResolver {
     public List<PostDetailOutput> matchThings(MatchInput input) {
         List<PostDetailOutput> postDetailOutputs = new ArrayList<>();
         String category = input.getCategory();
-        int[] price = input.getPrice();
         String[] hashtag = input.getHashtag();
         String transaction = input.getTransaction();
 
         List<Long> postIdList = productRepository.findPostIdByCategory(category);
-        List<Product> products = productRepository.findPostByPrice(price[0], price[1], postIdList);
+        List<Product> products = productRepository.findPostByPrice(input.getMinPrice(), input.getMaxPrice(), postIdList);
         for (int i = 0; i < products.size(); i++) {
             if(products.get(i).getPost().getTransaction()!=null && !products.get(i).getPost().getTransaction().equals(transaction)) continue;
 

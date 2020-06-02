@@ -40,14 +40,14 @@ export default () => {
         )}
         <WrapperUserInfo>
           <TextUserInfo>
-            {/* {loading && <TextLoader size={{ width: 50, height: 18 }} />} */}
-            {/* {!loading && findUserInfo!.name} */}
+            {loading && <TextLoader size={{ width: 50, height: 18 }} />}
+            {!loading && findUserInfo && findUserInfo!.name}
           </TextUserInfo>
           <TextuserAddr>
             <SmallIcon src={Pin} />
-            {/* {loading && <TextLoader size={{ width: 80, height: 12 }} />} */}
-            {/* {!loading && findUserInfo!.address && findUserInfo!.address} */}
-            {/* {!loading && !findUserInfo!.address && '주소를 등록해주세요'} */}
+            {loading && <TextLoader size={{ width: 80, height: 12 }} />}
+            {!loading && findUserInfo!.address && findUserInfo!.address}
+            {!loading && !findUserInfo!.address && '주소를 등록해주세요'}
           </TextuserAddr>
         </WrapperUserInfo>
       </WrapperFlex>

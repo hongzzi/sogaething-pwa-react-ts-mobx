@@ -27,18 +27,15 @@ public class Matching extends BaseTimeEntity {
 
     private String category;
 
-    private String hashtag;
-
     private int minPrice;
 
     private int maxPrice;
 
     private String transaction;
 
-    public Matching(User user, String category, String hashtag, int minPrice, int maxPrice, String transaction) {
+    public Matching(User user, String category, int minPrice, int maxPrice, String transaction) {
         this.user = user;
         this.category = category;
-        this.hashtag = hashtag;
         this.minPrice = minPrice;
         this.maxPrice = maxPrice;
         this.transaction = transaction;
