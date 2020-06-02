@@ -1,6 +1,9 @@
 import * as React from 'react';
 import styled from '~/styled';
 
+import { useRouter } from 'next/router';
+import { useState } from 'react';
+import { useCreateMatchingMutation } from '~/generated/graphql';
 import CommonBtn from '../CommonBtn';
 
 import DropdownIcon from '../../assets/img/form-dropdown.png';
@@ -10,29 +13,55 @@ import useStores from '../../helpers/useStores';
 export interface IMatchFormProps {
 }
 
+const category = ['디지털/가전', '가구/인테리어', '유아동/유아도서', '생활/가공식품', '스포츠/레저', '여성잡화', '여성의류', '남성패션/잡화', '게임/취미', '뷰티/미용', '반려동물용품', '도서/티켓/음반', '기타 중고물품'];
+
 export default (props: IMatchFormProps) => {
+    const router = useRouter();
     const store = useStores();
     const matchStore = store.matchStore;
-    const category = ['디지털/가전', '가구/인테리어', '유아동/유아도서', '생활/가공식품', '스포츠/레저', '여성잡화', '여성의류', '남성패션/잡화', '게임/취미', '뷰티/미용', '반려동물용품', '도서/티켓/음반', '기타 중고물품'];
+    const mutation = useCreateMatchingMutation();
+    const [match, setMatch] = useState(store.matchStore.getMatch());
 
     const handleChangeCategory = (event: any) => {
         matchStore.setCategory(event.target.value);
+        setMatch(store.matchStore.getMatch());
     }
     const handleChangeMinPrice = (event: any) => {
         matchStore.setMinPrice(event.target.value)
+        setMatch(store.matchStore.getMatch());
     }
     const handleChangeMaxPrice = (event: any) => {
         matchStore.setMaxPrice(event.target.value)
+        setMatch(store.matchStore.getMatch());
     }
     const handleChangeTransaction = (event: any) => {
         matchStore.setTransaction(event.target.value);
+        setMatch(store.matchStore.getMatch());
+    }
+    const handleClickHashtag = () => {
+        router.push('/form/match/hashtag')
+    }
+    const handleSubmit = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+        event.preventDefault();
+        mutation({
+            variables: {
+                input: {
+                    category: match.category,
+                    price: [match.minPrice, match.maxPrice],
+                    transaction: match.transaction,
+                    hashtag: match.hashtag,
+                },
+            },
+        }).then((res) => {
+            console.log(res);
+        })
     }
 
     return (
         <Wrapper>
             <FormContainer>
                 <InputContainer>
-                    <Select onChange={handleChangeCategory}> <Option selected> 카테고리 </Option>
+                    <Select value={match.category} onChange={handleChangeCategory}> <Option value={''}> 카테고리 </Option>
                         {
                             category.map((category, index) => (
                                 <Option key={index}>{category}</Option>
@@ -41,21 +70,23 @@ export default (props: IMatchFormProps) => {
                     </Select>
                 </InputContainer>
                 <InputContainer>
-                    <Input type={'number'} placeholder={'최소금액'} min={0} onChange={handleChangeMinPrice} />
+                    <Input type={'number'} value={match.minPrice} placeholder={'최소금액'} min={0} onChange={handleChangeMinPrice} />
                     <Span>~</Span>
-                    <Input type={'number'} placeholder={'최대금액'} min={0} onChange={handleChangeMaxPrice} />
+                    <Input type={'number'} value={match.maxPrice} placeholder={'최대금액'} min={0} onChange={handleChangeMaxPrice} />
                 </InputContainer>
                 <InputContainer>
-                    <Select onChange={handleChangeTransaction}> <Option selected> 거래방법 </Option> <Option>직거래</Option> <Option>택배거래</Option></Select>
+                    <Select value={match.transaction} onChange={handleChangeTransaction}> <Option value={''}> 거래방법 </Option> <Option>직거래</Option> <Option>택배거래</Option></Select>
                 </InputContainer>
-                <InputContainer>
+                <InputContainer onClick={handleClickHashtag}>
                     <HashTag>
-                        해시태그
+                        해시태그 {matchStore.hashtag.length}
                     </HashTag>
                 </InputContainer>
             </FormContainer>
             <FooterContainer>
-                <CommonBtn type={'disable'} text={'등록하기'} />
+                <BtnContainer onClick={handleSubmit} >
+                    <CommonBtn type={'disable'} text={'등록하기'} />
+                </BtnContainer>
             </FooterContainer>
         </Wrapper>
     );
@@ -112,7 +143,8 @@ const Span = styled.span`
 `
 
 const Select = styled.select`
-    background: url(${DropdownIcon}) no-repeat 95% 50%;
+    /* background: url(${DropdownIcon}) no-repeat 95% 50%; */
+    background: transparent;
     width: 100%;
     height: 2rem;
     font-size: 15px;
@@ -146,6 +178,8 @@ const HashTag = styled.div`
     border: solid 0;
     padding: 0.5rem;
 `
+
+const BtnContainer = styled.div``
 
 const FooterContainer = styled.div`
     display: flex;

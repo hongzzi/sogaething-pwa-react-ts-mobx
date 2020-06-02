@@ -1,0 +1,7 @@
+mutation createMatching($input: MatchInput!) {
+    createMatching(input: $input) {
+        category
+        hashtag
+        transaction
+    }
+}
