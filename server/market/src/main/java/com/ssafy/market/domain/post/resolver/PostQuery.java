@@ -4,9 +4,13 @@ import com.coxautodev.graphql.tools.GraphQLQueryResolver;
 import com.ssafy.market.domain.file.domain.File;
 import com.ssafy.market.domain.file.repository.FileRepository;
 import com.ssafy.market.domain.hashtag.domain.Hashtag;
+import com.ssafy.market.domain.hashtag.domain.MatchingHashtag;
 import com.ssafy.market.domain.hashtag.dto.HashtagInput;
 import com.ssafy.market.domain.hashtag.repository.HashtagRepository;
+import com.ssafy.market.domain.hashtag.repository.MatchingHashtagRepository;
+import com.ssafy.market.domain.matching.domain.Matching;
 import com.ssafy.market.domain.matching.dto.MatchInput;
+import com.ssafy.market.domain.matching.respository.MatchingRepository;
 import com.ssafy.market.domain.post.domain.Post;
 import com.ssafy.market.domain.post.dto.*;
 import com.ssafy.market.domain.post.repository.PostRepository;
@@ -33,6 +37,8 @@ public class PostQuery implements GraphQLQueryResolver {
     private final ProductRepository productRepository;
     private final HashtagRepository hashtagRepository;
     private final FileRepository fileRepository;
+    private final MatchingRepository matchingRepository;
+    private final MatchingHashtagRepository matchingHashtagRepository;
 
     public List<PostOutput> findAllPost() {
         List<PostOutput> outputs = new ArrayList<>();
@@ -194,14 +200,16 @@ public class PostQuery implements GraphQLQueryResolver {
     }
 
 
-    public List<PostDetailOutput> matchThings(MatchInput input) {
+    public List<PostDetailOutput> matchThings(Long matchingId) {
         List<PostDetailOutput> postDetailOutputs = new ArrayList<>();
-        String category = input.getCategory();
-        String[] hashtag = input.getHashtag();
-        String transaction = input.getTransaction();
+        Matching matching = matchingRepository.findByMatchingId(matchingId);
+
+        String category = matching.getCategory();
+        String[] hashtag = matchingHashtagRepository.findHashtagByMatching(matching).toArray(new String[0]);
+        String transaction = matching.getTransaction();
 
         List<Long> postIdList = productRepository.findPostIdByCategory(category);
-        List<Product> products = productRepository.findPostByPrice(input.getMinPrice(), input.getMaxPrice(), postIdList);
+        List<Product> products = productRepository.findPostByPrice(matching.getMinPrice(), matching.getMaxPrice(), postIdList);
         for (int i = 0; i < products.size(); i++) {
             if(products.get(i).getPost().getTransaction()!=null && !products.get(i).getPost().getTransaction().equals(transaction)) continue;
 
