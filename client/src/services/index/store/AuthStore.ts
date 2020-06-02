@@ -32,7 +32,6 @@ class AuthStore {
     if (initialData.token !== '') {
       this.setToken(initialData.token);
       this.auth = jwtDecode(initialData.token);
-      console.log(this.auth);
     }
 
     if (this.token) {
@@ -80,11 +79,6 @@ class AuthStore {
   @action
   setProvider(provider: Provider) {
     this.provider = provider;
-  }
-
-  @action
-  getTest() {
-    console.log('call store');
   }
 
   @action

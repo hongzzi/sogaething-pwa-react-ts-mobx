@@ -54,12 +54,9 @@ public class ChatRoomMongoRepository {
         if (collectionCounter == null) {
             mongoTemplate.insert(new CollectionCounter(name, (long) 1), "collectionCounter");
             result = (long) 1;
-            System.out.println("새로 만들기");
         } else {
             result = ((CollectionCounter)collectionCounter).getSeq();
-            System.out.println("걍 갖고오기");
         }
-        System.out.println(result);
         return result;
     }
     public ChatRoom insertChatRoom(ChatRoom chatRoom) throws DuplicateKeyException {
@@ -92,7 +89,7 @@ public class ChatRoomMongoRepository {
             Update update = new Update();
             update.set("isBuyerExit", chatRoom.isBuyerExit());
             update.set("isSellerExit", chatRoom.isSellerExit());
-            update.set("modifiedDateTime", LocalDateTime.now().toString());
+//            update.set("modifiedDateTime", LocalDateTime.now().toString());
 
             // 쿼리 조건, update 변경 내용, 컬렉션 네임
             Object updateResult = mongoTemplate.findAndModify(query, update, ChatRoom.class, "chatRoom");

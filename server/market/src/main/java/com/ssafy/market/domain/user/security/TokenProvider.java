@@ -58,7 +58,7 @@ public class TokenProvider {
                 .setSigningKey(appProperties.getAuth().getTokenSecret())
                 .parseClaimsJws(token)
                 .getBody();
-        return Long.parseLong(claims.getSubject());
+        return claims.get("userId", Long.class);
     }
 
     public boolean validateToken(String authToken) {

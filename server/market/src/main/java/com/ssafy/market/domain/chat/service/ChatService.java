@@ -2,12 +2,14 @@ package com.ssafy.market.domain.chat.service;
 
 import com.ssafy.market.domain.chat.domain.ChatMessage;
 import com.ssafy.market.domain.chat.domain.ChatRoom;
+import com.ssafy.market.domain.chat.domain.MessageType;
 import com.ssafy.market.domain.chat.redis.RedisPublisher;
 import com.ssafy.market.domain.chat.repository.ChatMongoRepository;
 import com.ssafy.market.domain.chat.repository.ChatRoomMongoRepository;
 import com.ssafy.market.domain.chat.util.CacheKey;
 import com.ssafy.market.domain.chat.util.TopicUtil;
 import com.ssafy.market.domain.user.repository.UserRepository;
+import com.ssafy.market.global.apis.ImgurApi;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,20 +32,25 @@ public class ChatService {
     private final ChatMongoRepository chatMongoRepository;
     private final ChatRoomMongoRepository chatRoomMongoRepository;
     private final UserRepository userRepository;
+    private final ImgurApi imgurApi;
 
     // 게시 처리 서비스
     private final RedisPublisher redisPublisher;
-    private Map<String, ChannelTopic> topics = TopicUtil.getTopicUtil();
+    private Map<Long, ChannelTopic> topics = TopicUtil.getTopicUtil();
 
-    public ChannelTopic getTopic(String roomId) {
+    public ChannelTopic getTopic(Long roomId) {
         return topics.get(roomId);
     }
 
     @CacheEvict(value = CacheKey.MESSAGE, key = "#chatMessage.roomId")
     @Transactional
     public Boolean sendMessage(ChatMessage chatMessage) {
-        ChannelTopic channelTopic = getTopic(String.valueOf(chatMessage.getRoomId()));
-        // WebSocket 에 발행된 메시지를 redis로 발행한다.(publish)
+        ChannelTopic channelTopic = getTopic(chatMessage.getRoomId());
+        if (MessageType.IMAGE.equals(chatMessage.getType())) {
+            String imagePath = imgurApi.uploadImg(chatMessage.getMessage());
+            chatMessage.setMessage(imagePath);
+        }
+        // WebSocket 에 발행된 메시지를 redis 로 발행한다.(publish)
         redisPublisher.publish(channelTopic, chatMessage);
         ChatMessage result = chatMongoRepository.insertChatMessage(chatMessage);
         if (result != null){

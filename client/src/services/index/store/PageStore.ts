@@ -15,6 +15,7 @@ export const initialPage: IPage = {
 class PageStore {
   @observable nav: boolean = false;
   @observable clickedIdx: number = 0;
+  @observable modal: boolean = false;
 
   constructor(initialData = initialPage, root: any) {
       this.nav = initialData.nav;
@@ -29,6 +30,11 @@ class PageStore {
   @action
   setClickedIdx(idx: number) {
     this.clickedIdx = idx;
+  }
+
+  @action
+  toggleModal(){
+    this.modal = !this.modal;
   }
 }
 

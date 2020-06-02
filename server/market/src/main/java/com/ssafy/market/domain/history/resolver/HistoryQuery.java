@@ -39,10 +39,12 @@ public class HistoryQuery implements GraphQLQueryResolver {
 
     public List<UserHistoryResponse> findUserHistoryByUserId(DataFetchingEnvironment env){
         Long userId = tokenProvider.getUserIdFromHeader(env);
+        System.out.println(userId);
         List<History> histories = historyRepository.findTop7ByUserIdOrderByCreatedDateDesc(userId);
 
         List<UserHistoryResponse> userHistoryResponses = new ArrayList<>();
         for (int i = 0; i < histories.size(); i++) {
+            System.out.println(histories.get(i));
             UserHistoryResponse response = new UserHistoryResponse();
             Post post = postRepository.findByPostId(histories.get(i).getPostId());
             Product product = productRepository.findByPost(post);
