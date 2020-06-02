@@ -73,10 +73,12 @@ export default () => {
       </WrapperFlex>
       <WrapperMainButton>
         <MainButton onClick={handleClickMatch}>
-          <div>진행중인 매칭</div> <InnerLine>3</InnerLine>
+          <div>진행중인 매칭</div>
+          {/* <InnerLine>3</InnerLine> */}
         </MainButton>
         <MainButton onClick={handleClickList}>
-          <div>판매중인 물품</div> <InnerLine>0</InnerLine>
+          <div>판매중인 물품</div>
+          {/* <InnerLine>0</InnerLine> */}
         </MainButton>
       </WrapperMainButton>
     </Wrapper>

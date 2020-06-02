@@ -5,7 +5,7 @@ export interface IUserProps {}
 
 export default function User() {
   const store = useStores();
-  
+
   store.authStore.setEmail('123123');
   return (
     <div>

@@ -155,6 +155,7 @@ export type IMatchInput = {
 };
 
 export type IMatchResponse = {
+  matchingId?: Maybe<Scalars["Int"]>;
   category?: Maybe<Scalars["String"]>;
   minPrice?: Maybe<Scalars["Int"]>;
   maxPrice?: Maybe<Scalars["Int"]>;
@@ -424,7 +425,7 @@ export type IQuerySearchThingsArgs = {
 };
 
 export type IQueryMatchThingsArgs = {
-  input: IMatchInput;
+  matchingId: Scalars["Int"];
 };
 
 export type IQueryFindFileByIdArgs = {
@@ -689,6 +690,7 @@ export type IGetMatchingQuery = { __typename?: "Query" } & {
       Maybe<
         { __typename?: "MatchResponse" } & Pick<
           IMatchResponse,
+          | "matchingId"
           | "category"
           | "minPrice"
           | "maxPrice"
@@ -703,7 +705,7 @@ export type IGetMatchingQuery = { __typename?: "Query" } & {
 };
 
 export type IGetMatchResultsQueryVariables = {
-  input: IMatchInput;
+  input: Scalars["Int"];
 };
 
 export type IGetMatchResultsQuery = { __typename?: "Query" } & {
@@ -1248,6 +1250,7 @@ export function useCreateMatchingMutation(
 export const GetMatchingDocument = gql`
   query getMatching {
     findMatchingByUserId {
+      matchingId
       category
       minPrice
       maxPrice
@@ -1306,8 +1309,8 @@ export function useGetMatchingQuery(
   >(GetMatchingDocument, baseOptions);
 }
 export const GetMatchResultsDocument = gql`
-  query getMatchResults($input: MatchInput!) {
-    matchThings(input: $input) {
+  query getMatchResults($input: Int!) {
+    matchThings(matchingId: $input) {
       postId
       title
       category

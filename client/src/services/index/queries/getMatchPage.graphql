@@ -18,6 +18,7 @@ mutation createMatching($input: MatchInput!) {
 
 query getMatching{
     findMatchingByUserId{
+        matchingId
         category
         minPrice
         maxPrice
@@ -28,8 +29,8 @@ query getMatching{
     }
 }
 
-query getMatchResults($input: MatchInput!){
-    matchThings(input: $input) {
+query getMatchResults($input: Int!){
+    matchThings(matchingId: $input) {
             postId
             title
             category

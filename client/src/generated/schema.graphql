@@ -1,5 +1,5 @@
 # source: http://3.34.131.20:8080/graphql
-# timestamp: Tue Jun 02 2020 19:15:50 GMT+0900 (GMT+09:00)
+# timestamp: Tue Jun 02 2020 23:02:13 GMT+0900 (GMT+09:00)
 
 """This directive allows results to be deferred during execution"""
 directive @defer on FIELD
@@ -151,6 +151,7 @@ input MatchInput {
 }
 
 type MatchResponse {
+  matchingId: Int
   category: String
   minPrice: Int
   maxPrice: Int
@@ -296,7 +297,7 @@ type Query {
   findElAllPosts: [Post]
   """
   searchThings(input: HashtagInput!): [PostMetaOutput]
-  matchThings(input: MatchInput!): [PostDetailOutput]
+  matchThings(matchingId: Int!): [PostDetailOutput]
   findAllFile: [FileOutput]
   findAllFiles: [File]
   findFileById(id: Int): FileOutput
