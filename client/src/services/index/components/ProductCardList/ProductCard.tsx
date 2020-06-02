@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import * as React from 'react';
 import styled, { keyframes } from '~/styled';
 import { IRecentPost } from '.';
@@ -13,14 +14,19 @@ interface IProductCard {
 
 export default (props: IProductCard) => {
   let hashtags;
+  let postId = '';
   if (props.cardData !== null) {
     hashtags = props.cardData.hashTags.map(
       (item: any) => '#' + item.hashtag + ' ',
     );
+    postId = props.cardData.postId;
   }
 
   return (
+
+    <Link href={`/post/${postId}`}>
     <Wrapper idx={props.idx} loading={props.loading}>
+
       <ImageView
         src={
           props.loading
@@ -44,6 +50,7 @@ export default (props: IProductCard) => {
         </Line>
       </TextCardContainer>
     </Wrapper>
+    </Link >
   );
 };
 
@@ -70,7 +77,7 @@ const Wrapper = styled.div<Pick<IProductCard, 'idx' | 'loading'>>`
   float: ${(props) => (props.idx % 2 === 1 ? 'left' : 'right')};
   margin-bottom: 15px;
   background-color: ${(props) => (props.loading ? 'lightgray' : '')};
-  animation: ${boxFade} ${props => props.loading ? '1.5s infinite ease-in-out' : ''};
+  animation: ${boxFade} ${(props) => props.loading ? '1.5s infinite ease-in-out' : ''};
 `;
 
 const TextCardContainer = styled.div`

@@ -1,5 +1,6 @@
 import autobind from 'autobind-decorator';
 import { action, observable, reaction } from 'mobx';
+import Stomp, {Client} from 'stompjs';
 import ChatService from '../service/ChatService';
 import { ChatRoomListItemDto, IChatDto, IChatRoomAuthDto } from './../service/ChatService';
 
@@ -14,6 +15,7 @@ class ChatStore {
     seller: '',
     buyer: '',
   };
+  @observable ws: Client|null = null;
 
   constructor(private chatService: ChatService, root: any) {}
 
@@ -40,6 +42,11 @@ class ChatStore {
     this.setChatRoom(roomId);
     this.setChatRoomAuth(data.chatRoom);
     this.loading = false;
+  }
+
+  @action
+  setWs(ws: Client) {
+    this.ws = ws;
   }
 
   @action

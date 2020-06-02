@@ -53,3 +53,9 @@ query getRecent {
     modifiedDate
   }
 }
+
+# query getSearchHashTag {
+#   searchThings(){
+
+#   }
+# }

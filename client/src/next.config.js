@@ -8,9 +8,9 @@ const Dotenv = require("dotenv-webpack");
 const webpack = require('webpack');
 
 module.exports = withOptimizedImages({
-  distDir: "../dist",
-  imagesName: "[hash].[ext]",
-  target: "serverless",
+  // distDir: "../dist",
+  // imagesName: "[hash].[ext]",
+  // target: "serverless",
   webpack(config) {
     config.resolve.plugins = [
       new TsconfigPathsPlugin({
@@ -23,9 +23,9 @@ module.exports = withOptimizedImages({
         minify: true,
       })
     );
-    config.plugins.push(
-      new CompressionPlugin()
-    );
+    // config.plugins.push(
+    //   new CompressionPlugin()
+    // );
     config.plugins.push(
       new webpack.EnvironmentPlugin(process.env)
     );

@@ -30,31 +30,41 @@ export default class extends React.Component {
     }
 
     const navState = getRouteNavIndex(router.asPath);
+
     const mobxStore = initializeStore({...initialRoot, pageStore: {
-      clickedIdx: navState,
-      nav: true,
+        clickedIdx: navState,
+        nav: true,
     }});
+
+    try{
+      mobxStore.nextServerInit(appContext.ctx.req, appContext.ctx.res);
+    }catch(error) {
+      console.error('[Error 29948] store init failed');
+      // console.error(error);
+    }
+
     appContext.ctx.mobxStore = mobxStore;
     const apolloClient = createApolloClient(mobxStore);
 
-    try {
-      await getMarkupFromTree({
-        tree: (
-          <App
-            Component={Component}
-            router={router}
-            apolloClient={apolloClient}
-            store={mobxStore}
-            {...appProps}
-          />
-        ),
-        renderFunction,
-      });
-    } catch (error) {
-      // tslint:disable-next-line:no-console
-      // console.error(error);
-      console.error('[Error 29948] Operating queries for SSR failed');
-    }
+    // try {
+    //   await getMarkupFromTree({
+    //     tree: (
+    //       <App
+    //         Component={Component}
+    //         router={router}
+    //         apolloClient={apolloClient}
+    //         store={mobxStore}
+    //         {...appProps}
+    //         {...pageProps}
+    //       />
+    //     ),
+    //     renderFunction,
+    //   });
+    // } catch (error) {
+    //   // tslint:disable-next-line:no-console
+    //   // console.error(error);
+    //   console.error('[Error 29948] Operating queries for SSR failed');
+    // }
 
     Head.rewind();
 

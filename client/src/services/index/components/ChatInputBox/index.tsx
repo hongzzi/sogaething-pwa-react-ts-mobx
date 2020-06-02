@@ -25,10 +25,10 @@ function useChatData() {
 
 export default (props: IChatInputProps) => {
   let sockJS;
-  if(NEXT_APP_SOCKET_ENDPOINT){
+  if (NEXT_APP_SOCKET_ENDPOINT) {
     sockJS = new SockJS(NEXT_APP_SOCKET_ENDPOINT!);
-  }else{
-    sockJS = new SockJS('');
+  } else {
+    sockJS = new SockJS('http://3.34.131.20:8080/ws-stomp');
   }
   let ws = Stomp.over(sockJS);
 
@@ -68,11 +68,16 @@ export default (props: IChatInputProps) => {
   };
 
   let reconnect = 0;
-  function connect() {
+
+  const stompDisconnect = () => {
+    ws.disconnect(() => {console.log('disconnect')});
+  }
+
+  const connect = () => {
     // pub/sub event
     ws.connect(
       {},
-      function(frame) {
+      (frame) => {
         ws.subscribe('/sub/chat/room/' + roomId, function(message) {
           const recv = JSON.parse(message.body);
           handleRecvMessage(recv);
@@ -83,7 +88,7 @@ export default (props: IChatInputProps) => {
           JSON.stringify({ type: 'ENTER', roomId, sender }),
         );
       },
-      function(error) {
+      (error) => {
         if (reconnect++ <= 5) {
           setTimeout(function() {
             console.log('connection reconnect');
