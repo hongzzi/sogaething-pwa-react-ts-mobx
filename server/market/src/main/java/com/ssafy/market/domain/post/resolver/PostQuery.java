@@ -6,6 +6,7 @@ import com.ssafy.market.domain.file.repository.FileRepository;
 import com.ssafy.market.domain.hashtag.domain.Hashtag;
 import com.ssafy.market.domain.hashtag.dto.HashtagInput;
 import com.ssafy.market.domain.hashtag.repository.HashtagRepository;
+import com.ssafy.market.domain.matching.dto.MatchInput;
 import com.ssafy.market.domain.post.domain.Post;
 import com.ssafy.market.domain.post.dto.*;
 import com.ssafy.market.domain.post.repository.PostRepository;
@@ -192,12 +193,11 @@ public class PostQuery implements GraphQLQueryResolver {
     public List<PostDetailOutput> matchThings(MatchInput input) {
         List<PostDetailOutput> postDetailOutputs = new ArrayList<>();
         String category = input.getCategory();
-        int[] price = input.getPrice();
         String[] hashtag = input.getHashtag();
         String transaction = input.getTransaction();
 
         List<Long> postIdList = productRepository.findPostIdByCategory(category);
-        List<Product> products = productRepository.findPostByPrice(price[0], price[1], postIdList);
+        List<Product> products = productRepository.findPostByPrice(input.getMinPrice(), input.getMaxPrice(), postIdList);
         for (int i = 0; i < products.size(); i++) {
             if(products.get(i).getPost().getTransaction()!=null && !products.get(i).getPost().getTransaction().equals(transaction)) continue;
 

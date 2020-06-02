@@ -37,13 +37,6 @@ input HashtagInput {
     hashtag: [String]
 }
 
-input MatchInput {
-    category: String
-    price: [Int]
-    hashtag: [String]
-    transaction: String
-}
-
 type Output{
     state: String
     postId : Int

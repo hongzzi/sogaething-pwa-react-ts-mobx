@@ -4,6 +4,12 @@ type Hashtag {
     hashtag: String
 }
 
+type MatchingHashtag {
+    matchingHashtagId: ID
+    matching: Matching
+    hashtag: String
+}
+
 input CreateHashtagInput {
     productId: Int
     hashtag: String

@@ -12,5 +12,4 @@ public interface JjimRepository extends JpaRepository<Jjim, Long> {
     List<Jjim> findByUser(User user);
     Jjim findByJjimId(Long JjimId);
     int deleteByJjimId(Long JjimId);
-
 }
