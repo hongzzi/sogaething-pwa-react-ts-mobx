@@ -22,9 +22,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Component
 @RequiredArgsConstructor
@@ -39,12 +37,19 @@ public class HistoryQuery implements GraphQLQueryResolver {
 
     public List<UserHistoryResponse> findUserHistoryByUserId(DataFetchingEnvironment env){
         Long userId = tokenProvider.getUserIdFromHeader(env);
-        List<Long> histories = historyRepository.findPostIdByCategory(userId);
-
-        List<UserHistoryResponse> userHistoryResponses = new ArrayList<>();
+//        List<Long> histories = historyRepository.findPostIdByCategory(userId);
+        List<History> histories = historyRepository.findByUserIdOrderByCreatedDateDesc(userId);
+        Set<Long> set = new HashSet<>();
         for (int i = 0; i < histories.size(); i++) {
-            Long postId = histories.get(i);
+            set.add(histories.get(i).getPostId());
+        }
+        List<Long> postIds = new ArrayList<>(set);
+        List<UserHistoryResponse> userHistoryResponses = new ArrayList<>();
+
+        for (int i = 0; i < postIds.size(); i++) {
+            Long postId = postIds.get(i);
             Post post = postRepository.findByPostId(postId);
+            System.out.println(postId);
             if(userId == post.getUserId()) continue;
 
             Product product = productRepository.findByPost(post);
