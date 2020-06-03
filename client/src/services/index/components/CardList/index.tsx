@@ -43,11 +43,11 @@ export default () => {
     console.error(error);
   };
 
-  const Cards = dump.map((item, i) => {
+  const Cards = findUserHistoryByUserId.map((item, i) => {
     if(loading){
       return <Card key={i} cardData={null} loading />;
     }else if(findUserHistoryByUserId){
-      return <Card key={i} cardData={findUserHistoryByUserId[i]} loading={false} />
+      return <Card key={i} cardData={item} loading={false} />
     }
     
   });
