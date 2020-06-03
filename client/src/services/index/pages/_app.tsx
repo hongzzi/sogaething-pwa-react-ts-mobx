@@ -1,15 +1,17 @@
 import ApolloClient from 'apollo-client';
 import pickBy from 'lodash/pickBy';
+import { toJS } from 'mobx';
 import { Provider } from 'mobx-react';
 import 'moment/locale/ko';
 import { Container, default as NextApp } from 'next/app';
 import Head from 'next/head';
-import Router from 'next/router'
+import Router from 'next/router';
 import React, { Fragment } from 'react';
 import {
   ApolloProvider as ApolloHookProvider,
   getMarkupFromTree,
 } from 'react-apollo-hooks';
+import { CookiesProvider } from 'react-cookie';
 import { renderToString as renderFunction } from 'react-dom/server';
 import { ThemeProvider } from 'styled-components';
 import GlobalStyle from '~/styled/global';
@@ -17,28 +19,22 @@ import baseTheme from '~/styled/themes/base';
 import { createApolloClient } from '../apollo';
 import FaviconImage from '../assets/favicon.png?url';
 import initializeStore, { IEnvironments, RootStore } from '../store';
-import {initialRoot } from '../store';
 
 export default class extends React.Component {
   static async getInitialProps(appContext: any) {
     const appProps = await App.getInitialProps(appContext);
     const { Component, router, ctx } = appContext;
 
-    let pageProps: {pageProps: any} = {pageProps : {}};
-    if (Component.getInitialProps) {
-      pageProps = await Component.getInitialProps(appContext);
-    }
-
+    const isServer = typeof window === 'undefined';
     const navState = getRouteNavIndex(router.asPath);
 
-    const mobxStore = initializeStore({...initialRoot, pageStore: {
-        clickedIdx: navState,
-        nav: true,
-    }});
-
-    try{
-      mobxStore.nextServerInit(appContext.ctx.req, appContext.ctx.res);
-    }catch(error) {
+    const mobxStore = initializeStore();
+    mobxStore.pageStore.clickedIdx = navState;
+    try {
+      if (isServer) {
+        await mobxStore.authStore.nextServerInit(ctx.req, ctx.res);
+      }
+    } catch (error) {
       console.error('[Error 29948] store init failed');
       // console.error(error);
     }
@@ -46,25 +42,24 @@ export default class extends React.Component {
     appContext.ctx.mobxStore = mobxStore;
     const apolloClient = createApolloClient(mobxStore);
 
-    // try {
-    //   await getMarkupFromTree({
-    //     tree: (
-    //       <App
-    //         Component={Component}
-    //         router={router}
-    //         apolloClient={apolloClient}
-    //         store={mobxStore}
-    //         {...appProps}
-    //         {...pageProps}
-    //       />
-    //     ),
-    //     renderFunction,
-    //   });
-    // } catch (error) {
-    //   // tslint:disable-next-line:no-console
-    //   // console.error(error);
-    //   console.error('[Error 29948] Operating queries for SSR failed');
-    // }
+    try {
+      await getMarkupFromTree({
+        tree: (
+          <App
+            Component={Component}
+            router={router}
+            apolloClient={apolloClient}
+            mobxStore
+            {...appProps}
+          />
+        ),
+        renderFunction,
+      });
+    } catch (error) {
+      // tslint:disable-next-line:no-console
+      // console.error(error);
+      console.error('[Error 29948] Operating queries for SSR failed');
+    }
 
     Head.rewind();
 
@@ -81,7 +76,7 @@ export default class extends React.Component {
   constructor(props: any) {
     super(props);
     const isServer = typeof window === 'undefined';
-    this.store = isServer ? props.mobxStore : initializeStore(props.mobxStore);
+    this.store = isServer ? props.mobxStore : new RootStore(props.mobxStore);
     this.apolloClient = createApolloClient(this.store, props.apolloState);
   }
 
@@ -97,17 +92,8 @@ export default class extends React.Component {
 }
 
 class App extends NextApp<any> {
-  componentDidMount() {
-    if (!window.sessionStorage.getItem('jwt')) {
-      Router.push('/signin');
-    }else {
-      this.props.store.authStore.setAuth();
-    }
-  }
-
   render() {
     const { Component, pageProps } = this.props;
-
     return (
       <Container>
         <Head>

@@ -11,13 +11,14 @@ import useStores from '../helpers/useStores';
 import { IAuthResponseDto } from '../store/AuthStore';
 import { useRouter } from 'next/router';
 import { KEYS } from '../constants';
+import Link from 'next/link';
 
 interface ISignInProps {}
 
 export default (props: ISignInProps) => {
   const store = useStores();
-
-  // const mutate = useGetLoginMutation;
+  // const store = useStore();
+  // console.log(store);
   const mutate = useGetLoginMutation();
   const router = useRouter();
   const success = (res: any) => {
@@ -30,11 +31,9 @@ export default (props: ISignInProps) => {
       },
     })
     .then((res: {data : IAuthResponseDto}) => {
-      store.authStore.setToken(res.data.loginUser.token);
-      store.authStore.setProvider('kakao');
-      router.push('/');
     })
     .catch((err) => {
+      router.push('/signin');
       console.log(err);
     })
   };
@@ -48,6 +47,8 @@ export default (props: ISignInProps) => {
       <WrapperLine>
         <Line>소개 Thing</Line>
       </WrapperLine>
+      <Link href='/'>
+        <a>
       <StyledKakaoLogin
         jsKey={KEYS.KAKAO}
         onSuccess={success}
@@ -55,6 +56,8 @@ export default (props: ISignInProps) => {
       >
         <LoginText>카카오로 시작하기</LoginText>
       </StyledKakaoLogin>
+      </a>
+      </Link>
       <LoginButton type={'google'}>
         <LoginText>구글계정으로 시작하기</LoginText>
       </LoginButton>

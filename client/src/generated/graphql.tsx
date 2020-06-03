@@ -176,6 +176,7 @@ export type IMutation = {
   deleteFile?: Maybe<Scalars["Int"]>;
   createDetailDeal?: Maybe<IDetailOutput>;
   deleteDetailDeal: Scalars["Int"];
+  logoutUser: IUserLogout;
   loginUser?: Maybe<ILoginUserOutput>;
   updateUser?: Maybe<IUserOutput>;
   deleteUser?: Maybe<Scalars["Int"]>;
@@ -183,6 +184,7 @@ export type IMutation = {
   updateHashtag?: Maybe<IHashtagOutput>;
   deleteHashtag?: Maybe<Scalars["Int"]>;
   createMatching?: Maybe<IMatching>;
+  deleteMatching?: Maybe<Scalars["Int"]>;
   updateProduct?: Maybe<IProductOutput>;
   createProduct?: Maybe<IProductOutput>;
   deleteProduct?: Maybe<Scalars["Int"]>;
@@ -231,6 +233,10 @@ export type IMutationDeleteDetailDealArgs = {
   id: Scalars["Int"];
 };
 
+export type IMutationLogoutUserArgs = {
+  userId: Scalars["Int"];
+};
+
 export type IMutationLoginUserArgs = {
   input: ILoginUserInput;
 };
@@ -257,6 +263,10 @@ export type IMutationDeleteHashtagArgs = {
 
 export type IMutationCreateMatchingArgs = {
   input: IMatchInput;
+};
+
+export type IMutationDeleteMatchingArgs = {
+  matchingId?: Maybe<Scalars["Int"]>;
 };
 
 export type IMutationUpdateProductArgs = {
@@ -374,18 +384,10 @@ export type IQuery = {
   findAllPosts?: Maybe<Array<Maybe<IPost>>>;
   findAllPost?: Maybe<Array<Maybe<IPostOutput>>>;
   countPostByUserId?: Maybe<Scalars["Int"]>;
-  /** findByUser(userId : Int) : [PostOutput] */
   findPostByPostId?: Maybe<IPostOutput>;
-  /** findAllPostsByUploaderId(uploader_id: Int):[Post]
-   *    findAllPostsByUploaderId(uploader_id: Int):[Post]
-   *    findPostByPostId(id: Int): Post
-   */
   findRecentPosts?: Maybe<Array<Maybe<IRecentPostResponse>>>;
   findPostListByUserId?: Maybe<Array<Maybe<IPostMetaOutput>>>;
   findByDetailPost?: Maybe<IPostDetailOutput>;
-  /** findAllPostsByUploaderId(uploader_id: Int):[Post]
-   * findElAllPosts: [Post]
-   */
   searchThings?: Maybe<Array<Maybe<IPostMetaOutput>>>;
   matchThings?: Maybe<Array<Maybe<IPostDetailOutput>>>;
   findAllFile?: Maybe<Array<Maybe<IFileOutput>>>;
@@ -401,6 +403,7 @@ export type IQuery = {
   findAllHashtag?: Maybe<Array<Maybe<IHashtagOutput>>>;
   findByHashtagId?: Maybe<IHashtagOutput>;
   autocomplete?: Maybe<Array<Maybe<IAutocomplete>>>;
+  findAllMatchingHashtagByMatchingId?: Maybe<Array<Maybe<Scalars["String"]>>>;
   findMatchingByUserId?: Maybe<Array<Maybe<IMatchResponse>>>;
   findAllProduct?: Maybe<Array<Maybe<IProductOutput>>>;
   findAllProducts?: Maybe<Array<Maybe<IProduct>>>;
@@ -447,6 +450,10 @@ export type IQueryFindByHashtagIdArgs = {
 
 export type IQueryAutocompleteArgs = {
   hashtag: Scalars["String"];
+};
+
+export type IQueryFindAllMatchingHashtagByMatchingIdArgs = {
+  matchingId?: Maybe<Scalars["Int"]>;
 };
 
 export type IQueryFindByProductIdArgs = {
@@ -542,6 +549,11 @@ export type IUserInfoResponse = {
   trust?: Maybe<Scalars["Int"]>;
   numOfPosts?: Maybe<Scalars["Int"]>;
   imgurl?: Maybe<Scalars["String"]>;
+};
+
+export type IUserLogout = {
+  state?: Maybe<Scalars["String"]>;
+  userId?: Maybe<Scalars["Int"]>;
 };
 
 export type IUserOutput = {
