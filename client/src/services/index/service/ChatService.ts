@@ -25,21 +25,41 @@ export interface AuthResponseDto {
 }
 
 export interface IChatRoomAuthDto {
-  seller: string,
-  buyer: string
+  seller: string;
+  buyer: string;
 }
 
 export interface IChatDto {
-  type: string,
-  roomId: number,
-  sender: string,
-  message: string,
-  createdDateTime: string
+  type: string;
+  roomId: number;
+  sender: string;
+  message: string;
+  createdDateTime: string;
 }
 
 export interface IChatRoomResponseDto {
   chatMessages: IChatDto[];
   chatRoom: IChatRoomAuthDto;
+}
+
+export interface ICreateChatRoomRequestDto {
+  buyerId: string;
+  sellerId: string;
+  postId: string;
+}
+
+export interface ICreateChatRoomResponseDto {
+  // buyerExit: boolean;
+  // buyerId: string;
+  // createdDateTime: string;
+  // modifiedDateTime: string;
+  // postId: string;
+  // roomId: number;
+  // sellerExit: boolean;
+  // sellerId: string;
+  content: string, // 방번호
+  name: string, // createChatroom
+  state: string, // success
 }
 
 const API_HOST = NEXT_APP_REST_ENDPOINT || ENDPOINT.REST;
@@ -55,8 +75,16 @@ class ChatService {
     return axios.get(`${API_HOST}/rooms/${authId}`);
   }
 
-  async getUserChatRoom(roomId: number): Promise<AxiosResponse<IChatRoomResponseDto>> {
+  async getUserChatRoom(
+    roomId: number,
+  ): Promise<AxiosResponse<IChatRoomResponseDto>> {
     return axios.get(`${API_HOST}/message/${roomId}`);
+  }
+
+  async postChatRoom(
+    data: ICreateChatRoomRequestDto,
+  ): Promise<AxiosResponse<ICreateChatRoomResponseDto>> {
+    return axios.post(`${API_HOST}/room`, data);
   }
 }
 

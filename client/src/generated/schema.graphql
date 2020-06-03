@@ -1,6 +1,4 @@
 # source: http://3.34.131.20:8080/graphql
-# timestamp: Wed Jun 03 2020 00:35:47 GMT+0900 (GMT+09:00)
-
 """This directive allows results to be deferred during execution"""
 directive @defer on FIELD
 

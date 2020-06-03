@@ -35,7 +35,7 @@ public class ChatRoomController {
             if (result != null) {
                 stringResult = new StringResult(String.valueOf(result.getRoomId()), "createChatRoom", "SUCCESS");
                 return new ResponseEntity<Object>(stringResult, HttpStatus.CREATED);
-            } else { // 이미 있는 방
+            } else { // 실행 중 에러
                 stringResult = new StringResult("-1", "createChatRoom", "SUCCESS");
                 return new ResponseEntity<Object>(stringResult, HttpStatus.CONFLICT);
             }
