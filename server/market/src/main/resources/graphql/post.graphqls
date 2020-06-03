@@ -23,7 +23,7 @@ input UpdatePostInput {
     price: Int!
 }
 
-input CreatePostInput{
+input CreatePostInput {
     title : String!
     category: String!
     imgPaths : [String]
@@ -37,10 +37,11 @@ input HashtagInput {
     hashtag: [String]
 }
 
-type Output{
+type Output {
     state: String
     postId : Int
 }
+
 type PostOutput {
     postId: ID!
     userId: Int #게시자 id
@@ -117,16 +118,10 @@ type Query {
     findAllPosts: [Post]
     findAllPost: [PostOutput]
     countPostByUserId(userId : Int): Int
-#    findByUser(userId : Int) : [PostOutput]
     findPostByPostId(id: Int): PostOutput
-    # findAllPostsByUploaderId(uploader_id: Int):[Post]
-    #    findAllPostsByUploaderId(uploader_id: Int):[Post]
-#    findPostByPostId(id: Int): Post
     findRecentPosts: [RecentPostResponse]
     findPostListByUserId(userId: Int): [PostMetaOutput]
     findByDetailPost(postId:Int):PostDetailOutput
-#    findAllPostsByUploaderId(uploader_id: Int):[Post]
-#    findElAllPosts: [Post]
     searchThings(input: HashtagInput!): [PostMetaOutput]
     matchThings(matchingId: Int!): [PostDetailOutput]
 }

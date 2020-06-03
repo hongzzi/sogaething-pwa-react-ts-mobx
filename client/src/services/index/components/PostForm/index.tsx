@@ -122,7 +122,7 @@ export default (props: IPostFormProps) => {
                     </Select>
                 </InputContainer>
                 <InputContainer>
-                    <Input type={'number'} value={post.price} placeholder={'금액'} min={0} onChange={handleChangePrice} required />
+                    <Input type={'text'} value={post.price} placeholder={'금액'} min={0} onKeyUp={handleChangePrice} required />
                     {/* <label htmlFor='currency-field'>Enter Amount</label> */}
                     {/* <Input type='text' name='currency-field' id='currency-field' pattern='^\$\d{1,3}(,\d{3})*(\.\d+)?$' value='' data-type='currency' placeholder='$1,000,000.00' prefix={'₩'} /> */}
                 </InputContainer>
@@ -131,7 +131,7 @@ export default (props: IPostFormProps) => {
                 </InputContainer>
                 <InputContainer onClick={handleClickHashtag}>
                     <HashTag>
-                        해시태그 {postStore.hashtag.length}
+                        해시태그 <HashTagContainer>{postStore.hashtag.length} 개</HashTagContainer>
                     </HashTag>
                 </InputContainer>
                 <ContentsBox>
@@ -278,12 +278,18 @@ const Option = styled.option`
 const HashTag = styled.div`
     background: url(${ExpandIcon}) no-repeat 95% 50%;
     width: 100%;
-    height: 2rem;
+    height: auto;
     font-size: 15px;
     color: #929292;
     font-weight: bold;
     border: solid 0;
-    padding: 0.5rem;
+    padding: 0.5rem 0.2rem;
+`
+
+const HashTagContainer = styled.div`
+    display: block;
+    float: right;
+    padding: 0 5rem;
 `
 
 const ContentsBox = styled.div`

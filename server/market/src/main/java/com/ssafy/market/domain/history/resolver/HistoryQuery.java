@@ -22,9 +22,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Component
 @RequiredArgsConstructor
@@ -39,30 +37,39 @@ public class HistoryQuery implements GraphQLQueryResolver {
 
     public List<UserHistoryResponse> findUserHistoryByUserId(DataFetchingEnvironment env){
         Long userId = tokenProvider.getUserIdFromHeader(env);
-        System.out.println(userId);
-        List<History> histories = historyRepository.findTop7ByUserIdOrderByCreatedDateDesc(userId);
-
-        List<UserHistoryResponse> userHistoryResponses = new ArrayList<>();
+//        List<Long> histories = historyRepository.findPostIdByCategory(userId);
+        List<History> histories = historyRepository.findByUserIdOrderByCreatedDateDesc(userId);
+        Set<Long> set = new HashSet<>();
         for (int i = 0; i < histories.size(); i++) {
-            System.out.println(histories.get(i));
-            UserHistoryResponse response = new UserHistoryResponse();
-            Post post = postRepository.findByPostId(histories.get(i).getPostId());
-            Product product = productRepository.findByPost(post);
+            set.add(histories.get(i).getPostId());
+        }
+        List<Long> postIds = new ArrayList<>(set);
+        List<UserHistoryResponse> userHistoryResponses = new ArrayList<>();
 
-            response.setUser(userRepository.findByUserId(userId));
-            response.setPostId(post.getPostId());
-            response.setIsBuy(post.isBuy());
-            response.setTitle(post.getTitle());
-            response.setSaleDate(post.getSaleDate());
-            response.setContents(post.getContents());
-            response.setViewCount(post.getViewCount());
-            response.setDeal(post.getDeal());
-            response.setCreatedDate(post.getCreatedDate());
-            response.setModifiedDate(post.getModifiedDate());
-            response.setHashTags(hashtagRepository.findByProduct(product));
-            response.setPrice(productRepository.totalPriceByPostId(post));
-            response.setImgUrls(fileRepository.findByProduct(product));
+        for (int i = 0; i < postIds.size(); i++) {
+            Long postId = postIds.get(i);
+            Post post = postRepository.findByPostId(postId);
+            System.out.println(postId);
+            if(userId == post.getUserId()) continue;
+
+            Product product = productRepository.findByPost(post);
+            UserHistoryResponse response = UserHistoryResponse.builder()
+                    .user(userRepository.findByUserId(userId))
+                    .postId(post.getPostId())
+                    .isBuy(post.isBuy())
+                    .title(post.getTitle())
+                    .saleDate(post.getSaleDate())
+                    .contents(post.getContents())
+                    .viewCount(post.getViewCount())
+                    .deal(post.getDeal())
+                    .createdDate(post.getCreatedDate())
+                    .modifiedDate(post.getModifiedDate())
+                    .hashTags(hashtagRepository.findByProduct(product))
+                    .price(productRepository.totalPriceByPostId(post))
+                    .imgUrls(fileRepository.findByProduct(product))
+                    .build();
             userHistoryResponses.add(response);
+            if(userHistoryResponses.size()==7) break;
         }
         return userHistoryResponses;
     }
