@@ -50,7 +50,7 @@ const Message = styled.div`
 
   padding: 8px;
 
-  background-color: #fafafa;
+  background-color: #fff;
 
   border-radius: 5px;
 `;

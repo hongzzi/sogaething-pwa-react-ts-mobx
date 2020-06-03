@@ -92,7 +92,7 @@ export default (props: IMatchFormProps) => {
                     <Select value={match.transaction} onChange={handleChangeTransaction}> <Option value={''}> 거래방법 </Option> <Option>직거래</Option> <Option>택배거래</Option></Select>
                 </InputContainer>
                 <InputContainer onClick={handleClickHashtag}>
-                    <HashTag>해시태그 {matchStore.hashtag.length}
+                    <HashTag>해시태그 <HashTagContainer>{match.hashtag.length} 개</HashTagContainer>
                     </HashTag>
                 </InputContainer>
             </FormContainer>
@@ -156,11 +156,10 @@ const Span = styled.span`
 `
 
 const Select = styled.select`
-    background: url(${DropdownIcon}) no-repeat 95% 50%;
     -webkit-appearance: none;
        -moz-appearance: none;
             appearance: none;
-    background: transparent;
+    background: url(${DropdownIcon}) no-repeat 95% 50%;
     width: 100%;
     height: 2rem;
     font-size: 15px;
@@ -183,16 +182,19 @@ const Option = styled.option`
 
 const HashTag = styled.div`
     background: url(${ExpandIcon}) no-repeat 95% 50%;
-    display: flex;
-    justify-content: start;
-    align-items: center;
     width: 100%;
-    height: 2rem;
+    height: auto;
     font-size: 15px;
     color: #929292;
     font-weight: bold;
     border: solid 0;
-    padding: 0.5rem 0.1rem;
+    padding: 0.5rem 0.2rem;
+`
+
+const HashTagContainer = styled.div`
+    display: block;
+    float: right;
+    padding: 0 5rem;
 `
 
 const BtnContainer = styled.div``
