@@ -2,10 +2,7 @@ package com.ssafy.market.domain.user.resolver;
 
 import com.coxautodev.graphql.tools.GraphQLMutationResolver;
 import com.ssafy.market.domain.user.domain.User;
-import com.ssafy.market.domain.user.dto.LoginUserOutput;
-import com.ssafy.market.domain.user.dto.LoginUserInput;
-import com.ssafy.market.domain.user.dto.UpdateUserInput;
-import com.ssafy.market.domain.user.dto.UserOutput;
+import com.ssafy.market.domain.user.dto.*;
 import com.ssafy.market.domain.user.repository.UserRepository;
 import com.ssafy.market.domain.user.security.TokenProvider;
 import com.ssafy.market.domain.user.util.CookieUtils;
@@ -13,17 +10,14 @@ import com.ssafy.market.global.apis.KakaoApi;
 import graphql.schema.DataFetchingEnvironment;
 import graphql.servlet.GraphQLContext;
 import lombok.RequiredArgsConstructor;
-import org.apache.http.HttpResponse;
-import org.apache.http.protocol.HTTP;
+
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
-import org.springframework.web.context.request.ServletWebRequest;
 
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServlet;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
@@ -54,8 +48,8 @@ public class UserMutation implements GraphQLMutationResolver {
 
             RequestAttributes attrs = RequestContextHolder.getRequestAttributes();
             HttpServletResponse res = ((ServletRequestAttributes) attrs).getResponse();
+            HttpServletRequest req = ((ServletRequestAttributes)attrs).getRequest();
             CookieUtils.addCookie(res,"token",Jwt,3600);
-
         }
 
         LoginUserOutput output = new LoginUserOutput(Jwt);
@@ -73,6 +67,29 @@ public class UserMutation implements GraphQLMutationResolver {
     public int deleteUser(Long id){
         User user = userRepository.findByUserId(id);
         return userRepository.deleteByUserId(id);
+    }
+
+    public UserLogout logoutUser(Long userId){
+
+        RequestAttributes attrs = RequestContextHolder.getRequestAttributes();
+        HttpServletResponse res = ((ServletRequestAttributes) attrs).getResponse();
+        HttpServletRequest req = ((ServletRequestAttributes) attrs).getRequest();
+        CookieUtils.deleteCookie(req,res,"token");
+        UserLogout output = null;
+        Cookie cookie = CookieUtils.getCookie(req,"token");
+//        if(cookie==null){
+//            System.out.println("쿠키 성공");
+//        }else{
+//            System.out.println("쿠키 실패");
+//        }
+        if(cookie==null){
+            output = new UserLogout("SUCCESS",userId);
+            return output;
+        }else{
+            output = new UserLogout("FAIL",userId);
+            return output;
+        }
+
     }
 }
 
