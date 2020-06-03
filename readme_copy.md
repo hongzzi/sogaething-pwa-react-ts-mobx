@@ -1,24 +1,7 @@
-<!-- PROJECT SHIELDS -->
-<!--
-*** I'm using markdown "reference style" links for readability.
-*** Reference links are enclosed in brackets [ ] instead of parentheses ( ).
-*** See the bottom of this document for the declaration of the reference variables
-*** for contributors-url, forks-url, etc. This is an optional, concise syntax you may use.
-*** https://www.markdownguide.org/basic-syntax/#reference-style-links
--->
-[![Contributors][contributors-shield]][contributors-url]
-[![Forks][forks-shield]][forks-url]
-[![Stargazers][stars-shield]][stars-url]
-[![Issues][issues-shield]][issues-url]
-[![MIT License][license-shield]][license-url]
-[![LinkedIn][linkedin-shield]][linkedin-url]
-
-
-
 <!-- PROJECT LOGO -->
 <br />
 <p align="center">
-  <a href="https://github.com/othneildrew/Best-README-Template">
+  <a href="README.md">
     <img src="img/main.png" alt="mock-up">
   </a>
 
@@ -30,9 +13,9 @@
     <a href="README.md"><strong>Explore the docs »</strong></a>
     <br />
     <br />
-    <a href="README.md">View Demo</a>
+    <a href=".">View Demo</a>
     ·
-    <a href="https://github.com/othneildrew/Best-README-Template/issues">Report Bug</a>
+    <a href=".">Report Bug</a>
 </p>
 
 
@@ -40,115 +23,117 @@
 <!-- TABLE OF CONTENTS -->
 ## 목차
 
-* [프로젝트 소개](#프로젝트-소개)
-  * [Documents](#documents)
+* [소개띵](#소개띵-(SogaeThing))
+  * [프로젝트 산출물](#Documents)
   * [Built With](#built-with)
 * [Getting Started](#getting-started)
   * [Prerequisites](#prerequisites)
   * [Installation](#installation)
-* [Usage](#usage)
-* [Roadmap](#roadmap)
-* [Contributing](#contributing)
-* [License](#license)
+* [기술스택](#기술스택)
 * [Contact](#contact)
-* [Acknowledgements](#acknowledgements)
+* [참고문서](#참고문서)
 
-
+<br>
 
 <!-- ABOUT THE PROJECT -->
-## 프로젝트 소개
+## 소개띵
+> 검색하지 말고 소개받자, 물건을 소개해주는 소개 Thing !
 
-[![Product Name Screen Shot][product-screenshot]](https://example.com)
+![Product Name Screen Shot](img/작업화면.png)
+
+```소개띵```은 조건검색으로 중고물품을 매칭시켜주는 ```중고거래 플랫폼```입니다.
+
+기존 중고거래 사이트 중고나라, 번개장터, 당근마켓은 많은 게시글을 제공해 이용자에게 결정권을 줍니다. 하지만 그 중 원하는 가격과 조건의 물건을 찾으려면 많은 시간을 할애해야 합니다. 제목에 의존한 검색으로 년도, 모델명, 상태 등의 세부조건에 충족하는 물건을 찾는게 어렵습니다. 또 마음에 드는 가격의 물품이라 연락했는데 사기글 또는 광고글이었던 경험은 누구나 가지고 있을 정도입니다. 
+
+<b>그래서 ```소개띵```은</b> ```조건매칭시스템```과 ```해시태그검색```을 사용합니다. 사용자가 원하는 조건에 가장 알맞은 게시글을 추천해주고 해시태그를 이용해 상세한 검색이 가능하도록 했습니다. 추가로 ```카카오페이```를 제공하여 은행앱에 가지 않아도 송금이 가능하도록 기능을 구현했기에 보다 쉬운 물품검색과 거래경험을 제공할 수 있습니다.
+
+<br>
+
+소개띵은 ```PWA(Progressive Web App)```입니다. <br>
+> ```Cross-platform App```을 구축하는 기술 중 가장 인기있는 두 가지는 ```PWA```와 ```React Native``` 입니다. ```PWA를 선택한 이유```는 앱스토어를 통해 모바일 디바이스에 타겟팅 하는 것 외에 브라우저를 통해 광범위한 사용자 및 장치에 접근하고자 했기 때문입니다. PWA는 React Native에 비하여 비교적 적은 비용으로 다양한 기기에서 퍼포먼스를 낼 수 있습니다. HTML, CSS 및 JS를 사용하여 앱을 한 번 작성하면, 브라우저를 사용할 수 있는 대부분의 곳에서 실행됩니다. 브라우저를 사용할 수 없는 경우 PWA를 감싸고 있는 작은 화면에서 WebView를 사용하여 항상 하이브리드 앱을 빌드 할 수 있습니다.
+
+참고문서 : [PWA vs React Native](https://www.kirupa.com/apps/pwa_vs_react_native.htm)
+
+<br>
 
 
-There are many great README templates available on GitHub, however, I didn't find one that really suit my needs so I created this enhanced one. I want to create a README template so amazing that it'll be the last one you ever need.
+### 프로젝트 산출물
 
-Here's why:
-* Your time should be focused on creating something amazing. A project that solves a problem and helps others
-* You shouldn't be doing the same tasks over and over like creating a README from scratch
-* You should element DRY principles to the rest of your life :smile:
-
-Of course, no one template will serve all projects since your needs may be different. So I'll be adding more in the near future. You may also suggest changes by forking this repo and creating a pull request or opening an issue.
-
-A list of commonly used resources that I find helpful are listed in the acknowledgements.
+* [프로젝트 계획서](documents/소개띵_프로젝트_계획서.pdf)
+* [와이어프레임 및 기획안](documents/소개띵_와이어프레임_기획안.pdf)
+* [소개띵 Wiki](https://lab.ssafy.com/s02-final/s02p31a404/wikis/home)
 
 ### Built With
-협업 Tool
-* [Sketch](https://www.sketch.com/)
-* [Zeplin](https://zeplin.io/)
-* [Postman](https://www.postman.com/)
-
-개발 FrameWork
+사용한 프레임워크
+* [React](https://ko.reactjs.org/)
 * [Next.js](https://nextjs.org/)
 * [Spring Boot](https://spring.io/projects/spring-boot)
 * [Apollo](https://www.apollographql.com/)
 
-개발 Languege
-* [TypeScript](https://www.typescriptlang.org/)
-* [Java](https://java.com/ko/download/)
-* [GraphQl](https://graphql.org/)
-
+<br>
 
 
 <!-- GETTING STARTED -->
 ## Getting Started
 
-This is an example of how you may give instructions on setting up your project locally.
-To get a local copy up and running follow these simple example steps.
+소개띵 시작 방법입니다. 클라이언트 실행방법을 설명해드립니다.
 
 ### Prerequisites
-
-This is an example of how to list things you need to use the software and how to install them.
-* npm
+[yarn 설치](https://heropy.blog/2017/11/25/yarn/)
 ```sh
-npm install npm@latest -g
+npm install yarn
 ```
 
 ### Installation
 
-1. Get a free API Key at [https://example.com](https://example.com)
-2. Clone the repo
+1. Clone the repo
 ```sh
-git clone https://github.com/your_username_/Project-Name.git
+git clone https://lab.ssafy.com/s02-final/s02p31a404.git
 ```
-3. Install NPM packages
+2. Install NPM packages
 ```sh
-npm install
+cd client
+yarn install
 ```
-4. Enter your API in `config.js`
+3. Enter your API in `.env.build`
 ```JS
-const API_KEY = 'ENTER YOUR API';
+NEXT_APP_STAGE = 'example'
+NEXT_APP_GRAPHQL_ENDPOINT = "http://www.example.com"
+NEXT_APP_KAKAO_CLIENT_KEY = "example"
+NEXT_APP_REST_ENDPOINT = "http://www.example.com/chat"
+NEXT_APP_SOCKET_ENDPOINT = "http://www.example.com/ws-stomp"
+```
+4. generate and run
+```
+yarn generate
+yarn dev
 ```
 
+## 개발스택
 
+Tool
+* [Sketch](https://www.sketch.com/)
+* [Zeplin](https://zeplin.io/)
+* [Postman](https://www.postman.com/)
+* VSCode
+* Intellij
 
-<!-- USAGE EXAMPLES -->
-## Usage
+Languege
+* [TypeScript](https://www.typescriptlang.org/)
+* [Java](https://java.com/ko/download/)
+* [GraphQl](https://graphql.org/)
+* [MySQL](https://www.mysql.com/)
+* [MongoDB](https://www.mongodb.com/)
 
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
+Library
+* [Mobx](https://mobx.js.org/)
+* [JWT](https://jwt.io/)
 
-_For more examples, please refer to the [Documentation](https://example.com)_
+Test
+* jest
 
-
-
-<!-- ROADMAP -->
-## Roadmap
-
-See the [open issues](https://github.com/othneildrew/Best-README-Template/issues) for a list of proposed features (and known issues).
-
-
-
-<!-- CONTRIBUTING -->
-## Contributing
-
-Contributions are what make the open source community such an amazing place to be learn, inspire, and create. Any contributions you make are **greatly appreciated**.
-
-1. Fork the Project
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the Branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
+Build
+* webpack
 
 
 <!-- LICENSE -->
@@ -160,44 +145,23 @@ Distributed under the MIT License. See `LICENSE` for more information.
 
 <!-- CONTACT -->
 ## Contact
+### [Samsung Software Academy for Youth](https://www.ssafy.com/) 2th Seoul, 심화프로젝트 A404
 
-박지홍 - [@hongzzi](https://github.com/hongzzi) - hongzzi.dev@gmail.com
+* Frontend Developer (github and email)
+  * ```류일한``` - [@RyuIl](https://github.com/RyuIL) - bbb8323@gmail.com <br>
+  * ```박지홍``` - [@hongzzi](https://github.com/hongzzi) - hongzzi.dev@gmail.com <br>
+* Backend Developer (github and email)
+  * ```박동준``` - [@DJPark](https://github.com/DongjoonPark) - dj5427@naver.com <br>
+  * ```문지현``` - [@moonjihyeon1994](https://github.com/moonjihyeon1994) - puppy613@gmail.com <br>
+  * ```동명환``` - [@MueynghwanDong](https://github.com/MueynghwanDong) - v8392070@gmail.com <br>
+
+
 
 Project Link: [https://lab.ssafy.com/s02-final/s02p31a404](https://lab.ssafy.com/s02-final/s02p31a404)
 
 
 
 <!-- ACKNOWLEDGEMENTS -->
-## Acknowledgements
+## 참고문서
 * [Best README Template](https://github.com/othneildrew/Best-README-Template/blob/master/README.md)
-* [GitHub Emoji Cheat Sheet](https://www.webpagefx.com/tools/emoji-cheat-sheet)
-* [Img Shields](https://shields.io)
-* [Choose an Open Source License](https://choosealicense.com)
-* [GitHub Pages](https://pages.github.com)
-* [Animate.css](https://daneden.github.io/animate.css)
-* [Loaders.css](https://connoratherton.com/loaders)
-* [Slick Carousel](https://kenwheeler.github.io/slick)
-* [Smooth Scroll](https://github.com/cferdinandi/smooth-scroll)
-* [Sticky Kit](http://leafo.net/sticky-kit)
-* [JVectorMap](http://jvectormap.com)
-* [Font Awesome](https://fontawesome.com)
-
-
-
-
-
-<!-- MARKDOWN LINKS & IMAGES -->
-<!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-[contributors-shield]: https://img.shields.io/github/contributors/othneildrew/Best-README-Template.svg?style=flat-square
-[contributors-url]: https://github.com/othneildrew/Best-README-Template/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/othneildrew/Best-README-Template.svg?style=flat-square
-[forks-url]: https://github.com/othneildrew/Best-README-Template/network/members
-[stars-shield]: https://img.shields.io/github/stars/othneildrew/Best-README-Template.svg?style=flat-square
-[stars-url]: https://github.com/othneildrew/Best-README-Template/stargazers
-[issues-shield]: https://img.shields.io/github/issues/othneildrew/Best-README-Template.svg?style=flat-square
-[issues-url]: https://github.com/othneildrew/Best-README-Template/issues
-[license-shield]: https://img.shields.io/github/license/othneildrew/Best-README-Template.svg?style=flat-square
-[license-url]: https://github.com/othneildrew/Best-README-Template/blob/master/LICENSE.txt
-[linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=flat-square&logo=linkedin&colorB=555
-[linkedin-url]: https://linkedin.com/in/othneildrew
-[product-screenshot]: images/screenshot.png
+* [PWA vs React Native](https://www.kirupa.com/apps/pwa_vs_react_native.htm) 
