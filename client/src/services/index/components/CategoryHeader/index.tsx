@@ -31,7 +31,7 @@ export default (props: ICategoryHeader) => {
       )}
       {props.type === 'chat' && (
         <>
-          <PointText>채팅</PointText> <StyledCustomIcon url={HeacerMenu} />
+          <PointText>{props.text}</PointText> <StyledCustomIcon url={HeacerMenu} />
         </>
       )}
     </Wrapper>

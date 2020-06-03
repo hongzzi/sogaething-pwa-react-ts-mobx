@@ -10,6 +10,7 @@ import {
 import useStores from '../helpers/useStores';
 import { IAuthResponseDto } from '../store/AuthStore';
 import { useRouter } from 'next/router';
+import { KEYS } from '../constants';
 
 interface ISignInProps {}
 
@@ -48,7 +49,7 @@ export default (props: ISignInProps) => {
         <Line>소개 Thing</Line>
       </WrapperLine>
       <StyledKakaoLogin
-        jsKey={NEXT_APP_KAKAO_CLIENT_KEY!}
+        jsKey={KEYS.KAKAO}
         onSuccess={success}
         onFailure={failure}
       >

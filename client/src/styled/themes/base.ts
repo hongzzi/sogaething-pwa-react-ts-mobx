@@ -2,7 +2,8 @@ import openColor from 'open-color';
 
 const theme = {
   ...openColor,
-  pointFontColor: '#f7b500',
+  pointFontColor: '#259be5',
+  // pointFontColor: '#f7b500',
   prevColor: '#ffaa00',
   mainFontColor: '#2b2b2b',
   mainBGcolor: '#ffffff',

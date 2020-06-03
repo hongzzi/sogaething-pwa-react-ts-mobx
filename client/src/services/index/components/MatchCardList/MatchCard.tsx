@@ -9,6 +9,7 @@ export interface IMatchCardProps {
 }
 
 export interface IMatchCard {
+  matchingId: number,
   category: string,
   hashtag: string[],
   transaction: string,
@@ -22,11 +23,20 @@ export default (props: IMatchCardProps) => {
   const { match } = props;
   const router = useRouter();
   const handleClick = () => {
-    router.push(`/`)
+    router.push(`/matchresult/${match.matchingId}`)
   }
+  const isMatchPossible = props.match.possibility;
+  let color = 'green';
+  if(isMatchPossible.endsWith('높음')){
+  }else if(isMatchPossible.endsWith('중간')){
+    color= 'orange';
+  }else if(isMatchPossible.endsWith('낮음')){
+    color = 'red';
+  }
+
   return (
     <Wrapper onClick={handleClick}>
-      <TopContent>
+      <TopContent color={color}>
         <InnerLine>{match.category}</InnerLine> <InnerLine>{match.createdDate}</InnerLine>
         <InnerLine>
           <SmallIcon
@@ -36,7 +46,7 @@ export default (props: IMatchCardProps) => {
           />
           {match.transaction}
         </InnerLine>
-        <InnerLine color={'green'}>
+        <InnerLine color={color}>
             {match.possibility}
         </InnerLine>
       </TopContent>
@@ -83,7 +93,7 @@ const TopContent = styled.div`
   justify-content: space-between;
   font-size: 10px;
   color: #6d7278;
-  border-bottom: 2px solid green;
+  border-bottom: 2px solid ${props => props.color};
 `;
 
 const Line = styled.div`
