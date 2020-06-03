@@ -46,13 +46,8 @@ public class ChatRoomService {
     @Transactional
     public ChatRoom createChatRoom(ChatRoom chatRoom) {
         ChatRoom result;
-        try {
-            result = chatRoomMongoRepository.insertChatRoom(chatRoom);
-            return result;
-        } catch (DuplicateKeyException e) {
-            logger.error("createChatRoom {}", e.getMessage());
-            return null;
-        }
+        result = chatRoomMongoRepository.insertChatRoom(chatRoom);
+        return result;
     }
 
     public boolean enterChatRoom(Long roomId) {

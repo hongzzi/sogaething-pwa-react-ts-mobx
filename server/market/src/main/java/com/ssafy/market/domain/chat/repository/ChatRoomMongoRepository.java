@@ -59,11 +59,12 @@ public class ChatRoomMongoRepository {
         }
         return result;
     }
-    public ChatRoom insertChatRoom(ChatRoom chatRoom) throws DuplicateKeyException {
+    public ChatRoom insertChatRoom(ChatRoom chatRoom) {
         try {
             Query query = new Query(Criteria.where("postId").is(chatRoom.getPostId()).andOperator(Criteria.where("sellerId").is(chatRoom.getSellerId()).andOperator(Criteria.where("buyerId").is(chatRoom.getBuyerId()))));
-            Boolean isChatRoomExist = mongoTemplate.exists(query, ChatRoom.class, "chatRoom");
-            if (isChatRoomExist) throw new DuplicateKeyException("That Room is already exist");
+
+            ChatRoom existedRoom = mongoTemplate.findOne(query, ChatRoom.class, "chatRoom");
+            if (existedRoom != null) return existedRoom;
 
             chatRoom.setRoomId(getNextSequence("roomId"));
             chatRoom.setBuyerExit(false);
@@ -71,7 +72,6 @@ public class ChatRoomMongoRepository {
             chatRoom.setCreatedDateTime(LocalDateTime.now().toString());
             chatRoom.setModifiedDateTime(LocalDateTime.now().toString());
 
-            System.out.println(chatRoom);
             return mongoTemplate.insert(chatRoom, "chatRoom");
         } catch (DuplicateKeyException e){
             throw e;
