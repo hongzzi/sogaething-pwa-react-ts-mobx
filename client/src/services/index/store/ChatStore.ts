@@ -49,11 +49,12 @@ class ChatStore {
   }
 
   @action
-  async postCreateChatRoom(data: ICreateChatRoomRequestDto ){
+  async postCreateChatRoom(data: ICreateChatRoomRequestDto ) {
     this.loading = true;
     const response = await this.chatService.postChatRoom(data);
     this.createdChat = response.data;
     this.loading = false;
+    return response;
   }
 
   @action
