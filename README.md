@@ -4,8 +4,6 @@
 [![npm version](https://img.shields.io/npm/v/react.svg?style=flat)](https://www.npmjs.com/package/react)
 > 매칭시스템을 도입한 중고거래 PWA
 
-![](./src/img/소개띵목업.png)
-
  - 목표기능
 1. 자체 알고리즘으로 원하는 물건의 판매글과 빠른 매칭서비스를 제공
 2. 광고없는 클린한 중고거래 게시판을 만들기
@@ -16,7 +14,7 @@
 
 <br>
 
-## :gear: 개발 환경 설정
+## :gear: Environment setting
 
 배포
 ```
@@ -32,7 +30,7 @@
 
 <br>
 
-## :hammer_and_pick: 개발 스택
+## :hammer_and_pick: Develop Stack
 
 **Front**
 
@@ -55,7 +53,7 @@
 - 환경 Windows 10 / eclipse (STS4)
 
 
-## :busts_in_silhouette: 정보
+## :busts_in_silhouette: Authors
 
 ### SSAFY 2기 Seoul 4반 심화프로젝트 <br>
 팀명 : 404 Not Found <br>
@@ -64,6 +62,6 @@
 
 <br>
 
-## 라이센스
+## License
 
  @copyright Samsung Software Academy
