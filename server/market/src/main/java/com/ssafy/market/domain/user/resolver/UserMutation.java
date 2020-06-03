@@ -8,12 +8,24 @@ import com.ssafy.market.domain.user.dto.UpdateUserInput;
 import com.ssafy.market.domain.user.dto.UserOutput;
 import com.ssafy.market.domain.user.repository.UserRepository;
 import com.ssafy.market.domain.user.security.TokenProvider;
+import com.ssafy.market.domain.user.util.CookieUtils;
 import com.ssafy.market.global.apis.KakaoApi;
 import graphql.schema.DataFetchingEnvironment;
+import graphql.servlet.GraphQLContext;
 import lombok.RequiredArgsConstructor;
+import org.apache.http.HttpResponse;
+import org.apache.http.protocol.HTTP;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
+import org.springframework.web.context.request.RequestAttributes;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+import org.springframework.web.context.request.ServletWebRequest;
 
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 
 @Component
@@ -25,12 +37,12 @@ public class UserMutation implements GraphQLMutationResolver {
     private final TokenProvider tokenProvider;
 
     @Transactional
-    public LoginUserOutput loginUser(LoginUserInput input,DataFetchingEnvironment env){
+    public LoginUserOutput loginUser(LoginUserInput input){
         String Provider = input.getProvider();
         String Token = input.getToken();
         String Jwt = "ERROR";
         if(StringUtils.hasText(Provider) && Provider.equals("Kakao")){
-            System.out.println("kakao");
+
             User user = kakaoApi.getUserInfo(Token);
 
             User selected = userRepository.findByProviderId(user.getProviderId());
@@ -39,6 +51,11 @@ public class UserMutation implements GraphQLMutationResolver {
             }
             user = userRepository.findByProviderId(user.getProviderId());
             Jwt = tokenProvider.createJwtToken(user);
+
+            RequestAttributes attrs = RequestContextHolder.getRequestAttributes();
+            HttpServletResponse res = ((ServletRequestAttributes) attrs).getResponse();
+            CookieUtils.addCookie(res,"token",Jwt,3600);
+
         }
 
         LoginUserOutput output = new LoginUserOutput(Jwt);

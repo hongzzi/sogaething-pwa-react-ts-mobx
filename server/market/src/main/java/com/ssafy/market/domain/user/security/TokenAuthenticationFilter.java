@@ -2,6 +2,7 @@ package com.ssafy.market.domain.user.security;
 
 import com.ssafy.market.domain.user.domain.User;
 import com.ssafy.market.domain.user.repository.UserRepository;
+import com.ssafy.market.domain.user.util.CookieUtils;
 import com.ssafy.market.global.apis.KakaoApi;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,6 +24,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Optional;
 
 public class TokenAuthenticationFilter extends OncePerRequestFilter {
 
@@ -44,8 +46,10 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
     @Transactional
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         try{
+
             String Token = getTokenFromRequest(request);
-            if(StringUtils.hasText(Token) && tokenProvider.validateToken(Token)) {
+            Cookie cookie = CookieUtils.getCookie(request,"token").get();
+            if(cookie!=null && StringUtils.hasText(Token) && tokenProvider.validateToken(Token)) {
                 Long userId = tokenProvider.getUserIdFromToken(Token);
                 UserDetails userDetails = customUserDetailsService.loadUserById(userId);
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
