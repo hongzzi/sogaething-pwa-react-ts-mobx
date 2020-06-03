@@ -42,4 +42,5 @@ extend type Query {
     findAllHashtag: [HashtagOutput]
     findByHashtagId(id: Int): HashtagOutput
     autocomplete(hashtag: String!): [Autocomplete]
+    findAllMatchingHashtagByMatchingId(matchingId: Int): [String]
 }

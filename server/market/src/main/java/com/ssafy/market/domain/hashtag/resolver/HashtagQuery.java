@@ -5,6 +5,7 @@ import com.ssafy.market.domain.hashtag.domain.Hashtag;
 import com.ssafy.market.domain.hashtag.dto.Autocomplete;
 import com.ssafy.market.domain.hashtag.dto.HashtagOutput;
 import com.ssafy.market.domain.hashtag.repository.HashtagRepository;
+import com.ssafy.market.domain.hashtag.repository.MatchingHashtagRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -16,6 +17,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class HashtagQuery implements GraphQLQueryResolver {
     private final HashtagRepository hashtagRepository;
+    private final MatchingHashtagRepository matchingHashtagRepository;
 
     public List<HashtagOutput> findAllHashtag()
     {
@@ -53,5 +55,9 @@ public class HashtagQuery implements GraphQLQueryResolver {
             }
         });
         return autocompletes;
+    }
+
+    public List<String> findAllMatchingHashtagByMatchingId(Long matchingId) {
+        return matchingHashtagRepository.findHashtagByMatchingId(matchingId);
     }
 }

@@ -21,6 +21,9 @@ public class MatchingHashtag {
     @JoinColumn(name = "matching_id")
     private Matching matching;
 
+    @Column(name = "matching_id", insertable = false, updatable = false, nullable = false)
+    private Long matchingId;
+
     private String hashtag;
 
     public MatchingHashtag(Matching matching, String hashtag){
