@@ -1,5 +1,9 @@
+import { toJS } from 'mobx';
 import { useObserver } from 'mobx-react';
+import { NextPage, NextPageContext } from 'next';
 import * as React from 'react';
+import { useCookies } from 'react-cookie';
+import { useGetUserInfoQuery } from '~/generated/graphql';
 import styled from '~/styled';
 import CardList from '../components/CardList';
 import CategoryHeader from '../components/CategoryHeader';
@@ -12,11 +16,15 @@ import SearchBar from '../components/SearchBar';
 import useStores from '../helpers/useStores';
 import ChatService from '../service/ChatService';
 
-export default function PageIndex() {
+const PageIndex: NextPage = (props) => {
   const { pageStore, authStore } = useStores();
   const handleMoreCards = () => {
-    console.log(pageStore.clickedIdx);
-    authStore.signOut();
+    console.log(pageStore);
+    console.log(authStore);
+    // console.log(toJS(authStore.auth));
+    // console.log(cookies);
+    // console.log(pageStore.clickedIdx);
+    // authStore.signOut();
   };
   return (
     <Layout>
@@ -28,9 +36,9 @@ export default function PageIndex() {
         </Line>
         <CardList />
         <Line>
-          <CategoryText>'최신'</CategoryText> 중고매물
+          {/* <CategoryText>'최신'</CategoryText> 중고매물 */}
         </Line>
-        <ProductCardList />
+        {/* <ProductCardList /> */}
         <WrapperAlignCenter onClick={handleMoreCards}>
           <CommonBtn type={'common'} text={'더보기'} />
         </WrapperAlignCenter>
@@ -39,6 +47,12 @@ export default function PageIndex() {
     </Layout>
   );
 }
+
+PageIndex.getInitialProps = async (ctx: NextPageContext) => {
+  return {test : 'test'}
+}
+
+export default PageIndex;
 
 const Layout = styled.div`
   position: relative;
