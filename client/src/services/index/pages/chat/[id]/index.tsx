@@ -66,6 +66,7 @@ const Wrapper = styled.div`
 
 const ChatContainer = styled.div`
   grid-area: CC;
+  overflow-y: scroll;
   background-color: #f1f1f1;
   padding: 3vw;
 `;
@@ -74,7 +75,6 @@ const WrapperChatMessage = styled.div`
   display: flex;
   flex-direction: column-reverse;
   justify-content: space-between;
-  overflow-y: scroll;
 `;
 
 const ChatInput = styled.div`
