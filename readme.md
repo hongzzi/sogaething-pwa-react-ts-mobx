@@ -10,42 +10,32 @@
   <p align="center">
     매칭시스템을 도입한 중고거래 PWA
     <br />
-    <a href="README.md"><strong>Explore the docs »</strong></a>
     <br />
-    <br />
-    <a href=".">View Demo</a>
-    ·
-    <a href=".">Report Bug</a>
+    <a href="https://scene.zeplin.io/project/5ebe42c1266b3f485e753a12"><strong>UI/UX기획안</strong></a>
+    · 
+    <a href="https://docs.google.com/document/d/17E7PcYOrBnsgTW2I1TAsC5IN_dH2IjCPFka5-g5fVCs/edit#"><strong>프로젝트 계획서</strong></a>
 </p>
 
 
 
-<!-- TABLE OF CONTENTS -->
-## 목차
-
-* [소개띵](#소개띵-(SogaeThing))
-  * [프로젝트 산출물](#Documents)
-  * [Built With](#built-with)
-* [Getting Started](#getting-started)
-  * [Prerequisites](#prerequisites)
-  * [Installation](#installation)
-* [기술스택](#기술스택)
-* [Contact](#contact)
-* [참고문서](#참고문서)
-
 <br>
 
 <!-- ABOUT THE PROJECT -->
-## 소개띵
+## :paperclip: 프로젝트 소개
 > 검색하지 말고 소개받자, 물건을 소개해주는 소개 Thing !
 
 ![Product Name Screen Shot](img/작업화면.png)
 
-```소개띵```은 조건검색으로 중고물품을 매칭시켜주는 ```중고거래 플랫폼```입니다.
+소개띵은 조건검색으로 중고물품을 매칭시켜주는 중고거래 플랫폼입니다.
 
-기존 중고거래 사이트 중고나라, 번개장터, 당근마켓은 많은 게시글을 제공해 이용자에게 결정권을 줍니다. 하지만 그 중 원하는 가격과 조건의 물건을 찾으려면 많은 시간을 할애해야 합니다. 제목에 의존한 검색으로 년도, 모델명, 상태 등의 세부조건에 충족하는 물건을 찾는게 어렵습니다. 또 마음에 드는 가격의 물품이라 연락했는데 사기글 또는 광고글이었던 경험은 누구나 가지고 있을 정도입니다. 
+기존 중고거래 사이트 중고나라, 번개장터, 당근마켓은 많은 게시글을 제공해 이용자에게 결정권을 줍니다.
+제목에 의존한 검색으로 년도, 모델명, 상태 등의 세부조건에 충족하는 물건을 찾는게 어렵습니다. 
+그 중 원하는 가격과 조건의 물건을 찾으려면 많은 시간을 할애해야 합니다. 
+또 마음에 드는 가격의 물품이라 연락했는데 사기글 또는 광고글이었던 경험은 누구나 가지고 있을 정도입니다. 
 
-<b>그래서 ```소개띵```은</b> ```조건매칭시스템```과 ```해시태그검색```을 사용합니다. 사용자가 원하는 조건에 가장 알맞은 게시글을 추천해주고 해시태그를 이용해 상세한 검색이 가능하도록 했습니다. 추가로 ```카카오페이```를 제공하여 은행앱에 가지 않아도 송금이 가능하도록 기능을 구현했기에 보다 쉬운 물품검색과 거래경험을 제공할 수 있습니다.
+그래서 <b>소개띵</b>은 조건매칭시스템과 해시태그검색을 사용합니다. 
+사용자가 원하는 조건에 가장 알맞은 게시글을 추천해주고 해시태그를 이용해 상세한 검색이 가능하도록 했습니다. 
+추가로 카카오페이를 제공하여 은행앱에 가지 않아도 송금이 가능하도록 기능을 구현했기에 보다 쉬운 물품검색과 거래경험을 제공할 수 있습니다.
 
 <br>
 
@@ -57,10 +47,10 @@
 <br>
 
 
-### 프로젝트 산출물
+### :clipboard: 프로젝트 산출물
 
-* [프로젝트 계획서](documents/소개띵_프로젝트_계획서.pdf)
-* [와이어프레임 및 기획안](documents/소개띵_와이어프레임_기획안.pdf)
+* [프로젝트 계획서](https://docs.google.com/document/d/17E7PcYOrBnsgTW2I1TAsC5IN_dH2IjCPFka5-g5fVCs/edit#)
+* [와이어프레임 및 기획안](https://scene.zeplin.io/project/5ebe42c1266b3f485e753a12)
 * [소개띵 Wiki](https://lab.ssafy.com/s02-final/s02p31a404/wikis/home)
 
 ### Built With
@@ -74,15 +64,10 @@
 
 
 <!-- GETTING STARTED -->
-## Getting Started
+## :gear: Getting Started
 
 소개띵 시작 방법입니다. 클라이언트 실행방법을 설명해드립니다.
 
-### Prerequisites
-[yarn 설치](https://heropy.blog/2017/11/25/yarn/)
-```sh
-npm install yarn
-```
 
 ### Installation
 
@@ -109,14 +94,14 @@ yarn generate
 yarn dev
 ```
 
-## 개발스택
+<br>
 
-Tool
+##  :hammer_and_pick: 개발스택
+
+협업Tool
 * [Sketch](https://www.sketch.com/)
 * [Zeplin](https://zeplin.io/)
 * [Postman](https://www.postman.com/)
-* VSCode
-* Intellij
 
 Languege
 * [TypeScript](https://www.typescriptlang.org/)
@@ -129,22 +114,14 @@ Library
 * [Mobx](https://mobx.js.org/)
 * [JWT](https://jwt.io/)
 
-Test
-* jest
-
-Build
-* webpack
+<br>
 
 
-<!-- LICENSE -->
-## License
-
-Distributed under the MIT License. See `LICENSE` for more information.
-
-
-
+<br>
 <!-- CONTACT -->
-## Contact
+
+## :busts_in_silhouette:  Contact
+
 ### [Samsung Software Academy for Youth](https://www.ssafy.com/) 2th Seoul, 심화프로젝트 A404
 
 * Frontend Developer (github and email)
@@ -159,9 +136,11 @@ Distributed under the MIT License. See `LICENSE` for more information.
 
 Project Link: [https://lab.ssafy.com/s02-final/s02p31a404](https://lab.ssafy.com/s02-final/s02p31a404)
 
-
+<br>
 
 <!-- ACKNOWLEDGEMENTS -->
-## 참고문서
+## 참고문서 
 * [Best README Template](https://github.com/othneildrew/Best-README-Template/blob/master/README.md)
 * [PWA vs React Native](https://www.kirupa.com/apps/pwa_vs_react_native.htm) 
+
+<br>
