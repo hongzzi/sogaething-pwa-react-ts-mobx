@@ -27,11 +27,21 @@ export default (props: IMatchFormProps) => {
         setMatch(store.matchStore.getMatch());
     }
     const handleChangeMinPrice = (event: any) => {
-        matchStore.setMinPrice(event.target.value)
+        let targetValue = event.target.value+'';
+        let parseValue = event.target.value;
+        if(targetValue.startsWith('0')){
+            parseValue = Number.parseInt(targetValue);
+        }
+        matchStore.setMinPrice(parseValue)
         setMatch(store.matchStore.getMatch());
     }
     const handleChangeMaxPrice = (event: any) => {
-        matchStore.setMaxPrice(event.target.value)
+        let targetValue = event.target.value+'';
+        let parseValue = event.target.value;
+        if(targetValue.startsWith('0')){
+            parseValue = Number.parseInt(targetValue);
+        }
+        matchStore.setMaxPrice(parseValue)
         setMatch(store.matchStore.getMatch());
     }
     const handleChangeTransaction = (event: any) => {
@@ -54,7 +64,10 @@ export default (props: IMatchFormProps) => {
                 },
             },
         }).then((res) => {
-            console.log(res);
+            // console.log(res);
+            router.push(`/match/${res.data.createMatching.user.userId}`);
+        }).catch((error) => {
+            // console.log(error);
         })
     }
 
@@ -71,16 +84,15 @@ export default (props: IMatchFormProps) => {
                     </Select>
                 </InputContainer>
                 <InputContainer>
-                    <Input type={'number'} value={match.minPrice} placeholder={'최소금액'} min={0} onChange={handleChangeMinPrice} />
+                    <Input type={'number'} value={match.minPrice ? match.minPrice : ''} placeholder={'최소금액'} min={0} onChange={handleChangeMinPrice} />
                     <Span>~</Span>
-                    <Input type={'number'} value={match.maxPrice} placeholder={'최대금액'} min={0} onChange={handleChangeMaxPrice} />
+                    <Input type={'number'} value={match.maxPrice ? match.maxPrice : ''} placeholder={'최대금액'} min={0} onChange={handleChangeMaxPrice} />
                 </InputContainer>
                 <InputContainer>
                     <Select value={match.transaction} onChange={handleChangeTransaction}> <Option value={''}> 거래방법 </Option> <Option>직거래</Option> <Option>택배거래</Option></Select>
                 </InputContainer>
                 <InputContainer onClick={handleClickHashtag}>
-                    <HashTag>
-                        해시태그 {matchStore.hashtag.length}
+                    <HashTag>해시태그 {matchStore.hashtag.length}
                     </HashTag>
                 </InputContainer>
             </FormContainer>
@@ -144,7 +156,10 @@ const Span = styled.span`
 `
 
 const Select = styled.select`
-    /* background: url(${DropdownIcon}) no-repeat 95% 50%; */
+    background: url(${DropdownIcon}) no-repeat 95% 50%;
+    -webkit-appearance: none;
+       -moz-appearance: none;
+            appearance: none;
     background: transparent;
     width: 100%;
     height: 2rem;
@@ -177,7 +192,7 @@ const HashTag = styled.div`
     color: #929292;
     font-weight: bold;
     border: solid 0;
-    padding: 0.5rem;
+    padding: 0.5rem 0.1rem;
 `
 
 const BtnContainer = styled.div``

@@ -12,6 +12,7 @@ export interface IPost {
 }
 
 export interface IUser {
+    userId: number,
     name: string,
     address: string | null,
     trust: number,

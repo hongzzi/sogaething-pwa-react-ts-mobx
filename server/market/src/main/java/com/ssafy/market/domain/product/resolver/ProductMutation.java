@@ -28,8 +28,6 @@ public class ProductMutation implements GraphQLMutationResolver {
     }
     @Transactional
     public int deleteProduct(Long id){
-        Product product = productRepository.findById(id).get();
-
         return productRepository.deleteByProductId(id);
     }
 

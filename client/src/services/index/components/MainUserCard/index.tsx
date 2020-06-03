@@ -1,10 +1,13 @@
+import { useRouter } from 'next/router';
 import * as React from 'react';
 import { useGetUserInfoQuery } from '~/generated/graphql';
 import styled from '~/styled';
+import NoAvatar from '../../assets/img/no-avatar.png?url';
 import Pin from '../../assets/img/pin-fill.png?url';
 import CircleImageView from '../CircleImageView';
 import { TextLoader } from '../LoaderPlaceholder';
 import CirclePlaceHolder from '../LoaderPlaceholder/Circle';
+import useStores from '../../helpers/useStores';
 
 interface IQueryData {
   findUserInfo: IFindUserInfo | null;
@@ -19,22 +22,39 @@ export interface IFindUserInfo {
 }
 
 export default () => {
+  const router = useRouter();
+  const store = useStores();
   const { data, loading, error } = useGetUserInfoQuery();
   const { findUserInfo } = data as IQueryData;
   const handleClickMatch = () => {
-    console.log(findUserInfo);
-    console.log(error);
+    if (store.authStore.auth) {
+      router.push(`/match/${store.authStore.auth.userId}`);
+    } else {
+      alert('요청이 실패했습니다. 잠시 후 다시 시도해주세요.');
+    }
   };
+  const handleClickList = () => {
+    if (store.authStore.auth) {
+      router.push(`/list/seller/${store.authStore.auth.userId}`);
+    } else {
+      alert('요청이 실패했습니다. 잠시 후 다시 시도해주세요.');
+    }
+  }
   return (
     <Wrapper>
       <WrapperFlex>
         {loading && <CirclePlaceHolder size={4} />}
-        {!loading && (
+        {!loading && findUserInfo && findUserInfo.imgurl && (
           <CircleImageView
             size={4}
-            src={
-              'https://pngimage.net/wp-content/uploads/2018/05/default-user-profile-image-png-6.png'
-            }
+            src={findUserInfo.imgurl}
+            radius={35}
+          />
+        )}
+        {!loading && !findUserInfo!.imgurl && (
+          <CircleImageView
+            size={4}
+            src={NoAvatar}
             radius={35}
           />
         )}
@@ -52,11 +72,13 @@ export default () => {
         </WrapperUserInfo>
       </WrapperFlex>
       <WrapperMainButton>
-        <MainButton>
-          <div>진행중인 매칭</div> <InnerLine>3</InnerLine>
-        </MainButton>
         <MainButton onClick={handleClickMatch}>
-          <div>판매글 목록</div> <InnerLine>0</InnerLine>
+          <div>진행중인 매칭</div>
+          {/* <InnerLine>3</InnerLine> */}
+        </MainButton>
+        <MainButton onClick={handleClickList}>
+          <div>판매중인 물품</div>
+          {/* <InnerLine>0</InnerLine> */}
         </MainButton>
       </WrapperMainButton>
     </Wrapper>
@@ -103,6 +125,7 @@ const TextuserAddr = styled.div`
 const WrapperMainButton = styled.div`
   display: flex;
   text-align: center;
+  padding: 0 0.3rem;
   justify-content: space-between;
 `;
 
@@ -120,10 +143,10 @@ const MainButton = styled.div`
   font-style: normal;
   line-height: normal;
   letter-spacing: normal;
-  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.5);
+  box-shadow: 0 2px 4px 0 rgba(30, 30, 30, 0.5);
   background-image: linear-gradient(to right, #259be5, #6459db);
   margin-bottom: 17px;
-  width: 45%;
+  width: 46%;
   height: 48px;
   border-radius: 7px;
   background-color: #ffffff;

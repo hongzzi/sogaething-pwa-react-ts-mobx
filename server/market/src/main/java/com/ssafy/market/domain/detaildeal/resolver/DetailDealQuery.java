@@ -63,7 +63,7 @@ public class DetailDealQuery implements GraphQLQueryResolver {
                 fs.add(files.get(j).getImgPath());
             }
             List<String> file = new ArrayList<>(fs);
-            UserInfoResponse userInfoResponse = new UserInfoResponse(writer.getName(),writer.getAddress(),writer.getTrust(),numOfPosts,writer.getImageUrl());
+            UserInfoResponse userInfoResponse = new UserInfoResponse(writer.getUserId(),writer.getName(),writer.getAddress(),writer.getTrust(),numOfPosts,writer.getImageUrl());
 
             outputList.add(new DetailOutput(id,po.getPostId(),file,po.getTitle(),pro.getCategory(),
                     hash,po.getContents(),pro.getPrice(),
@@ -96,7 +96,7 @@ public class DetailDealQuery implements GraphQLQueryResolver {
             fs.add(files.get(j).getImgPath());
         }
         List<String> file = new ArrayList<>(fs);
-        UserInfoResponse userInfoResponse = new UserInfoResponse(writer.getName(),writer.getAddress(),writer.getTrust(),numOfPosts,writer.getImageUrl());
+        UserInfoResponse userInfoResponse = new UserInfoResponse(writer.getUserId(),writer.getName(),writer.getAddress(),writer.getTrust(),numOfPosts,writer.getImageUrl());
         DetailOutput output = new DetailOutput(
                 deal.getDealId(),postId,file, post.getTitle(), product.getCategory(),
                 hash, post.getContents(), product.getPrice(),

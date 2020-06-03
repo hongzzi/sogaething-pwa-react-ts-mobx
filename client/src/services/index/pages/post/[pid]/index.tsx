@@ -40,7 +40,7 @@ export interface IUser {
 export default function Detail(props: any) {
     const router = useRouter()
     const { pid } = router.query
-    const updateMutaion = useUpdateViewMutation({ variables: { postId: pid }});
+    const updateMutaion = useUpdateViewMutation({ variables: { postId: pid } });
     const { data, loading, error } = useGetPostQuery({ variables: { postId: pid } });
     const createMutation = useCreateHistoryMutation();
 
@@ -60,28 +60,28 @@ export default function Detail(props: any) {
     }, [data])
 
     return (
-        <>
-            {
-                loading &&
-                <p>loading…</p>
-            }
-            {
-                error &&
-                <p>error</p>
-            }
-            {
-                data && data.findByDetailPost && (
-                    <Layout>
-                        <CategoryHeader type={'normal'} text={' '} />
-                        <ContentBody>
+        <Layout>
+            <CategoryHeader type={'normal'} text={' '} />
+            <ContentBody>
+                {
+                    loading &&
+                    <p>loading…</p>
+                }
+                {
+                    error &&
+                    <p>error</p>
+                }
+                {
+                    data && data.findByDetailPost && (
+                        <>
                             <ImageSlider images={data.findByDetailPost.imgPaths as string[]} />
                             <PostDetail data={data.findByDetailPost} loading={loading} />
                             <PostDetailNav data={data.findByDetailPost} loading={loading} />
-                        </ContentBody>
-                    </Layout>
-                )
-            }
-        </>
+                        </>
+                    )
+                }
+            </ContentBody>
+        </Layout>
     );
 }
 

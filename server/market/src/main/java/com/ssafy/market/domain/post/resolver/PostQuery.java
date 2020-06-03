@@ -42,7 +42,7 @@ public class PostQuery implements GraphQLQueryResolver {
 
     public List<PostOutput> findAllPost() {
         List<PostOutput> outputs = new ArrayList<>();
-        List<Post> postList = postRepository.findAll();
+        List<Post> postList = postRepository.findAllByOrderByPostIdDesc();
         for(int i = 0; i<postList.size();i++){
             Post post = postList.get(i);
             Product product = productRepository.findByPost(post);
@@ -65,6 +65,9 @@ public class PostQuery implements GraphQLQueryResolver {
         return postRepository.findAll();
     }
 
+    public Long countPostByUserId(Long userId){
+        return postRepository.countPostByUserId(userId);
+    }
 
     public PostOutput findPostByPostId(Long id) {
 
@@ -112,7 +115,8 @@ public class PostQuery implements GraphQLQueryResolver {
     public List<PostMetaOutput> findPostListByUserId(Long userId){
         List<PostMetaOutput> metaOutputList = new ArrayList<>();
         User user = userRepository.findByUserId(userId);
-        List<Post> postList = postRepository.findPostByUser(user);
+        List<Post> postList = postRepository.findByUserIdOrderByPostIdDesc(userId);
+
         for (int i = 0; i< postList.size(); i++){
             Post post = postList.get(i);
             Product product = productRepository.findByPost(post);
@@ -186,7 +190,7 @@ public class PostQuery implements GraphQLQueryResolver {
         }
         List<String> file = new ArrayList<>(fs);
         Long numOfPosts = postRepository.countPostByUserId(writer.getUserId());
-        UserInfoResponse user = new UserInfoResponse(writer.getName(),writer.getAddress(),writer.getTrust(),
+        UserInfoResponse user = new UserInfoResponse(writer.getUserId(),writer.getName(),writer.getAddress(),writer.getTrust(),
                 numOfPosts,writer.getImageUrl());
         PostDetailOutput detailOutput = new PostDetailOutput(
                 postId,post.getTitle(),product.getCategory(),file,hash,

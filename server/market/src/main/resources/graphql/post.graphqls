@@ -117,6 +117,7 @@ type Mutation {
 type Query {
     findAllPosts: [Post]
     findAllPost: [PostOutput]
+    countPostByUserId(userId : Int): Int
     findPostByPostId(id: Int): PostOutput
     findRecentPosts: [RecentPostResponse]
     findPostListByUserId(userId: Int): [PostMetaOutput]

@@ -34,7 +34,7 @@ export default () => {
   const Cards = dump.map((item, i) => {
     if (loading) {
       return <Card key={i} idx={i} cardData={null} loading />;
-    } else {
+    }else if(findRecentPosts){
       return <Card key={i} idx={i} cardData={findRecentPosts[i]} loading={false} />;
     }
   });

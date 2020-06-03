@@ -66,6 +66,7 @@ public class UserQuery implements GraphQLQueryResolver {
         Long numOfPosts = postRepository.countPostByUserId(userId);
 
         UserInfoResponse output = new UserInfoResponse();
+        output.setUserId(user.getUserId());
         output.setName(user.getName());
         output.setAddress(user.getAddress());
         output.setTrust(user.getTrust());
