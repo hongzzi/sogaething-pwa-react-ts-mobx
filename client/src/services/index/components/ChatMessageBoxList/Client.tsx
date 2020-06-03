@@ -29,7 +29,6 @@ export default (props: IChatMessageBox) => {
 const Wrapper = styled.div`
   position: relative;
   display: flex;
-  width: 100%;
   margin: 2vw;
   flex-direction: row-reverse;
   & > img {

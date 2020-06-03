@@ -34,7 +34,6 @@ export default (props: IChatMessageBox) => {
 const Wrapper = styled.div`
   position: relative;
   display: flex;
-  width: 100%;
   margin: 2vw;
 
   & > img {
@@ -70,7 +69,6 @@ const Time = styled.p`
 `;
 
 const Notice = styled.div`
-  width: 100%;
   text-align: center;
   font-size: 14px;
 `;

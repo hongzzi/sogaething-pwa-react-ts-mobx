@@ -7,6 +7,7 @@ import CustomIcon from '../CustomIcon';
 
 import HeartIcon from '../../assets/img/detail-like.png'
 import useStores from '../../helpers/useStores';
+import { ICreateChatRoomRequestDto } from '../../service/ChatService';
 
 export interface IPostDetailNavProps {
   loading: boolean,
@@ -16,6 +17,15 @@ export interface IPostDetailNavProps {
 export default function PostDetailNav(props: IPostDetailNavProps) {
   const { loading, data } = props;
   const store = useStores();
+  const handleChatClick = () => {
+    const createChatData: ICreateChatRoomRequestDto = {
+      buyerId: store.authStore.getAuth()!.userId+'',
+      sellerId: data.user.userId,
+      postId: data.postId,
+    }
+
+    store.chatStore.postCreateChatRoom(createChatData);
+  }
   return (
     <>
       {
@@ -26,7 +36,9 @@ export default function PostDetailNav(props: IPostDetailNavProps) {
               <CustomIcon url={HeartIcon} />
             </IconBorder>
             <PriceTextLine>{numberWithCommas(data.price)} 원</PriceTextLine>
-            <CommonBtn type={'chatting'} text={'연락하기'} />
+            <div onClick={handleChatClick}>
+              <CommonBtn type={'chatting'} text={'연락하기'} />
+            </div>
           </FlexBox>
         </Wrapper>
       }
