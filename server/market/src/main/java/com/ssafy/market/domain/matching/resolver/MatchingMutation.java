@@ -36,9 +36,9 @@ public class MatchingMutation implements GraphQLMutationResolver {
         return matching;
     }
 
-//    @Transactional
-//    public int deleteMatching(Long matchingId) {
-//        matchingHashtagRepository.deleteByMatchingId(matchingId);
-//        return matchingRepository.deleteByMatchingId(matchingId);
-//    }
+    @Transactional
+    public int deleteMatching(Long matchingId) {
+        matchingHashtagRepository.deleteByMatchingId(matchingId);
+        return matchingRepository.deleteByMatchingId(matchingId);
+    }
 }

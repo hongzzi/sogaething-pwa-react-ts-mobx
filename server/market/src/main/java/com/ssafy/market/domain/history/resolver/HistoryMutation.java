@@ -26,8 +26,13 @@ public class HistoryMutation implements GraphQLMutationResolver {
     @Transactional
     public HistoryOutput createHistory(long postId, DataFetchingEnvironment env) {
         Long userId = tokenProvider.getUserIdFromHeader(env);
-        History history = historyRepository.save(new History(null, new User(userId), new Post(postId)));
-        HistoryOutput output = new HistoryOutput(history.getUser().getUserId(), history.getPost().getPostId(), history.getCreatedDate(), history.getModifiedDate());
+        History history = historyRepository.save(new History( new User(userId), new Post(postId)));
+        HistoryOutput output = HistoryOutput.builder()
+                .userId(history.getUser().getUserId())
+                .postId(history.getPost().getPostId())
+                .createdDate(history.getCreatedDate())
+                .modifiedDate(history.getModifiedDate())
+                .build();
         Post post = postRepository.findByPostId(postId);
         post.updateViewCount();
         return output;

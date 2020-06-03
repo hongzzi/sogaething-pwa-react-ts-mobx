@@ -34,5 +34,5 @@ extend type Query {
 
 extend type Mutation {
     createMatching(input: MatchInput!): Matching
-#    deleteMatching(matchingId: Int): Int
+    deleteMatching(matchingId: Int): Int
 }
