@@ -26,13 +26,21 @@ type UserOutput {
     trust: Int
 }
 
+#type Output {
+#    state: String
+#    userId : Int
+#}
+
 type UserInfoOutput {
     name: String
     address: String
     trust: Int
     numOfPosts: Int
 }
-
+type UserLogout{
+    state: String
+    userId: Int
+}
 type UserInfoResponse {
     userId: Int
     name: String
@@ -61,6 +69,7 @@ extend type Query {
 }
 
 extend type Mutation {
+    logoutUser(userId: Int!): UserLogout!
     loginUser(input: LoginUserInput!): LoginUserOutput
     updateUser(input: UpdateUserInput!): UserOutput
     deleteUser(id: Int!): Int

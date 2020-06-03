@@ -10,26 +10,26 @@ import java.util.Optional;
 
 public class CookieUtils {
 
-    public static Optional<Cookie> getCookie(HttpServletRequest request, String name) {
+    public static Cookie getCookie(HttpServletRequest request, String name) {
         Cookie[] cookies = request.getCookies();
-
         if (cookies != null && cookies.length > 0) {
             for (Cookie cookie : cookies) {
                 if (cookie.getName().equals(name)) {
-                    return Optional.of(cookie);
+                    return cookie;
                 }
             }
         }
 
-        return Optional.empty();
+        return null;
     }
 
     public static void addCookie(HttpServletResponse response, String name, String value, int maxAge) {
         Cookie cookie = new Cookie(name, value);
-//        cookie.setPath("/");
+        cookie.setPath("/");
         cookie.setHttpOnly(true);
         cookie.setMaxAge(maxAge);
-//        cookie.isHttpOnly();
+        cookie.setDomain("localhost");
+        cookie.isHttpOnly();
         response.addCookie(cookie);
     }
 
