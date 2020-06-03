@@ -55,7 +55,6 @@
 
 ### Built With
 사용한 프레임워크
-* [React](https://ko.reactjs.org/)
 * [Next.js](https://nextjs.org/)
 * [Spring Boot](https://spring.io/projects/spring-boot)
 * [Apollo](https://www.apollographql.com/)
@@ -111,6 +110,7 @@ Languege
 * [MongoDB](https://www.mongodb.com/)
 
 Library
+* [React](https://ko.reactjs.org/)
 * [Mobx](https://mobx.js.org/)
 * [JWT](https://jwt.io/)
 
