@@ -14,5 +14,5 @@ public interface FileRepository extends JpaRepository<File, Long> {
     File findByFileId(Long id);
     int deleteByFileId(Long id);
     List<File> findByProduct(Product product);
-
+    File findTop1ByProduct(Product product);
 }
