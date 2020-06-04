@@ -108,11 +108,13 @@ Languege
 * [GraphQl](https://graphql.org/)
 * [MySQL](https://www.mysql.com/)
 * [MongoDB](https://www.mongodb.com/)
+* [Redis] (https://redis.io/)
 
 Library
 * [React](https://ko.reactjs.org/)
 * [Mobx](https://mobx.js.org/)
 * [JWT](https://jwt.io/)
+* [WebSocket] (https://en.wikipedia.org/wiki/WebSocket)
 
 <br>
 
