@@ -1,7 +1,8 @@
 import { Response } from 'express-serve-static-core'
 import forIn from 'lodash/forIn'
+import { IToken } from './../store/AuthStore';
 
-export function setMapInCookie(res: Response, map: { [key: string]: string } | any): void {
+export function setMapInCookie(res: Response, map: { [key: string]: string } | IToken): void {
   let cookies = ''
 
   forIn(map, (value, key) => {

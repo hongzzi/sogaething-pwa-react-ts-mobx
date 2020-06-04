@@ -22,7 +22,7 @@ class MatchStore {
     @observable minPrice: number = 0;
     @observable maxPrice: number = 0;
 
-    constructor(initialData = initialMatch, root: any) {
+    constructor(root: any, initialData?: MatchStore) {
         this.match = {
             category: '',
             hashtag: Array(),

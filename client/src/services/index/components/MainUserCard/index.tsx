@@ -40,6 +40,10 @@ export default () => {
       alert('요청이 실패했습니다. 잠시 후 다시 시도해주세요.');
     }
   }
+  const handleClickTest = () => {
+    console.log(data);
+    console.log(store.authStore.auth);
+  }
   return (
     <Wrapper>
       <WrapperFlex>
@@ -59,7 +63,7 @@ export default () => {
           />
         )}
         <WrapperUserInfo>
-          <TextUserInfo>
+          <TextUserInfo onClick={handleClickTest}>
             {loading && <TextLoader size={{ width: 50, height: 18 }} />}
             {!loading && findUserInfo && findUserInfo!.name}
           </TextUserInfo>

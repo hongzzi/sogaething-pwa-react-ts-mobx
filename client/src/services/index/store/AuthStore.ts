@@ -1,6 +1,8 @@
 import autobind from 'autobind-decorator';
+import { Request, Response } from 'express-serve-static-core'
 import jwtDecode from 'jwt-decode';
-import { action, observable, reaction, toJS, autorun } from 'mobx';
+import { action, autorun, observable, reaction, toJS } from 'mobx';
+import { checkTokenIsExpired } from '../helpers';
 
 export interface IAuth {
   sub: string;
@@ -16,7 +18,12 @@ export interface IAuthResponseDto {
 
 export const initialAuth = {
   token: '',
+  auth: {},
 };
+
+export interface IToken {
+  token: string;
+}
 
 export type Provider = 'kakao' | 'google' | 'naver';
 
@@ -28,34 +35,26 @@ class AuthStore {
   @observable email = '';
   @observable provider: string = '';
 
-  constructor(initialData = initialAuth, root: any) {
-    if (initialData.token) {
-      this.setToken(initialData.token);
-      this.auth = jwtDecode(initialData.token);
+  constructor(root: any, initialData?: AuthStore) {
+    if (initialData) {
+      this.auth = initialData!.auth;
+      this.token = initialData!.token;
+    } else {
+      this.auth = {
+        sub: '',
+        userId: 0,
+        userName: '',
+      }
+      this.token = '';
     }
-
-    if (this.token) {
-      this.auth = jwtDecode(this.token) as IAuth;
-    }
-
-    reaction(
-      () => this.token,
-      (token) => {
-        if (token != null) {
-          window.sessionStorage.setItem('jwt', token);
-        }
-      },
-    );
   }
 
   isLoggedIn() {
     return this.token != null;
   }
 
-  async refreshTokens(_tokens: {
-    accessToken: string;
-    refreshTokens: string;
-  }): Promise<any> {
+  @action
+  async refreshTokens(_tokens: IToken): Promise<any> {
     // will be type change
     return {
       accessToken: '',
@@ -124,6 +123,37 @@ class AuthStore {
     window.sessionStorage.removeItem('jwt');
     this.token = '';
     this.auth = undefined;
+  }
+  @action
+  async nextServerInit(req: Request, res: Response) {
+    try {
+      if (!req || !res) {
+        throw new Error()
+      }
+
+      if (!req.cookies.token) {
+        throw new Error()
+      }
+
+      const tokens: IToken = {
+        token: req.cookies.token,
+      }
+      const isRefreshTokenExpired = checkTokenIsExpired(tokens.token)
+      const isAccessTokenExpired = checkTokenIsExpired(tokens.token)
+
+      if (isRefreshTokenExpired) {
+        throw new Error()
+      }
+
+      if (isAccessTokenExpired) {
+        const refreshedTokens = await this.refreshTokens(tokens)
+
+        tokens.token = refreshedTokens.token
+      }
+      this.setToken(tokens.token);
+    } catch (error) {
+      console.error(error);
+    }
   }
 }
 
