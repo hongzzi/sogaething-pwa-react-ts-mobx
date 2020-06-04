@@ -7,7 +7,7 @@ import ImageView from '../ImageView';
 import { TextLoader } from '../LoaderPlaceholder';
 
 interface IProductCard {
-  cardData: IRecentPost | null;
+  cardData: any | null;
   loading?: boolean;
   idx: number;
 }
@@ -15,6 +15,7 @@ interface IProductCard {
 export default (props: IProductCard) => {
   let hashtags;
   let postId = '';
+
   if (props.cardData !== null) {
     hashtags = props.cardData.hashTags.map(
       (item: any) => '#' + item.hashtag + ' ',

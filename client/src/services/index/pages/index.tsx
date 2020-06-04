@@ -19,12 +19,6 @@ import ChatService from '../service/ChatService';
 const PageIndex: NextPage = (props) => {
   const { pageStore, authStore } = useStores();
   const handleMoreCards = () => {
-    console.log(pageStore);
-    console.log(authStore);
-    // console.log(toJS(authStore.auth));
-    // console.log(cookies);
-    // console.log(pageStore.clickedIdx);
-    // authStore.signOut();
   };
   return (
     <Layout>
@@ -36,9 +30,9 @@ const PageIndex: NextPage = (props) => {
         </Line>
         <CardList />
         <Line>
-          {/* <CategoryText>'최신'</CategoryText> 중고매물 */}
+          <CategoryText>'최신'</CategoryText> 중고매물
         </Line>
-        {/* <ProductCardList /> */}
+        <ProductCardList />
         <WrapperAlignCenter onClick={handleMoreCards}>
           <CommonBtn type={'common'} text={'더보기'} />
         </WrapperAlignCenter>
