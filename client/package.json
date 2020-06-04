@@ -32,6 +32,7 @@
     "@types/jwt-decode": "^2.2.1",
     "@types/sockjs-client": "^1.1.1",
     "@types/stompjs": "^2.3.4",
+    "apollo-boost": "^0.4.9",
     "apollo-cache-inmemory": "^1.6.2",
     "apollo-client": "^2.6.2",
     "apollo-link-context": "^1.0.17",
