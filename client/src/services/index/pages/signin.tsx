@@ -31,6 +31,7 @@ export default (props: ISignInProps) => {
       },
     })
     .then((res: {data : IAuthResponseDto}) => {
+      store.authStore.setToken(res.data.loginUser.token);
       router.push('/');
     })
     .catch((err) => {

@@ -6,7 +6,7 @@ import styled from '~/styled';
 import useStores from '../../helpers/useStores';
 import { ChatRoomListItemDto } from '../../service/ChatService';
 import CircleImageView from '../CircleImageView';
-
+import NoAvatar from '../../assets/img/no-avatar.png?url';
 interface IChatCardProps {
   chatData?: ChatRoomListItemDto;
 }
@@ -24,7 +24,7 @@ export default (props: IChatCardProps) => {
           <CircleImageView
             size={2}
             src={
-              'https://pngimage.net/wp-content/uploads/2018/05/default-user-profile-image-png-6.png'
+              NoAvatar
             }
           />
           <WrapperText>
