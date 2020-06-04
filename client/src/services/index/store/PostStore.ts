@@ -43,7 +43,7 @@ class PostStore {
     @observable transaction: string = '';
     @observable price: number = 0;
 
-    constructor(initialData = initialPost, root: any) {
+    constructor(root: any, initialData?: PostStore) {
         this.post = {
             title: '',
             category: '',
