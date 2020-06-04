@@ -11,7 +11,7 @@
     "prebuild2": "rimraf ./dist",
     "build": "next build ./src",
     "postbuild2": "webpack",
-    "start": "NODE_ENV=production dotenv -e .env.production -- next start -p 3000",
+    "start": "NODE_ENV=production dotenv -e .env.production -- next start ./src -p 8081",
     "start:aws": "NODE_ENV=development dotenv -e .env.development -- next start -p 80",
     "netlify-deploy": "next build ./src && next export ./src",
     "deploy:dev": "sls deploy --stage dev",
