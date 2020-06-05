@@ -28,6 +28,7 @@ export interface IPostResponseDto {
 }
 
 export const initialPost = {
+    hashtag: [],
 };
 
 @autobind
@@ -42,6 +43,7 @@ class PostStore {
     @observable contents: string = '';
     @observable transaction: string = '';
     @observable price: number = 0;
+    @observable tag: string = ''
 
     constructor(root: any, initialData?: PostStore) {
         this.post = {
@@ -52,7 +54,8 @@ class PostStore {
             contents: '',
             transaction: '',
             price: 0,
-        }
+        };
+        this.tag = '';
     }
 
     @action
@@ -114,6 +117,16 @@ class PostStore {
     removeHashtag(hashtag: string) {
         this.hashSet.delete(hashtag);
         this.hashtag = Array.from(this.hashSet.values());
+    }
+
+    @action
+    getTag() {
+        return this.tag;
+    }
+
+    @action
+    setTag(tag: string) {
+        this.tag = tag;
     }
 
     @action
