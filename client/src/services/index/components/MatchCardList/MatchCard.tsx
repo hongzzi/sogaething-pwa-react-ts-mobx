@@ -54,7 +54,7 @@ export default (props: IMatchCardProps) => {
         <Icon src='https://cdn.zeplin.io/5eb284a8aa2cdb76474240bb/assets/C4E60944-CDB7-47D8-B09E-219D6BF7D446.png' />
       </TopIcon>
       <BottomContent>
-          <Line color={'#ffc53d'}>{match.hashtag.map((item) => (<>#{item} </>))}</Line>
+          <Line color={'#ffc53d'}>{match.hashtag.map((item) => (`#${item} `))}</Line>
           <Line>{numberWithCommas(match.minPrice)} ~ {numberWithCommas(match.maxPrice)} 원</Line>
       </BottomContent>
       <BottomIcon>

@@ -23,19 +23,25 @@ export interface IRecentPost {
 
 export default () => {
   const { data, loading, error } = useGetRecentQuery();
-
-  const {findRecentPosts} = data as IQueryData;
-
+  let Cards;
   const handleClickCard = () => {
     console.log(findRecentPosts);
     console.log(error);
   };
+  if (loading || error) {
+    Cards = [1, 2, 3, 4, 5, 6].map((item, i) => {
+      return <Card key={i} idx={i} cardData={null} loading/>;
+    });
+    return (
+      <Wrapper onClick={handleClickCard}>{Cards}</Wrapper>
+    );
+  }
 
-  const Cards = dump.map((item, i) => {
-    if (loading) {
-      return <Card key={i} idx={i} cardData={null} loading />;
-    }else if(findRecentPosts){
-      return <Card key={i} idx={i} cardData={findRecentPosts[i]} loading={false} />;
+  const {findRecentPosts} = data as IQueryData;
+
+  Cards = data!.findRecentPosts!.map((item, i) => {
+    if (data!.findRecentPosts) {
+      return <Card key={i} idx={i} cardData={item} loading={false} />;
     }
   });
   return <Wrapper onClick={handleClickCard}>{Cards}</Wrapper>;

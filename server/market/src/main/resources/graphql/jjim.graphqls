@@ -20,7 +20,7 @@ input CreateJjimInput{
     postId : Int!
 }
 extend type Query {
-    findPostByUserId(userId : Int): [JjimOutput]
+    findJjimByUserId(userId : Int): [JjimOutput]
 }
 extend type Mutation {
     createJjim(input : CreateJjimInput!) : Jjim

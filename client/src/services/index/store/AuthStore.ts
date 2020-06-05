@@ -130,7 +130,6 @@ class AuthStore {
       if (!req || !res) {
         throw new Error()
       }
-
       if (!req.cookies.token) {
         throw new Error()
       }

@@ -61,11 +61,18 @@ public class User {
         this.trust = trust;
         this.role = role;
     }
-    public void update(String imageUrl, String phone, String address, int trust){
+    public void update(String name, String email, String imageUrl, String phone, String address){
+        this.name = name;
+        this.email = email;
         this.imageUrl = imageUrl;
         this.phone = phone;
         this.address = address;
-        this.trust = trust;
+    }
+    public void update(String name, String imageUrl, String phone, String address){
+        this.name = name;
+        this.imageUrl = imageUrl;
+        this.phone = phone;
+        this.address = address;
     }
     public void setTrust (int trust){
         this.trust = trust;

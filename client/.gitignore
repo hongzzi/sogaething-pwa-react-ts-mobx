@@ -67,3 +67,10 @@ dist
 .vercel/
 
 src/out
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml
+.ebignore
+
+.npmrc
