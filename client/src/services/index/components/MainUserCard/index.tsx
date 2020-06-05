@@ -4,17 +4,17 @@ import { useGetUserInfoQuery } from '~/generated/graphql';
 import styled from '~/styled';
 import NoAvatar from '../../assets/img/no-avatar.png?url';
 import Pin from '../../assets/img/pin-fill.png?url';
+import useStores from '../../helpers/useStores';
 import CircleImageView from '../CircleImageView';
 import { TextLoader } from '../LoaderPlaceholder';
 import CirclePlaceHolder from '../LoaderPlaceholder/Circle';
-import useStores from '../../helpers/useStores';
 
 interface IQueryData {
   findUserInfo: IFindUserInfo | null;
 }
 
 export interface IFindUserInfo {
-  address?: string | null;
+  address?: string;
   name: string;
   numOfPosts: number;
   trust: number;
@@ -25,7 +25,7 @@ export default () => {
   const router = useRouter();
   const store = useStores();
   const { data, loading, error } = useGetUserInfoQuery();
-  const { findUserInfo } = data as IQueryData;
+
   const handleClickMatch = () => {
     if (store.authStore.auth) {
       router.push(`/match/${store.authStore.auth.userId}`);
@@ -39,28 +39,52 @@ export default () => {
     } else {
       alert('요청이 실패했습니다. 잠시 후 다시 시도해주세요.');
     }
+  };
+
+  if (loading || error) {
+    return (
+      <Wrapper>
+        <WrapperFlex>
+          <CirclePlaceHolder size={4} />
+          <WrapperUserInfo>
+            <TextUserInfo>
+              <TextLoader size={{ width: 50, height: 18 }} />
+            </TextUserInfo>
+            <TextuserAddr>
+              <SmallIcon src={Pin} />
+              <TextLoader size={{ width: 80, height: 12 }} />
+            </TextuserAddr>
+          </WrapperUserInfo>
+        </WrapperFlex>
+        <WrapperMainButton>
+          <MainButton onClick={handleClickMatch}>
+            <div>진행중인 매칭</div>
+            {/* <InnerLine>3</InnerLine> */}
+          </MainButton>
+          <MainButton onClick={handleClickList}>
+            <div>판매중인 물품</div>
+            {/* <InnerLine>0</InnerLine> */}
+          </MainButton>
+        </WrapperMainButton>
+      </Wrapper>
+    );
   }
+
+  const { findUserInfo } = data as IQueryData;
+
   const handleClickTest = () => {
     console.log(data);
     console.log(store.authStore.auth);
-  }
+  };
   return (
     <Wrapper>
       <WrapperFlex>
         {loading && <CirclePlaceHolder size={4} />}
         {!loading && findUserInfo && findUserInfo.imgurl && (
-          <CircleImageView
-            size={4}
-            src={findUserInfo.imgurl}
-            radius={35}
-          />
+          <CircleImageView size={4} src={findUserInfo.imgurl} radius={35} />
         )}
         {!loading && !findUserInfo!.imgurl && (
-          <CircleImageView
-            size={4}
-            src={NoAvatar}
-            radius={35}
-          />
+          <CircleImageView size={4} src={NoAvatar} radius={35} />
         )}
         <WrapperUserInfo>
           <TextUserInfo onClick={handleClickTest}>
@@ -115,7 +139,7 @@ const WrapperUserInfo = styled.div`
 const TextUserInfo = styled.div`
   font-size: 18px;
   font-weight: bold;
-  color: ${props => props.theme.mainFontColor};
+  color: ${(props) => props.theme.mainFontColor};
 `;
 
 const TextuserAddr = styled.div`

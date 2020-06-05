@@ -31,7 +31,7 @@ public class JjimQuery implements GraphQLQueryResolver {
     private final FileRepository fileRepository;
 
     @Transactional
-    public List<JjimOutput> findPostByUserId(Long userId){
+    public List<JjimOutput> findJjimByUserId(Long userId){
         User user = userRepository.findByUserId(userId);
         List<Jjim> jjimList = jjimRepository.findByUser(user);
         List<JjimOutput> outputs = new ArrayList<>();
@@ -39,7 +39,7 @@ public class JjimQuery implements GraphQLQueryResolver {
             Jjim jjim = jjimList.get(i);
             Post post = jjim.getPost();
             Product product = productRepository.findByPost(post);
-            File file = fileRepository.findByProduct(product).get(0);
+            File file = fileRepository.findTopByProduct(product);
             JjimOutput jjimOutput = new JjimOutput(jjim.getJjimId(),post.getPostId(),post.getTitle(),product.getCategory(),
                     file.getImgPath(),product.getPrice(),jjim.getCreatedDate().toString(),jjim.getModifiedDate().toString());
             outputs.add(jjimOutput);

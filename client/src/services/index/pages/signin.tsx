@@ -31,6 +31,8 @@ export default (props: ISignInProps) => {
       },
     })
     .then((res: {data : IAuthResponseDto}) => {
+      store.authStore.setToken(res.data.loginUser.token);
+      router.push('/');
     })
     .catch((err) => {
       router.push('/signin');
@@ -47,8 +49,6 @@ export default (props: ISignInProps) => {
       <WrapperLine>
         <Line>소개 Thing</Line>
       </WrapperLine>
-      <Link href='/'>
-        <a>
       <StyledKakaoLogin
         jsKey={KEYS.KAKAO}
         onSuccess={success}
@@ -56,8 +56,6 @@ export default (props: ISignInProps) => {
       >
         <LoginText>카카오로 시작하기</LoginText>
       </StyledKakaoLogin>
-      </a>
-      </Link>
       <LoginButton type={'google'}>
         <LoginText>구글계정으로 시작하기</LoginText>
       </LoginButton>

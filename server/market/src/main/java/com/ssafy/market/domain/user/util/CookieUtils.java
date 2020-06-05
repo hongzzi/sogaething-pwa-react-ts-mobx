@@ -6,7 +6,6 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Base64;
-import java.util.Optional;
 
 public class CookieUtils {
 
@@ -28,7 +27,7 @@ public class CookieUtils {
         cookie.setPath("/");
         cookie.setHttpOnly(true);
         cookie.setMaxAge(maxAge);
-        cookie.setDomain("localhost");
+        cookie.setDomain("www.sogaething.com");
         cookie.isHttpOnly();
         response.addCookie(cookie);
     }

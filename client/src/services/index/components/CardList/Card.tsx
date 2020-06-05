@@ -1,39 +1,45 @@
+import Link from 'next/link';
 import * as React from 'react';
+import { IGetHistoryQuery } from '~/generated/graphql';
 import styled from '~/styled';
-import {IFindUserHistoryByUserId} from '.';
+import { IFindUserHistoryByUserId } from '.';
 import { numberWithCommas } from '../../helpers/comma';
 import { TextLoader } from '../LoaderPlaceholder';
-import Link from 'next/link';
 interface ICardProps {
-  cardData: IFindUserHistoryByUserId | null;
+  cardData: any | null;
   loading: boolean;
 }
 
 export default (props: ICardProps) => {
-  let bgImg = 'https://www.sctech.edu/wp-content/plugins/ajax-search-pro/img/default.jpg';
+  let bgImg =
+    'https://www.sctech.edu/wp-content/plugins/ajax-search-pro/img/default.jpg';
   let hashtags;
   let price = 0;
   let title = '';
   let postId = '';
   if (props.cardData !== null) {
-    hashtags = props.cardData.hashTags.map(
-      (item: any) => '#' + item.hashtag + ' ',
-    );
-    bgImg = props.cardData.imgUrls[0].imgPath;
+    if (props.cardData.hashTags.length !== 0) {
+      hashtags = props.cardData.hashTags.map(
+        (item: any) => '#' + item.hashtag + ' ',
+      );
+    }
+    if (props.cardData.imgUrls.length !== 0) {
+      bgImg = props.cardData.imgUrls[0].imgPath!;
+    }
     price = props.cardData.price;
     title = props.cardData.title;
     postId = props.cardData.postId;
   }
   return (
     <Link href={`/post/${postId}`}>
-    <Card bgImg={bgImg}>
-      <WrapperText>
-          {props.loading && <TextLoader size={{height: 10, width: 50}} />}
-          {!props.loading && title} <br/>
-          {props.loading && <TextLoader size={{height: 10, width: 80}} />}
-          {!props.loading && numberWithCommas(price)+'원'}
-      </WrapperText>
-    </Card>
+      <Card bgImg={bgImg}>
+        <WrapperText>
+          {props.loading && <TextLoader size={{ height: 10, width: 50 }} />}
+          {!props.loading && title} <br />
+          {props.loading && <TextLoader size={{ height: 10, width: 80 }} />}
+          {!props.loading && numberWithCommas(price) + '원'}
+        </WrapperText>
+      </Card>
     </Link>
   );
 };

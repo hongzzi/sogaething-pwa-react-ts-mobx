@@ -11,7 +11,7 @@ export default (props: IMatchCardListProps) => {
   const Cards = data.map((item, i) => {
     return <Card key={i} match={item} />;
   });
-  return <Wrapper>{Cards}</Wrapper>;
+  return <>{Cards}</>;
 };
 
 const Wrapper = styled.div`

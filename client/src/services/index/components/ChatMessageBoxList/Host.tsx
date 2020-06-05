@@ -3,7 +3,7 @@ import * as React from 'react';
 import styled from '~/styled';
 import { IChatDto } from '../../service/ChatService';
 import CircleImageView from '../CircleImageView';
-
+import NoAvatar from '../../assets/img/no-avatar.png?url';
 interface IChatMessageBox {
   cardData: IChatDto;
 }
@@ -16,7 +16,7 @@ export default (props: IChatMessageBox) => {
       {type !== 'ENTER' && (
         <CircleImageView
           size={1.8}
-          src='https://pngimage.net/wp-content/uploads/2018/05/default-user-profile-image-png-6.png'
+          src={NoAvatar}
         />
       )}
       {type === 'ENTER' ? (
