@@ -23,6 +23,14 @@ public class CookieUtils {
     }
 
     public static void addCookie(HttpServletResponse response, String name, String value, int maxAge) {
+//        Cookie c2 = new Cookie(name, value);
+//        c2.setPath("/");
+//        c2.setHttpOnly(true);
+//        c2.setMaxAge(maxAge);
+//        c2.setDomain("localhost");
+//        c2.isHttpOnly();
+//        response.addCookie(c2);
+
         Cookie cookie = new Cookie(name, value);
         cookie.setPath("/");
         cookie.setHttpOnly(true);
@@ -30,6 +38,7 @@ public class CookieUtils {
         cookie.setDomain("www.sogaething.com");
         cookie.isHttpOnly();
         response.addCookie(cookie);
+
     }
 
     public static void deleteCookie(HttpServletRequest request, HttpServletResponse response, String name) {
