@@ -23,12 +23,18 @@ export default () => {
         <p>error</p>
       }
       {
-        data && data.matchThings &&
+        data &&
         <MarginTopCategoryHeaderContainer>
           <HashTagHeader>
-            #맥북
+            {
+              data.findAllMatchingHashtagByMatchingId && data.findAllMatchingHashtagByMatchingId.map(
+                (value) => (<>#{value} </>),
+              )}
           </HashTagHeader>
-          <FeedCardList data={data.matchThings} />
+          {
+            data.matchThings &&
+            <FeedCardList data={data.matchThings} />
+          }
         </MarginTopCategoryHeaderContainer>
       }
     </Wrapper>
@@ -52,4 +58,6 @@ const HashTagHeader = styled.div`
     border-radius: 6px;
     font-size: 15px;
     padding: 10px 15px 10px 15px;
+    width: 100%;
+    height: auto;
 `;

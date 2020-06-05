@@ -72,7 +72,9 @@ export default function HashTagSearch(props: IHashTagSearchProps) {
     }
 
     const handleOff = () => {
-        store.visiableStore.setOff();
+        setTimeout(() => {
+            store.visiableStore.setOff();
+          }, 100);
     }
 
     return (
@@ -159,6 +161,7 @@ const Tag = styled.button`
     font-size: 12px;
     border-radius: 5px;
     border: transparent;
-    background: #9ccc;
+    color: #fff;
+    background: #259be5;
     line-height: 1.5rem;
 `

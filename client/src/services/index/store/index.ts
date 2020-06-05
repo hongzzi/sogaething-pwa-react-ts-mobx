@@ -1,12 +1,12 @@
 import { useStaticRendering } from 'mobx-react';
 import ChatService from '../service/ChatService';
 import AuthStore, { IAuth, initialAuth, IToken } from './AuthStore';
-import CardStore from './CardStore';
 import ChatStore from './ChatStore';
 import MatchStore, { initialMatch } from './MatchStore';
 import PageStore, { initialPage } from './PageStore';
 import PostStore, { initialPost } from './PostStore';
-import VisiableStore, { initialVisiable } from './VisiableStore';
+import CardStore from './CardStore';
+import VisiableStore from './VisiableStore';
 
 const isServer = typeof window === 'undefined';
 

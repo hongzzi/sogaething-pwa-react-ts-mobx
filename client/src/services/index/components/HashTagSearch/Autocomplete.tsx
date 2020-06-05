@@ -90,9 +90,9 @@ const TagBox = styled.div`
 `
 
 const Name = styled.div`
-    color: #99d;
+    color: #6459db;
 `
 
 const Count = styled.div`
-    color: #d99;
+    color: #ff3d71;
 `

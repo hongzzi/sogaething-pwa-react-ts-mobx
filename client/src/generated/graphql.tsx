@@ -726,39 +726,42 @@ export type IGetMatchResultsQueryVariables = {
   input: Scalars["Int"];
 };
 
-export type IGetMatchResultsQuery = { __typename?: "Query" } & {
-  matchThings: Maybe<
-    Array<
-      Maybe<
-        { __typename?: "PostDetailOutput" } & Pick<
-          IPostDetailOutput,
-          | "postId"
-          | "title"
-          | "category"
-          | "imgPaths"
-          | "hashtag"
-          | "contents"
-          | "price"
-          | "viewCount"
-          | "isBuy"
-          | "deal"
-          | "dealState"
-          | "saleDate"
-          | "transaction"
-          | "createdDate"
-          | "modifiedDate"
-        > & {
-            user: Maybe<
-              { __typename?: "UserInfoResponse" } & Pick<
-                IUserInfoResponse,
-                "name" | "address" | "trust" | "numOfPosts" | "imgurl"
-              >
-            >;
-          }
+export type IGetMatchResultsQuery = { __typename?: "Query" } & Pick<
+  IQuery,
+  "findAllMatchingHashtagByMatchingId"
+> & {
+    matchThings: Maybe<
+      Array<
+        Maybe<
+          { __typename?: "PostDetailOutput" } & Pick<
+            IPostDetailOutput,
+            | "postId"
+            | "title"
+            | "category"
+            | "imgPaths"
+            | "hashtag"
+            | "contents"
+            | "price"
+            | "viewCount"
+            | "isBuy"
+            | "deal"
+            | "dealState"
+            | "saleDate"
+            | "transaction"
+            | "createdDate"
+            | "modifiedDate"
+          > & {
+              user: Maybe<
+                { __typename?: "UserInfoResponse" } & Pick<
+                  IUserInfoResponse,
+                  "name" | "address" | "trust" | "numOfPosts" | "imgurl"
+                >
+              >;
+            }
+        >
       >
-    >
-  >;
-};
+    >;
+  };
 
 export type IGetMyPostsQueryVariables = {
   userId?: Maybe<Scalars["Int"]>;
@@ -1328,6 +1331,7 @@ export function useGetMatchingQuery(
 }
 export const GetMatchResultsDocument = gql`
   query getMatchResults($input: Int!) {
+    findAllMatchingHashtagByMatchingId(matchingId: $input)
     matchThings(matchingId: $input) {
       postId
       title
