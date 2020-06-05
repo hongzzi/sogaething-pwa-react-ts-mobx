@@ -14,6 +14,7 @@ type LoginUserOutput {
     token: String!
 }
 
+
 type UserOutput {
     userId: ID
     name: String
@@ -55,11 +56,12 @@ input LoginUserInput {
     token: String
 }
 
-input UpdateUserInput {
+input UpdateUserInput{
+    name: String
+    email : String
     imageUrl: String
     phone: String
     address: String
-    trust: Int
 }
 
 extend type Query {
