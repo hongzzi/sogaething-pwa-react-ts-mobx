@@ -6,6 +6,7 @@ import com.ssafy.market.domain.user.dto.*;
 import com.ssafy.market.domain.user.repository.UserRepository;
 import com.ssafy.market.domain.user.security.TokenProvider;
 import com.ssafy.market.domain.user.util.CookieUtils;
+import com.ssafy.market.global.apis.ImgurApi;
 import com.ssafy.market.global.apis.KakaoApi;
 import graphql.schema.DataFetchingEnvironment;
 import graphql.servlet.GraphQLContext;
@@ -29,6 +30,7 @@ public class UserMutation implements GraphQLMutationResolver {
     private final UserRepository userRepository;
     private final KakaoApi kakaoApi;
     private final TokenProvider tokenProvider;
+    private final ImgurApi api;
 
     @Transactional
     public LoginUserOutput loginUser(LoginUserInput input){
@@ -48,7 +50,7 @@ public class UserMutation implements GraphQLMutationResolver {
 
             RequestAttributes attrs = RequestContextHolder.getRequestAttributes();
             HttpServletResponse res = ((ServletRequestAttributes) attrs).getResponse();
-            HttpServletRequest req = ((ServletRequestAttributes)attrs).getRequest();
+//            HttpServletRequest req = ((ServletRequestAttributes)attrs).getRequest();
             CookieUtils.addCookie(res,"token",Jwt,3600);
         }
 
@@ -59,7 +61,10 @@ public class UserMutation implements GraphQLMutationResolver {
     public UserOutput updateUser(UpdateUserInput input,DataFetchingEnvironment env ){
         Long userId = tokenProvider.getUserIdFromHeader(env);
         User user = userRepository.findByUserId(userId);
-        user.update(input.getImageUrl(),input.getPhone(),input.getAddress(),input.getTrust());
+        String[] image = input.getImageUrl().split(",");
+        String img = api.uploadImg(image[1]);
+
+        user.update(input.getName(),input.getEmail(),img,input.getPhone(),input.getAddress());
         UserOutput output =  new UserOutput(userId,user.getName(),user.getEmail(),user.getImageUrl(),user.getProvider(),user.getProviderId(),user.getPhone(),user.getAddress(),user.getTrust());
         return output;
     }
