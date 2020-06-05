@@ -23,10 +23,7 @@ import org.springframework.stereotype.Component;
 import javax.transaction.Transactional;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 
 @Component
 @RequiredArgsConstructor
@@ -65,26 +62,26 @@ public class PostMutation implements GraphQLMutationResolver {
                 Post post = postRepository.save(new Post(null, user, false, input.getTitle(), ts, input.getContents(), (long) 0, "판매", "진행중", input.getTransaction()));
                 Product product = productRepository.save(new Product(null, post, input.getPrice(), input.getCategory(), (long) 0));
                 String[] hashtagArr = input.getHashtag();
-                List<String> hash = new ArrayList<>();
-                if (hashtagArr.length > 0) {
-                    for (int i = 0; i < hashtagArr.length; i++) {
-                        hashtagRepository.save(new Hashtag(null, product, hashtagArr[i]));
-                        hash.add(hashtagArr[i]);
-                    }
+                List<Hashtag> hList = new ArrayList<>();
+                for(int i =0; i<hashtagArr.length;i++){
+                    hList.add(new Hashtag(null,product,hashtagArr[i]));
                 }
-                String[] arr = input.getImgPaths();
-                if (arr.length > 0) {
-                    for (int k = 0; k < arr.length; k++) {
-                        String[] temp = arr[k].split(",");
+                hashtagRepository.saveAll(hList);
+                String[] Arr = input.getImgPaths();
+                List<File> fList = new ArrayList<>();
+                if (Arr.length > 0) {
+                    for (int k = 0; k < Arr.length; k++) {
+                        String[] temp = Arr[k].split(",");
                         String imgur = api.uploadImg(temp[1]);
                         if(!imgur.equals("false")) {
-                            fileRepository.save(new File(null, product, imgur));
+                            fList.add(new File(null,product,imgur));
                         }
                         else{
                             break;
                         }
                     }
                 }
+                fileRepository.saveAll(fList);
                 output = new Output("SUCCESS", post.getPostId());
             }else{
                 output = new Output("FAIL",null);
@@ -112,33 +109,29 @@ public class PostMutation implements GraphQLMutationResolver {
         }
         // 해시 태그 및 파일 추가 하기
         String[] hashtagArr = input.getHashtag();
-        HashSet<String> hs = new HashSet<>();
-        if (hashtagArr.length > 0) {
-            for (int i = 0; i < hashtagArr.length; i++) {
-                 hashtagRepository.save(new Hashtag(null, product, hashtagArr[i]));
-                hs.add(hashtagArr[i]);
-            }
+        List<Hashtag> hList = new ArrayList<>();
+        for(int i =0; i<hashtagArr.length;i++){
+            hList.add(new Hashtag(null,product,hashtagArr[i]));
         }
-        String[] Arr = input.getImgPaths();
-        if (Arr.length > 0) {
-            try {
-                for (int k = 0; k < Arr.length; k++) {
-                    String[] temp = Arr[k].split(",");
-                    String imgur = api.uploadImg(temp[1]);
-                    if (!imgur.equals("false")) {
-                        fileRepository.save(new File(null, product, imgur));
-                    } else {
-                        break;
-                    }
-                }
-            }catch (Exception e){
-                System.out.println("Fail" + e);
-            }
-        }
-        List<String> hash= new ArrayList<>(hs);
+        hashtagRepository.saveAll(hList);
 
-        List<File> files = fileRepository.findByProduct(product);
-        String imgPath = files.get(0).getImgPath();
+        String[] fArr = input.getImgPaths();
+        List<File> fList = new ArrayList<>();
+        if (fArr.length > 0) {
+            for (int k = 0; k < fArr.length; k++) {
+                String[] temp = fArr[k].split(",");
+                String imgur = api.uploadImg(temp[1]);
+                if(!imgur.equals("false")) {
+                    fList.add(new File(null,product,imgur));
+                }
+                else{
+                    break;
+                }
+            }
+        }
+        fileRepository.saveAll(fList);
+        List<String> hash = hashtagRepository.findDistinctByHashtag(product.getProductId());
+        String imgPath = fileRepository.findTop1ByProduct(product).getImgPath();
         PostMetaOutput output = new PostMetaOutput(
                 input.getPostId(),post.getTitle(),product.getCategory(),imgPath,
                 product.getPrice(),hash,post.isBuy(),post.getViewCount(),post.getDeal(),post.getDealState(),

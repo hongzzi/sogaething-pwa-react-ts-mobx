@@ -29,7 +29,9 @@ async function main() {
     const filePath = path.join(__dirname, 'dist', 'service-worker.js')
     app.serveStatic(req, res, filePath)
   })
-  server.use(cors())
+  server.use(cors({
+    credentials: true,
+  }))
   server.use(bodyParser.json())
   server.use(bodyParser.urlencoded({ extended: true }))
   server.use(cookieParser())

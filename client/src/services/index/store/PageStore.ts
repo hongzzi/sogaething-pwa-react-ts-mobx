@@ -3,11 +3,11 @@ import { action, observable, reaction } from 'mobx';
 
 export interface IPage {
   nav: boolean;
-  clickedIdx: number
+  clickedIdx: number;
 }
 
 export const initialPage: IPage = {
-  nav : true,
+  nav: true,
   clickedIdx: 0,
 };
 
@@ -17,9 +17,15 @@ class PageStore {
   @observable clickedIdx: number = 0;
   @observable modal: boolean = false;
 
-  constructor(initialData = initialPage, root: any) {
-      this.nav = initialData.nav;
-      this.clickedIdx = initialData.clickedIdx;
+  constructor(root: any, initialData?: PageStore) {
+    if (initialData) {
+      this.nav = initialData!.nav;
+      this.clickedIdx = initialData!.clickedIdx;
+    } else {
+      this.nav = false;
+      this.clickedIdx = 0;
+    }
+
   }
 
   @action
@@ -33,7 +39,7 @@ class PageStore {
   }
 
   @action
-  toggleModal(){
+  toggleModal() {
     this.modal = !this.modal;
   }
 }

@@ -1,5 +1,5 @@
 import autobind from 'autobind-decorator';
-import { action, observable, reaction, toJS } from 'mobx';
+import { action, observable, toJS } from 'mobx';
 
 export interface IMatch {
     category: string,
@@ -10,10 +10,12 @@ export interface IMatch {
 }
 
 export const initialMatch = {
+    hashtag: [],
 };
 
 @autobind
 class MatchStore {
+    hashSet: Set<string> = new Set();
     match: IMatch | undefined;
     @observable title: string = '';
     @observable category: string = '';
@@ -21,14 +23,27 @@ class MatchStore {
     @observable transaction: string = '';
     @observable minPrice: number = 0;
     @observable maxPrice: number = 0;
+    @observable tag: string = ''
 
-    constructor(initialData = initialMatch, root: any) {
-        this.match = {
-            category: '',
-            hashtag: Array(),
-            transaction: '',
-            maxPrice: 999999999,
-            minPrice: 0,
+    constructor(root: any, initialData?: MatchStore) {
+        if (initialData) {
+            this.match = {
+                category: '',
+                hashtag: Array(),
+                transaction: '',
+                maxPrice: 999999999,
+                minPrice: 0,
+            };
+            this.tag = '';
+        } else {
+            this.match = {
+                category: '',
+                hashtag: Array(),
+                transaction: '',
+                maxPrice: 999999999,
+                minPrice: 0,
+            };
+            this.tag = '';
         }
     }
 
@@ -66,12 +81,30 @@ class MatchStore {
 
     @action
     getHashtag() {
-        return this.hashtag;
+        return toJS(this.hashtag);
     }
 
     @action
     setHashtag(hashtag: string) {
-        this.hashtag = this.hashtag.concat(hashtag);
+        this.hashSet.add(hashtag);
+        this.hashtag = Array.from(this.hashSet.values());
+    }
+
+    @action
+    removeHashtag(hashtag: string) {
+        this.hashSet.delete(hashtag);
+        this.hashtag = Array.from(this.hashSet.values());
+    }
+
+
+    @action
+    getTag() {
+        return this.tag;
+    }
+
+    @action
+    setTag(tag: string) {
+        this.tag = tag;
     }
 
     @action

@@ -4,6 +4,7 @@ import com.coxautodev.graphql.tools.GraphQLQueryResolver;
 import com.ssafy.market.domain.file.domain.File;
 import com.ssafy.market.domain.file.repository.FileRepository;
 import com.ssafy.market.domain.hashtag.domain.Hashtag;
+
 import com.ssafy.market.domain.hashtag.dto.HashtagInput;
 import com.ssafy.market.domain.hashtag.repository.HashtagRepository;
 import com.ssafy.market.domain.hashtag.repository.MatchingHashtagRepository;
@@ -116,39 +117,30 @@ public class PostQuery implements GraphQLQueryResolver {
 
     public List<PostMetaOutput> searchThings(HashtagInput input) {
         String[] hashtags = input.getHashtag();
+        List<Long> hashtagCountOutputs = hashtagRepository.findHashtagCount(Arrays.asList(hashtags));
         List<PostMetaOutput> outputs = new ArrayList<>();
-        HashMap<Long, Post> hashMap = new HashMap<>();
-        long[] postIdArr = new long[(int) postRepository.count() + 1];
-        for (int i = 0; i < hashtags.length; i++) {
-            List<Hashtag> hashtagList = hashtagRepository.findDistinctByHashtagStartingWith(hashtags[i]);
-            for (int j = 0; j < hashtagList.size(); j++) {
-                long PostId = hashtagList.get(j).getProduct().getPost().getPostId();
-                hashMap.put(PostId, hashtagList.get(j).getProduct().getPost());
-                postIdArr[(int) PostId]++;
-            }
-        }
-        long[] temp = postIdArr.clone();
-        Arrays.sort(temp);
-        boolean[] visited = new boolean[postIdArr.length];
-        for (int i = 0; i < temp.length; i++) {
-            if (temp[i] == 0) continue;
-            for (int j = 0; j < postIdArr.length; j++) {
-                if (!visited[j] && temp[i] == postIdArr[j]) {
-                    visited[j] = true;
-                    Post post = hashMap.get((long) j);
-                    Product product = productRepository.findByPost(post);
-                    File files = fileRepository.findByProduct(product).get(0);
-                    List<Hashtag> hashtagList = hashtagRepository.findByProduct(product);
-                    HashSet<String> hs = new HashSet<>();
-                    for (int k = 0; k < hashtagList.size(); k++) {
-                        hs.add(hashtagList.get(k).getHashtag());
-                    }
-                    List<String> hash = new ArrayList<>(hs);
-                    outputs.add(new PostMetaOutput(post.getPostId(), post.getTitle(), product.getCategory(), files.getImgPath(), product.getPrice()
-                            , hash,post.isBuy(),post.getViewCount(),post.getDeal(),post.getDealState(),post.getSaleDate().toString(),post.getTransaction(), post.getCreatedDate().toString(), post.getModifiedDate().toString()));
-                    break;
-                }
-            }
+        for (int i = 0; i < hashtagCountOutputs.size(); i++) {
+            Product product = productRepository.findByProductId(hashtagCountOutputs.get(i));
+            Post post = product.getPost();
+            File file = fileRepository.findTop1ByProduct(product);
+
+            PostMetaOutput postMetaOutput = PostMetaOutput.builder()
+                    .postId(post.getPostId())
+                    .title(post.getTitle())
+                    .category(product.getCategory())
+                    .imgPath(file.getImgPath())
+                    .price(productRepository.totalPriceByPostId(post))
+                    .hashtag(hashtagRepository.findDistinctByHashtag(product.getProductId()))
+                    .isBuy(post.isBuy())
+                    .viewCount(post.getViewCount())
+                    .deal(post.getDeal())
+                    .dealState(post.getDealState())
+                    .saleDate(post.getSaleDate().toString())
+                    .transaction(post.getTransaction())
+                    .createdDate(post.getCreatedDate().toString())
+                    .modifiedDate(post.getModifiedDate().toString())
+                    .build();
+            outputs.add(postMetaOutput);
         }
         return outputs;
     }

@@ -1,4 +1,6 @@
 # source: http://3.34.131.20:8080/graphql
+# timestamp: Wed Jun 03 2020 17:51:24 GMT+0900 (대한민국 표준시)
+
 """This directive allows results to be deferred during execution"""
 directive @defer on FIELD
 
@@ -170,6 +172,7 @@ type Mutation {
   deleteFile(id: Int!): Int
   createDetailDeal(input: CreateDetailDealInput!): DetailOutput
   deleteDetailDeal(id: Int!): Int!
+  logoutUser(userId: Int!): UserLogout!
   loginUser(input: LoginUserInput!): LoginUserOutput
   updateUser(input: UpdateUserInput!): UserOutput
   deleteUser(id: Int!): Int
@@ -177,6 +180,7 @@ type Mutation {
   updateHashtag(input: UpdateHashtagInput!): HashtagOutput
   deleteHashtag(id: Int!): Int
   createMatching(input: MatchInput!): Matching
+  deleteMatching(matchingId: Int): Int
   updateProduct(input: UpdateProductInput!): ProductOutput
   createProduct(input: CreateProductInput!): ProductOutput
   deleteProduct(id: Int!): Int
@@ -278,23 +282,10 @@ type Query {
   findAllPosts: [Post]
   findAllPost: [PostOutput]
   countPostByUserId(userId: Int): Int
-
-  """findByUser(userId : Int) : [PostOutput]"""
   findPostByPostId(id: Int): PostOutput
-
-  """
-  findAllPostsByUploaderId(uploader_id: Int):[Post]
-     findAllPostsByUploaderId(uploader_id: Int):[Post]
-     findPostByPostId(id: Int): Post
-  """
   findRecentPosts: [RecentPostResponse]
   findPostListByUserId(userId: Int): [PostMetaOutput]
   findByDetailPost(postId: Int): PostDetailOutput
-
-  """
-  findAllPostsByUploaderId(uploader_id: Int):[Post]
-  findElAllPosts: [Post]
-  """
   searchThings(input: HashtagInput!): [PostMetaOutput]
   matchThings(matchingId: Int!): [PostDetailOutput]
   findAllFile: [FileOutput]
@@ -310,6 +301,7 @@ type Query {
   findAllHashtag: [HashtagOutput]
   findByHashtagId(id: Int): HashtagOutput
   autocomplete(hashtag: String!): [Autocomplete]
+  findAllMatchingHashtagByMatchingId(matchingId: Int): [String]
   findMatchingByUserId: [MatchResponse]
   findAllProduct: [ProductOutput]
   findAllProducts: [Product]
@@ -403,6 +395,11 @@ type UserInfoResponse {
   trust: Int
   numOfPosts: Int
   imgurl: String
+}
+
+type UserLogout {
+  state: String
+  userId: Int
 }
 
 type UserOutput {

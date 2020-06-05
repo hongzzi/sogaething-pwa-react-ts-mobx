@@ -45,7 +45,7 @@ export default class extends Document {
           <link rel='icon' sizes='57x57'href='/icon57.png' />
 
           {/* will be update manifest.json url  */}
-          <link rel='manifest' href='http://localhost:3000/static/manifest.json' />
+          <link rel='manifest' href='/static/manifest.json' />
           <link href='https://fonts.googleapis.com/css2?family=Jua&display=swap' rel='stylesheet'/>
         </Head>
         <body>

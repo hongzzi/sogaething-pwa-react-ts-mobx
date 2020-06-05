@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import styled from '~/styled';
 
 import { useRouter } from 'next/router';
@@ -51,7 +51,12 @@ export default (props: IPostFormProps) => {
         setPost(store.postStore.getPost());
     }
     const handleChangePrice = (event: any) => {
-        postStore.setPrice(event.target.value)
+        const targetValue = event.target.value + '';
+        let parseValue = event.target.value;
+        if (targetValue.startsWith('0')) {
+            parseValue = Number.parseInt(targetValue);
+        }
+        store.postStore.setPrice(parseValue);
         setPost(store.postStore.getPost());
     }
     const handleChangeTransaction = (event: any) => {
@@ -122,7 +127,7 @@ export default (props: IPostFormProps) => {
                     </Select>
                 </InputContainer>
                 <InputContainer>
-                    <Input type={'text'} value={post.price} placeholder={'금액'} min={0} onKeyUp={handleChangePrice} required />
+                    <Input type={'number'} value={post.price + ''} placeholder={'금액'} min={0} onChange={handleChangePrice} />
                     {/* <label htmlFor='currency-field'>Enter Amount</label> */}
                     {/* <Input type='text' name='currency-field' id='currency-field' pattern='^\$\d{1,3}(,\d{3})*(\.\d+)?$' value='' data-type='currency' placeholder='$1,000,000.00' prefix={'₩'} /> */}
                 </InputContainer>

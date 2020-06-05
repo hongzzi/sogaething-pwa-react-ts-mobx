@@ -6,3 +6,8 @@ export interface Response<T> {
 }
 
 export type ApiResponse<T> = AxiosResponse<Response<T>>
+
+
+export interface DataFetchLoading {
+  loading: boolean;
+}
