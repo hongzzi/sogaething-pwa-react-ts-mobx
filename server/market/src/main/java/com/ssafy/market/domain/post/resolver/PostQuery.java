@@ -4,12 +4,10 @@ import com.coxautodev.graphql.tools.GraphQLQueryResolver;
 import com.ssafy.market.domain.file.domain.File;
 import com.ssafy.market.domain.file.repository.FileRepository;
 import com.ssafy.market.domain.hashtag.domain.Hashtag;
-import com.ssafy.market.domain.hashtag.domain.MatchingHashtag;
 import com.ssafy.market.domain.hashtag.dto.HashtagInput;
 import com.ssafy.market.domain.hashtag.repository.HashtagRepository;
 import com.ssafy.market.domain.hashtag.repository.MatchingHashtagRepository;
 import com.ssafy.market.domain.matching.domain.Matching;
-import com.ssafy.market.domain.matching.dto.MatchInput;
 import com.ssafy.market.domain.matching.respository.MatchingRepository;
 import com.ssafy.market.domain.post.domain.Post;
 import com.ssafy.market.domain.post.dto.*;
@@ -26,8 +24,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.*;
-
-
 
 @Component
 @RequiredArgsConstructor
@@ -46,16 +42,12 @@ public class PostQuery implements GraphQLQueryResolver {
         for(int i = 0; i<postList.size();i++){
             Post post = postList.get(i);
             Product product = productRepository.findByPost(post);
-            List<Hashtag> hashtagList = hashtagRepository.findByProduct(product);
-            HashSet<String> hs = new HashSet<>();
-            for (int j = 0; j<hashtagList.size(); j++){
-                hs.add(hashtagList.get(j).getHashtag());
-            }
-            List<String> hash = new ArrayList<>(hs);
+            List<String> list = hashtagRepository.findHashtagDistinctByProduct(product.getProductId());
+
             List<File> files = fileRepository.findByProduct(product);
 
             outputs.add(new PostOutput(post.getPostId(),post.getUser().getUserId(), post.isBuy(),post.getTitle(),post.getContents(),post.getDeal()
-            ,post.getDealState(),product.getCategory(),product.getName(),product.getPrice(),hash,files
+            ,post.getDealState(),product.getCategory(),product.getName(),product.getPrice(),list,files
             ));
         }
         return outputs;
@@ -73,16 +65,12 @@ public class PostQuery implements GraphQLQueryResolver {
 
         Post post = postRepository.findByPostId(id);
         Product product = productRepository.findByPost(post);
-        List<Hashtag> hashtagList = hashtagRepository.findByProduct(product);
-        HashSet<String> hs = new HashSet<>();
-        for (int j = 0; j<hashtagList.size(); j++){
-            hs.add(hashtagList.get(j).getHashtag());
-        }
-        List<String> hash = new ArrayList<>(hs);
+        List<String> list = hashtagRepository.findHashtagDistinctByProduct(product.getProductId());
+
         List<File> files = fileRepository.findByProduct(product);
 
         PostOutput output = new PostOutput(post.getPostId(),post.getUser().getUserId(), post.isBuy(),post.getTitle(),post.getContents(),post.getDeal()
-                ,post.getDealState(),product.getCategory(),product.getName(),product.getPrice(),hash,files                );
+                ,post.getDealState(),product.getCategory(),product.getName(),product.getPrice(),list,files                );
         return output;
     }
 
@@ -114,21 +102,14 @@ public class PostQuery implements GraphQLQueryResolver {
 
     public List<PostMetaOutput> findPostListByUserId(Long userId){
         List<PostMetaOutput> metaOutputList = new ArrayList<>();
-        User user = userRepository.findByUserId(userId);
         List<Post> postList = postRepository.findByUserIdOrderByPostIdDesc(userId);
-
         for (int i = 0; i< postList.size(); i++){
             Post post = postList.get(i);
             Product product = productRepository.findByPost(post);
-            File files = fileRepository.findByProduct(product).get(0);
-            List<Hashtag> hashtagList = hashtagRepository.findByProduct(product);
-            HashSet<String> hs = new HashSet<>();
-            for (int j = 0; j<hashtagList.size(); j++){
-                hs.add(hashtagList.get(j).getHashtag());
-            }
-            List<String> hash = new ArrayList<>(hs);
-            metaOutputList.add(new PostMetaOutput(post.getPostId(),post.getTitle(),product.getCategory(),files.getImgPath(),product.getPrice()
-                    ,hash,post.isBuy(),post.getViewCount(),post.getDeal(), post.getDealState(),post.getSaleDate().toString(),post.getTransaction(),post.getCreatedDate().toString(), post.getModifiedDate().toString()));
+            File file = fileRepository.findTopByProduct(product);
+            List<String> list = hashtagRepository.findHashtagDistinctByProduct(product.getProductId());
+            metaOutputList.add(new PostMetaOutput(post.getPostId(),post.getTitle(),product.getCategory(),file.getImgPath(),product.getPrice()
+                    ,list,post.isBuy(),post.getViewCount(),post.getDeal(), post.getDealState(),post.getSaleDate().toString(),post.getTransaction(),post.getCreatedDate().toString(), post.getModifiedDate().toString()));
         }
         return metaOutputList;
     }
@@ -177,23 +158,13 @@ public class PostQuery implements GraphQLQueryResolver {
         Post post = postRepository.findByPostId(postId);
         Product product = productRepository.findByPost(post);
         User writer = userRepository.findByUserId(post.getUser().getUserId());
-        List<Hashtag> hashtagList = hashtagRepository.findByProduct(product);
-        HashSet<String> hs = new HashSet<>();
-        for (int j = 0; j<hashtagList.size(); j++){
-            hs.add(hashtagList.get(j).getHashtag());
-        }
-        List<String> hash = new ArrayList<>(hs);
-        List<File> files = fileRepository.findByProduct(product);
-        HashSet<String> fs = new HashSet<>();
-        for (int j = 0; j<files.size(); j++){
-            fs.add(files.get(j).getImgPath());
-        }
-        List<String> file = new ArrayList<>(fs);
+        List<String> list = hashtagRepository.findHashtagDistinctByProduct(product.getProductId());
+        List<String> imgPath = fileRepository.findFilePathByProduct(product.getProductId());
         Long numOfPosts = postRepository.countPostByUserId(writer.getUserId());
         UserInfoResponse user = new UserInfoResponse(writer.getUserId(),writer.getName(),writer.getAddress(),writer.getTrust(),
                 numOfPosts,writer.getImageUrl());
         PostDetailOutput detailOutput = new PostDetailOutput(
-                postId,post.getTitle(),product.getCategory(),file,hash,
+                postId,post.getTitle(),product.getCategory(),imgPath,list,
                 post.getContents(),product.getPrice(),user,post.getViewCount(),post.isBuy(),post.getDeal(),post.getDealState(),post.getSaleDate().toString(),post.getTransaction(), post.getCreatedDate().toString(),post.getModifiedDate().toString()
         );
         return detailOutput;

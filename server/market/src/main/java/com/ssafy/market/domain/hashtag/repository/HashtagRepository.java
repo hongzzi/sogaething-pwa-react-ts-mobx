@@ -14,6 +14,9 @@ public interface HashtagRepository extends JpaRepository<Hashtag, Long> {
     List<Hashtag> findByProduct(Product product);
     long countByHashtag(String Hashtag);
 
+    @Query(value = "SELECT DISTINCT hashtag FROM hashtag WHERE product_id = :product", nativeQuery = true)
+    List<String> findHashtagDistinctByProduct(@Param("product") Long productId);
+
     @Query(value = "SELECT DISTINCT hashtag FROM hashtag WHERE hashtag LIKE :hashtag%", nativeQuery = true)
     List<String> findAutocompleteHashtag(@Param("hashtag") String hashtag);
 
