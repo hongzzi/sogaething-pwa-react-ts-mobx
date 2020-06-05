@@ -56,7 +56,8 @@ export default (props: IPostFormProps) => {
         if (targetValue.startsWith('0')) {
             parseValue = Number.parseInt(targetValue);
         }
-        store.postStore.setPrice(parseValue);
+        store.postStore.setPrice(Number.parseInt(parseValue));
+        console.log(typeof store.postStore.getPost().price);
         setPost(store.postStore.getPost());
     }
     const handleChangeTransaction = (event: any) => {

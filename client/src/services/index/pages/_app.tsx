@@ -93,7 +93,7 @@ export default class extends React.Component {
 
 class App extends NextApp<any> {
   componentDidMount() {
-    if(!this.props.store.authStore.token){
+    if (!this.props.store.authStore.token) {
       Router.push('/signin');
     }
   }

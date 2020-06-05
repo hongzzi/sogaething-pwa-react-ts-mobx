@@ -41,7 +41,9 @@ export default () => {
     }
   };
 
-  if (loading || error) {
+  const { findUserInfo } = data as IQueryData;
+
+  if (loading || error || !findUserInfo) {
     return (
       <Wrapper>
         <WrapperFlex>
@@ -70,7 +72,7 @@ export default () => {
     );
   }
 
-  const { findUserInfo } = data as IQueryData;
+  
 
   const handleClickTest = () => {
     console.log(data);

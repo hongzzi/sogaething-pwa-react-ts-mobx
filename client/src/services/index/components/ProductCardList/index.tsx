@@ -8,17 +8,17 @@ interface IQueryData {
 }
 
 export interface IRecentPost {
-  category: string
-  postId: string
-  user: any
-  hashTags: object[] | any
-  isBuy: boolean
-  price: number
-  saleDate: string
-  imgUrls: object[] | any
-  deal: string
-  createdDate: string
-  modifiedDate: string
+  category: string;
+  postId: string;
+  user: any;
+  hashTags: object[] | any;
+  isBuy: boolean;
+  price: number;
+  saleDate: string;
+  imgUrls: object[] | any;
+  deal: string;
+  createdDate: string;
+  modifiedDate: string;
 }
 
 export default () => {
@@ -30,25 +30,26 @@ export default () => {
   };
   if (loading || error) {
     Cards = [1, 2, 3, 4, 5, 6].map((item, i) => {
-      return <Card key={i} idx={i} cardData={null} loading/>;
+      return <Card key={i} idx={i} cardData={null} loading />;
     });
-    return (
-      <Wrapper onClick={handleClickCard}>{Cards}</Wrapper>
-    );
+    return <Wrapper onClick={handleClickCard}>{Cards}</Wrapper>;
   }
 
-  const {findRecentPosts} = data as IQueryData;
+  const { findRecentPosts } = data as IQueryData;
 
-  Cards = data!.findRecentPosts!.map((item, i) => {
-    if (data!.findRecentPosts) {
-      return <Card key={i} idx={i} cardData={item} loading={false} />;
-    }
-  });
+  if(Array.isArray(findRecentPosts)){
+    Cards = data!.findRecentPosts!.map((item, i) => {
+      if (data!.findRecentPosts) {
+        return <Card key={i} idx={i} cardData={item} loading={false} />;
+      }
+    });
+  }
+  
   return <Wrapper onClick={handleClickCard}>{Cards}</Wrapper>;
 };
 
 const Wrapper = styled.div`
-    display: block;
+  display: block;
 `;
 
 const dump = [

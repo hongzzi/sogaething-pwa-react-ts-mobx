@@ -15,9 +15,16 @@ import ProductCardList from '../components/ProductCardList';
 import SearchBar from '../components/SearchBar';
 import useStores from '../helpers/useStores';
 import ChatService from '../service/ChatService';
+import { useRouter } from 'next/router';
 
 const PageIndex: NextPage = (props) => {
   const { pageStore, authStore } = useStores();
+  const router = useRouter();
+  React.useEffect(()=>{
+    if(authStore.token === '' || !authStore.token){
+      router.push('/signin');
+    }
+  });
   const handleMoreCards = () => {
   };
   return (

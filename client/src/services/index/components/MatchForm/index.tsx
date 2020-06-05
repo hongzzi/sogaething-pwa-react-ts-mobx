@@ -32,7 +32,7 @@ export default (props: IMatchFormProps) => {
         if(targetValue.startsWith('0')){
             parseValue = Number.parseInt(targetValue);
         }
-        matchStore.setMinPrice(parseValue)
+        matchStore.setMinPrice(Number.parseInt(parseValue))
         setMatch(store.matchStore.getMatch());
     }
     const handleChangeMaxPrice = (event: any) => {
@@ -41,7 +41,7 @@ export default (props: IMatchFormProps) => {
         if(targetValue.startsWith('0')){
             parseValue = Number.parseInt(targetValue);
         }
-        matchStore.setMaxPrice(parseValue)
+        matchStore.setMaxPrice(Number.parseInt(parseValue))
         setMatch(store.matchStore.getMatch());
     }
     const handleChangeTransaction = (event: any) => {
