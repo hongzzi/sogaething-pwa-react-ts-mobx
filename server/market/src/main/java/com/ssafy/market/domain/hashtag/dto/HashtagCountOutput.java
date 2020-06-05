@@ -5,6 +5,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 public interface HashtagCountOutput {
-    Long getProduct_id();
+    String getHashtag();
     Long getCount();
 }
