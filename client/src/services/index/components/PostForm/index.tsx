@@ -127,7 +127,7 @@ export default (props: IPostFormProps) => {
                     </Select>
                 </InputContainer>
                 <InputContainer>
-                    <Input type={'number'} value={post.price + ''} placeholder={'금액'} min={0} onChange={handleChangePrice} />
+                    <Input type={'number'} value={post.price ? post.price : ''} placeholder={'금액'} min={0} onChange={handleChangePrice} />
                     {/* <label htmlFor='currency-field'>Enter Amount</label> */}
                     {/* <Input type='text' name='currency-field' id='currency-field' pattern='^\$\d{1,3}(,\d{3})*(\.\d+)?$' value='' data-type='currency' placeholder='$1,000,000.00' prefix={'₩'} /> */}
                 </InputContainer>

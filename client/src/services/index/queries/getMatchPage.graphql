@@ -30,6 +30,7 @@ query getMatching{
 }
 
 query getMatchResults($input: Int!){
+    findAllMatchingHashtagByMatchingId(matchingId: $input)
     matchThings(matchingId: $input) {
             postId
             title

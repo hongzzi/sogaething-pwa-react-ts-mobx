@@ -3,6 +3,7 @@ import styled from '~/styled';
 
 import CircleImageView from '../CircleImageView';
 
+import Avatar from '../../assets/img/no-avatar.png?url';
 import Pin from '../../assets/img/pin-fill.png?url';
 
 export interface IPostDetailUserCardProps {
@@ -20,11 +21,10 @@ export interface IUser {
 export default class PostDetailUserCard extends React.Component<IPostDetailUserCardProps> {
   public render() {
     const { user } = this.props;
-    const nullImgUrl = 'https://pngimage.net/wp-content/uploads/2018/05/default-user-profile-image-png-6.png';
     return (
       <Wrapper>
         <GridImgWrapper>
-          <CircleImageView src={user.imgurl == null ? nullImgUrl : user.imgurl} size={2.4} radius={50} />
+          <CircleImageView src={user.imgurl == null ? Avatar : user.imgurl} size={2.4} radius={50} />
         </GridImgWrapper>
         <GridTopLineWrapper>
           <UserNameTextLine>{user.name}</UserNameTextLine>
@@ -54,7 +54,7 @@ const Wrapper = styled.div`
     width: 100%;
     height: 4.5rem;
     border-bottom: solid 1px #ccc;
-    padding: 1rem 0.5rem;
+    padding: 0.7rem 0.5rem;
 `
 
 const GridImgWrapper = styled.div`
