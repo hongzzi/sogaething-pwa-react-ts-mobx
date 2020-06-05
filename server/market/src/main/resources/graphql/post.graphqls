@@ -124,4 +124,5 @@ type Query {
     findByDetailPost(postId:Int):PostDetailOutput
     searchThings(input: HashtagInput!): [PostMetaOutput]
     matchThings(matchingId: Int!): [PostDetailOutput]
+    searchThingsByTitle(title: String!): [PostMetaOutput]
 }
