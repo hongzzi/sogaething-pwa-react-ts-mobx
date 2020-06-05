@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
@@ -192,6 +193,34 @@ public class PostQuery implements GraphQLQueryResolver {
             }
         }
         return postDetailOutputs;
+    }
+
+    public List<PostMetaOutput> searchThingsByTitle(String title){
+//        List<PostMetaOutput> outputs = new ArrayList<>();
+        List<Post> posts = postRepository.findByTitleContaining(title);
+        List<PostMetaOutput> outputs = posts.stream().map( post -> {
+            Product product = productRepository.findByPost(post);
+            File file = fileRepository.findTop1ByProduct(product);
+
+            PostMetaOutput postMetaOutput = PostMetaOutput.builder()
+                    .postId(post.getPostId())
+                    .title(post.getTitle())
+                    .category(product.getCategory())
+                    .imgPath(file.getImgPath())
+                    .price(productRepository.totalPriceByPostId(post))
+                    .hashtag(hashtagRepository.findDistinctByHashtag(product.getProductId()))
+                    .isBuy(post.isBuy())
+                    .viewCount(post.getViewCount())
+                    .deal(post.getDeal())
+                    .dealState(post.getDealState())
+                    .saleDate(post.getSaleDate().toString())
+                    .transaction(post.getTransaction())
+                    .createdDate(post.getCreatedDate().toString())
+                    .modifiedDate(post.getModifiedDate().toString())
+                    .build();
+            return postMetaOutput;
+        }).collect(Collectors.toList());
+        return outputs;
     }
 
 }
