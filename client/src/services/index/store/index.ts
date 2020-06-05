@@ -6,7 +6,7 @@ import MatchStore, { initialMatch } from './MatchStore';
 import PageStore, { initialPage } from './PageStore';
 import PostStore, { initialPost } from './PostStore';
 import CardStore from './CardStore';
-import VisiableStore, { initialVisiable } from './visiableStore';
+import VisiableStore from './VisiableStore';
 
 const isServer = typeof window === 'undefined';
 
