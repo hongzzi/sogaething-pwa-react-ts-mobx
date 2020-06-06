@@ -1,0 +1,14 @@
+query getPikachu {
+  pokemon(name: "Pikachu") {
+    id
+    number
+    name
+  }
+}
+
+
+query getHello($input: test!){
+    hello2(input: $input){
+        name
+    }
+}

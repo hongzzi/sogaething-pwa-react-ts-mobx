@@ -1,19 +1,30 @@
 package com.ssafy.market.domain.chat.domain;
 
 import lombok.Data;
+import org.springframework.data.mongodb.core.mapping.Document;
+
+import java.io.Serializable;
+import java.time.LocalDateTime;
 
 @Data
-public class ChatMessage {
+@Document(collection = "chatMessage")
+public class ChatMessage implements Serializable {
+    private static final long serialVersionUID = 1L;
     private MessageType type;
-    private String content;
+    private Long roomId;
     private String sender;
+    private String message;
+    private String createdDateTime;
+
 
     @Override
     public String toString() {
         return "ChatMessage{" +
                 "type=" + type +
-                ", content='" + content + '\'' +
+                ", roomId='" + roomId + '\'' +
                 ", sender='" + sender + '\'' +
+                ", message='" + message + '\'' +
+                ", createdDateTime='" + createdDateTime + '\'' +
                 '}';
     }
 }

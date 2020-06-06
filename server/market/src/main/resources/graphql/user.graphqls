@@ -1,0 +1,78 @@
+type User {
+    userId: ID
+    name: String
+    email: String
+    imageUrl: String
+    provider: String
+    providerId: Int
+    phone: String
+    address: String
+    trust: Int
+}
+
+type LoginUserOutput {
+    token: String!
+}
+
+
+type UserOutput {
+    userId: ID
+    name: String
+    email: String
+    imageUrl: String
+    provider: String
+    providerId: Int
+    phone: String
+    address: String
+    trust: Int
+}
+
+#type Output {
+#    state: String
+#    userId : Int
+#}
+
+type UserInfoOutput {
+    name: String
+    address: String
+    trust: Int
+    numOfPosts: Int
+}
+type UserLogout{
+    state: String
+    userId: Int
+}
+type UserInfoResponse {
+    userId: Int
+    name: String
+    address: String
+    trust: Int
+    numOfPosts: Int
+    imgurl: String
+}
+
+input LoginUserInput {
+    provider: String
+    token: String
+}
+
+input UpdateUserInput{
+    name: String
+    email : String
+    imageUrl: String
+    phone: String
+    address: String
+}
+
+extend type Query {
+    findAllUsers: [User]
+    findAllUser: [UserOutput]
+    findUserInfo: UserInfoResponse
+}
+
+extend type Mutation {
+    logoutUser(userId: Int!): UserLogout!
+    loginUser(input: LoginUserInput!): LoginUserOutput
+    updateUser(input: UpdateUserInput!): UserOutput
+    deleteUser(id: Int!): Int
+}

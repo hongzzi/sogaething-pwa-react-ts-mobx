@@ -1,93 +1,415 @@
-"""Represents a Pokémon's attack types"""
-type Attack {
-  """The name of this Pokémon attack"""
+# source: http://3.34.131.20:8080/graphql
+# timestamp: Wed Jun 03 2020 17:51:24 GMT+0900 (대한민국 표준시)
+
+"""This directive allows results to be deferred during execution"""
+directive @defer on FIELD
+
+type Autocomplete {
+  hashtag: String
+  count: Int
+}
+
+input CreateDetailDealInput {
+  postId: Int!
+}
+
+input CreateFileInput {
+  productId: Int
+  imgPath: String
+}
+
+input CreateHashtagInput {
+  productId: Int
+  hashtag: String
+}
+
+input CreateJjimInput {
+  postId: Int!
+}
+
+input CreatePostInput {
+  title: String!
+  category: String!
+  imgPaths: [String]
+  hashtag: [String]
+  contents: String!
+  transaction: String!
+  price: Int!
+}
+
+input CreateProductInput {
+  postId: Int!
+  price: Int!
+  name: String!
+  category: String!
+}
+
+type DetailDeal {
+  dealId: ID!
+  post: Post!
+  user: User!
+  createdDate: String
+  modifiedDate: String
+}
+
+type DetailOutput {
+  dealId: ID
+  postId: Int
+  imgPaths: [String]
+  title: String
+  category: String
+  hashtag: [String]
+  contents: String
+  price: Int
+  buyerId: Int
+  sellerId: Int
+  user: UserInfoResponse
+  createdDate: String
+  modifiedDate: String
+}
+
+type File {
+  fileId: ID
+  product: Product
+  imgPath: String
+}
+
+type FileOutput {
+  fileId: Int
+  productId: Int
+  imgPath: String
+}
+
+type Hashtag {
+  hashtagId: ID
+  product: Product
+  hashtag: String
+}
+
+input HashtagInput {
+  hashtag: [String]
+}
+
+type HashtagOutput {
+  hashtagId: ID
+  productId: Int
+  hashtag: String
+}
+
+type HistoryOutput {
+  userId: Int
+  postId: Int
+  createdDate: String
+  modifiedDate: String
+}
+
+type Jjim {
+  jjimId: ID
+  user: User
+  post: Post
+  createdDate: String
+  modifiedDate: String
+}
+
+type JjimOutput {
+  jjimId: Int
+  postId: Int
+  title: String
+  category: String
+  imgPath: String
+  price: Int
+  createdDate: String
+  modifiedDate: String
+}
+
+input LoginUserInput {
+  provider: String
+  token: String
+}
+
+type LoginUserOutput {
+  token: String!
+}
+
+type Matching {
+  matchingId: ID
+  user: User
+  category: String
+  minPrice: Int
+  maxPrice: Int
+  transaction: String
+  createdDate: String
+  modifiedDate: String
+}
+
+input MatchInput {
+  category: String
+  minPrice: Int
+  maxPrice: Int
+  hashtag: [String]
+  transaction: String
+}
+
+type MatchResponse {
+  matchingId: Int
+  category: String
+  minPrice: Int
+  maxPrice: Int
+  hashtag: [String]
+  transaction: String
+  createdDate: String
+  possibility: String
+}
+
+type Mutation {
+  updateView(postId: Int!): Int!
+  updateIsBuy(postId: Int!): Int!
+  createPost(input: CreatePostInput!): Output
+  updatePost(input: UpdatePostInput!): PostMetaOutput
+  deletePost(postId: Int!): Output
+  createFile(input: CreateFileInput!): FileOutput
+  updateFile(input: UpdateFileInput!): FileOutput
+  deleteFile(id: Int!): Int
+  createDetailDeal(input: CreateDetailDealInput!): DetailOutput
+  deleteDetailDeal(id: Int!): Int!
+  logoutUser(userId: Int!): UserLogout!
+  loginUser(input: LoginUserInput!): LoginUserOutput
+  updateUser(input: UpdateUserInput!): UserOutput
+  deleteUser(id: Int!): Int
+  createHashtag(input: CreateHashtagInput!): HashtagOutput
+  updateHashtag(input: UpdateHashtagInput!): HashtagOutput
+  deleteHashtag(id: Int!): Int
+  createMatching(input: MatchInput!): Matching
+  deleteMatching(matchingId: Int): Int
+  updateProduct(input: UpdateProductInput!): ProductOutput
+  createProduct(input: CreateProductInput!): ProductOutput
+  deleteProduct(id: Int!): Int
+  createJjim(input: CreateJjimInput!): Jjim
+  deleteJjim(jjimId: Int): Int
+  createHistory(postId: Int!): HistoryOutput
+}
+
+type Output {
+  state: String
+  postId: Int
+}
+
+type Post {
+  postId: ID
+  userId: Int
+  isBuy: Boolean
+  title: String
+  saleDate: String
+  contents: String
+  viewCount: Int
+  deal: String
+  dealState: String
+  createdDate: String
+  modifiedDate: String
+}
+
+type PostDetailOutput {
+  postId: ID
+  title: String
+  category: String
+  imgPaths: [String]
+  hashtag: [String]
+  contents: String
+  price: Int
+  user: UserInfoResponse
+  viewCount: Int
+  isBuy: Boolean
+  deal: String
+  dealState: String
+  saleDate: String
+  transaction: String
+  createdDate: String
+  modifiedDate: String
+}
+
+type PostMetaOutput {
+  postId: Int
+  title: String
+  category: String
+  imgPath: String
+  price: Int
+  hashtag: [String]
+  isBuy: Boolean
+  viewCount: Int
+  deal: String
+  dealState: String
+  saleDate: String
+  transaction: String
+  createdDate: String
+  modifiedDate: String
+}
+
+type PostOutput {
+  postId: ID!
+  userId: Int
+
+  """게시자 id"""
+  isBuy: Boolean
+
+  """구매 or 판매"""
+  title: String
+  contents: String
+  deal: String
+  dealState: String
+  category: String
   name: String
-
-  """The type of this Pokémon attack"""
-  type: String
-
-  """The damage of this Pokémon attack"""
-  damage: Int
+  hashtag: [String]
+  imgPaths: [File]
 }
 
-"""Represents a Pokémon"""
-type Pokemon {
-  """The ID of an object"""
-  id: ID!
-
-  """The identifier of this Pokémon"""
-  number: String
-
-  """The name of this Pokémon"""
+type Product {
+  productId: ID
+  post: Post
   name: String
-
-  """The minimum and maximum weight of this Pokémon"""
-  weight: PokemonDimension
-
-  """The minimum and maximum weight of this Pokémon"""
-  height: PokemonDimension
-
-  """The classification of this Pokémon"""
-  classification: String
-
-  """The type(s) of this Pokémon"""
-  types: [String]
-
-  """The type(s) of Pokémons that this Pokémon is resistant to"""
-  resistant: [String]
-
-  """The attacks of this Pokémon"""
-  attacks: PokemonAttack
-
-  """The type(s) of Pokémons that this Pokémon weak to"""
-  weaknesses: [String]
-  fleeRate: Float
-
-  """The maximum CP of this Pokémon"""
-  maxCP: Int
-
-  """The evolutions of this Pokémon"""
-  evolutions: [Pokemon]
-
-  """The evolution requirements of this Pokémon"""
-  evolutionRequirements: PokemonEvolutionRequirement
-
-  """The maximum HP of this Pokémon"""
-  maxHP: Int
-  image: String
+  price: Int
+  category: String
 }
 
-"""Represents a Pokémon's attack types"""
-type PokemonAttack {
-  """The fast attacks of this Pokémon"""
-  fast: [Attack]
-
-  """The special attacks of this Pokémon"""
-  special: [Attack]
-}
-
-"""Represents a Pokémon's dimensions"""
-type PokemonDimension {
-  """The minimum value of this dimension"""
-  minimum: String
-
-  """The maximum value of this dimension"""
-  maximum: String
-}
-
-"""Represents a Pokémon's requirement to evolve"""
-type PokemonEvolutionRequirement {
-  """The amount of candy to evolve"""
-  amount: Int
-
-  """The name of the candy to evolve"""
+type ProductOutput {
+  productId: ID
+  postId: Int
   name: String
+  price: Int
+  category: String
 }
 
-"""Query any Pokémon by number or name"""
 type Query {
-  query: Query
-  pokemons(first: Int!): [Pokemon]
-  pokemon(id: String, name: String): Pokemon
+  findAllPosts: [Post]
+  findAllPost: [PostOutput]
+  countPostByUserId(userId: Int): Int
+  findPostByPostId(id: Int): PostOutput
+  findRecentPosts: [RecentPostResponse]
+  findPostListByUserId(userId: Int): [PostMetaOutput]
+  findByDetailPost(postId: Int): PostDetailOutput
+  searchThings(input: HashtagInput!): [PostMetaOutput]
+  matchThings(matchingId: Int!): [PostDetailOutput]
+  findAllFile: [FileOutput]
+  findAllFiles: [File]
+  findFileById(id: Int): FileOutput
+  findAllDetailDeals: [DetailDeal]
+  findAllDetailDeal: [DetailOutput]
+  findDetailDealByPost(postId: Int): DetailOutput
+  findAllUsers: [User]
+  findAllUser: [UserOutput]
+  findUserInfo: UserInfoResponse
+  findAllHashtags: [Hashtag]
+  findAllHashtag: [HashtagOutput]
+  findByHashtagId(id: Int): HashtagOutput
+  autocomplete(hashtag: String!): [Autocomplete]
+  findAllMatchingHashtagByMatchingId(matchingId: Int): [String]
+  findMatchingByUserId: [MatchResponse]
+  findAllProduct: [ProductOutput]
+  findAllProducts: [Product]
+  findByProductId(id: Int): ProductOutput
+  findPostByUserId(userId: Int): [JjimOutput]
+  findUserHistoryByUserId: [UserHistoryResponse]
 }
 
+type RecentPostResponse {
+  postId: String
+  user: User
+  hashTags: [Hashtag]
+  isBuy: Boolean
+  price: Int
+  saleDate: String
+  imgUrls: [File]
+  category: String
+  deal: String
+  createdDate: String
+  modifiedDate: String
+}
+
+input UpdateFileInput {
+  fileId: Int
+  imgPath: String
+}
+
+input UpdateHashtagInput {
+  hashtagId: Int
+  hashtag: String
+}
+
+input UpdatePostInput {
+  postId: Int!
+  title: String!
+  category: String!
+  imgPaths: [String]
+  hashtag: [String]
+  contents: String!
+  transaction: String!
+  price: Int!
+}
+
+input UpdateProductInput {
+  productId: ID!
+  postId: Int!
+  price: Int!
+  name: String!
+  category: String!
+}
+
+input UpdateUserInput {
+  imageUrl: String
+  phone: String
+  address: String
+  trust: Int
+}
+
+type User {
+  userId: ID
+  name: String
+  email: String
+  imageUrl: String
+  provider: String
+  providerId: Int
+  phone: String
+  address: String
+  trust: Int
+}
+
+type UserHistoryResponse {
+  user: User
+  postId: ID
+  isBuy: Boolean
+  title: String
+  saleDate: String
+  contents: String
+  viewCount: Int
+  deal: String
+  createdDate: String
+  modifiedDate: String
+  hashTags: [Hashtag]
+  price: Int
+  imgUrls: [File]
+}
+
+type UserInfoResponse {
+  userId: Int
+  name: String
+  address: String
+  trust: Int
+  numOfPosts: Int
+  imgurl: String
+}
+
+type UserLogout {
+  state: String
+  userId: Int
+}
+
+type UserOutput {
+  userId: ID
+  name: String
+  email: String
+  imageUrl: String
+  provider: String
+  providerId: Int
+  phone: String
+  address: String
+  trust: Int
+}

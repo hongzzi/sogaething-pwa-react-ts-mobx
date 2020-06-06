@@ -1,0 +1,58 @@
+mutation createMatching($input: MatchInput!) {
+    createMatching(input: $input) {
+        matchingId
+        user {
+                userId
+                name
+                imageUrl
+                trust
+        }
+        category
+        minPrice
+        maxPrice
+        transaction
+        createdDate
+        modifiedDate
+    }
+}
+
+query getMatching{
+    findMatchingByUserId{
+        matchingId
+        category
+        minPrice
+        maxPrice
+        hashtag
+        transaction
+        createdDate
+        possibility
+    }
+}
+
+query getMatchResults($input: Int!){
+    findAllMatchingHashtagByMatchingId(matchingId: $input)
+    matchThings(matchingId: $input) {
+            postId
+            title
+            category
+            imgPaths
+            hashtag
+            contents
+            price
+            user {
+                name
+                address
+                trust
+                numOfPosts
+                imgurl
+            }
+            viewCount
+            isBuy
+            deal
+            dealState
+            saleDate
+            transaction
+            createdDate
+            modifiedDate
+    }
+}

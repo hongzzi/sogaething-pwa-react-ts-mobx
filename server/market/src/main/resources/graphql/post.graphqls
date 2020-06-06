@@ -1,28 +1,128 @@
 type Post {
-    post_id : ID!
-    uploader_id : Int!
-    is_buy : Boolean!
-    title : String!
-    sale_date : String!
-    contents : String!
-    view_count : Int!
-    enroll_date : String
-    modify_date : String
-    deal : String!
+    postId: ID
+    userId: Int
+    isBuy: Boolean
+    title: String
+    saleDate: String
+    contents: String
+    viewCount: Int
+    deal: String
+    dealState: String
+    createdDate: String
+    modifiedDate: String
 }
 
-type Query {
-	findAllPosts: [Post]!
+input UpdatePostInput {
+    postId: Int!
+    title : String!
+    category: String!
+    imgPaths : [String]
+    hashtag: [String]
+    contents : String!
+    transaction : String!
+    price: Int!
 }
 
 input CreatePostInput {
-    uploader_id : Int!
     title : String!
-    sale_date : String!
+    category: String!
+    imgPaths : [String]
+    hashtag: [String]
     contents : String!
-    deal : String!
+    transaction : String!
+    price: Int!
+}
+
+input HashtagInput {
+    hashtag: [String]
+}
+
+type Output {
+    state: String
+    postId : Int
+}
+
+type PostOutput {
+    postId: ID!
+    userId: Int #게시자 id
+    isBuy: Boolean # 구매 or 판매
+    title: String
+    contents: String
+    deal: String
+    dealState: String
+    category: String
+    name: String
+    hashtag: [String]
+    imgPaths: [File] # 나중에 바뀔 부분
+}
+
+type PostDetailOutput {
+    postId: ID
+    title: String
+    category: String
+    imgPaths: [String]
+    hashtag: [String]
+    contents: String
+    price: Int
+    user: UserInfoResponse
+    viewCount: Int
+    isBuy: Boolean
+    deal: String
+    dealState: String
+    saleDate: String
+    transaction: String
+    createdDate: String
+    modifiedDate: String
+}
+
+type PostMetaOutput {
+    postId: Int
+    title: String
+    category: String
+    imgPath: String
+    price: Int
+    hashtag: [String]
+    isBuy: Boolean
+    viewCount: Int
+    deal: String
+    dealState: String
+    saleDate: String
+    transaction: String
+    createdDate: String
+    modifiedDate: String
+}
+
+type RecentPostResponse {
+    postId: String
+    user: User
+    hashTags: [Hashtag]
+    isBuy: Boolean
+    price: Int
+    saleDate: String
+    imgUrls: [File]
+    category: String
+    deal: String
+    createdDate: String
+    modifiedDate: String
 }
 
 type Mutation {
-    createPost(input: CreatePostInput!): Post
+    updateView(postId: Int!): Int!
+    updateIsBuy(postId: Int!): Int!
+    createPost(input: CreatePostInput!): Output
+    updatePost(input: UpdatePostInput!): PostMetaOutput
+    deletePost(postId: Int!): Output
+}
+
+type Query {
+    findAllPosts: [Post]
+    findAllPost: [PostOutput]
+    countPostByUserId(userId : Int): Int
+    findPostByPostId(id: Int): PostOutput
+    findRecentPosts: [RecentPostResponse]
+    findPostListByUserId(userId: Int): [PostMetaOutput]
+    findByDetailPost(postId:Int):PostDetailOutput
+    searchThings(input: HashtagInput!): [PostMetaOutput]
+    matchThings(matchingId: Int!): [PostDetailOutput]
+    searchThingsByTitle(title: String!): [PostMetaOutput]
 }

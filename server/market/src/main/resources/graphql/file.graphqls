@@ -1,0 +1,33 @@
+type File {
+    fileId: ID
+    product: Product
+    imgPath: String
+}
+
+type FileOutput {
+    fileId: Int
+    productId: Int
+    imgPath: String
+}
+
+input CreateFileInput{
+    productId: Int
+    imgPath: String
+}
+
+input UpdateFileInput {
+    fileId: Int
+    imgPath: String
+}
+
+extend type Mutation {
+    createFile(input: CreateFileInput!): FileOutput
+    updateFile(input: UpdateFileInput!): FileOutput
+    deleteFile(id: Int!): Int
+}
+
+extend type Query {
+    findAllFile: [FileOutput]
+    findAllFiles: [File]
+    findFileById(id: Int): FileOutput
+}

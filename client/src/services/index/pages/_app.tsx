@@ -1,25 +1,46 @@
-import ApolloClient from 'apollo-client'
-import pickBy from 'lodash/pickBy'
-import { Provider } from 'mobx-react'
-import { Container, default as NextApp } from 'next/app'
-import Head from 'next/head'
-import React, { Fragment } from 'react'
-import { ApolloProvider as ApolloHookProvider, getMarkupFromTree } from 'react-apollo-hooks'
-import { renderToString as renderFunction } from 'react-dom/server'
-import { ThemeProvider } from 'styled-components'
-import GlobalStyle from '~/styled/global'
-import baseTheme from '~/styled/themes/base'
-import { createApolloClient } from '../apollo'
-import FaviconImage from '../assets/favicon.png?url'
-import initializeStore, { RootStore } from '../store'
+import ApolloClient from 'apollo-client';
+import pickBy from 'lodash/pickBy';
+import { toJS } from 'mobx';
+import { Provider } from 'mobx-react';
+import 'moment/locale/ko';
+import { Container, default as NextApp } from 'next/app';
+import Head from 'next/head';
+import Router from 'next/router';
+import React, { Fragment } from 'react';
+import {
+  ApolloProvider as ApolloHookProvider,
+  getMarkupFromTree,
+} from 'react-apollo-hooks';
+import { CookiesProvider } from 'react-cookie';
+import { renderToString as renderFunction } from 'react-dom/server';
+import { ThemeProvider } from 'styled-components';
+import GlobalStyle from '~/styled/global';
+import baseTheme from '~/styled/themes/base';
+import { createApolloClient } from '../apollo';
+import FaviconImage from '../assets/favicon.png?url';
+import initializeStore, { IEnvironments, RootStore } from '../store';
 
 export default class extends React.Component {
   static async getInitialProps(appContext: any) {
     const appProps = await App.getInitialProps(appContext);
-    const { Component, router } = appContext;
+    const { Component, router, ctx } = appContext;
+
+    const isServer = typeof window === 'undefined';
+    const navState = getRouteNavIndex(router.asPath);
+
     const mobxStore = initializeStore();
-    const apolloClient = createApolloClient(mobxStore);
+    mobxStore.pageStore.clickedIdx = navState;
+    try {
+      if (isServer) {
+        await mobxStore.authStore.nextServerInit(ctx.req, ctx.res);
+      }
+    } catch (error) {
+      console.error('[Error 29948] store init failed');
+      // console.error(error);
+    }
+
     appContext.ctx.mobxStore = mobxStore;
+    const apolloClient = createApolloClient(mobxStore);
 
     try {
       await getMarkupFromTree({
@@ -33,32 +54,30 @@ export default class extends React.Component {
           />
         ),
         renderFunction,
-      })
-
+      });
     } catch (error) {
       // tslint:disable-next-line:no-console
-      console.error('[Error 29948] Operating queries for SSR failed')
+      // console.error(error);
+      console.error('[Error 29948] Operating queries for SSR failed');
     }
 
-    Head.rewind()
+    Head.rewind();
 
     return {
       apolloState: apolloClient.cache.extract(),
-      mobxStore,
+      store: mobxStore,
       ...appProps,
-    }
+    };
   }
 
-  apolloClient: ApolloClient<any>
-  store: RootStore
+  apolloClient: ApolloClient<any>;
+  store: RootStore;
 
   constructor(props: any) {
-    super(props)
+    super(props);
     const isServer = typeof window === 'undefined';
-    this.store = isServer
-      ? props.mobxStore
-      : initializeStore(props.mobxStore);
-    this.apolloClient = createApolloClient(this.store, props.apolloState)
+    this.store = isServer ? props.store : new RootStore(props.store);
+    this.apolloClient = createApolloClient(this.store, props.apolloState);
   }
 
   render() {
@@ -68,18 +87,22 @@ export default class extends React.Component {
         apolloClient={this.apolloClient}
         store={this.store}
       />
-    )
+    );
   }
 }
 
 class App extends NextApp<any> {
+  componentDidMount() {
+    if (!this.props.store.authStore.token) {
+      Router.push('/signin');
+    }
+  }
   render() {
-    const { Component, pageProps } = this.props
-
+    const { Component, pageProps } = this.props;
     return (
       <Container>
         <Head>
-          <title>Hello, Next.js</title>
+          <title>소개띵</title>
           <link rel='shortcut icon' href={FaviconImage} />
         </Head>
         <ApolloHookProvider client={this.props.apolloClient}>
@@ -94,10 +117,23 @@ class App extends NextApp<any> {
         </ApolloHookProvider>
         <noscript>You should use javascript</noscript>
       </Container>
-    )
+    );
   }
 }
 
-// function extractNextEnvironments(environments: IEnvironments): IEnvironments {
-//   return pickBy(environments, (_value, key) => key.indexOf('NEXT_APP') !== -1)
-// }
+function extractNextEnvironments(environments: IEnvironments): IEnvironments {
+  return pickBy(environments, (_value, key) => key.indexOf('NEXT_APP') !== -1);
+}
+
+function getRouteNavIndex(path: string): number {
+  if (path.startsWith('/chat')) {
+    return 3;
+  } else if (path.startsWith('/category')) {
+    return 1;
+  } else if (path.startsWith('/user')) {
+    return 4;
+  } else if (path.startsWith('')) {
+    return 0;
+  }
+  return 0;
+}

@@ -1,0 +1,48 @@
+query getPost($postId: Int) {
+    findByDetailPost(postId: $postId) {
+        postId
+        title
+        category
+        imgPaths
+        hashtag
+        contents
+        price
+        user{
+            userId
+            name
+            address
+            trust
+            numOfPosts
+            imgurl
+        }
+        viewCount
+        isBuy
+        deal
+        dealState
+        saleDate
+        transaction
+        createdDate
+        modifiedDate
+    }
+}
+
+mutation createPost($input: CreatePostInput!) {
+    createPost(input: $input) {
+        state
+        postId
+    }
+}
+
+mutation createHistory($input: Int!) {
+    createHistory(postId: $input) {
+        userId
+        postId
+        createdDate
+        modifiedDate
+    }
+}
+
+mutation updateView($postId: Int!){
+    updateView(postId: $postId)
+}
+

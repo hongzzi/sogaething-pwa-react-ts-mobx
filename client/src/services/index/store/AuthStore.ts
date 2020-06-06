@@ -1,17 +1,31 @@
 import autobind from 'autobind-decorator';
+import { Request, Response } from 'express-serve-static-core'
 import jwtDecode from 'jwt-decode';
-import { action, observable, reaction } from 'mobx';
-import AuthService from '../service/AuthService';
+import { action, autorun, observable, reaction, toJS } from 'mobx';
+import { checkTokenIsExpired } from '../helpers';
 
 export interface IAuth {
-  email: string;
-  id: number;
+  sub: string;
+  userId: number;
+  userName: string;
 }
 
-export const initialAuth: IAuth = {
-  email: '',
-  id: -1,
+export interface IAuthResponseDto {
+  loginUser: {
+    token: string,
+  }
+}
+
+export const initialAuth = {
+  token: '',
+  auth: {},
 };
+
+export interface IToken {
+  token: string;
+}
+
+export type Provider = 'kakao' | 'google' | 'naver';
 
 @autobind
 class AuthStore {
@@ -19,32 +33,28 @@ class AuthStore {
   @observable refreshToken: string = '';
   @observable auth: IAuth | undefined;
   @observable email = '';
-  @observable password = '';
-  private authService = new AuthService();
+  @observable provider: string = '';
 
-  constructor(initialData = initialAuth, root: any) {
-    if (this.token) {
-      this.auth = jwtDecode(this.token) as IAuth;
+  constructor(root: any, initialData?: AuthStore) {
+    if (initialData) {
+      this.auth = initialData!.auth;
+      this.token = initialData!.token;
+    } else {
+      this.auth = {
+        sub: '',
+        userId: 0,
+        userName: '',
+      }
+      this.token = '';
     }
-
-    reaction(
-      () => this.token,
-      (token) => {
-        if (token != null) {
-          window.sessionStorage.setItem('jwt', token);
-        }
-      },
-    );
   }
 
   isLoggedIn() {
     return this.token != null;
   }
 
-  async refreshTokens(_tokens: {
-    accessToken: string;
-    refreshTokens: string;
-  }): Promise<any> {
+  @action
+  async refreshTokens(_tokens: IToken): Promise<any> {
     // will be type change
     return {
       accessToken: '',
@@ -66,19 +76,17 @@ class AuthStore {
   // }
 
   @action
-  getTest() {
-    console.log(this.authService.test);
+  setProvider(provider: Provider) {
+    this.provider = provider;
   }
 
   @action
   resetPasswordAndEmail() {
-    this.password = '';
     this.email = '';
   }
 
   @action
   setPassword(pw: string) {
-    this.password = pw;
   }
 
   @action
@@ -89,7 +97,20 @@ class AuthStore {
   @action
   setToken(token: string) {
     this.token = token;
-    this.auth = jwtDecode(token) as IAuth;
+    this.setAuth();
+  }
+  @action
+  setAuth() {
+    if (this.token) {
+      this.auth = jwtDecode(this.token) as IAuth;
+    }
+  }
+
+  @action
+  getAuth() {
+    if (this.token) {
+      return this.auth;
+    }
   }
 
   @action
@@ -102,6 +123,36 @@ class AuthStore {
     window.sessionStorage.removeItem('jwt');
     this.token = '';
     this.auth = undefined;
+  }
+  @action
+  async nextServerInit(req: Request, res: Response) {
+    try {
+      if (!req || !res) {
+        throw new Error()
+      }
+      if (!req.cookies.token) {
+        throw new Error()
+      }
+
+      const tokens: IToken = {
+        token: req.cookies.token,
+      }
+      const isRefreshTokenExpired = checkTokenIsExpired(tokens.token)
+      const isAccessTokenExpired = checkTokenIsExpired(tokens.token)
+
+      if (isRefreshTokenExpired) {
+        throw new Error()
+      }
+
+      if (isAccessTokenExpired) {
+        const refreshedTokens = await this.refreshTokens(tokens)
+
+        tokens.token = refreshedTokens.token
+      }
+      this.setToken(tokens.token);
+    } catch (error) {
+      console.error(error);
+    }
   }
 }
 

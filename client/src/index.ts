@@ -1,3 +1,4 @@
+import { NEXT_APP_STAGE } from './services/index/helpers/config';
 import bodyParser from 'body-parser'
 import cookieParser from 'cookie-parser'
 import cors from 'cors';
@@ -9,7 +10,7 @@ import path from 'path'
 import api from './api'
 import conf from './next.config'
 
-const dev = process.env.NODE_ENV !== 'production'
+const dev = NEXT_APP_STAGE !== 'production'
 const port = dev ? 3000 : 80
 
 main()
@@ -28,7 +29,9 @@ async function main() {
     const filePath = path.join(__dirname, 'dist', 'service-worker.js')
     app.serveStatic(req, res, filePath)
   })
-  server.use(cors())
+  server.use(cors({
+    credentials: true,
+  }))
   server.use(bodyParser.json())
   server.use(bodyParser.urlencoded({ extended: true }))
   server.use(cookieParser())

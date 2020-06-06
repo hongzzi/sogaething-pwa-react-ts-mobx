@@ -1,0 +1,40 @@
+type Product {
+    productId: ID
+    post: Post
+    name: String
+    price: Int
+    category: String
+}
+
+input CreateProductInput {
+    postId: Int!
+    price: Int!
+    name: String!
+    category: String!
+}
+
+input UpdateProductInput {
+    productId: ID!
+    postId: Int!
+    price: Int!
+    name: String!
+    category: String!
+}
+
+type ProductOutput {
+    productId: ID
+    postId: Int
+    name: String
+    price: Int
+    category: String
+}
+extend type Mutation {
+    updateProduct(input: UpdateProductInput!) : ProductOutput
+    createProduct(input: CreateProductInput!) : ProductOutput
+    deleteProduct(id: Int!) : Int
+}
+extend type Query {
+    findAllProduct: [ProductOutput]
+    findAllProducts: [Product]
+    findByProductId(id: Int): ProductOutput
+}

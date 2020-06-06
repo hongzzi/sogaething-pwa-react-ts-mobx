@@ -1,8 +1,11 @@
 package com.ssafy.market.domain.post.domain;
 
 import com.ssafy.market.domain.BaseTimeEntity;
+import com.ssafy.market.domain.product.domain.Product;
+import com.ssafy.market.domain.user.domain.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -11,57 +14,88 @@ import java.util.Date;
 @Getter
 @NoArgsConstructor
 @Entity
+@Table(name="post")
 public class Post extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long post_id;
+    @Column(name = "postId")
+    private Long postId;
 
-    private Long uploader_id;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
-    private boolean is_buy;
+    @Column(name = "user_id", insertable = false, updatable = false, nullable = false)
+    private Long userId;
 
+    @Column(name = "is_buy")
+    private boolean isBuy;
+
+    @Column(name = "title")
     private String title;
 
-    private Date sale_date;
+    @Column(name = "sale_date")
+    private Date saleDate;
 
+    @Column(name = "contents")
     private String contents;
 
-    private Long view_count;
+    @Column(name = "view_count")
+    private Long viewCount;
 
-//    @Temporal(TemporalType.TIMESTAMP)
-    private Date enroll_date;
-
-    @Column(name = "modify_date", nullable = false, updatable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
-    private Timestamp modify_date;
-
+    @Column(name = "deal")
     private String deal;
 
-    private String deal_state;
+    @Column(name = "deal_state")
+    private String dealState;
 
-    public Post(Long post_id) {
-        this.post_id = post_id;
+    @Column(name = "transaction")
+    private String transaction;
+
+    public Post(Long postId) {
+        this.postId = postId;
     }
 
-    public Post(Long uploader_id, String title, Date sale_date, String contents, String deal) {
-        this.uploader_id = uploader_id;
+    public Post(Long postId, User user, boolean isBuy, String title, Date saleDate, String contents, Long viewCount, String deal, String dealState,String transaction) {
+        this.postId = postId;
+        this.user = user;
+        this.isBuy = isBuy;
         this.title = title;
-        this.sale_date = sale_date;
+        this.saleDate = saleDate;
         this.contents = contents;
+        this.viewCount = viewCount;
         this.deal = deal;
+        this.dealState = dealState;
+        this.transaction = transaction;
     }
-
-    public Post(Long post_id, Long uploader_id, boolean is_buy, String title, Date sale_date, String contents, Long view_count, Date enroll_date, Timestamp modify_date, String deal, String deal_state) {
-        this.post_id = post_id;
-        this.uploader_id = uploader_id;
-        this.is_buy = is_buy;
+    public void update(String title, String contents, String transaction){
         this.title = title;
-        this.sale_date = sale_date;
         this.contents = contents;
-        this.view_count = view_count;
-        this.enroll_date = enroll_date;
-        this.modify_date = modify_date;
-        this.deal = deal;
-        this.deal_state = deal_state;
+        this.transaction = transaction;
+    }
+    public void update(Long viewCount){
+        this.viewCount = viewCount;
+    }
+    public void update(Boolean isBuy){
+        this.isBuy = isBuy;
+    }
+    public void updateViewCount(){
+        this.viewCount = this.viewCount + 1;
+    }
+    @Override
+    public String toString() {
+        return "Post{" +
+                "postId=" + postId +
+                ", user=" + user +
+                ", userId=" + userId +
+                ", isBuy=" + isBuy +
+                ", title='" + title + '\'' +
+                ", saleDate=" + saleDate +
+                ", contents='" + contents + '\'' +
+                ", viewCount=" + viewCount +
+                ", deal='" + deal + '\'' +
+                ", dealState='" + dealState + '\'' +
+                '}';
     }
 }
 

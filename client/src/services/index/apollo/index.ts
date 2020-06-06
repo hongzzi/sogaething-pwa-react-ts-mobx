@@ -5,6 +5,8 @@ import { createHttpLink } from 'apollo-link-http'
 import fetch from 'isomorphic-unfetch'
 import { checkTokenIsExpired } from '../helpers'
 import { ENDPOINT } from './../constants';
+import { NEXT_APP_GRAPHQL_ENDPOINT } from './../helpers/config';
+import { IToken } from './../store/AuthStore';
 import { RootStore } from './../store/index';
 
 let apolloClient: ApolloClient<NormalizedCacheObject>
@@ -19,6 +21,7 @@ export function createApolloClient(store: RootStore, state?: any) {
     const httpLink = createHttpLink({
       fetch,
       uri: ENDPOINT.GRAPHQL,
+      credentials: 'include', // 서버로 부터 http only 쿠키 저장 할 수게 하는 옵션
     })
 
     const link = createAuthorizationLink(store).concat(httpLink)
@@ -46,24 +49,23 @@ export function createApolloClient(store: RootStore, state?: any) {
 
 function createAuthorizationLink(store: RootStore) {
   return setContext(async (_req, { headers }) => {
-    const tokens = {
-      accessToken : store.authStore.token,
-      refreshTokens : store.authStore.refreshToken,
+    const token: IToken = {
+      token : store.authStore.token,
     }
-    if (typeof tokens === 'undefined') {
+    if (typeof token === 'undefined') {
       return {
         headers,
       }
     }
 
-    const isStoredAccessTokenExpired = checkTokenIsExpired(tokens.accessToken)
+    const isStoredAccessTokenExpired = checkTokenIsExpired(token.token)
 
     if (!isStoredAccessTokenExpired) {
-      return createHeaders(tokens.accessToken, headers)
+      return createHeaders(token.token, headers)
 
     } else {
       try {
-        const { accessToken: refreshedAccessToken } = await store.authStore.refreshTokens(tokens)
+        const { token: refreshedAccessToken } = await store.authStore.refreshTokens(token)
 
         if (!refreshedAccessToken) {
           throw new Error()
@@ -80,8 +82,8 @@ function createAuthorizationLink(store: RootStore) {
   })
 }
 
-function createHeaders(accessToken: string, oldHeaders: any) {
+function createHeaders(token: string, oldHeaders: any) {
   return {
-    headers: { Authorization: `Bearer ${accessToken}`, ...oldHeaders },
+    headers: { Authorization: `Bearer ${token}`, ...oldHeaders },
   }
 }

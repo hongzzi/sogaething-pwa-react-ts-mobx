@@ -1,0 +1,46 @@
+type Hashtag {
+    hashtagId: ID
+    product: Product
+    hashtag: String
+}
+
+type MatchingHashtag {
+    matchingHashtagId: ID
+    matching: Matching
+    hashtag: String
+}
+
+input CreateHashtagInput {
+    productId: Int
+    hashtag: String
+}
+
+input UpdateHashtagInput {
+    hashtagId: Int
+    hashtag: String
+}
+
+type HashtagOutput {
+    hashtagId: ID
+    productId: Int
+    hashtag: String
+}
+
+type Autocomplete {
+    hashtag: String
+    count: Int
+}
+
+extend type Mutation {
+    createHashtag(input: CreateHashtagInput!): HashtagOutput
+    updateHashtag(input: UpdateHashtagInput!): HashtagOutput
+    deleteHashtag(id: Int!): Int
+}
+
+extend type Query {
+    findAllHashtags: [Hashtag]
+    findAllHashtag: [HashtagOutput]
+    findByHashtagId(id: Int): HashtagOutput
+    autocomplete(hashtag: String!): [Autocomplete]
+    findAllMatchingHashtagByMatchingId(matchingId: Int): [String]
+}

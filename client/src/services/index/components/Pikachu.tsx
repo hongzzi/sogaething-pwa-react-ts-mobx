@@ -1,14 +1,14 @@
-import { useGetPikachuQuery } from '~/generated/graphql'
+// import { useGetPikachuQuery } from '~/generated/graphql'
 import styled from '~/styled'
 import Link from 'next/link'
 
 export default function Pikachu() {
-  const { data, loading, error } = useGetPikachuQuery()
-
+  // const { data, loading, error } = useGetPikachuQuery()
+  
   return (
     <Container>
       <Caption>GraphQL Result</Caption>
-      <Link href='/user'><a>User</a></Link>
+      {/* <Link href='/user'><a>User</a></Link>
       {loading &&
         <p>loading...</p>
       }
@@ -21,7 +21,7 @@ export default function Pikachu() {
           <Line>id: {data.pokemon.id}</Line>
           <Line>number: {data.pokemon.number}</Line>
         </div>
-      )}
+      )} */}
     </Container>
   )
 }

@@ -1,0 +1,61 @@
+query getUserInfo {
+  findUserInfo {
+    name
+    address
+    trust
+    numOfPosts
+    imgurl
+  }
+}
+
+query getHistory {
+  findUserHistoryByUserId {
+    postId
+    isBuy
+    title
+    saleDate
+    viewCount
+    deal
+    createdDate
+    modifiedDate
+    hashTags {
+      hashtag
+    }
+    price
+    imgUrls {
+      imgPath
+    }
+  }
+}
+
+query getRecent {
+  findRecentPosts {
+    postId
+    user {
+      userId
+      name
+      imageUrl
+      address
+      trust
+    }
+    hashTags {
+      hashtag
+    }
+    isBuy
+    price
+    saleDate
+    imgUrls {
+      imgPath
+    }
+    category
+    deal
+    createdDate
+    modifiedDate
+  }
+}
+
+# query getSearchHashTag {
+#   searchThings(){
+
+#   }
+# }

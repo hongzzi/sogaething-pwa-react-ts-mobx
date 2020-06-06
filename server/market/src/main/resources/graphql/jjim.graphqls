@@ -1,0 +1,28 @@
+type Jjim{
+    jjimId: ID
+    user : User
+    post : Post
+    createdDate : String
+    modifiedDate : String
+}
+type JjimOutput{
+    jjimId: Int
+    postId: Int
+    title: String
+    category: String
+    imgPath: String
+    price: Int
+    createdDate: String
+    modifiedDate: String
+}
+
+input CreateJjimInput{
+    postId : Int!
+}
+extend type Query {
+    findJjimByUserId(userId : Int): [JjimOutput]
+}
+extend type Mutation {
+    createJjim(input : CreateJjimInput!) : Jjim
+    deleteJjim(jjimId: Int) : Int
+}

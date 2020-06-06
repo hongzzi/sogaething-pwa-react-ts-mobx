@@ -1,102 +1,97 @@
 package com.ssafy.market.domain.user.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 
+@Getter
 @Entity
-@Table(name = "users", uniqueConstraints = {
-        @UniqueConstraint(columnNames = "email")
+@NoArgsConstructor
+@Table(name = "user", uniqueConstraints = {
+        @UniqueConstraint(columnNames = "userId")
 })
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long userId;
 
     @Column(nullable = false)
     private String name;
 
-    @Email
-    @Column(nullable = false)
     private String email;
 
     private String imageUrl;
 
-    @Column(nullable = false)
-    private Boolean emailVerified = false;
-
-    @JsonIgnore
-    private String password;
-
     @NotNull
+    @Column(nullable = false)
+    private String provider;
+
+    private Long providerId;
+
+    private String phone;
+
+    private String address;
+
+    private int trust;
+
     @Enumerated(EnumType.STRING)
-    private AuthProvider provider;
-
-    private String providerId;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getImageUrl() {
-        return imageUrl;
-    }
+    @Column(nullable = false)
+    private Role role;
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
     }
 
-    public Boolean getEmailVerified() {
-        return emailVerified;
+    public User(Long userId) {
+        this.userId = userId;
     }
 
-    public void setEmailVerified(Boolean emailVerified) {
-        this.emailVerified = emailVerified;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public AuthProvider getProvider() {
-        return provider;
-    }
-
-    public void setProvider(AuthProvider provider) {
+    public User(Long userId, String name, @Email String email, String imageUrl, @NotNull String provider, Long providerId, String phone, String address, int trust, Role role) {
+        this.userId = userId;
+        this.name = name;
+        this.email = email;
+        this.imageUrl = imageUrl;
         this.provider = provider;
-    }
-
-    public String getProviderId() {
-        return providerId;
-    }
-
-    public void setProviderId(String providerId) {
         this.providerId = providerId;
+        this.phone = phone;
+        this.address = address;
+        this.trust = trust;
+        this.role = role;
+    }
+    public void update(String name, String email, String imageUrl, String phone, String address){
+        this.name = name;
+        this.email = email;
+        this.imageUrl = imageUrl;
+        this.phone = phone;
+        this.address = address;
+    }
+    public void update(String name, String imageUrl, String phone, String address){
+        this.name = name;
+        this.imageUrl = imageUrl;
+        this.phone = phone;
+        this.address = address;
+    }
+    public void setTrust (int trust){
+        this.trust = trust;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + userId +
+                ", name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                ", imageUrl='" + imageUrl + '\'' +
+                ", provider='" + provider + '\'' +
+                ", providerId='" + providerId + '\'' +
+                ", phone='" + phone + '\'' +
+                ", address='" + address + '\'' +
+                ", trust=" + trust +
+                ", role=" + role +
+                '}';
     }
 }
+
