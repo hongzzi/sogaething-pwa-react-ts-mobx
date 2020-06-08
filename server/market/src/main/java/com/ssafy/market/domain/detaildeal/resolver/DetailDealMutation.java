@@ -53,7 +53,7 @@ public class DetailDealMutation implements GraphQLMutationResolver {
     }
     @Transactional
     public int deleteDetailDeal(Long id){
-        DetailDeal detailDeal = detailDealRepository.findBydealId(id);
+        DetailDeal detailDeal = detailDealRepository.findByDealId(id);
         return detailDealRepository.deleteByDealId(id);
     }
 }

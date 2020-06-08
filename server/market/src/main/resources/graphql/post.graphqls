@@ -125,4 +125,5 @@ type Query {
     searchThings(input: HashtagInput!): [PostMetaOutput]
     matchThings(matchingId: Int!): [PostDetailOutput]
     searchThingsByTitle(title: String!): [PostMetaOutput]
+    searchThingsByCategory(category: String!): [PostMetaOutput]
 }
