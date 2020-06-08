@@ -45,7 +45,6 @@ public class ChatService {
     @CacheEvict(value = CacheKey.MESSAGE, key = "#chatMessage.roomId")
     @Transactional
     public Boolean sendMessage(ChatMessage chatMessage) {
-        System.out.println("들어왔다");
         ChannelTopic channelTopic = getTopic(chatMessage.getRoomId());
         if (MessageType.IMAGE.equals(chatMessage.getType())) {
             String imagePath = imgurApi.uploadImg(chatMessage.getMessage());
@@ -61,15 +60,14 @@ public class ChatService {
         }
     }
 
-    @Cacheable(value = CacheKey.MESSAGE, key = "#roomId", unless = "#result == null")
+//    @Cacheable(value = CacheKey.MESSAGE, key = "#roomId", unless = "#result == null")
     @Transactional(readOnly = true)
     public Map<String, Object> findChatMessagesByRoomId(Long roomId) {
-        System.out.println("findChatMessagesByRoomId");
+//        System.out.println("findChatMessagesByRoomId");
         try {
             ChatRoom searchedChatRoom = chatRoomMongoRepository.getChaRoomByRoomId(roomId);
             List<ChatMessage> searchedMessages = chatMongoRepository.getChatMessagesByRoomId(roomId);
             Collections.reverse(searchedMessages);
-            System.out.println(searchedChatRoom);
             Map<String, String> chatRoom = new HashMap<>();
             chatRoom.put("buyer", userRepository.findByUserId(Long.parseLong(searchedChatRoom.getBuyerId())).getName());
             chatRoom.put("seller", userRepository.findByUserId(Long.parseLong(searchedChatRoom.getSellerId())).getName());
