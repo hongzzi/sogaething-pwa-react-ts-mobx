@@ -33,8 +33,8 @@ class ChatStore {
     this.setLoading(true);
     const response = await this.chatService.getUserChatList(authId);
     const chatArr = response.data;
-    this.setLoading(false);
     this.setChatRooms(chatArr);
+    this.setLoading(false);
   }
 
   @action

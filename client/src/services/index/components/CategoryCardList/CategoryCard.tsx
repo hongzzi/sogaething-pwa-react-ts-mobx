@@ -5,6 +5,7 @@ import styled, { keyframes } from '~/styled';
 import { numberWithCommas } from '../../helpers/comma';
 import ImageView from '../ImageView';
 import { TextLoader } from '../LoaderPlaceholder';
+import moment from 'moment';
 
 interface IProductCard {
   cardData: IPostMetaOutput | null;
@@ -13,16 +14,8 @@ interface IProductCard {
 }
 
 export default (props: IProductCard) => {
-  let hashtags;
-  let postId: number | undefined | null = -1;
-
-  if (Array.isArray(props.cardData) && Array.isArray(props.cardData!.hashtag)) {
-    hashtags = props.cardData!.hashtag!.map((item: any) => '#' + item + ' ');
-    postId = props.cardData!.postId;
-  }
-
   return (
-    <Link href={`/post/${postId}`}>
+    // <Link href={`/post/${props.cardData!.postId;}`}>
       <Wrapper idx={props.idx} loading={props.loading}>
         <ImageView
           src={
@@ -35,7 +28,7 @@ export default (props: IProductCard) => {
         />
         <TextCardContainer>
           <Line color='black' size={12}>
-            <b>{!props.loading && hashtags}</b>
+            <b>{!props.loading && props.cardData!.hashtag!.map(item => '#'+item+' ')}</b>
           </Line>
           <Line color={'#868e96'} size={10}>
             {props.cardData && props.cardData!.category}
@@ -45,9 +38,12 @@ export default (props: IProductCard) => {
               {props.cardData && numberWithCommas(props.cardData.price!) + '원'}
             </b>
           </Line>
+          <Line color={'#868e96'} size={10}>
+            {props.cardData && moment(props.cardData.createdDate).fromNow()}
+          </Line>
         </TextCardContainer>
       </Wrapper>
-    </Link>
+    // </Link>
   );
 };
 
@@ -67,7 +63,7 @@ const Wrapper = styled.div<Pick<IProductCard, 'idx' | 'loading'>>`
   border: 1px solid lightgray;
   width: 44vw;
   min-height: 52vw;
-  max-height: 55vw;
+  max-height: 58vw;
   border-radius: 8px;
   overflow: hidden;
   display: block;
