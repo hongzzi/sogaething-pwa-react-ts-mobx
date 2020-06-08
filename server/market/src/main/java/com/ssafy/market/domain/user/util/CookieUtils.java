@@ -35,7 +35,7 @@ public class CookieUtils {
         cookie.setPath("/");
         cookie.setHttpOnly(true);
         cookie.setMaxAge(maxAge);
-        cookie.setDomain("www.sogaething.com");
+        cookie.setDomain("localhost");
         cookie.isHttpOnly();
         response.addCookie(cookie);
 
