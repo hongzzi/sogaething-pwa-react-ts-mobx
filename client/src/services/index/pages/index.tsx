@@ -1,6 +1,7 @@
 import { toJS } from 'mobx';
 import { useObserver } from 'mobx-react';
 import { NextPage, NextPageContext } from 'next';
+import { useRouter } from 'next/router';
 import * as React from 'react';
 import { useCookies } from 'react-cookie';
 import { useGetUserInfoQuery } from '~/generated/graphql';
@@ -8,6 +9,7 @@ import styled from '~/styled';
 import CardList from '../components/CardList';
 import CategoryHeader from '../components/CategoryHeader';
 import CommonBtn from '../components/CommonBtn';
+import Loader from '../components/Loader';
 import MainUserCard from '../components/MainUserCard';
 import Nav from '../components/Nav';
 import Pikachu from '../components/Pikachu';
@@ -15,18 +17,17 @@ import ProductCardList from '../components/ProductCardList';
 import SearchBar from '../components/SearchBar';
 import useStores from '../helpers/useStores';
 import ChatService from '../service/ChatService';
-import { useRouter } from 'next/router';
-import Loader from '../components/Loader';
 
 const PageIndex: NextPage = (props) => {
   const { pageStore, authStore } = useStores();
   const router = useRouter();
-  React.useEffect(()=>{
-    if(authStore.token === '' || !authStore.token){
+  React.useEffect(() => {
+    if (authStore.token === '' || !authStore.token) {
       router.push('/signin');
     }
   });
   const handleMoreCards = () => {
+    console.log(authStore.auth);
   };
   return (
     <Layout>

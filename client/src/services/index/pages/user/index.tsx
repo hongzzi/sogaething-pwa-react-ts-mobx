@@ -1,8 +1,9 @@
+import { useObserver } from 'mobx-react';
 import * as React from 'react';
 import { FaMoneyBillWave, FaRegHeart, FaShoppingBag } from 'react-icons/fa';
 import { IoIosPin, IoIosSettings } from 'react-icons/io';
 import { MdGpsFixed } from 'react-icons/md';
-import { useGetUserInfoQuery } from '~/generated/graphql';
+import { useGetUserInfoQuery, usePutUpdateImgMutation } from '~/generated/graphql';
 import styled from '~/styled';
 import Camera from '../../assets/img/circle-camera.png?url';
 import NoAvatar from '../../assets/img/no-avatar.png?url';
@@ -10,11 +11,35 @@ import Categoryheader from '../../components/CategoryHeader';
 import CircleImageView from '../../components/CircleImageView';
 import Loader from '../../components/Loader';
 import Nav from '../../components/Nav';
+import useStores from '../../helpers/useStores';
 
 export interface IUserProps {}
 
+function useAuthData() {
+  const { authStore } = useStores();
+  return useObserver(() => ({
+    // useObserver를 사용해서 리턴하는 값의 업데이트를 계속 반영한다
+    imgurl: authStore.imgurl,
+  }));
+}
+
 export default (props: IUserProps) => {
   const userInfo = useGetUserInfoQuery();
+  const mutationUpdateImg = usePutUpdateImgMutation();
+  const [userImg, setUserImg] = React.useState(NoAvatar);
+  const {authStore} = useStores();
+  const {imgurl} = useAuthData();
+  const [loading, setLoading] = React.useState(false);
+
+  React.useEffect(() => {
+    if (userInfo.loading || !userInfo.data) {
+      return;
+    }
+    if (userInfo.data) {
+      setUserImg(imgurl);
+      return;
+    }
+  }, [userImg])
 
   if (userInfo.loading || !userInfo.data) {
     return (
@@ -24,17 +49,57 @@ export default (props: IUserProps) => {
     );
   }
 
-  const handleClick = () => {
-    // console.log(userInfo);
+  const fileInput = React.useRef<HTMLInputElement>(null);
+
+  const handleClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    fileInput.current!.click();
   };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      const files = Array.from(e.target.files);
+      if (files) {
+        const reader = new FileReader();
+        setLoading(true);
+        reader.onloadend = () => {
+          if (reader.result) {
+            const targetImg = reader.result.toString();
+            mutationUpdateImg({
+              variables: {
+                input: {
+                  imageUrl: targetImg,
+                },
+              },
+            })
+            .then((res) => {
+              setUserImg(res.data.updateImg.imageUrl);
+              authStore.setUserImage(res.data.updateImg.imageUrl);
+              setLoading(false);
+            })
+            .finally(()=>{
+              setLoading(false);
+            })
+          }
+        }
+        reader.readAsDataURL(files[0]);
+      }
+    }
+  }
+
   const {data} = userInfo;
   return (
     <Wrapper>
-      <Categoryheader type={'chat'} text={'내 정보'} />
-      <Container>
+      {loading && <Loader />}
+      {!loading && <Categoryheader type={'chat'} text={'내 정보'} />}
+      {!loading && (
+        <Container>
+        <FileInput type='file' ref={fileInput} onChange={handleFileChange} />
         <WrapperRow>
           <WrapperImg onClick={handleClick}>
-            <CircleImageView src={NoAvatar} size={3} />
+            <div onClick={handleClick}>
+              <CircleImageView src={authStore.imgurl ? authStore.imgurl : data.findUserInfo!.imgurl!} size={3} />
+            </div>
           </WrapperImg>
           <WrapperUserInfo>
             <FlexContainer>
@@ -84,6 +149,8 @@ export default (props: IUserProps) => {
           </ListContainer>
         </WrapperRow>
       </Container>
+      )}
+      
       <Nav />
     </Wrapper>
   );
@@ -174,4 +241,10 @@ const CenterFelxContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-around;
+`;
+
+const FileInput = styled.input`
+  /* width: 100px;
+  height: 20px; */
+  display: none;
 `;
