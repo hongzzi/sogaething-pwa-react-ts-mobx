@@ -15,6 +15,9 @@ public interface HistoryRepository extends JpaRepository<History, Long> {
 //    List<History> findByUserIdByOrderByCreatedDateDesc(Long UserId);
     List<History> findByUserIdOrderByCreatedDateDesc(Long UserId);
 
+    @Query(value = "SELECT DISTINCT post_id FROM history WHERE user_id = :userId order by created_date desc", nativeQuery = true)
+    List<Long> findDistinctByUserIdOrderByCreatedDateDesc(@Param("userId")Long userId);
+
 //    @Query(value = "SELECT DISTINCT post_id FROM history WHERE user_id = :userId order by created_date desc", nativeQuery = true)
 //    List<Long> findPostIdByCategory(@Param("userId")Long userId);
 }
