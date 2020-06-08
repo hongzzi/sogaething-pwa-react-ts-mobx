@@ -150,8 +150,6 @@ public class PostQuery implements GraphQLQueryResolver {
         String[] hashtag = matchingHashtagRepository.findHashtagByMatching(matching).toArray(new String[0]);
         String transaction = matching.getTransaction();
 
-//        List<Long> postIdList = productRepository.findPostIdByCategory(category);
-//        List<Product> products = productRepository.findPostByPrice(matching.getMinPrice(), matching.getMaxPrice(), postIdList);
         List<Product> products = productRepository.findPostByCategoryAndPrice(matching.getMinPrice(), matching.getMaxPrice(), category);
         for (int i = 0; i < products.size(); i++) {
             if(products.get(i).getPost().getTransaction()!=null && !products.get(i).getPost().getTransaction().equals(transaction)) continue;
