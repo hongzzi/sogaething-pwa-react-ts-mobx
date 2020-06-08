@@ -8,6 +8,7 @@ import useStores from '../../helpers/useStores';
 import CircleImageView from '../CircleImageView';
 import { TextLoader } from '../LoaderPlaceholder';
 import CirclePlaceHolder from '../LoaderPlaceholder/Circle';
+import { useObserver } from 'mobx-react';
 
 interface IQueryData {
   findUserInfo: IFindUserInfo | null;
@@ -21,10 +22,19 @@ export interface IFindUserInfo {
   imgurl: string;
 }
 
+function useAuthData() {
+  const { authStore } = useStores();
+  return useObserver(() => ({
+    // useObserver를 사용해서 리턴하는 값의 업데이트를 계속 반영한다
+    imgurl: authStore.imgurl,
+  }));
+}
+
 export default () => {
   const router = useRouter();
   const store = useStores();
   const { data, loading, error } = useGetUserInfoQuery();
+  const {imgurl} = useAuthData();
 
   const handleClickMatch = () => {
     if (store.authStore.auth) {
@@ -42,7 +52,7 @@ export default () => {
   };
 
   const { findUserInfo } = data as IQueryData;
-
+  
   if (loading || error || !findUserInfo) {
     return (
       <Wrapper>
@@ -72,8 +82,6 @@ export default () => {
     );
   }
 
-  
-
   const handleClickTest = () => {
     console.log(data);
     console.log(store.authStore.auth);
@@ -83,10 +91,10 @@ export default () => {
       <WrapperFlex>
         {loading && <CirclePlaceHolder size={4} />}
         {!loading && findUserInfo && findUserInfo.imgurl && (
-          <CircleImageView size={4} src={findUserInfo.imgurl} radius={35} />
+          <CircleImageView size={4} src={store.authStore.imgurl ? store.authStore.imgurl : findUserInfo.imgurl} radius={35} />
         )}
         {!loading && !findUserInfo!.imgurl && (
-          <CircleImageView size={4} src={NoAvatar} radius={35} />
+          <CircleImageView size={4} src={store.authStore.imgurl} radius={35} />
         )}
         <WrapperUserInfo>
           <TextUserInfo onClick={handleClickTest}>

@@ -4,6 +4,7 @@ import { useGetMatchingQuery } from '~/generated/graphql';
 import CategoryHeader from '~/services/index/components/CategoryHeader';
 import MatchCardList from '~/services/index/components/MatchCardList';
 import styled from '~/styled';
+import Loader from '~/services/index/components/Loader';
 
 export default () => {
   const router = useRouter();
@@ -12,10 +13,10 @@ export default () => {
 
   return (
     <Wrapper>
-      <CategoryHeader type={'normal'} text={'구매하기'} />
+      <CategoryHeader type={'normal'} text={'구매하기'} backHome/>
       {
         loading &&
-        <p>loading…</p>
+        <Loader />
       }
       {
         error &&
