@@ -6,6 +6,7 @@ import CircleImageView from '../CircleImageView';
 import NoAvatar from '../../assets/img/no-avatar.png?url';
 interface IChatMessageBox {
   cardData: IChatDto;
+  imgPath: string;
 }
 
 export default (props: IChatMessageBox) => {
@@ -16,7 +17,7 @@ export default (props: IChatMessageBox) => {
       {type !== 'ENTER' && (
         <CircleImageView
           size={1.8}
-          src={NoAvatar}
+          src={props.imgPath ? props.imgPath : NoAvatar}
         />
       )}
       {type === 'ENTER' ? (

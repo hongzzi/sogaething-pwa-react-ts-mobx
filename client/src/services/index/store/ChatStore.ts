@@ -12,8 +12,14 @@ class ChatStore {
   @observable chatRoom: number = 0;
   @observable chatRoomData: IChatDto[] = [];
   @observable chatRoomAuth: IChatRoomAuthDto = {
-    seller: '',
-    buyer: '',
+    seller: {
+      imageUrl: '',
+      name: '',
+    },
+    buyer: {
+      imageUrl: '',
+      name: '',
+    },
   };
   @observable ws: Client|null = null;
   @observable createdChat: ICreateChatRoomResponseDto = {

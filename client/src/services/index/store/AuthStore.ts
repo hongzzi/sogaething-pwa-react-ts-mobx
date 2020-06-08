@@ -162,8 +162,6 @@ class AuthStore {
 
   @action
   setUserImage(data: string) {
-    console.log('------setUserImage----------------------------')
-    console.log(data);
     this.imgurl = data;
   }
 }

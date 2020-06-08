@@ -44,7 +44,6 @@ class PostStore {
     @observable transaction: string = '';
     @observable price: number = 0;
     @observable tag: string = '';
-    @observable isPosted: boolean = false;
 
     constructor(root: any, initialData?: PostStore) {
         this.post = {
@@ -158,11 +157,6 @@ class PostStore {
     @action
     setPrice(price: number) {
         this.price = price;
-    }
-
-    @action
-    setPosted(posted: boolean){
-        this.isPosted = posted;
     }
 }
 

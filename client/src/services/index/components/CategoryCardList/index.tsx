@@ -48,5 +48,6 @@ export default (props: ICardProps) => {
 
 const Wrapper = styled.div`
   display: block;
-  padding: 80px 16px 0 16px;
+  padding: 80px 16px 30px 16px;
+  height: 100%;
 `;

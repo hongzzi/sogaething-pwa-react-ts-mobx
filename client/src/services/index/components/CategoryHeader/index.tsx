@@ -16,7 +16,6 @@ interface ICategoryHeader {
 
 export default (props: ICategoryHeader) => {
   const router = useRouter();
-  console.log(router.query.isPosted);
   const handleBackIconClick = () => {
     if (props.backHome || router.query.isPosted) {
       router.push('/');

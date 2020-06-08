@@ -1,3 +1,4 @@
+import moment from 'moment';
 import Link from 'next/link';
 import * as React from 'react';
 import { IPostMetaOutput } from '~/generated/graphql';
@@ -5,7 +6,6 @@ import styled, { keyframes } from '~/styled';
 import { numberWithCommas } from '../../helpers/comma';
 import ImageView from '../ImageView';
 import { TextLoader } from '../LoaderPlaceholder';
-import moment from 'moment';
 
 interface IProductCard {
   cardData: IPostMetaOutput | null;
@@ -14,8 +14,13 @@ interface IProductCard {
 }
 
 export default (props: IProductCard) => {
+  let postId = -1;
+
+  if (props.cardData) {
+    postId = props.cardData.postId!;
+  }
   return (
-    // <Link href={`/post/${props.cardData!.postId;}`}>
+    <Link href={`/post/${postId}`}>
       <Wrapper idx={props.idx} loading={props.loading}>
         <ImageView
           src={
@@ -28,7 +33,7 @@ export default (props: IProductCard) => {
         />
         <TextCardContainer>
           <Line color='black' size={12}>
-            <b>{!props.loading && props.cardData!.hashtag!.map(item => '#'+item+' ')}</b>
+            <b>{!props.loading && props.cardData!.hashtag!.map((item) => '#' + item + ' ')}</b>
           </Line>
           <Line color={'#868e96'} size={10}>
             {props.cardData && props.cardData!.category}
@@ -43,7 +48,7 @@ export default (props: IProductCard) => {
           </Line>
         </TextCardContainer>
       </Wrapper>
-    // </Link>
+    </Link>
   );
 };
 
