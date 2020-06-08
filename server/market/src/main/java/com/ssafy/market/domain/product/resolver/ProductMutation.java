@@ -21,7 +21,6 @@ public class ProductMutation implements GraphQLMutationResolver {
     @Transactional
     public ProductOutput createProduct(CreateProductInput input) {
         Post post =  postRepository.findByPostId(input.getPostId());
-
         Product product = productRepository.save(new Product(null,post, input.getPrice(),input.getCategory(),(long)0));
         ProductOutput productOutput = new ProductOutput(product.getProductId(),post.getPostId(),product.getName(),product.getPrice(),product.getCategory());
         return productOutput;

@@ -23,7 +23,6 @@ public class ProductQuery implements GraphQLQueryResolver {
         List<ProductOutput> outputs = new ArrayList<>();
         List<Product> productList = productRepository.findAll();
 
-        System.out.println(productList.size());
         for(int i = 0; i< productList.size(); i++){
             outputs.add(new ProductOutput(productList.get(i).getProductId(),
                     productList.get(i).getPost().getPostId(),

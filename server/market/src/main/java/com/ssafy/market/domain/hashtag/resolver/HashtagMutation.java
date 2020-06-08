@@ -38,7 +38,6 @@ public class HashtagMutation implements GraphQLMutationResolver {
     @Transactional
     public int deleteHashtag(Long id){
         Hashtag hashtag = hashtagRepository.findByHashtagId(id);
-
         return hashtagRepository.deleteByHashtagId(id);
     }
 }

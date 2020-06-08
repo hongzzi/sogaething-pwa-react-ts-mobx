@@ -15,9 +15,8 @@ import javax.transaction.Transactional;
 @Component
 @RequiredArgsConstructor
 public class FileMutation implements GraphQLMutationResolver {
-
-    private  final FileRepository fileRepository;
-    private  final ProductRepository productRepository;
+    private final FileRepository fileRepository;
+    private final ProductRepository productRepository;
 
     @Transactional
     public FileOutput createFile(CreateFileInput input){

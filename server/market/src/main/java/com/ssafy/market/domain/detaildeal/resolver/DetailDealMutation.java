@@ -26,7 +26,6 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 public class DetailDealMutation implements GraphQLMutationResolver {
-
     private final DetailDealRepository detailDealRepository;
     private final PostRepository postRepository;
     private final UserRepository userRepository;
