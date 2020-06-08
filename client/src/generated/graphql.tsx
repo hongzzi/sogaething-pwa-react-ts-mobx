@@ -171,27 +171,27 @@ export type IMutation = {
   createPost?: Maybe<IOutput>;
   updatePost?: Maybe<IPostMetaOutput>;
   deletePost?: Maybe<IOutput>;
+  createDetailDeal?: Maybe<IDetailOutput>;
+  deleteDetailDeal: Scalars["Int"];
   createFile?: Maybe<IFileOutput>;
   updateFile?: Maybe<IFileOutput>;
   deleteFile?: Maybe<Scalars["Int"]>;
-  createDetailDeal?: Maybe<IDetailOutput>;
-  deleteDetailDeal: Scalars["Int"];
-  logoutUser: IUserLogout;
-  loginUser?: Maybe<ILoginUserOutput>;
-  updateUser?: Maybe<IUserOutput>;
-  updateImg?: Maybe<IUserOutput>;
-  deleteUser?: Maybe<Scalars["Int"]>;
   createHashtag?: Maybe<IHashtagOutput>;
   updateHashtag?: Maybe<IHashtagOutput>;
   deleteHashtag?: Maybe<Scalars["Int"]>;
+  createHistory?: Maybe<IHistoryOutput>;
+  createJjim?: Maybe<IJjim>;
+  deleteJjim?: Maybe<Scalars["Int"]>;
   createMatching?: Maybe<IMatching>;
   deleteMatching?: Maybe<Scalars["Int"]>;
   updateProduct?: Maybe<IProductOutput>;
   createProduct?: Maybe<IProductOutput>;
   deleteProduct?: Maybe<Scalars["Int"]>;
-  createJjim?: Maybe<IJjim>;
-  deleteJjim?: Maybe<Scalars["Int"]>;
-  createHistory?: Maybe<IHistoryOutput>;
+  logoutUser: IUserLogout;
+  loginUser?: Maybe<ILoginUserOutput>;
+  updateUser?: Maybe<IUserOutput>;
+  updateImg?: Maybe<IUserOutput>;
+  deleteUser?: Maybe<Scalars["Int"]>;
 };
 
 export type IMutationUpdateViewArgs = {
@@ -214,6 +214,14 @@ export type IMutationDeletePostArgs = {
   postId: Scalars["Int"];
 };
 
+export type IMutationCreateDetailDealArgs = {
+  input: ICreateDetailDealInput;
+};
+
+export type IMutationDeleteDetailDealArgs = {
+  id: Scalars["Int"];
+};
+
 export type IMutationCreateFileArgs = {
   input: ICreateFileInput;
 };
@@ -223,34 +231,6 @@ export type IMutationUpdateFileArgs = {
 };
 
 export type IMutationDeleteFileArgs = {
-  id: Scalars["Int"];
-};
-
-export type IMutationCreateDetailDealArgs = {
-  input: ICreateDetailDealInput;
-};
-
-export type IMutationDeleteDetailDealArgs = {
-  id: Scalars["Int"];
-};
-
-export type IMutationLogoutUserArgs = {
-  userId: Scalars["Int"];
-};
-
-export type IMutationLoginUserArgs = {
-  input: ILoginUserInput;
-};
-
-export type IMutationUpdateUserArgs = {
-  input: IUpdateUserInput;
-};
-
-export type IMutationUpdateImgArgs = {
-  input: IUpdateImgInput;
-};
-
-export type IMutationDeleteUserArgs = {
   id: Scalars["Int"];
 };
 
@@ -264,6 +244,18 @@ export type IMutationUpdateHashtagArgs = {
 
 export type IMutationDeleteHashtagArgs = {
   id: Scalars["Int"];
+};
+
+export type IMutationCreateHistoryArgs = {
+  postId: Scalars["Int"];
+};
+
+export type IMutationCreateJjimArgs = {
+  input: ICreateJjimInput;
+};
+
+export type IMutationDeleteJjimArgs = {
+  jjimId?: Maybe<Scalars["Int"]>;
 };
 
 export type IMutationCreateMatchingArgs = {
@@ -286,16 +278,24 @@ export type IMutationDeleteProductArgs = {
   id: Scalars["Int"];
 };
 
-export type IMutationCreateJjimArgs = {
-  input: ICreateJjimInput;
+export type IMutationLogoutUserArgs = {
+  userId: Scalars["Int"];
 };
 
-export type IMutationDeleteJjimArgs = {
-  jjimId?: Maybe<Scalars["Int"]>;
+export type IMutationLoginUserArgs = {
+  input: ILoginUserInput;
 };
 
-export type IMutationCreateHistoryArgs = {
-  postId: Scalars["Int"];
+export type IMutationUpdateUserArgs = {
+  input: IUpdateUserInput;
+};
+
+export type IMutationUpdateImgArgs = {
+  input: IUpdateImgInput;
+};
+
+export type IMutationDeleteUserArgs = {
+  id: Scalars["Int"];
 };
 
 export type IOutput = {
@@ -397,26 +397,26 @@ export type IQuery = {
   matchThings?: Maybe<Array<Maybe<IPostDetailOutput>>>;
   searchThingsByTitle?: Maybe<Array<Maybe<IPostMetaOutput>>>;
   searchThingsByCategory?: Maybe<Array<Maybe<IPostMetaOutput>>>;
-  findAllFile?: Maybe<Array<Maybe<IFileOutput>>>;
-  findAllFiles?: Maybe<Array<Maybe<IFile>>>;
-  findFileById?: Maybe<IFileOutput>;
   findAllDetailDeals?: Maybe<Array<Maybe<IDetailDeal>>>;
   findAllDetailDeal?: Maybe<Array<Maybe<IDetailOutput>>>;
   findDetailDealByPost?: Maybe<IDetailOutput>;
-  findAllUsers?: Maybe<Array<Maybe<IUser>>>;
-  findAllUser?: Maybe<Array<Maybe<IUserOutput>>>;
-  findUserInfo?: Maybe<IUserInfoResponse>;
+  findAllFile?: Maybe<Array<Maybe<IFileOutput>>>;
+  findAllFiles?: Maybe<Array<Maybe<IFile>>>;
+  findFileById?: Maybe<IFileOutput>;
   findAllHashtags?: Maybe<Array<Maybe<IHashtag>>>;
   findAllHashtag?: Maybe<Array<Maybe<IHashtagOutput>>>;
   findByHashtagId?: Maybe<IHashtagOutput>;
   autocomplete?: Maybe<Array<Maybe<IAutocomplete>>>;
   findAllMatchingHashtagByMatchingId?: Maybe<Array<Maybe<Scalars["String"]>>>;
+  findUserHistoryByUserId?: Maybe<Array<Maybe<IUserHistoryResponse>>>;
+  findJjimByUserId?: Maybe<Array<Maybe<IJjimOutput>>>;
   findMatchingByUserId?: Maybe<Array<Maybe<IMatchResponse>>>;
   findAllProduct?: Maybe<Array<Maybe<IProductOutput>>>;
   findAllProducts?: Maybe<Array<Maybe<IProduct>>>;
   findByProductId?: Maybe<IProductOutput>;
-  findJjimByUserId?: Maybe<Array<Maybe<IJjimOutput>>>;
-  findUserHistoryByUserId?: Maybe<Array<Maybe<IUserHistoryResponse>>>;
+  findAllUsers?: Maybe<Array<Maybe<IUser>>>;
+  findAllUser?: Maybe<Array<Maybe<IUserOutput>>>;
+  findUserInfo?: Maybe<IUserInfoResponse>;
 };
 
 export type IQueryCountPostByUserIdArgs = {
@@ -448,15 +448,15 @@ export type IQuerySearchThingsByTitleArgs = {
 };
 
 export type IQuerySearchThingsByCategoryArgs = {
-  category: Scalars["String"];
-};
-
-export type IQueryFindFileByIdArgs = {
-  id?: Maybe<Scalars["Int"]>;
+  categoryNum: Scalars["Int"];
 };
 
 export type IQueryFindDetailDealByPostArgs = {
   postId?: Maybe<Scalars["Int"]>;
+};
+
+export type IQueryFindFileByIdArgs = {
+  id?: Maybe<Scalars["Int"]>;
 };
 
 export type IQueryFindByHashtagIdArgs = {
@@ -471,12 +471,12 @@ export type IQueryFindAllMatchingHashtagByMatchingIdArgs = {
   matchingId?: Maybe<Scalars["Int"]>;
 };
 
-export type IQueryFindByProductIdArgs = {
-  id?: Maybe<Scalars["Int"]>;
-};
-
 export type IQueryFindJjimByUserIdArgs = {
   userId?: Maybe<Scalars["Int"]>;
+};
+
+export type IQueryFindByProductIdArgs = {
+  id?: Maybe<Scalars["Int"]>;
 };
 
 export type IRecentPostResponse = {
@@ -605,7 +605,7 @@ export type IGetAutoCompleteQuery = { __typename?: "Query" } & {
 };
 
 export type IGetSearchByCategoryQueryVariables = {
-  input: Scalars["String"];
+  input: Scalars["Int"];
 };
 
 export type IGetSearchByCategoryQuery = { __typename?: "Query" } & {
@@ -997,8 +997,8 @@ export function useGetAutoCompleteQuery(
   >(GetAutoCompleteDocument, baseOptions);
 }
 export const GetSearchByCategoryDocument = gql`
-  query getSearchByCategory($input: String!) {
-    searchThingsByCategory(category: $input) {
+  query getSearchByCategory($input: Int!) {
+    searchThingsByCategory(categoryNum: $input) {
       postId
       title
       category

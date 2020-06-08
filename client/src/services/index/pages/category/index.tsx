@@ -61,8 +61,8 @@ export default (props: ICategoryProps) => {
             디지털/가전
           </CategoryItemText>
         </WrapperCategoryItem>
-        <WrapperCategoryItem>
-          <GiSofa size={25} onClick={() => handleCategoryItemClick(2)} />{' '}
+        <WrapperCategoryItem onClick={() => handleCategoryItemClick(2)}>
+          <GiSofa size={25} />{' '}
           <CategoryItemText>가구</CategoryItemText>
         </WrapperCategoryItem>
         <WrapperCategoryItem>
@@ -113,8 +113,8 @@ export default (props: ICategoryProps) => {
             뷰티/미용
           </CategoryItemText>
         </WrapperCategoryItem>
-        <WrapperCategoryItem>
-          <FaDog size={25} onClick={() => handleCategoryItemClick(11)} />{' '}
+        <WrapperCategoryItem onClick={() => handleCategoryItemClick(11)}>
+          <FaDog size={25} />{' '}
           <CategoryItemText>반려동물용품</CategoryItemText>
         </WrapperCategoryItem>
         <WrapperCategoryItem>

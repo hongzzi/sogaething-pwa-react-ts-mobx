@@ -90,7 +90,7 @@ export default (props: IPostFormProps) => {
                 },
             }).then((res: { data: IPostResponseDto }) => {
                 if (res.data.createPost.state === 'SUCCESS') {
-                    router.push(`/post/${res.data.createPost.postId}`);
+                    router.push(`/post/${res.data.createPost.postId}?isPosted=true`);
                 }
             }).catch((error) => {
                 console.log(error);

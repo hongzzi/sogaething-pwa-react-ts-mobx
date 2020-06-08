@@ -6,14 +6,16 @@ import category from '../../pages/category';
 import Card from './CategoryCard';
 
 interface IQueryData {
-  findRecentPosts: [IPostMetaOutput];
+  searchThingsByCategory: IPostMetaOutput[];
 }
 
-interface ICardProps {}
+interface ICardProps {
+  categoryId: number;
+}
 
 export default (props: ICardProps) => {
   const { data, loading, error } = useGetSearchByCategoryQuery({
-    variables: { input: '1' },
+    variables: { input: props.categoryId },
   });
   const handleClickCard = () => {
     console.log(data);
@@ -28,15 +30,18 @@ export default (props: ICardProps) => {
     return <Wrapper onClick={handleClickCard}>{Cards}</Wrapper>;
   }
 
-  // const {  } = data;
+  const { searchThingsByCategory } = data as IQueryData;
 
-  // if (Array.isArray(findRecentPosts)) {
-  //   Cards = data!.findRecentPosts!.map((item, i) => {
-  //     if (data!.findRecentPosts) {
-  //       return <Card key={i} idx={i} cardData={item} loading={false} />;
-  //     }
-  //   });
-  // }
+  if (Array.isArray(searchThingsByCategory)) {
+    if (searchThingsByCategory.length === 0) {
+      return <Wrapper><b>등록된 글이 없습니다</b></Wrapper>;
+    }
+    Cards = searchThingsByCategory!.map((item, i) => {
+      if (searchThingsByCategory.length) {
+        return <Card key={i} idx={i} cardData={item} loading={false} />;
+      }
+    });
+  }
 
   return <Wrapper onClick={handleClickCard}>{Cards}</Wrapper>;
 };

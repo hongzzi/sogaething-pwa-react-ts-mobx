@@ -1,11 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import useStores from '~/services/index/helpers/useStores';
 import styled from '~/styled';
 
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useGetPostQuery, useCreateHistoryMutation, useUpdateViewMutation } from '~/generated/graphql';
+import { useCreateHistoryMutation, useGetPostQuery, useUpdateViewMutation } from '~/generated/graphql';
 
+import Loader from '~/services/index/components/Loader';
 import CategoryHeader from '../../../components/CategoryHeader';
 import ImageSlider from '../../../components/ImageSlider';
 import PostDetail from '../../../components/PostDetail';
@@ -76,7 +77,7 @@ export default function Detail(props: any) {
             <ContentBody>
                 {
                     loading &&
-                    <p>loading…</p>
+                    <Loader />
                 }
                 {
                     error &&

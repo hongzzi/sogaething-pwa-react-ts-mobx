@@ -1,56 +1,53 @@
 import Link from 'next/link';
 import * as React from 'react';
+import { IPostMetaOutput } from '~/generated/graphql';
 import styled, { keyframes } from '~/styled';
 import { numberWithCommas } from '../../helpers/comma';
 import ImageView from '../ImageView';
 import { TextLoader } from '../LoaderPlaceholder';
 
 interface IProductCard {
-  cardData: any | null;
+  cardData: IPostMetaOutput | null;
   loading?: boolean;
   idx: number;
 }
 
 export default (props: IProductCard) => {
   let hashtags;
-  let postId = '';
+  let postId: number | undefined | null = -1;
 
-  if (props.cardData !== null) {
-    hashtags = props.cardData.hashTags.map(
-      (item: any) => '#' + item.hashtag + ' ',
-    );
-    postId = props.cardData.postId;
+  if (Array.isArray(props.cardData) && Array.isArray(props.cardData!.hashtag)) {
+    hashtags = props.cardData!.hashtag!.map((item: any) => '#' + item + ' ');
+    postId = props.cardData!.postId;
   }
 
   return (
-
-    // <Link href={`/post/${postId}`}>
-    <Wrapper idx={props.idx} loading={props.loading}>
-
-      <ImageView
-        src={
-          props.loading
-            ? 'https://www.sctech.edu/wp-content/plugins/ajax-search-pro/img/default.jpg'
-            : props.cardData!.imgUrls.length === 0
-            ? 'https://www.sctech.edu/wp-content/plugins/ajax-search-pro/img/default.jpg'
-            : props.cardData!.imgUrls[0].imgPath
-        }
-      />
-      <TextCardContainer>
-        <Line color='black' size={12}>
-          <b>{!props.loading && hashtags}</b>
-        </Line>
-        <Line color={'#868e96'} size={10}>
-          {props.cardData && props.cardData!.category}
-        </Line>
-        <Line color={'#ffaa00'}>
-          <b>
-            {props.cardData && numberWithCommas(props.cardData!.price) + '원'}
-          </b>
-        </Line>
-      </TextCardContainer>
-    </Wrapper>
-    // </Link >
+    <Link href={`/post/${postId}`}>
+      <Wrapper idx={props.idx} loading={props.loading}>
+        <ImageView
+          src={
+            props.loading
+              ? 'https://www.sctech.edu/wp-content/plugins/ajax-search-pro/img/default.jpg'
+              : props.cardData!.imgPath! ?
+              props.cardData!.imgPath!
+              : 'https://www.sctech.edu/wp-content/plugins/ajax-search-pro/img/default.jpg'
+          }
+        />
+        <TextCardContainer>
+          <Line color='black' size={12}>
+            <b>{!props.loading && hashtags}</b>
+          </Line>
+          <Line color={'#868e96'} size={10}>
+            {props.cardData && props.cardData!.category}
+          </Line>
+          <Line color={'#ffaa00'}>
+            <b>
+              {props.cardData && numberWithCommas(props.cardData.price!) + '원'}
+            </b>
+          </Line>
+        </TextCardContainer>
+      </Wrapper>
+    </Link>
   );
 };
 
@@ -74,10 +71,10 @@ const Wrapper = styled.div<Pick<IProductCard, 'idx' | 'loading'>>`
   border-radius: 8px;
   overflow: hidden;
   display: block;
-  float: ${(props) => (props.idx % 2 === 1 ? 'left' : 'right')};
+  float: ${(props) => (props.idx % 2 === 0 ? 'left' : 'right')};
   margin-bottom: 15px;
   background-color: ${(props) => (props.loading ? 'lightgray' : '')};
-  animation: ${boxFade} ${(props) => props.loading ? '1.5s infinite ease-in-out' : ''};
+  animation: ${boxFade} ${(props: any) => (props.loading ? '1.5s infinite ease-in-out' : '')};
 `;
 
 const TextCardContainer = styled.div`

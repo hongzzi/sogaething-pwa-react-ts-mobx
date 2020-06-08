@@ -1,4 +1,4 @@
-query getSearchByCategory($input: String!){
+query getSearchByCategory($input: Int!){
     searchThingsByCategory(categoryNum: $input){
         postId
         title
