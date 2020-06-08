@@ -8,6 +8,7 @@ import com.ssafy.market.domain.chat.repository.ChatMongoRepository;
 import com.ssafy.market.domain.chat.repository.ChatRoomMongoRepository;
 import com.ssafy.market.domain.chat.util.CacheKey;
 import com.ssafy.market.domain.chat.util.TopicUtil;
+import com.ssafy.market.domain.user.domain.User;
 import com.ssafy.market.domain.user.repository.UserRepository;
 import com.ssafy.market.global.apis.ImgurApi;
 import lombok.RequiredArgsConstructor;
@@ -60,7 +61,7 @@ public class ChatService {
         }
     }
 
-//    @Cacheable(value = CacheKey.MESSAGE, key = "#roomId", unless = "#result == null")
+    @Cacheable(value = CacheKey.MESSAGE, key = "#roomId", unless = "#result == null")
     @Transactional(readOnly = true)
     public Map<String, Object> findChatMessagesByRoomId(Long roomId) {
 //        System.out.println("findChatMessagesByRoomId");
@@ -68,9 +69,20 @@ public class ChatService {
             ChatRoom searchedChatRoom = chatRoomMongoRepository.getChaRoomByRoomId(roomId);
             List<ChatMessage> searchedMessages = chatMongoRepository.getChatMessagesByRoomId(roomId);
             Collections.reverse(searchedMessages);
-            Map<String, String> chatRoom = new HashMap<>();
-            chatRoom.put("buyer", userRepository.findByUserId(Long.parseLong(searchedChatRoom.getBuyerId())).getName());
-            chatRoom.put("seller", userRepository.findByUserId(Long.parseLong(searchedChatRoom.getSellerId())).getName());
+
+            Map<String, Map<String, String>> chatRoom = new HashMap<>();
+
+            Map<String, String> buyerMap = new HashMap<>();
+            User buyer = userRepository.findByUserId(Long.parseLong(searchedChatRoom.getBuyerId()));
+            buyerMap.put("name", buyer.getName());
+            buyerMap.put("imageUrl", buyer.getImageUrl());
+            Map<String, String> sellerMap = new HashMap<>();
+            User seller = userRepository.findByUserId(Long.parseLong(searchedChatRoom.getSellerId()));
+            sellerMap.put("name", seller.getName());
+            sellerMap.put("imageUrl", seller.getImageUrl());
+
+            chatRoom.put("buyer", buyerMap);
+            chatRoom.put("seller", sellerMap);
 
             Map<String, Object> result = new HashMap<>();
             result.put("chatRoom", chatRoom);
