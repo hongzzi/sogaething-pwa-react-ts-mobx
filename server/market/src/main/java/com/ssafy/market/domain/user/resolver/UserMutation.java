@@ -9,7 +9,6 @@ import com.ssafy.market.domain.user.util.CookieUtils;
 import com.ssafy.market.global.apis.ImgurApi;
 import com.ssafy.market.global.apis.KakaoApi;
 import graphql.schema.DataFetchingEnvironment;
-import graphql.servlet.GraphQLContext;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.stereotype.Component;
@@ -58,6 +57,16 @@ public class UserMutation implements GraphQLMutationResolver {
         return output;
     }
     @Transactional
+    public UserOutput updateImg(UpdateImgInput input, DataFetchingEnvironment env){
+        Long userId = tokenProvider.getUserIdFromHeader(env);
+        User user = userRepository.findByUserId(userId);
+        String[] image = input.getImageUrl().split(",");
+        String img = api.uploadImg(image[1]);
+        user.updateimg(img);
+        UserOutput output =  new UserOutput(userId,user.getName(),user.getEmail(),user.getImageUrl(),user.getProvider(),user.getProviderId(),user.getPhone(),user.getAddress(),user.getTrust());
+        return output;
+    }
+    @Transactional
     public UserOutput updateUser(UpdateUserInput input,DataFetchingEnvironment env ){
         Long userId = tokenProvider.getUserIdFromHeader(env);
         User user = userRepository.findByUserId(userId);
@@ -82,11 +91,7 @@ public class UserMutation implements GraphQLMutationResolver {
         CookieUtils.deleteCookie(req,res,"token");
         UserLogout output = null;
         Cookie cookie = CookieUtils.getCookie(req,"token");
-//        if(cookie==null){
-//            System.out.println("쿠키 성공");
-//        }else{
-//            System.out.println("쿠키 실패");
-//        }
+
         if(cookie==null){
             output = new UserLogout("SUCCESS",userId);
             return output;

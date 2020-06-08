@@ -74,6 +74,9 @@ public class User {
         this.phone = phone;
         this.address = address;
     }
+    public void updateimg(String imageUrl){
+        this.imageUrl = imageUrl;
+    }
     public void setTrust (int trust){
         this.trust = trust;
     }
