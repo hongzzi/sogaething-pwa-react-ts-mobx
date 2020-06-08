@@ -16,7 +16,6 @@ public class ImgurApi {
 
     @Value("${spring.global.apis.imgur.client-id}")
     private String CLIENT_ID;
-//    public static final String CLIENT_ID = "2d1537da8393cd6";
 
     public String uploadImg(String base64){
         try {

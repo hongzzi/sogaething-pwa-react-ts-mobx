@@ -14,7 +14,7 @@ import javax.persistence.*;
 @Table(name="matching")
 public class Matching extends BaseTimeEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "matching_id")
     private Long matchingId;
 

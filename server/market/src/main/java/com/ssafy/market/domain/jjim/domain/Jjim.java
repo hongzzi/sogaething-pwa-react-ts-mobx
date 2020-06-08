@@ -14,7 +14,7 @@ import javax.persistence.*;
 public class Jjim extends BaseTimeEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "jjim_id")
     private Long jjimId;
 
