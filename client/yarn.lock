@@ -2710,6 +2710,14 @@ anymatch@^3.0.1:
     normalize-path "^3.0.0"
     picomatch "^2.0.4"
 
+anymatch@~3.1.1:
+  version "3.1.1"
+  resolved "https://registry.yarnpkg.com/anymatch/-/anymatch-3.1.1.tgz#c55ecf02185e2469259399310c173ce31233b142"
+  integrity sha512-mM8522psRCqzV+6LhomX5wgp25YVibjh8Wj23I5RPkPppSVSjyKD2A2mBJmWGa+KN7f2D6LNh9jkBCeyLktzjg==
+  dependencies:
+    normalize-path "^3.0.0"
+    picomatch "^2.0.4"
+
 apollo-boost@^0.4.9:
   version "0.4.9"
   resolved "https://registry.yarnpkg.com/apollo-boost/-/apollo-boost-0.4.9.tgz#ab3ba539c2ca944e6fd156583a1b1954b17a6791"
@@ -11896,6 +11904,13 @@ react-error-overlay@5.1.6:
   version "5.1.6"
   resolved "https://registry.yarnpkg.com/react-error-overlay/-/react-error-overlay-5.1.6.tgz#0cd73407c5d141f9638ae1e0c63e7b2bf7e9929d"
   integrity sha512-X1Y+0jR47ImDVr54Ab6V9eGk0Hnu7fVWGeHQSOXHf/C2pF9c6uy3gef8QUeuUiWlNb0i08InPSE5a/KJzNzw1Q==
+
+react-icons@^3.10.0:
+  version "3.10.0"
+  resolved "https://registry.yarnpkg.com/react-icons/-/react-icons-3.10.0.tgz#6c217a2dde2e8fa8d293210023914b123f317297"
+  integrity sha512-WsQ5n1JToG9VixWilSo1bHv842Cj5aZqTGiS3Ud47myF6aK7S/IUY2+dHcBdmkQcCFRuHsJ9OMUI0kTDfjyZXQ==
+  dependencies:
+    camelcase "^5.0.0"
 
 react-is@16.8.6, react-is@^16.6.0, react-is@^16.7.0, react-is@^16.8.1:
   version "16.8.6"
