@@ -19,7 +19,6 @@ public class ImgurApi {
 //    public static final String CLIENT_ID = "2d1537da8393cd6";
 
     public String uploadImg(String base64){
-        System.out.println("dasd");
         try {
             Connection.Response response = uploadSync(base64);
             if (response.statusCode() == 400) {
