@@ -26,7 +26,8 @@ public interface PostRepository extends JpaRepository<Post, Long> {
             "join product product on post.post_id = product.post_id \n" +
             "join file file on product.product_id = file.product_id \n" +
             "join (SELECT product_id, group_concat(distinct hashtag separator ',') as hashtags FROM hashtag group by product_id) hashtags on hashtags.product_id = product.product_id\n" +
-            "where product.category = :category", nativeQuery = true)
+            "where product.category = :category " +
+            "order by createdDate desc", nativeQuery = true)
     List<SearchByCategoryOutput> findPostByCategory(@Param("category")String category);
 
     @Query(value = "select post.post_id as postId, post.title as title, product.created_date as createdDate, product.modified_date as modifiedDate, file.img_path as imgPath, hashtags.hashtags as hashtag, " +
