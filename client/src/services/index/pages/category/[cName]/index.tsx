@@ -1,15 +1,16 @@
 import { useRouter } from 'next/router';
 import * as React from 'react';
-import styled from '~/styled';
 import CategoryHeader from '~/services/index/components/CategoryHeader';
+import styled from '~/styled';
+import { categoryItems } from '..';
 
 export default () => {
     const router = useRouter();
 
-    console.log(router.query.cName);
     return (
         <Wrapper>
-            <CategoryHeader type={'normal'} text={router.query.cName} />
+            <CategoryHeader type={'normal'} text={categoryItems[router.query.cName]} />
+
         </Wrapper>
     )
 }

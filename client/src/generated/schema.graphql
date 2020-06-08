@@ -1,5 +1,5 @@
-# source: http://3.34.131.20:8081/graphql
-# timestamp: Mon Jun 08 2020 15:55:12 GMT+0900 (대한민국 표준시)
+# source: http://www.sogaething.com:8081/graphql
+# timestamp: Mon Jun 08 2020 20:12:25 GMT+0900 (대한민국 표준시)
 
 """This directive allows results to be deferred during execution"""
 directive @defer on FIELD
@@ -290,6 +290,7 @@ type Query {
   searchThings(input: HashtagInput!): [PostMetaOutput]
   matchThings(matchingId: Int!): [PostDetailOutput]
   searchThingsByTitle(title: String!): [PostMetaOutput]
+  searchThingsByCategory(category: String!): [PostMetaOutput]
   findAllFile: [FileOutput]
   findAllFiles: [File]
   findFileById(id: Int): FileOutput

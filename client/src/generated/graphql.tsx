@@ -396,6 +396,7 @@ export type IQuery = {
   searchThings?: Maybe<Array<Maybe<IPostMetaOutput>>>;
   matchThings?: Maybe<Array<Maybe<IPostDetailOutput>>>;
   searchThingsByTitle?: Maybe<Array<Maybe<IPostMetaOutput>>>;
+  searchThingsByCategory?: Maybe<Array<Maybe<IPostMetaOutput>>>;
   findAllFile?: Maybe<Array<Maybe<IFileOutput>>>;
   findAllFiles?: Maybe<Array<Maybe<IFile>>>;
   findFileById?: Maybe<IFileOutput>;
@@ -444,6 +445,10 @@ export type IQueryMatchThingsArgs = {
 
 export type IQuerySearchThingsByTitleArgs = {
   title: Scalars["String"];
+};
+
+export type IQuerySearchThingsByCategoryArgs = {
+  category: Scalars["String"];
 };
 
 export type IQueryFindFileByIdArgs = {

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useGetRecentQuery } from '~/generated/graphql';
 import styled from '~/styled';
-import Card from './ProductCard';
+import Card from './CategoryCard';
 
 interface IQueryData {
   findRecentPosts: [IRecentPost];

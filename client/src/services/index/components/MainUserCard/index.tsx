@@ -1,3 +1,4 @@
+import { useObserver } from 'mobx-react';
 import { useRouter } from 'next/router';
 import * as React from 'react';
 import { useGetUserInfoQuery } from '~/generated/graphql';
@@ -8,7 +9,6 @@ import useStores from '../../helpers/useStores';
 import CircleImageView from '../CircleImageView';
 import { TextLoader } from '../LoaderPlaceholder';
 import CirclePlaceHolder from '../LoaderPlaceholder/Circle';
-import { useObserver } from 'mobx-react';
 
 interface IQueryData {
   findUserInfo: IFindUserInfo | null;
@@ -52,8 +52,8 @@ export default () => {
   };
 
   const { findUserInfo } = data as IQueryData;
-  
-  if (loading || error || !findUserInfo) {
+
+  if (loading || error) {
     return (
       <Wrapper>
         <WrapperFlex>
