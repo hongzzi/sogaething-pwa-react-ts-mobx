@@ -82,11 +82,7 @@ public class UserMutation implements GraphQLMutationResolver {
         CookieUtils.deleteCookie(req,res,"token");
         UserLogout output = null;
         Cookie cookie = CookieUtils.getCookie(req,"token");
-//        if(cookie==null){
-//            System.out.println("쿠키 성공");
-//        }else{
-//            System.out.println("쿠키 실패");
-//        }
+
         if(cookie==null){
             output = new UserLogout("SUCCESS",userId);
             return output;

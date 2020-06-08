@@ -23,4 +23,5 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     @Query(value = "SELECT * FROM product WHERE post_id IN :postIds and price >= :startPrice and price <= :endPrice ", nativeQuery = true)
     List<Product> findPostByPrice(@Param("startPrice")int startPrice, @Param("endPrice")int endPrice, @Param("postIds")List<Long> postIds);
+
 }
