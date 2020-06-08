@@ -6,6 +6,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -13,7 +14,9 @@ import java.io.IOException;
 @Service
 public class ImgurApi {
 
-    public static final String CLIENT_ID = "2d1537da8393cd6";
+    @Value("${spring.global.apis.imgur.client-id}")
+    private String CLIENT_ID;
+//    public static final String CLIENT_ID = "2d1537da8393cd6";
 
     public String uploadImg(String base64){
         try {

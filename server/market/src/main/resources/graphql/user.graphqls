@@ -56,6 +56,10 @@ input LoginUserInput {
     token: String
 }
 
+input UpdateImgInput{
+    imageUrl: String
+}
+
 input UpdateUserInput{
     name: String
     email : String
@@ -63,6 +67,8 @@ input UpdateUserInput{
     phone: String
     address: String
 }
+
+
 
 extend type Query {
     findAllUsers: [User]
@@ -74,5 +80,6 @@ extend type Mutation {
     logoutUser(userId: Int!): UserLogout!
     loginUser(input: LoginUserInput!): LoginUserOutput
     updateUser(input: UpdateUserInput!): UserOutput
+    updateImg(input : UpdateImgInput!): UserOutput
     deleteUser(id: Int!): Int
 }
