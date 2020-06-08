@@ -61,11 +61,10 @@ input UpdateImgInput{
 }
 
 input UpdateUserInput{
-    name: String
-    email : String
     imageUrl: String
     phone: String
     address: String
+    trust: Int
 }
 
 
