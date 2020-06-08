@@ -36,4 +36,11 @@ public interface PostRepository extends JpaRepository<Post, Long> {
             "join (SELECT product_id, group_concat(distinct hashtag separator ',') as hashtags FROM hashtag group by product_id) hashtags on hashtags.product_id = product.product_id\n" +
             "where product.product_id in (select product_id from hashtag where hashtag in :hashtags group by product_id order by count(hashtag) desc)", nativeQuery = true)
     List<SearchByCategoryOutput> findByHashTags(@Param("hashtags")List<String> hashtags);
+
+    @Query(value = "select post.post_id, post.title, post.contents, product.category ,product.created_date, product.modified_date, file.img_path, hashtags.hashtags, product.price, post.is_buy, post.view_count, post.deal, post.deal_state, post.sale_date, post.transaction from post\n" +
+            "join product product on post.post_id = product.post_id \n" +
+            "join file file on product.product_id = file.product_id \n" +
+            "join (SELECT product_id, group_concat(distinct hashtag separator ',') as hashtags FROM hashtag group by product_id) hashtags on hashtags.product_id = product.product_id\n" +
+            "where product.product_id in (SELECT product_id FROM product WHERE post_id in (select distinct post_id from post where category = \"디지털/가전\") and price >= 3000000 and price <= 3100000)", nativeQuery = true)
+    List<SearchByCategoryOutput> findByOptions(@Param("hashtags")List<String> hashtags);
 }
