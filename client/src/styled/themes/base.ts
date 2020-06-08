@@ -30,9 +30,10 @@ const theme = {
       color: '#8f9bb3',
     },
     login: {
-      kakao: { bg: '#ffe812', border: 'none' },
+      kakao: { bg: '#ffffff', border: '#ffe812' },
       google: { bg: '#ffffff', border: '#ff6b6b'},
       naver: { bg: '#5dcb50', border: 'none' },
+      facebook: { bg: '#ffffff', border: '#0091ff' },
     },
     chatting: {
       bodyColor: '#ff3d71',

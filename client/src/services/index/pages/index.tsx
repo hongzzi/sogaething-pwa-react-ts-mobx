@@ -16,6 +16,7 @@ import SearchBar from '../components/SearchBar';
 import useStores from '../helpers/useStores';
 import ChatService from '../service/ChatService';
 import { useRouter } from 'next/router';
+import Loader from '../components/Loader';
 
 const PageIndex: NextPage = (props) => {
   const { pageStore, authStore } = useStores();

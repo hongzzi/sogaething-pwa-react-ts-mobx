@@ -1,17 +1,17 @@
+import Link from 'next/link';
+import { useRouter } from 'next/router';
 import * as React from 'react';
 import KakaoLogin from 'react-kakao-login';
 import { useGetLoginMutation } from '~/generated/graphql';
 import styled from '~/styled';
 import GoogleIcon from '../assets/img/signin-google.png?url';
 import KakaoIcon from '../assets/img/signin-kakao.png?url';
+import { KEYS } from '../constants';
 import {
   NEXT_APP_KAKAO_CLIENT_KEY,
 } from '../helpers/config';
 import useStores from '../helpers/useStores';
 import { IAuthResponseDto } from '../store/AuthStore';
-import { useRouter } from 'next/router';
-import { KEYS } from '../constants';
-import Link from 'next/link';
 
 interface ISignInProps {}
 
@@ -30,7 +30,7 @@ export default (props: ISignInProps) => {
         },
       },
     })
-    .then((res: {data : IAuthResponseDto}) => {
+    .then((res: {data: IAuthResponseDto}) => {
       store.authStore.setToken(res.data.loginUser.token);
       router.push('/');
     })
@@ -46,8 +46,10 @@ export default (props: ISignInProps) => {
   const getNaverAuth = () => {};
   return (
     <Wrapper>
+      <WrapperSigninContainer>
       <WrapperLine>
-        <Line>소개 Thing</Line>
+        <Line size={48}>소개</Line>
+        <Line size={70}>ㄸ!</Line>
       </WrapperLine>
       <StyledKakaoLogin
         jsKey={KEYS.KAKAO}
@@ -56,27 +58,29 @@ export default (props: ISignInProps) => {
       >
         <LoginText>카카오로 시작하기</LoginText>
       </StyledKakaoLogin>
-      <LoginButton type={'google'}>
-        <LoginText>구글계정으로 시작하기</LoginText>
+      <LoginButton type={'facebook'}>
+        <LoginText>페이스북으로 시작하기</LoginText>
       </LoginButton>
-      <LoginButton type={'naver'}>
-        <LoginText>네이버로 시작하기</LoginText>
-      </LoginButton>
+      </WrapperSigninContainer>
+      <Background />
     </Wrapper>
   );
 };
 
 const Wrapper = styled.div`
-  padding: 40px;
-  height: 100%;
+  border-bottom-left-radius: 100% 25%;
+  border-bottom-right-radius: 100% 25%;
+  background: white;
+  width: 100%;
+  height: 90%;
+  overflow: hidden;
 `;
 
 const WrapperLine = styled.div`
-  text-align: center;
-  display: flex;
+  margin-top: 20vh;
+  margin-bottom: 5vh;
   align-items: center;
   text-align: center;
-  height: 50%;
   width:100%;
 `;
 
@@ -87,12 +91,13 @@ const WrapperLoginImageText = styled.div`
   margin: auto;
 `;
 
-const Line = styled.p`
-  margin: 22px 0.5rem 0rem 0;
+const Line = styled.p<{size: number}>`
+  /* margin: 22px 0.5rem 0rem 0; */
+  margin: 0;
   width: 100%;
-  font-size: 36px;
+  font-size: ${(props) => props.size + 'px'};
   font-weight: bold;
-  font-family: "Jua";
+  font-family: "TmonMonsori";
   color: ${(props) => props.theme.pointFontColor};
 `;
 
@@ -106,24 +111,39 @@ const LoginText = styled.div`
 
 const StyledKakaoLogin = styled(KakaoLogin)`
   display: flex;
-  height: 49px;
+  height: 52px;
   width: 100%;
-  margin-top: 13px;
   background-color: ${(props) => props.theme.button.login.kakao.bg};
   border-radius: 25px;
-  border: 0ch;
+  border: 3px solid ${(props) => props.theme.button.login.kakao.border};
 `;
 
-const LoginButton = styled.div<{ type: 'google' | 'naver' }>`
-  height: 49px;
+const LoginButton = styled.div<{ type: 'facebook' | 'naver' }>`
+  height: 52px;
   width: 100%;
   display: flex;
   border-radius: 25px;
   background-color: ${(props) => props.theme.button.login[props.type].bg};
   border: ${(props) =>
     props.theme.button.login[props.type].border !== 'none'
-      ? '1px solid ' + props.theme.button.login[props.type].border
+      ? '3px solid ' + props.theme.button.login[props.type].border
       : 'none'};
   margin-top: 13px;
   margin-bottom: 13px;
+`;
+
+const WrapperSigninContainer = styled.div`
+  height: 90%;
+  width: 100%;
+  padding: 40px;
+`;
+
+const Background = styled.div`
+  position: absolute;
+  z-index: -1;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 30%;
+  background-image: linear-gradient(to bottom, #259be5, #6459db);
 `;

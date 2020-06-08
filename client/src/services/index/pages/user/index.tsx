@@ -1,31 +1,47 @@
 import * as React from 'react';
 import { FaMoneyBillWave, FaRegHeart, FaShoppingBag } from 'react-icons/fa';
 import { IoIosPin, IoIosSettings } from 'react-icons/io';
+import { MdGpsFixed } from 'react-icons/md';
+import { useGetUserInfoQuery } from '~/generated/graphql';
 import styled from '~/styled';
 import Camera from '../../assets/img/circle-camera.png?url';
 import NoAvatar from '../../assets/img/no-avatar.png?url';
 import Categoryheader from '../../components/CategoryHeader';
 import CircleImageView from '../../components/CircleImageView';
+import Loader from '../../components/Loader';
 import Nav from '../../components/Nav';
-import { MdGpsFixed } from 'react-icons/md';
 
 export interface IUserProps {}
 
 export default (props: IUserProps) => {
+  const userInfo = useGetUserInfoQuery();
+
+  if (userInfo.loading || !userInfo.data) {
+    return (
+      <Wrapper>
+        <Loader />
+      </Wrapper>
+    );
+  }
+
+  const handleClick = () => {
+    // console.log(userInfo);
+  };
+  const {data} = userInfo;
   return (
     <Wrapper>
       <Categoryheader type={'chat'} text={'내 정보'} />
       <Container>
         <WrapperRow>
-          <WrapperImg>
+          <WrapperImg onClick={handleClick}>
             <CircleImageView src={NoAvatar} size={3} />
           </WrapperImg>
           <WrapperUserInfo>
             <FlexContainer>
-              <BoldText>유일한 </BoldText>
+              <BoldText> {data.findUserInfo!.name} </BoldText>
               <SmallText>lv 1</SmallText>
             </FlexContainer>
-            <SmallText>경기도 수원시 영통구</SmallText>
+            <SmallText>{data.findUserInfo!.address ? data.findUserInfo!.address : '주소를 등록하세요.'}</SmallText>
           </WrapperUserInfo>
         </WrapperRow>
         <WrapperRow>
