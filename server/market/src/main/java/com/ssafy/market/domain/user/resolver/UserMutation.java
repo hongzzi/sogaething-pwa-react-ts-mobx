@@ -73,7 +73,7 @@ public class UserMutation implements GraphQLMutationResolver {
         String[] image = input.getImageUrl().split(",");
         String img = api.uploadImg(image[1]);
 
-        user.update(input.getName(),input.getEmail(),img,input.getPhone(),input.getAddress());
+        user.update(img,input.getPhone(),input.getAddress(),input.getTrust());
         UserOutput output =  new UserOutput(userId,user.getName(),user.getEmail(),user.getImageUrl(),user.getProvider(),user.getProviderId(),user.getPhone(),user.getAddress(),user.getTrust());
         return output;
     }

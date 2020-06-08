@@ -13,7 +13,7 @@ import javax.persistence.*;
 @Table(name="file")
 public class File {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long fileId;
 
     @ManyToOne(targetEntity = Product.class)
