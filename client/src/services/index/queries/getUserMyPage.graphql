@@ -1,0 +1,13 @@
+mutation putUpdateImg($input: UpdateImgInput!){
+    updateImg(input: $input){
+        userId
+        name
+        email
+        imageUrl
+        provider
+        providerId
+        phone
+        address
+        trust
+    }
+}

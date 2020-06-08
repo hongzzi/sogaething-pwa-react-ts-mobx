@@ -9,12 +9,17 @@ import CustomIcon from '../CustomIcon';
 interface ICategoryHeader {
   type: 'check' | 'back-check' | 'normal' | 'chat';
   text?: string;
+  backHome?: boolean;
 }
 
 export default (props: ICategoryHeader) => {
   const router = useRouter();
   const handleBackIconClick = () => {
-    router.back();
+    if(props.backHome){
+      router.push('/');
+    }else{
+      router.back();
+    }
   }
   return (
     <Wrapper>
