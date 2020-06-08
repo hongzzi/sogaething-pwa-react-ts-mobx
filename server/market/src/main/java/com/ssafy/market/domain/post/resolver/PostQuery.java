@@ -39,6 +39,8 @@ public class PostQuery implements GraphQLQueryResolver {
     private final MatchingRepository matchingRepository;
     private final MatchingHashtagRepository matchingHashtagRepository;
 
+    static String [] categoryList = {"", "디지털/가전", "가구", "유아동", "생활/가공식품", "스포츠/레저", "여성의류", "여성잡화", "남성패션/잡화", "게임/취미", "뷰티/미용", "반려동물용품", "도서/티켓/음반"};
+
     public List<PostOutput> findAllPost() {
         List<PostOutput> outputs = new ArrayList<>();
         List<Post> postList = postRepository.findAllByOrderByPostIdDesc();
@@ -148,8 +150,9 @@ public class PostQuery implements GraphQLQueryResolver {
         String[] hashtag = matchingHashtagRepository.findHashtagByMatching(matching).toArray(new String[0]);
         String transaction = matching.getTransaction();
 
-        List<Long> postIdList = productRepository.findPostIdByCategory(category);
-        List<Product> products = productRepository.findPostByPrice(matching.getMinPrice(), matching.getMaxPrice(), postIdList);
+//        List<Long> postIdList = productRepository.findPostIdByCategory(category);
+//        List<Product> products = productRepository.findPostByPrice(matching.getMinPrice(), matching.getMaxPrice(), postIdList);
+        List<Product> products = productRepository.findPostByCategoryAndPrice(matching.getMinPrice(), matching.getMaxPrice(), category);
         for (int i = 0; i < products.size(); i++) {
             if(products.get(i).getPost().getTransaction()!=null && !products.get(i).getPost().getTransaction().equals(transaction)) continue;
 
@@ -173,7 +176,7 @@ public class PostQuery implements GraphQLQueryResolver {
 
     public List<PostMetaOutput> searchThingsByTitle(String title){
         List<Post> posts = postRepository.findByTitleContaining(title);
-        List<PostMetaOutput> outputs = posts.stream().map( post -> {
+        List<PostMetaOutput> outputs = posts.stream().map(post -> {
             Product product = productRepository.findByPost(post);
             File file = fileRepository.findTop1ByProduct(product);
             PostMetaOutput postMetaOutput = PostMetaOutput.builder()
@@ -197,8 +200,8 @@ public class PostQuery implements GraphQLQueryResolver {
         return outputs;
     }
 
-    public List<PostMetaOutput> searchThingsByCategory(String category){
-        List<SearchByCategoryOutput> posts = postRepository.findPostByCategory(category);
+    public List<PostMetaOutput> searchThingsByCategory(int categoryNum){
+        List<SearchByCategoryOutput> posts = postRepository.findPostByCategory(categoryList[categoryNum]);
         return getPostMetaOutputs(posts);
     }
 
