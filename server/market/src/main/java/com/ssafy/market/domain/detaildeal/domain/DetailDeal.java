@@ -17,7 +17,7 @@ import java.util.List;
 @Table(name = "detail_deal")
 public class DetailDeal extends BaseTimeEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long dealId;
 
     @OneToOne(targetEntity = Post.class)

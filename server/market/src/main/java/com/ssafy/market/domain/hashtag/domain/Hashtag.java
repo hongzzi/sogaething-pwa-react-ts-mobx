@@ -14,7 +14,7 @@ import javax.persistence.*;
 @Table(name="hashtag")
 public class Hashtag {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long hashtagId;
 
     @ManyToOne

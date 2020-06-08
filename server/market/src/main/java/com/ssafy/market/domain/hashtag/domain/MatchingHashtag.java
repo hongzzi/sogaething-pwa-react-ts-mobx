@@ -13,7 +13,7 @@ import javax.persistence.*;
 @Table(name="matching_hashtag")
 public class MatchingHashtag {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "matching_hashtag_id")
     private Long matchingHashtagId;
 

@@ -179,6 +179,7 @@ export type IMutation = {
   logoutUser: IUserLogout;
   loginUser?: Maybe<ILoginUserOutput>;
   updateUser?: Maybe<IUserOutput>;
+  updateImg?: Maybe<IUserOutput>;
   deleteUser?: Maybe<Scalars["Int"]>;
   createHashtag?: Maybe<IHashtagOutput>;
   updateHashtag?: Maybe<IHashtagOutput>;
@@ -243,6 +244,10 @@ export type IMutationLoginUserArgs = {
 
 export type IMutationUpdateUserArgs = {
   input: IUpdateUserInput;
+};
+
+export type IMutationUpdateImgArgs = {
+  input: IUpdateImgInput;
 };
 
 export type IMutationDeleteUserArgs = {
@@ -390,6 +395,7 @@ export type IQuery = {
   findByDetailPost?: Maybe<IPostDetailOutput>;
   searchThings?: Maybe<Array<Maybe<IPostMetaOutput>>>;
   matchThings?: Maybe<Array<Maybe<IPostDetailOutput>>>;
+  searchThingsByTitle?: Maybe<Array<Maybe<IPostMetaOutput>>>;
   findAllFile?: Maybe<Array<Maybe<IFileOutput>>>;
   findAllFiles?: Maybe<Array<Maybe<IFile>>>;
   findFileById?: Maybe<IFileOutput>;
@@ -408,7 +414,7 @@ export type IQuery = {
   findAllProduct?: Maybe<Array<Maybe<IProductOutput>>>;
   findAllProducts?: Maybe<Array<Maybe<IProduct>>>;
   findByProductId?: Maybe<IProductOutput>;
-  findPostByUserId?: Maybe<Array<Maybe<IJjimOutput>>>;
+  findJjimByUserId?: Maybe<Array<Maybe<IJjimOutput>>>;
   findUserHistoryByUserId?: Maybe<Array<Maybe<IUserHistoryResponse>>>;
 };
 
@@ -436,6 +442,10 @@ export type IQueryMatchThingsArgs = {
   matchingId: Scalars["Int"];
 };
 
+export type IQuerySearchThingsByTitleArgs = {
+  title: Scalars["String"];
+};
+
 export type IQueryFindFileByIdArgs = {
   id?: Maybe<Scalars["Int"]>;
 };
@@ -460,7 +470,7 @@ export type IQueryFindByProductIdArgs = {
   id?: Maybe<Scalars["Int"]>;
 };
 
-export type IQueryFindPostByUserIdArgs = {
+export type IQueryFindJjimByUserIdArgs = {
   userId?: Maybe<Scalars["Int"]>;
 };
 
@@ -488,6 +498,10 @@ export type IUpdateHashtagInput = {
   hashtag?: Maybe<Scalars["String"]>;
 };
 
+export type IUpdateImgInput = {
+  imageUrl?: Maybe<Scalars["String"]>;
+};
+
 export type IUpdatePostInput = {
   postId: Scalars["Int"];
   title: Scalars["String"];
@@ -508,10 +522,11 @@ export type IUpdateProductInput = {
 };
 
 export type IUpdateUserInput = {
+  name?: Maybe<Scalars["String"]>;
+  email?: Maybe<Scalars["String"]>;
   imageUrl?: Maybe<Scalars["String"]>;
   phone?: Maybe<Scalars["String"]>;
   address?: Maybe<Scalars["String"]>;
-  trust?: Maybe<Scalars["Int"]>;
 };
 
 export type IUser = {
@@ -858,6 +873,27 @@ export type IUpdateViewMutation = { __typename?: "Mutation" } & Pick<
   IMutation,
   "updateView"
 >;
+
+export type IPutUpdateImgMutationVariables = {
+  input: IUpdateImgInput;
+};
+
+export type IPutUpdateImgMutation = { __typename?: "Mutation" } & {
+  updateImg: Maybe<
+    { __typename?: "UserOutput" } & Pick<
+      IUserOutput,
+      | "userId"
+      | "name"
+      | "email"
+      | "imageUrl"
+      | "provider"
+      | "providerId"
+      | "phone"
+      | "address"
+      | "trust"
+    >
+  >;
+};
 
 import gql from "graphql-tag";
 import * as React from "react";
@@ -1749,4 +1785,76 @@ export function useUpdateViewMutation(
     IUpdateViewMutation,
     IUpdateViewMutationVariables
   >(UpdateViewDocument, baseOptions);
+}
+export const PutUpdateImgDocument = gql`
+  mutation putUpdateImg($input: UpdateImgInput!) {
+    updateImg(input: $input) {
+      userId
+      name
+      email
+      imageUrl
+      provider
+      providerId
+      phone
+      address
+      trust
+    }
+  }
+`;
+export type IPutUpdateImgMutationFn = ReactApollo.MutationFn<
+  IPutUpdateImgMutation,
+  IPutUpdateImgMutationVariables
+>;
+
+export const PutUpdateImgComponent = (
+  props: Omit<
+    Omit<
+      ReactApollo.MutationProps<
+        IPutUpdateImgMutation,
+        IPutUpdateImgMutationVariables
+      >,
+      "mutation"
+    >,
+    "variables"
+  > & { variables?: IPutUpdateImgMutationVariables }
+) => (
+  <ReactApollo.Mutation<IPutUpdateImgMutation, IPutUpdateImgMutationVariables>
+    mutation={PutUpdateImgDocument}
+    {...props}
+  />
+);
+
+export type IPutUpdateImgProps<TChildProps = {}> = Partial<
+  ReactApollo.MutateProps<IPutUpdateImgMutation, IPutUpdateImgMutationVariables>
+> &
+  TChildProps;
+export function withPutUpdateImg<TProps, TChildProps = {}>(
+  operationOptions?: ReactApollo.OperationOption<
+    TProps,
+    IPutUpdateImgMutation,
+    IPutUpdateImgMutationVariables,
+    IPutUpdateImgProps<TChildProps>
+  >
+) {
+  return ReactApollo.withMutation<
+    TProps,
+    IPutUpdateImgMutation,
+    IPutUpdateImgMutationVariables,
+    IPutUpdateImgProps<TChildProps>
+  >(PutUpdateImgDocument, {
+    alias: "withPutUpdateImg",
+    ...operationOptions
+  });
+}
+
+export function usePutUpdateImgMutation(
+  baseOptions?: ReactApolloHooks.MutationHookOptions<
+    IPutUpdateImgMutation,
+    IPutUpdateImgMutationVariables
+  >
+) {
+  return ReactApolloHooks.useMutation<
+    IPutUpdateImgMutation,
+    IPutUpdateImgMutationVariables
+  >(PutUpdateImgDocument, baseOptions);
 }

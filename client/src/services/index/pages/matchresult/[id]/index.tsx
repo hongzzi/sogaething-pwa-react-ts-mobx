@@ -6,6 +6,7 @@ import FeedCardList from '~/services/index/components/FeedCardList';
 import styled from '~/styled';
 
 import { useGetMatchResultsQuery } from '~/generated/graphql';
+import Loader from '~/services/index/components/Loader';
 
 export default () => {
   const router = useRouter();
@@ -16,7 +17,7 @@ export default () => {
       <CategoryHeader type={'normal'} text={'매칭결과'} />
       {
         loading &&
-        <p>loading…</p>
+        <Loader />
       }
       {
         error &&
@@ -28,7 +29,7 @@ export default () => {
           <HashTagHeader>
             {
               data.findAllMatchingHashtagByMatchingId && data.findAllMatchingHashtagByMatchingId.map(
-                (value) => (<>#{value} </>),
+                (value) => (`#${value} `),
               )}
           </HashTagHeader>
           {

@@ -8,9 +8,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UpdateUserInput {
-    private String name;
-    private String email;
     private String imageUrl;
     private String phone;
     private String address;
+    private int trust;
 }

@@ -15,7 +15,7 @@ import javax.persistence.*;
 @Table(name="product")
 public class Product extends BaseTimeEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long productId;
 
     @ManyToOne(targetEntity = Post.class)

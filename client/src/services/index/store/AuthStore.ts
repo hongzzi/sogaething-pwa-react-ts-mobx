@@ -31,9 +31,10 @@ export type Provider = 'kakao' | 'google' | 'naver';
 class AuthStore {
   @observable token: string = '';
   @observable refreshToken: string = '';
-  @observable auth: IAuth | undefined;
+  @observable auth: IAuth;
   @observable email = '';
   @observable provider: string = '';
+  @observable imgurl: string = '';
 
   constructor(root: any, initialData?: AuthStore) {
     if (initialData) {
@@ -122,7 +123,11 @@ class AuthStore {
   signOut() {
     window.sessionStorage.removeItem('jwt');
     this.token = '';
-    this.auth = undefined;
+    this.auth = {
+      sub: 'logout',
+      userId: -1,
+      userName: '',
+    };
   }
   @action
   async nextServerInit(req: Request, res: Response) {
@@ -153,6 +158,13 @@ class AuthStore {
     } catch (error) {
       console.error(error);
     }
+  }
+
+  @action
+  setUserImage(data: string) {
+    console.log('------setUserImage----------------------------')
+    console.log(data);
+    this.imgurl = data;
   }
 }
 
