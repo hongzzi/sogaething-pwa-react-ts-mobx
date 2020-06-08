@@ -604,6 +604,36 @@ export type IGetAutoCompleteQuery = { __typename?: "Query" } & {
   >;
 };
 
+export type IGetSearchByCategoryQueryVariables = {
+  input: Scalars["String"];
+};
+
+export type IGetSearchByCategoryQuery = { __typename?: "Query" } & {
+  searchThingsByCategory: Maybe<
+    Array<
+      Maybe<
+        { __typename?: "PostMetaOutput" } & Pick<
+          IPostMetaOutput,
+          | "postId"
+          | "title"
+          | "category"
+          | "imgPath"
+          | "price"
+          | "hashtag"
+          | "isBuy"
+          | "viewCount"
+          | "deal"
+          | "dealState"
+          | "saleDate"
+          | "transaction"
+          | "createdDate"
+          | "modifiedDate"
+        >
+      >
+    >
+  >;
+};
+
 export type IGetLoginMutationVariables = {
   input: ILoginUserInput;
 };
@@ -965,6 +995,84 @@ export function useGetAutoCompleteQuery(
     IGetAutoCompleteQuery,
     IGetAutoCompleteQueryVariables
   >(GetAutoCompleteDocument, baseOptions);
+}
+export const GetSearchByCategoryDocument = gql`
+  query getSearchByCategory($input: String!) {
+    searchThingsByCategory(category: $input) {
+      postId
+      title
+      category
+      imgPath
+      price
+      hashtag
+      isBuy
+      viewCount
+      deal
+      dealState
+      saleDate
+      transaction
+      createdDate
+      modifiedDate
+    }
+  }
+`;
+
+export const GetSearchByCategoryComponent = (
+  props: Omit<
+    Omit<
+      ReactApollo.QueryProps<
+        IGetSearchByCategoryQuery,
+        IGetSearchByCategoryQueryVariables
+      >,
+      "query"
+    >,
+    "variables"
+  > & { variables: IGetSearchByCategoryQueryVariables }
+) => (
+  <ReactApollo.Query<
+    IGetSearchByCategoryQuery,
+    IGetSearchByCategoryQueryVariables
+  >
+    query={GetSearchByCategoryDocument}
+    {...props}
+  />
+);
+
+export type IGetSearchByCategoryProps<TChildProps = {}> = Partial<
+  ReactApollo.DataProps<
+    IGetSearchByCategoryQuery,
+    IGetSearchByCategoryQueryVariables
+  >
+> &
+  TChildProps;
+export function withGetSearchByCategory<TProps, TChildProps = {}>(
+  operationOptions?: ReactApollo.OperationOption<
+    TProps,
+    IGetSearchByCategoryQuery,
+    IGetSearchByCategoryQueryVariables,
+    IGetSearchByCategoryProps<TChildProps>
+  >
+) {
+  return ReactApollo.withQuery<
+    TProps,
+    IGetSearchByCategoryQuery,
+    IGetSearchByCategoryQueryVariables,
+    IGetSearchByCategoryProps<TChildProps>
+  >(GetSearchByCategoryDocument, {
+    alias: "withGetSearchByCategory",
+    ...operationOptions
+  });
+}
+
+export function useGetSearchByCategoryQuery(
+  baseOptions?: ReactApolloHooks.QueryHookOptions<
+    IGetSearchByCategoryQueryVariables
+  >
+) {
+  return ReactApolloHooks.useQuery<
+    IGetSearchByCategoryQuery,
+    IGetSearchByCategoryQueryVariables
+  >(GetSearchByCategoryDocument, baseOptions);
 }
 export const GetLoginDocument = gql`
   mutation getLogin($input: LoginUserInput!) {

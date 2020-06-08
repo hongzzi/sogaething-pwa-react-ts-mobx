@@ -1,7 +1,6 @@
 import Link from 'next/link';
 import * as React from 'react';
 import styled, { keyframes } from '~/styled';
-import { IRecentPost } from '.';
 import { numberWithCommas } from '../../helpers/comma';
 import ImageView from '../ImageView';
 import { TextLoader } from '../LoaderPlaceholder';
@@ -25,7 +24,7 @@ export default (props: IProductCard) => {
 
   return (
 
-    <Link href={`/post/${postId}`}>
+    // <Link href={`/post/${postId}`}>
     <Wrapper idx={props.idx} loading={props.loading}>
 
       <ImageView
@@ -51,7 +50,7 @@ export default (props: IProductCard) => {
         </Line>
       </TextCardContainer>
     </Wrapper>
-    </Link >
+    // </Link >
   );
 };
 

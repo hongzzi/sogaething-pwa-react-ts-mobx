@@ -1,37 +1,26 @@
 import * as React from 'react';
-import { useGetRecentQuery } from '~/generated/graphql';
+import { useGetSearchByCategoryQuery } from '~/generated/graphql';
+import { IPostMetaOutput } from '~/generated/graphql';
 import styled from '~/styled';
+import category from '../../pages/category';
 import Card from './CategoryCard';
 
 interface IQueryData {
-  findRecentPosts: [IRecentPost];
+  findRecentPosts: [IPostMetaOutput];
 }
 
-export interface IRecentPost {
-  category: string;
-  postId: string;
-  user: any;
-  hashTags: object[] | any;
-  isBuy: boolean;
-  price: number;
-  saleDate: string;
-  imgUrls: object[] | any;
-  deal: string;
-  createdDate: string;
-  modifiedDate: string;
-}
-
-interface ICardProps {
-}
+interface ICardProps {}
 
 export default (props: ICardProps) => {
-  const { data, loading, error } = useGetRecentQuery();
-  let Cards;
+  const { data, loading, error } = useGetSearchByCategoryQuery({
+    variables: { input: '1' },
+  });
   const handleClickCard = () => {
-    console.log(findRecentPosts);
+    console.log(data);
     console.log(error);
   };
 
+  let Cards;
   if (loading || error) {
     Cards = [1, 2, 3, 4, 5, 6].map((item, i) => {
       return <Card key={i} idx={i} cardData={null} loading />;
@@ -39,19 +28,20 @@ export default (props: ICardProps) => {
     return <Wrapper onClick={handleClickCard}>{Cards}</Wrapper>;
   }
 
-  const { findRecentPosts } = data as IQueryData;
+  // const {  } = data;
 
-  if (Array.isArray(findRecentPosts)) {
-    Cards = data!.findRecentPosts!.map((item, i) => {
-      if (data!.findRecentPosts) {
-        return <Card key={i} idx={i} cardData={item} loading={false} />;
-      }
-    });
-  }
+  // if (Array.isArray(findRecentPosts)) {
+  //   Cards = data!.findRecentPosts!.map((item, i) => {
+  //     if (data!.findRecentPosts) {
+  //       return <Card key={i} idx={i} cardData={item} loading={false} />;
+  //     }
+  //   });
+  // }
 
   return <Wrapper onClick={handleClickCard}>{Cards}</Wrapper>;
 };
 
 const Wrapper = styled.div`
   display: block;
+  padding: 60px 16px 0 16px;
 `;

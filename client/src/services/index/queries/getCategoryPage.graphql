@@ -1,5 +1,5 @@
-mutation getSearchByCategory($input: Int){
-    searchThingsByCategory(input: $input){
+query getSearchByCategory($input: String!){
+    searchThingsByCategory(categoryNum: $input){
         postId
         title
         category

@@ -3,6 +3,7 @@ import * as React from 'react';
 import CategoryHeader from '~/services/index/components/CategoryHeader';
 import styled from '~/styled';
 import { categoryItems } from '..';
+import CategoryCardList from '~/services/index/components/CategoryCardList';
 
 export default () => {
     const router = useRouter();
@@ -10,7 +11,7 @@ export default () => {
     return (
         <Wrapper>
             <CategoryHeader type={'normal'} text={categoryItems[router.query.cName]} />
-
+            <CategoryCardList />
         </Wrapper>
     )
 }
