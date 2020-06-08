@@ -19,6 +19,7 @@ import com.ssafy.market.domain.user.domain.User;
 import com.ssafy.market.domain.user.dto.UserInfoResponse;
 import com.ssafy.market.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -118,36 +119,11 @@ public class PostQuery implements GraphQLQueryResolver {
 
     public List<PostMetaOutput> searchThings(HashtagInput input) {
         String[] hashtags = input.getHashtag();
-        List<Long> hashtagCountOutputs = hashtagRepository.findHashtagCount(Arrays.asList(hashtags));
-        List<PostMetaOutput> outputs = new ArrayList<>();
-        for (int i = 0; i < hashtagCountOutputs.size(); i++) {
-            Product product = productRepository.findByProductId(hashtagCountOutputs.get(i));
-            Post post = product.getPost();
-            File file = fileRepository.findTop1ByProduct(product);
-
-            PostMetaOutput postMetaOutput = PostMetaOutput.builder()
-                    .postId(post.getPostId())
-                    .title(post.getTitle())
-                    .category(product.getCategory())
-                    .imgPath(file.getImgPath())
-                    .price(productRepository.totalPriceByPostId(post))
-                    .hashtag(hashtagRepository.findDistinctByHashtag(product.getProductId()))
-                    .isBuy(post.isBuy())
-                    .viewCount(post.getViewCount())
-                    .deal(post.getDeal())
-                    .dealState(post.getDealState())
-                    .saleDate(post.getSaleDate().toString())
-                    .transaction(post.getTransaction())
-                    .createdDate(post.getCreatedDate().toString())
-                    .modifiedDate(post.getModifiedDate().toString())
-                    .build();
-            outputs.add(postMetaOutput);
-        }
-        return outputs;
+        List<SearchByCategoryOutput> posts = postRepository.findByHashTags(Arrays.asList(hashtags));
+        return getPostMetaOutputs(posts);
     }
 
     public PostDetailOutput findByDetailPost(Long postId){
-
         Post post = postRepository.findByPostId(postId);
         Product product = productRepository.findByPost(post);
         User writer = userRepository.findByUserId(post.getUser().getUserId());
@@ -196,12 +172,10 @@ public class PostQuery implements GraphQLQueryResolver {
     }
 
     public List<PostMetaOutput> searchThingsByTitle(String title){
-//        List<PostMetaOutput> outputs = new ArrayList<>();
         List<Post> posts = postRepository.findByTitleContaining(title);
         List<PostMetaOutput> outputs = posts.stream().map( post -> {
             Product product = productRepository.findByPost(post);
             File file = fileRepository.findTop1ByProduct(product);
-
             PostMetaOutput postMetaOutput = PostMetaOutput.builder()
                     .postId(post.getPostId())
                     .title(post.getTitle())
@@ -223,4 +197,32 @@ public class PostQuery implements GraphQLQueryResolver {
         return outputs;
     }
 
+    public List<PostMetaOutput> searchThingsByCategory(String category){
+        List<SearchByCategoryOutput> posts = postRepository.findPostByCategory(category);
+        return getPostMetaOutputs(posts);
+    }
+
+    @NotNull
+    private List<PostMetaOutput> getPostMetaOutputs(List<SearchByCategoryOutput> posts) {
+        List<PostMetaOutput> outputs = posts.stream().map( post -> {
+            PostMetaOutput postMetaOutput = PostMetaOutput.builder()
+                    .postId(post.getPostId())
+                    .title(post.getTitle())
+                    .category(post.getCategory())
+                    .imgPath(post.getImgPath())
+                    .price(post.getPrice())
+                    .hashtag(Arrays.asList(post.getHashtag().split(",")))
+                    .isBuy(post.getIsBuy())
+                    .viewCount(post.getViewCount())
+                    .deal(post.getDeal())
+                    .dealState(post.getDealState())
+                    .saleDate(post.getSaleDate())
+                    .transaction(post.getTransaction())
+                    .createdDate(post.getCreatedDate())
+                    .modifiedDate(post.getModifiedDate())
+                    .build();
+            return postMetaOutput;
+        }).collect(Collectors.toList());
+        return outputs;
+    }
 }
