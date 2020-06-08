@@ -92,15 +92,16 @@ public class ChatRoomService {
                 Map<String, String> sellerUser = new HashMap<>();
                 sellerUser.put("userId", String.valueOf(seller.getUserId()));
                 sellerUser.put("userName", seller.getName());
+                sellerUser.put("imageUrl", seller.getImageUrl());
                 Map<String, String> buyerUser = new HashMap<>();
                 buyerUser.put("userId", String.valueOf(buyer.getUserId()));
                 buyerUser.put("userName", buyer.getName());
+                buyerUser.put("imageUrl", buyer.getImageUrl());
                 String createdDateTime = chatRoom.getCreatedDateTime();
                 String modifiedDateTime = chatRoom.getModifiedDateTime();
                 Boolean isSellerExit = chatRoom.isSellerExit();
                 Boolean isBuyerExit = chatRoom.isBuyerExit();
                 String lastMessage = chatMongoRepository.getLastChatMessageByRoomId(chatRoom.getRoomId());
-                System.out.println("last message: "+ lastMessage);
                 ChatRoomDto chatRoomDto = new ChatRoomDto(chatRoom.getRoomId(), sellerUser, buyerUser, createdDateTime, modifiedDateTime, isSellerExit, isBuyerExit, lastMessage);
                 result.add(chatRoomDto);
             }
