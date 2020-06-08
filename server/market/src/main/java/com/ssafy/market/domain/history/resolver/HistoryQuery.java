@@ -37,19 +37,18 @@ public class HistoryQuery implements GraphQLQueryResolver {
 
     public List<UserHistoryResponse> findUserHistoryByUserId(DataFetchingEnvironment env){
         Long userId = tokenProvider.getUserIdFromHeader(env);
-//        List<Long> histories = historyRepository.findPostIdByCategory(userId);
         List<History> histories = historyRepository.findByUserIdOrderByCreatedDateDesc(userId);
-        Set<Long> set = new HashSet<>();
+        List<Long> postIds = new ArrayList<>();
         for (int i = 0; i < histories.size(); i++) {
-            set.add(histories.get(i).getPostId());
+            if(!postIds.contains(histories.get(i).getPostId())) {
+                postIds.add(histories.get(i).getPostId());
+            }
         }
-        List<Long> postIds = new ArrayList<>(set);
         List<UserHistoryResponse> userHistoryResponses = new ArrayList<>();
 
         for (int i = 0; i < postIds.size(); i++) {
             Long postId = postIds.get(i);
             Post post = postRepository.findByPostId(postId);
-            System.out.println(postId);
             if(userId == post.getUserId()) continue;
 
             Product product = productRepository.findByPost(post);
