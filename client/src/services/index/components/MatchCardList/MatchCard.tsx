@@ -1,3 +1,4 @@
+import moment from 'moment'; ;
 import { useRouter } from 'next/router';
 import * as React from 'react';
 import styled from '~/styled';
@@ -23,21 +24,22 @@ export default (props: IMatchCardProps) => {
   const { match } = props;
   const router = useRouter();
   const handleClick = () => {
-    router.push(`/matchresult/${match.matchingId}`)
+    router.replace(`/matchresult/${match.matchingId}`)
   }
   const isMatchPossible = props.match.possibility;
+
   let color = 'green';
-  if(isMatchPossible.endsWith('높음')){
-  }else if(isMatchPossible.endsWith('중간')){
-    color= 'orange';
-  }else if(isMatchPossible.endsWith('낮음')){
+  if (isMatchPossible.endsWith('높음')) {
+  } else if (isMatchPossible.endsWith('중간')) {
+    color = 'orange';
+  } else if (isMatchPossible.endsWith('낮음')) {
     color = 'red';
   }
 
   return (
     <Wrapper onClick={handleClick}>
       <TopContent color={color}>
-        <InnerLine>{match.category}</InnerLine> <InnerLine>{match.createdDate}</InnerLine>
+        <InnerLine>{match.category}</InnerLine> <InnerLine>{moment(match.createdDate).format('YYYY년M월D일 dd요일')}</InnerLine>
         <InnerLine>
           <SmallIcon
             src={
@@ -93,18 +95,18 @@ const TopContent = styled.div`
   justify-content: space-between;
   font-size: 10px;
   color: #6d7278;
-  border-bottom: 2px solid ${props => props.color};
+  border-bottom: 2px solid ${(props) => props.color};
 `;
 
 const Line = styled.div`
-    color: ${props => props.color};
+    color: ${(props) => props.color};
     font-weight: bold;
     line-height: 28px;
 `;
 
 const InnerLine = styled.div`
   display: inline;
-  color: ${props => props.color};
+  color: ${(props) => props.color};
 `;
 
 const BottomContent = styled.div`
