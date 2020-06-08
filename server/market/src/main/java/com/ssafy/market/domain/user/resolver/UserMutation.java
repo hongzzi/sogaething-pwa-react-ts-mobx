@@ -9,7 +9,6 @@ import com.ssafy.market.domain.user.util.CookieUtils;
 import com.ssafy.market.global.apis.ImgurApi;
 import com.ssafy.market.global.apis.KakaoApi;
 import graphql.schema.DataFetchingEnvironment;
-import graphql.servlet.GraphQLContext;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.stereotype.Component;
@@ -55,6 +54,16 @@ public class UserMutation implements GraphQLMutationResolver {
         }
 
         LoginUserOutput output = new LoginUserOutput(Jwt);
+        return output;
+    }
+    @Transactional
+    public UserOutput updateImg(UpdateImgInput input, DataFetchingEnvironment env){
+        Long userId = tokenProvider.getUserIdFromHeader(env);
+        User user = userRepository.findByUserId(userId);
+        String[] image = input.getImageUrl().split(",");
+        String img = api.uploadImg(image[1]);
+        user.updateimg(img);
+        UserOutput output =  new UserOutput(userId,user.getName(),user.getEmail(),user.getImageUrl(),user.getProvider(),user.getProviderId(),user.getPhone(),user.getAddress(),user.getTrust());
         return output;
     }
     @Transactional
