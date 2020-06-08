@@ -14,9 +14,9 @@ export enum ENDPOINT {
     GRAPHQL = 'http://www.sogaething.com:8081/graphql',
     REST = 'http://www.sogaething.com:8081/chat',
     SOCKET = 'http://www.sogaething.com:8081/ws-stomp',
-    // GRAPHQL = 'http://localhost:8080/graphql',
-    // REST = 'http://localhost:8080/chat',
-    // SOCKET = 'http://localhost:8080/ws-stomp',
+//     GRAPHQL = 'http://localhost:8080/graphql',
+//     REST = 'http://localhost:8080/chat',
+//     SOCKET = 'http://localhost:8080/ws-stomp',
 }
 
 export enum KEYS {
