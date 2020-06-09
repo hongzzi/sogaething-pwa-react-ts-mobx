@@ -97,8 +97,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/**/*.css",
                         "/**/*.js")
                 .permitAll()
-                .antMatchers("/","/auth/**", "/oauth2/**", "/apis/graphql", "/chat/**", "/ws-stomp/**")
-                .permitAll();
+                .anyRequest().permitAll();
 
         http.addFilterBefore(tokenAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
     }
