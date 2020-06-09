@@ -49,6 +49,12 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
 
             String Token = getTokenFromRequest(request);
             Cookie cookie = CookieUtils.getCookie(request,"token");
+            if(cookie == null && Token == null){
+                System.out.println("쿠키랑 헤더에 토큰 정보가 없음.");
+            }
+            if(Token==null && cookie!=null){
+                Token = cookie.getValue();
+            }
             if(cookie!=null && StringUtils.hasText(Token) && tokenProvider.validateToken(Token)) {
                 Long userId = tokenProvider.getUserIdFromToken(Token);
                 UserDetails userDetails = customUserDetailsService.loadUserById(userId);

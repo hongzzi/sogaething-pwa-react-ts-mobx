@@ -36,17 +36,16 @@ public class AppProperties {
     }
 
     public static final class OAuth2 {
-        private List<String> authorizedRedirectUris = new ArrayList<>();
-
-        public List<String> getAuthorizedRedirectUris() {
-//            System.out.println(authorizedRedirectUris);
-            return authorizedRedirectUris;
-        }
-
-        public OAuth2 authorizedRedirectUris(List<String> authorizedRedirectUris) {
-            this.authorizedRedirectUris = authorizedRedirectUris;
-            return this;
-        }
+//        private List<String> authorizedRedirectUris = new ArrayList<>();
+//
+//        public List<String> getAuthorizedRedirectUris() {
+//            return authorizedRedirectUris;
+//        }
+//
+//        public OAuth2 authorizedRedirectUris(List<String> authorizedRedirectUris) {
+//            this.authorizedRedirectUris = authorizedRedirectUris;
+//            return this;
+//        }
     }
 
     public Auth getAuth() {
