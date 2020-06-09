@@ -1,10 +1,11 @@
-import { ENDPOINT } from './../constants';
 import axios, { AxiosResponse } from 'axios';
 import { NEXT_APP_REST_ENDPOINT } from '../helpers/config';
+import { ENDPOINT } from './../constants';
 
 export interface ChatUserDto {
   userName: string;
   userId: string | number;
+  imgPath: string;
 }
 
 export interface ChatRoomListItemDto {
@@ -25,8 +26,14 @@ export interface AuthResponseDto {
 }
 
 export interface IChatRoomAuthDto {
-  seller: string;
-  buyer: string;
+  seller: {
+    imageUrl: string;
+    name: string;
+  };
+  buyer: {
+    imageUrl: string;
+    name: string;
+  };
 }
 
 export interface IChatDto {
@@ -49,17 +56,9 @@ export interface ICreateChatRoomRequestDto {
 }
 
 export interface ICreateChatRoomResponseDto {
-  // buyerExit: boolean;
-  // buyerId: string;
-  // createdDateTime: string;
-  // modifiedDateTime: string;
-  // postId: string;
-  // roomId: number;
-  // sellerExit: boolean;
-  // sellerId: string;
-  content: string, // 방번호
-  name: string, // createChatroom
-  state: string, // success
+  content: string; // 방번호
+  name: string; // createChatroom
+  state: string; // success
 }
 
 const API_HOST = NEXT_APP_REST_ENDPOINT || ENDPOINT.REST;

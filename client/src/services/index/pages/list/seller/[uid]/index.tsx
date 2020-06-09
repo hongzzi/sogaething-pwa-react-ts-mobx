@@ -4,6 +4,7 @@ import styled from '~/styled';
 import { useRouter } from 'next/router';
 import { useGetMyPostsQuery } from '~/generated/graphql';
 
+import Loader from '~/services/index/components/Loader';
 import Categoryheader from '../../../../components/CategoryHeader';
 import Nav from '../../../../components/Nav';
 import PostList from '../../../../components/PostList';
@@ -32,7 +33,7 @@ export default (props: IPostListSellerProps) => {
             <Categoryheader type={'normal'} text={'판매내역'} />
             {
                 loading &&
-                <p>Loading</p>
+                <Loader />
             }
             {
                 error &&

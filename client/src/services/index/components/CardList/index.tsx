@@ -55,8 +55,6 @@ export default () => {
   const handleCardClick = () => {};
   let Cards;
   if (loading || error) {
-    console.log(authStore.auth!.sub);
-    if(error) console.log(error);
     Cards = [1, 2, 3].map((item, i) => {
       return <Card key={i} cardData={null} loading />;
     });

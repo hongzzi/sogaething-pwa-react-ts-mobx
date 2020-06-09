@@ -30,6 +30,11 @@ export default class extends React.Component {
 
     const mobxStore = initializeStore();
     mobxStore.pageStore.clickedIdx = navState;
+
+    if(ctx.req){
+      console.log(ctx.req.headers);
+    }
+
     try {
       if (isServer) {
         await mobxStore.authStore.nextServerInit(ctx.req, ctx.res);
@@ -93,9 +98,10 @@ export default class extends React.Component {
 
 class App extends NextApp<any> {
   componentDidMount() {
-    if (!this.props.store.authStore.token) {
-      Router.push('/signin');
-    }
+    // if (!this.props.store.authStore.token) {
+    //   Router.push('/signin');
+    // }
+    // console.log(this.props.store.authStore.token);
   }
   render() {
     const { Component, pageProps } = this.props;

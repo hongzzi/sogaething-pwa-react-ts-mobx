@@ -4,6 +4,7 @@ import * as React from 'react';
 import styled from '~/styled';
 import CategoryHeader from '../../components/CategoryHeader';
 import ChatList from '../../components/ChatList';
+import Loader from '../../components/Loader';
 import Nav from '../../components/Nav';
 import useStores from '../../helpers/useStores';
 import { MarginTopCategoryHeaderContainer } from '../matchresult/[id]';
@@ -25,6 +26,10 @@ export default () => {
   }, [])
 
   const handleOnClick = () => {
+  }
+
+  if (loading) {
+    return <Loader />
   }
 
   return (

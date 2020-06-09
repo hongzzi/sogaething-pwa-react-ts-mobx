@@ -1,9 +1,11 @@
+import { useObserver } from 'mobx-react';
 import { useRouter } from 'next/router';
 import * as React from 'react';
 import styled from '~/styled';
 import HeaderBack from '../../assets/img/header-back.png?url';
 import HeaderCheck from '../../assets/img/header-check.png?url';
 import HeacerMenu from '../../assets/img/header-menu.png?url';
+import useStores from '../../helpers/useStores';
 import CustomIcon from '../CustomIcon';
 
 interface ICategoryHeader {
@@ -15,9 +17,9 @@ interface ICategoryHeader {
 export default (props: ICategoryHeader) => {
   const router = useRouter();
   const handleBackIconClick = () => {
-    if(props.backHome){
+    if (props.backHome || router.query.isPosted) {
       router.push('/');
-    }else{
+    } else {
       router.back();
     }
   }

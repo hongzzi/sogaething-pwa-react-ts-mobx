@@ -1,4 +1,3 @@
-import { NEXT_APP_STAGE } from './services/index/helpers/config';
 import bodyParser from 'body-parser'
 import cookieParser from 'cookie-parser'
 import cors from 'cors';
@@ -9,6 +8,7 @@ import next from 'next'
 import path from 'path'
 import api from './api'
 import conf from './next.config'
+import { NEXT_APP_STAGE } from './services/index/helpers/config';
 
 const dev = NEXT_APP_STAGE !== 'production'
 const port = dev ? 3000 : 80

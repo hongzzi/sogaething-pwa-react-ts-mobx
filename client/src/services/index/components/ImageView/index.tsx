@@ -7,11 +7,11 @@ interface IImageView {
 }
 
 export default (props: IImageView) => {
-    return <Wrapper src={props.src} />
+    return <Wrapper src={props.src} size={props.size}/>
 }
 
 const Wrapper = styled.img <Pick<IImageView, 'size'>>`
     width: 100%;
-    height: ${props => props.size !== undefined ? props.size : '120px'};
+    height: ${(props) => props.size !== undefined ? props.size + 'px' : '120px'};
     object-fit: cover;
 `;

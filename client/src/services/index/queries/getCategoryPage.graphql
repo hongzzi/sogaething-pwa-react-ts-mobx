@@ -1,0 +1,18 @@
+query getSearchByCategory($input: Int!){
+    searchThingsByCategory(categoryNum: $input){
+        postId
+        title
+        category
+        imgPath
+        price
+        hashtag
+        isBuy
+        viewCount
+        deal
+        dealState
+        saleDate
+        transaction
+        createdDate
+        modifiedDate
+    }
+}

@@ -8,7 +8,7 @@ const Dotenv = require("dotenv-webpack");
 const webpack = require('webpack');
 
 module.exports = withOptimizedImages({
-  // distDir: "../dist",
+  distDir: '../dist',
   // imagesName: "[hash].[ext]",
   // target: "serverless",
   webpack(config) {
