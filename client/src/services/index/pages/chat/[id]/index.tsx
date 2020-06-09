@@ -14,12 +14,13 @@ function useChatData() {
     // useObserver를 사용해서 리턴하는 값의 업데이트를 계속 반영한다
     loading: chatStore.loading,
     chatRoomData: chatStore.chatRoomData,
+    chatRoomAuth: chatStore.chatRoomAuth,
   }));
 }
 
 export default () => {
   const { chatStore, authStore } = useStores();
-  const { loading, chatRoomData } = useChatData();
+  const { loading, chatRoomData, chatRoomAuth } = useChatData();
   const router = useRouter();
   const [me, setMe] = React.useState('');
   const [userId, setUserId] = React.useState('');
@@ -36,15 +37,23 @@ export default () => {
         <CategoryHeader
           type={'normal'}
           text={
-            chatStore.getChatRoomAuth().buyer === me
-              ? chatStore.getChatRoomAuth().seller
-              : chatStore.getChatRoomAuth().buyer
+            chatStore.getChatRoomAuth().buyer.name === me
+              ? chatStore.getChatRoomAuth().seller.name
+              : chatStore.getChatRoomAuth().buyer.name
           }
         />
       )}
       <ChatContainer>
         <WrapperChatMessage>
-          <ChatMessageBox chatRoomData={chatRoomData} me={userId} />
+          <ChatMessageBox
+            chatRoomData={chatRoomData}
+            me={userId}
+            imgPath={
+              chatStore.getChatRoomAuth().buyer.name === me
+                ? chatStore.getChatRoomAuth().seller.imageUrl
+                : chatStore.getChatRoomAuth().buyer.imageUrl
+            }
+          />
         </WrapperChatMessage>
       </ChatContainer>
       <ChatInput>

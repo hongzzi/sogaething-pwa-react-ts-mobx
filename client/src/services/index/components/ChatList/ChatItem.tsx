@@ -3,10 +3,11 @@ import moment from 'moment';
 import { useRouter } from 'next/router';
 import * as React from 'react';
 import styled from '~/styled';
+import NoAvatar from '../../assets/img/no-avatar.png?url';
 import useStores from '../../helpers/useStores';
 import { ChatRoomListItemDto } from '../../service/ChatService';
 import CircleImageView from '../CircleImageView';
-import NoAvatar from '../../assets/img/no-avatar.png?url';
+
 interface IChatCardProps {
   chatData?: ChatRoomListItemDto;
 }
@@ -19,12 +20,13 @@ export default (props: IChatCardProps) => {
   const handleClickChatItem = () => {
     router.push(`/chat/${props.chatData!.roomId}`);
   }
+
   return(
         <ChatListItem onClick={handleClickChatItem}>
           <CircleImageView
             size={2}
             src={
-              NoAvatar
+              authStore.auth!.userId + '' === props.chatData!.buyerUser.userId ? props.chatData!.sellerUser.imgPath ? props.chatData!.sellerUser.imgPath : NoAvatar : props.chatData!.buyerUser.imgPath ? props.chatData!.buyerUser.imgPath : NoAvatar
             }
           />
           <WrapperText>

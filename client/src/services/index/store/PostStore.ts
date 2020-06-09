@@ -43,7 +43,7 @@ class PostStore {
     @observable contents: string = '';
     @observable transaction: string = '';
     @observable price: number = 0;
-    @observable tag: string = ''
+    @observable tag: string = '';
 
     constructor(root: any, initialData?: PostStore) {
         this.post = {

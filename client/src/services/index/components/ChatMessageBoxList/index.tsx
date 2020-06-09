@@ -9,12 +9,13 @@ import Host from './Host';
 interface IChatMessageProps {
   chatRoomData: IChatDto[];
   me: string;
+  imgPath: string;
 }
 
 export default (props: IChatMessageProps) => {
   const Cards = props.chatRoomData.map((item, i) => {
     return item.sender !== props.me ?
-        <Host key={i} cardData={item} /> :
+        <Host key={i} cardData={item} imgPath={props.imgPath}/> :
         <Client key={i} cardData={item} />
   });
   return <>{Cards}</>;

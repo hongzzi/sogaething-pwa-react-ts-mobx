@@ -27,7 +27,8 @@ const PageIndex: NextPage = (props) => {
     }
   });
   const handleMoreCards = () => {
-    console.log(authStore.auth);
+    // console.log(authStore.token);
+    router.push('/category');
   };
   return (
     <Layout>

@@ -77,6 +77,7 @@ export default (props: IFeedCardProps) => {
 
 const Wrapper = styled.div`
   border-radius: 6px;
+  min-height: 300px;
   overflow: hidden;
   margin-top: 30px;
   border: 1px solid #c5cee0;
