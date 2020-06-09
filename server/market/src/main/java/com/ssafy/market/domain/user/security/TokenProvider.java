@@ -1,6 +1,7 @@
 package com.ssafy.market.domain.user.security;
 
 import com.ssafy.market.domain.user.domain.User;
+import com.ssafy.market.domain.user.util.CookieUtils;
 import com.ssafy.market.global.config.AppProperties;
 import graphql.schema.DataFetchingEnvironment;
 import graphql.servlet.GraphQLContext;
@@ -11,6 +12,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 
@@ -91,6 +93,10 @@ public class TokenProvider {
         GraphQLContext context = env.getContext();
         HttpServletRequest request = context.getHttpServletRequest().get();
         String bearerToken = getTokenFromRequest(request);
+        if(bearerToken==null){
+            Cookie cookie = CookieUtils.getCookie(request,"token");
+            bearerToken = cookie.getValue();
+        }
         Long userId = getUserIdFromToken(bearerToken);
         return userId;
     }
