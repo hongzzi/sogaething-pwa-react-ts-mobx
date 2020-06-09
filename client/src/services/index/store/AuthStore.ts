@@ -1,5 +1,5 @@
 import autobind from 'autobind-decorator';
-import { Request, Response } from 'express-serve-static-core'
+import { Request, Response } from 'express-serve-static-core';
 import jwtDecode from 'jwt-decode';
 import { action, autorun, observable, reaction, toJS } from 'mobx';
 import { checkTokenIsExpired } from '../helpers';
@@ -12,8 +12,8 @@ export interface IAuth {
 
 export interface IAuthResponseDto {
   loginUser: {
-    token: string,
-  }
+    token: string;
+  };
 }
 
 export const initialAuth = {
@@ -45,8 +45,9 @@ class AuthStore {
         sub: '',
         userId: 0,
         userName: '',
-      }
+      };
       this.token = '';
+      this.imgurl = '';
     }
   }
 
@@ -87,8 +88,7 @@ class AuthStore {
   }
 
   @action
-  setPassword(pw: string) {
-  }
+  setPassword(pw: string) {}
 
   @action
   setEmail(email: string) {
@@ -129,34 +129,46 @@ class AuthStore {
       userName: '',
     };
   }
-  @action
   async nextServerInit(req: Request, res: Response) {
     try {
       if (!req || !res) {
-        throw new Error()
+        console.error('req, res 값 없음');
+        throw new Error();
       }
-      if (!req.cookies.token) {
-        throw new Error()
+      if (!req.headers.cookie) {
+        console.error('쿠키에 토큰 없음');
+        throw new Error();
       }
+
+      const cookieString: string = req.headers.cookie as string;
 
       const tokens: IToken = {
-        token: req.cookies.token,
+        token: '',
+      };
+
+      for (const item of cookieString.split('; ')) {
+        const cookie = item.split('=');
+        if (cookie[0] === 'token') {
+          tokens.token = cookie[1];
+        }
       }
-      const isRefreshTokenExpired = checkTokenIsExpired(tokens.token)
-      const isAccessTokenExpired = checkTokenIsExpired(tokens.token)
+
+      const isRefreshTokenExpired = checkTokenIsExpired(tokens.token);
+      const isAccessTokenExpired = checkTokenIsExpired(tokens.token);
 
       if (isRefreshTokenExpired) {
-        throw new Error()
+        throw new Error();
       }
 
       if (isAccessTokenExpired) {
-        const refreshedTokens = await this.refreshTokens(tokens)
+        const refreshedTokens = await this.refreshTokens(tokens);
 
-        tokens.token = refreshedTokens.token
+        tokens.token = refreshedTokens.token;
       }
       this.setToken(tokens.token);
     } catch (error) {
-      console.error(error);
+      // console.error(error);
+      console.error('error in nextServerInit');
     }
   }
 

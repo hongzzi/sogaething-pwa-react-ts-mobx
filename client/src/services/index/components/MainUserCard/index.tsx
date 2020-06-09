@@ -90,8 +90,8 @@ export default () => {
     <Wrapper>
       <WrapperFlex>
         {loading && <CirclePlaceHolder size={4} />}
-        {!loading && findUserInfo && findUserInfo.imgurl && (
-          <CircleImageView size={4} src={store.authStore.imgurl ? store.authStore.imgurl : findUserInfo.imgurl} radius={35} />
+        {!loading && findUserInfo && (
+          <CircleImageView size={4} src={store.authStore.imgurl! ? store.authStore.imgurl : findUserInfo.imgurl} radius={35} />
         )}
         {!loading && !findUserInfo!.imgurl && (
           <CircleImageView size={4} src={store.authStore.imgurl} radius={35} />
