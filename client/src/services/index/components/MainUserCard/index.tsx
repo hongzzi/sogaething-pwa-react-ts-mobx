@@ -93,9 +93,6 @@ export default () => {
         {!loading && findUserInfo && findUserInfo.imgurl && (
           <CircleImageView size={4} src={store.authStore.imgurl ? store.authStore.imgurl : findUserInfo.imgurl} radius={35} />
         )}
-        {!loading && !findUserInfo!.imgurl && (
-          <CircleImageView size={4} src={store.authStore.imgurl} radius={35} />
-        )}
         <WrapperUserInfo>
           <TextUserInfo onClick={handleClickTest}>
             {loading && <TextLoader size={{ width: 50, height: 18 }} />}
