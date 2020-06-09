@@ -44,7 +44,6 @@ public class ChatRoomMongoRepository {
         query = new Query(Criteria.where("sellerId").is(userId).andOperator(Criteria.where("isSellerExit").is(false)));
         result.addAll(mongoTemplate.find(query, ChatRoom.class, "chatRoom"));
         Collections.sort(result);
-        System.out.println(result);
         return result;
     }
 

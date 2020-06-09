@@ -1,3 +1,4 @@
+import { useObserver } from 'mobx-react';
 import { useRouter } from 'next/router';
 import * as React from 'react';
 import { useGetUserInfoQuery } from '~/generated/graphql';
@@ -8,7 +9,6 @@ import useStores from '../../helpers/useStores';
 import CircleImageView from '../CircleImageView';
 import { TextLoader } from '../LoaderPlaceholder';
 import CirclePlaceHolder from '../LoaderPlaceholder/Circle';
-import { useObserver } from 'mobx-react';
 
 interface IQueryData {
   findUserInfo: IFindUserInfo | null;
@@ -52,8 +52,8 @@ export default () => {
   };
 
   const { findUserInfo } = data as IQueryData;
-  
-  if (loading || error || !findUserInfo) {
+
+  if (loading || error) {
     return (
       <Wrapper>
         <WrapperFlex>
@@ -90,11 +90,8 @@ export default () => {
     <Wrapper>
       <WrapperFlex>
         {loading && <CirclePlaceHolder size={4} />}
-        {!loading && findUserInfo && findUserInfo.imgurl && (
-          <CircleImageView size={4} src={store.authStore.imgurl ? store.authStore.imgurl : findUserInfo.imgurl} radius={35} />
-        )}
-        {!loading && !findUserInfo!.imgurl && (
-          <CircleImageView size={4} src={store.authStore.imgurl} radius={35} />
+        {!loading && findUserInfo && (
+          <CircleImageView size={4} src={store.authStore.imgurl! ? store.authStore.imgurl : findUserInfo.imgurl} radius={35} />
         )}
         <WrapperUserInfo>
           <TextUserInfo onClick={handleClickTest}>

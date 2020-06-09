@@ -12,8 +12,14 @@ class ChatStore {
   @observable chatRoom: number = 0;
   @observable chatRoomData: IChatDto[] = [];
   @observable chatRoomAuth: IChatRoomAuthDto = {
-    seller: '',
-    buyer: '',
+    seller: {
+      imageUrl: '',
+      name: '',
+    },
+    buyer: {
+      imageUrl: '',
+      name: '',
+    },
   };
   @observable ws: Client|null = null;
   @observable createdChat: ICreateChatRoomResponseDto = {
@@ -33,8 +39,8 @@ class ChatStore {
     this.setLoading(true);
     const response = await this.chatService.getUserChatList(authId);
     const chatArr = response.data;
-    this.setLoading(false);
     this.setChatRooms(chatArr);
+    this.setLoading(false);
   }
 
   @action

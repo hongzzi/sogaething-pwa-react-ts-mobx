@@ -2,6 +2,7 @@ package com.ssafy.market.domain.post.repository;
 
 import com.ssafy.market.domain.post.domain.Post;
 import com.ssafy.market.domain.post.dto.SearchByCategoryOutput;
+import com.ssafy.market.domain.post.dto.SearchByOptionsOutput;
 import com.ssafy.market.domain.user.domain.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -38,10 +39,14 @@ public interface PostRepository extends JpaRepository<Post, Long> {
             "where product.product_id in (select product_id from hashtag where hashtag in :hashtags group by product_id order by count(hashtag) desc)", nativeQuery = true)
     List<SearchByCategoryOutput> findByHashTags(@Param("hashtags")List<String> hashtags);
 
-    @Query(value = "select post.post_id as postId, post.title, post.contents, product.category ,product.created_date as createdDate, product.modified_date as modifiedDate, file.img_path as imgPath, hashtags.hashtags, product.price, post.is_buy as isBuy, post.view_count as viewCount, post.deal, post.deal_state as dealState, post.sale_date as saleDate, post.transaction from post\n" +
-            "join product product on post.post_id = product.post_id \n" +
-            "join file file on product.product_id = file.product_id \n" +
+    @Query(value = "select post.post_id as postId, post.title as title, product.created_date as createdDate, product.modified_date as modifiedDate, file.img_path as imgPath, hashtags.hashtags hashtag, product.price as price,\n" +
+            "post.is_buy as isBuy, post.view_count as viewCount, post.deal as deal, post.deal_state as dealState, post.sale_date as saleDate, post.transaction as transaction, product.category as category, \n" +
+            "user.user_id as userId, user.name, user.address, user.trust, user.image_url from post\n" +
+            "join product product on post.post_id = product.post_id\n" +
+            "join file file on product.product_id = file.product_id\n" +
+            "join user user on user.user_id = post.user_id\n" +
             "join (SELECT product_id, group_concat(distinct hashtag separator ',') as hashtags FROM hashtag group by product_id) hashtags on hashtags.product_id = product.product_id\n" +
-            "where product.product_id in (SELECT product_id FROM product WHERE post_id in (select distinct post_id from post where category = \"디지털/가전\") and price >= 3000000 and price <= 3100000)", nativeQuery = true)
-    List<SearchByCategoryOutput> findByOptions(@Param("hashtags")List<String> hashtags);
+            "where product.product_id in (SELECT product_id FROM product WHERE post_id in (select distinct post_id from post where category = :category) \n" +
+            "and price >= :startPrice and price <= :endPrice)", nativeQuery = true)
+    List<SearchByOptionsOutput> findByOptions(@Param("startPrice")int startPrice, @Param("endPrice")int endPrice, @Param("category")String category);
 }
