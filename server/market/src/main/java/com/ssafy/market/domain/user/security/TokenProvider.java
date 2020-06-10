@@ -84,8 +84,11 @@ public class TokenProvider {
     public String getTokenFromRequest(HttpServletRequest request) {
         String bearerToken = request.getHeader("Authorization");
         if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
+            System.out.println("토큰 is hear~");
+            System.out.println(bearerToken.substring(7, bearerToken.length()));
             return bearerToken.substring(7, bearerToken.length());
         }
+        System.out.println("토큰 is null~");
         return null;
     }
 
@@ -95,9 +98,14 @@ public class TokenProvider {
         String bearerToken = getTokenFromRequest(request);
         if(bearerToken==null){
             Cookie cookie = CookieUtils.getCookie(request,"token");
+            System.out.println("Is Cookie Null?" + cookie);
             bearerToken = cookie.getValue();
         }
+        System.out.println("bearerToken");
+        System.out.println(bearerToken);
         Long userId = getUserIdFromToken(bearerToken);
+        System.out.println("userId");
+        System.out.println(userId);
         return userId;
     }
 }
