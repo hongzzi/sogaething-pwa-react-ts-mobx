@@ -98,8 +98,15 @@ public class TokenProvider {
         String bearerToken = getTokenFromRequest(request);
         if(bearerToken==null){
             Cookie cookie = CookieUtils.getCookie(request,"token");
+//            if(cookie!=null)
+//                bearerToken = cookie.getValue();
+//            else{
+//                System.out.println("쿠키 없음");
+//            }
+
             System.out.println("Is Cookie Null?" + cookie);
             bearerToken = cookie.getValue();
+
         }
         System.out.println("bearerToken");
         System.out.println(bearerToken);
