@@ -46,7 +46,7 @@ public class ChatController {
 
     @MessageMapping("/chat/remit")
     public void remitMessage(RemitMessageDto remitMessageDto){
-        logger.debug("remitMessage {}");
+        logger.debug("remitMessage {}", remitMessageDto);
         if (MessageType.REMIT.equals(remitMessageDto.getType())) {
             chatService.sendRemitMessage(remitMessageDto);
         }
