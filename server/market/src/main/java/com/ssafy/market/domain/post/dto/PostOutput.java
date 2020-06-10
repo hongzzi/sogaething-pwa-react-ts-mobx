@@ -1,6 +1,5 @@
 package com.ssafy.market.domain.post.dto;
 
-import com.ssafy.market.domain.detaildeal.dto.FileArr;
 import com.ssafy.market.domain.file.domain.File;
 import lombok.AllArgsConstructor;
 import lombok.Data;
