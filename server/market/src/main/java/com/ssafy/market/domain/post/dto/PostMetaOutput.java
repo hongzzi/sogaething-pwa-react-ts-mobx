@@ -1,6 +1,5 @@
 package com.ssafy.market.domain.post.dto;
 
-import com.ssafy.market.domain.hashtag.domain.Hashtag;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

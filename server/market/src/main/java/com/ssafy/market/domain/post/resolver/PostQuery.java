@@ -141,34 +141,31 @@ public class PostQuery implements GraphQLQueryResolver {
         return detailOutput;
     }
 
-
     public List<PostDetailOutput> matchThings(Long matchingId) {
-        List<PostDetailOutput> postDetailOutputs = new ArrayList<>();
         Matching matching = matchingRepository.findByMatchingId(matchingId);
+        List<SearchByOptionsOutput> searchByOptionsOutputs = postRepository.findByOptions(matching.getMinPrice(), matching.getMaxPrice(), matching.getCategory());
 
-        String category = matching.getCategory();
-        String[] hashtag = matchingHashtagRepository.findHashtagByMatching(matching).toArray(new String[0]);
-        String transaction = matching.getTransaction();
-
-        List<Product> products = productRepository.findPostByCategoryAndPrice(matching.getMinPrice(), matching.getMaxPrice(), category);
-        for (int i = 0; i < products.size(); i++) {
-            if(products.get(i).getPost().getTransaction()!=null && !products.get(i).getPost().getTransaction().equals(transaction)) continue;
-
-            List<Hashtag> hashtagList = hashtagRepository.findByProduct(products.get(i));
-            HashSet<String> hs = new HashSet<>();
-            for (int j = 0; j<hashtagList.size(); j++){
-                hs.add(hashtagList.get(j).getHashtag());
-            }
-            List<String> hash = new ArrayList<>(hs);
-            int flag = 0;
-            for (int j = 0; j < hash.size(); j++) {
-                if(Arrays.toString(hashtag).contains(hash.get(j)))
-                    flag++;
-            }
-            if(flag == hashtag.length){
-                postDetailOutputs.add(findByDetailPost(products.get(i).getPost().getPostId()));
-            }
-        }
+        List<PostDetailOutput> postDetailOutputs = searchByOptionsOutputs.stream().map( searchByOptionsOutput -> {
+            PostDetailOutput output = PostDetailOutput.builder()
+                    .category(searchByOptionsOutput.getCategory())
+                    .contents(searchByOptionsOutput.getContents())
+                    .createdDate(searchByOptionsOutput.getCreatedDate())
+                    .deal(searchByOptionsOutput.getDeal())
+                    .dealState(searchByOptionsOutput.getDealState())
+                    .hashtag(Arrays.asList(searchByOptionsOutput.getHashtag().split(",")))
+                    .imgPaths(Arrays.asList(new String[]{searchByOptionsOutput.getImgPath()}))
+                    .isBuy(searchByOptionsOutput.getIsBuy())
+                    .modifiedDate(searchByOptionsOutput.getModifiedDate())
+                    .postId(searchByOptionsOutput.getPostId())
+                    .price(searchByOptionsOutput.getPrice())
+                    .saleDate(searchByOptionsOutput.getSaleDate())
+                    .title(searchByOptionsOutput.getTitle())
+                    .transaction(searchByOptionsOutput.getTransaction())
+                    .user(new UserInfoResponse(searchByOptionsOutput.getUserId(), searchByOptionsOutput.getName(), searchByOptionsOutput.getAddress(), searchByOptionsOutput.getTrust(), postRepository.countPostByUserId(searchByOptionsOutput.getUserId()), searchByOptionsOutput.getImageUrl()))
+                    .viewCount(searchByOptionsOutput.getViewCount())
+                    .build();
+            return output;
+        }).collect(Collectors.toList());
         return postDetailOutputs;
     }
 
