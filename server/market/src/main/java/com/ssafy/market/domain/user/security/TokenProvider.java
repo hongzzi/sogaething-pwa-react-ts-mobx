@@ -95,7 +95,11 @@ public class TokenProvider {
         String bearerToken = getTokenFromRequest(request);
         if(bearerToken==null){
             Cookie cookie = CookieUtils.getCookie(request,"token");
-            bearerToken = cookie.getValue();
+            if(cookie!=null)
+                bearerToken = cookie.getValue();
+            else{
+                System.out.println("쿠키 없음");
+            }
         }
         Long userId = getUserIdFromToken(bearerToken);
         return userId;
