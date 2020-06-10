@@ -21,5 +21,4 @@ public interface SearchByOptionsOutput {
     int getTrust();
     String getImageUrl();
     String getContents();
-//    user.user_id as userId, user.name, user.address, user.trust, user.image_url
 }

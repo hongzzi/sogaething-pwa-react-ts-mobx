@@ -19,7 +19,6 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     int deleteByPostId(Long id);
     long countPostByUserId(Long UserId);
     List<Post> findTop6ByOrderByCreatedDateDesc();
-//    Post findTop1ByOrderByPostIdDesc();
     List<Post> findByTitleContaining(String title);
 
     @Query(value = "select post.post_id as postId, post.title as title, product.created_date as createdDate, product.modified_date as modifiedDate, file.img_path as imgPath, hashtags.hashtags hashtag, product.price as price, " +
@@ -39,9 +38,9 @@ public interface PostRepository extends JpaRepository<Post, Long> {
             "where product.product_id in (select product_id from hashtag where hashtag in :hashtags group by product_id order by count(hashtag) desc)", nativeQuery = true)
     List<SearchByCategoryOutput> findByHashTags(@Param("hashtags")List<String> hashtags);
 
-    @Query(value = "select post.post_id as postId, post.title as title, product.created_date as createdDate, product.modified_date as modifiedDate, file.img_path as imgPath, hashtags.hashtags hashtag, product.price as price,\n" +
+    @Query(value = "select post.post_id as postId, post.title as title, product.created_date as createdDate, product.modified_date as modifiedDate,post.contents , file.img_path as imgPath, hashtags.hashtags hashtag, product.price as price,\n" +
             "post.is_buy as isBuy, post.view_count as viewCount, post.deal as deal, post.deal_state as dealState, post.sale_date as saleDate, post.transaction as transaction, product.category as category, \n" +
-            "user.user_id as userId, user.name, user.address, user.trust, user.image_url from post\n" +
+            "user.user_id as userId, user.name, user.address, user.trust, user.image_url as imageUrl from post\n" +
             "join product product on post.post_id = product.post_id\n" +
             "join file file on product.product_id = file.product_id\n" +
             "join user user on user.user_id = post.user_id\n" +
