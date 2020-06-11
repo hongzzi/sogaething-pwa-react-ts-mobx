@@ -1,114 +1,151 @@
-import { toJS } from 'mobx';
-import { useObserver } from 'mobx-react';
-import { NextPage, NextPageContext } from 'next';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import * as React from 'react';
-import { useCookies } from 'react-cookie';
-import { useGetUserInfoQuery } from '~/generated/graphql';
+import KakaoLogin from 'react-kakao-login';
+import { useGetLoginMutation } from '~/generated/graphql';
 import styled from '~/styled';
-import CardList from '../components/CardList';
-import CategoryHeader from '../components/CategoryHeader';
-import CommonBtn from '../components/CommonBtn';
-import Loader from '../components/Loader';
-import MainUserCard from '../components/MainUserCard';
-import Nav from '../components/Nav';
-import Pikachu from '../components/Pikachu';
-import ProductCardList from '../components/ProductCardList';
-import SearchBar from '../components/SearchBar';
+import GoogleIcon from '../assets/img/signin-google.png?url';
+import KakaoIcon from '../assets/img/signin-kakao.png?url';
+import { KEYS } from '../constants';
+import {
+  NEXT_APP_KAKAO_CLIENT_KEY,
+} from '../helpers/config';
 import useStores from '../helpers/useStores';
-import ChatService from '../service/ChatService';
+import { IAuthResponseDto } from '../store/AuthStore';
 
-const PageIndex: NextPage = (props) => {
-  const { pageStore, authStore } = useStores();
+interface ISignInProps {}
+
+const isServer = typeof window === 'undefined';
+
+export default (props: ISignInProps) => {
+  const store = useStores();
+  // const store = useStore();
+  // console.log(store);
+  const mutate = useGetLoginMutation();
   const router = useRouter();
-  React.useEffect(() => {
-    if (authStore.token === '' || !authStore.token) {
-      router.push('/signin');
-    }
-  });
-  const handleMoreCards = () => {
-    // console.log(authStore.token);
-    router.push('/category');
+  const success = (res: any) => {
+    mutate({
+      variables: {
+        input: {
+          provider: 'Kakao',
+          token: res.response.access_token,
+        },
+      },
+    })
+    .then((res: {data: IAuthResponseDto}) => {
+      store.authStore.setToken(res.data.loginUser.token);
+      router.push('/main');
+    })
+    .catch((err) => {
+      router.push('/');
+      console.log(err);
+    })
   };
+  const failure = () => {
+    alert('실패');
+  };
+
+  const getNaverAuth = () => {};
   return (
-    <Layout>
-      <Container>
-        <SearchBar />
-        <StyledMainUserCard />
-        <Line>
-          <CategoryText>'내가 본'</CategoryText> 매물
-        </Line>
-        <CardList />
-        <Line>
-          <CategoryText>'최신'</CategoryText> 중고매물
-        </Line>
-        <ProductCardList />
-        <WrapperAlignCenter onClick={handleMoreCards}>
-          <CommonBtn type={'common'} text={'더보기'} />
-        </WrapperAlignCenter>
-      </Container>
-      <Nav />
-    </Layout>
+    <Wrapper>
+      <WrapperSigninContainer>
+      <WrapperLine>
+        <Line size={48}>소개</Line>
+        <Line size={70}>ㄸ!</Line>
+      </WrapperLine>
+      <StyledKakaoLogin
+        jsKey={KEYS.KAKAO}
+        onSuccess={success}
+        onFailure={failure}
+      >
+        <LoginText>카카오로 시작하기</LoginText>
+      </StyledKakaoLogin>
+      <LoginButton type={'facebook'}>
+        <LoginText>페이스북으로 시작하기</LoginText>
+      </LoginButton>
+      </WrapperSigninContainer>
+      <Background />
+    </Wrapper>
   );
-}
+};
 
-PageIndex.getInitialProps = async (ctx: NextPageContext) => {
-  return {test : 'test'}
-}
-
-export default PageIndex;
-
-const Layout = styled.div`
-  position: relative;
-  padding-bottom: 48px;
+const Wrapper = styled.div`
+  border-bottom-left-radius: 100% 25%;
+  border-bottom-right-radius: 100% 25%;
+  background: white;
+  width: 100%;
+  height: 90%;
+  overflow: hidden;
 `;
 
-export const Container = styled.div`
-  padding: 1rem;
-`;
-
-const StyledMainUserCard = styled(MainUserCard)``;
-
-const CategoryText = styled.p`
-  display: inline-block;
-  font-size: 12px;
-  color: ${(props) => props.theme.mainCategoryTextColor};
-`;
-
-const WrapperAlignCenter = styled.div`
+const WrapperLine = styled.div`
+  margin-top: 20vh;
+  margin-bottom: 5vh;
+  align-items: center;
   text-align: center;
+  width:100%;
 `;
 
-const Title = styled.h1`
-  font-size: 2rem;
-  margin: 0 0 1rem;
+const WrapperLoginImageText = styled.div`
+  width: 80%;
+  display: flex;
+  align-items: center;
+  margin: auto;
 `;
 
-const Line = styled.div`
-  margin: 22px 0.5rem 0rem 0;
-  font-size: 11px;
+const Line = styled.p<{size: number}>`
+  /* margin: 22px 0.5rem 0rem 0; */
+  margin: 0;
+  width: 100%;
+  font-size: ${(props) => props.size + 'px'};
+  font-weight: bold;
+  font-family: "TmonMonsori";
+  color: ${(props) => props.theme.pointFontColor};
 `;
 
-const Code = styled.div`
-  font-family: monospace;
-  display: inline-block;
-  background-color: ${(props) => props.theme.blue[0]};
-  color: ${(props) => props.theme.blue[8]};
-  font-size: 0.75rem;
-  border-radius: 0.125rem;
-  padding: 0.0625rem 0.125rem;
-  margin-right: 0.25rem;
-  font-weight: 700;
+const LoginText = styled.div`
+  font-family: "Noto sans";
+  font-weight: bold;
+  margin: auto;
+  text-align: center;
+  font-size: 16px;
 `;
 
-const Author = styled.div`
-  font-family: monospace;
-  display: inline-block;
-  background-color: ${(props) => props.theme.green[0]};
-  color: ${(props) => props.theme.green[8]};
-  font-size: 0.75rem;
-  border-radius: 0.125rem;
-  padding: 0.0625rem 0.125rem;
-  margin-right: 0.25rem;
-  font-weight: 700;
+const StyledKakaoLogin = styled(KakaoLogin)`
+  display: flex;
+  height: 52px;
+  width: 100%;
+  background-color: ${(props) => props.theme.button.login.kakao.bg};
+  border-radius: 25px;
+  border: 3px solid ${(props) => props.theme.button.login.kakao.border};
+`;
+
+const LoginButton = styled.div<{ type: 'facebook' | 'naver' }>`
+  height: 52px;
+  width: 100%;
+  display: flex;
+  border-radius: 25px;
+  background-color: ${(props) => props.theme.button.login[props.type].bg};
+  border: ${(props) =>
+    props.theme.button.login[props.type].border !== 'none'
+      ? '3px solid ' + props.theme.button.login[props.type].border
+      : 'none'};
+  margin-top: 13px;
+  margin-bottom: 13px;
+`;
+
+const WrapperSigninContainer = styled.div`
+  height: 90%;
+  width: 100%;
+  padding: 40px;
+`;
+
+const Background = styled.div`
+  position: absolute;
+  z-index: -1;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 30%;
+  background-image: linear-gradient(to bottom, #259be5, #6459db);
 `;

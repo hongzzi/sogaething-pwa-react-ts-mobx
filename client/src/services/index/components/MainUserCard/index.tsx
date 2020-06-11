@@ -34,7 +34,7 @@ export default () => {
   const router = useRouter();
   const store = useStores();
   const { data, loading, error } = useGetUserInfoQuery();
-  const {imgurl} = useAuthData();
+  // const {imgurl} = useAuthData();
 
   const handleClickMatch = () => {
     if (store.authStore.auth) {

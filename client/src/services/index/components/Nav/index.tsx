@@ -46,7 +46,7 @@ export default (props: INav) => {
   }
   return (
     <WrapprNav size={props.size}>
-      <Link href='/'>
+      <Link href='/main'>
         <a>
           <WrapperNavItem onClick={() => pageStore.setClickedIdx(0)}>
             {clickedIdx === 0 ? (
