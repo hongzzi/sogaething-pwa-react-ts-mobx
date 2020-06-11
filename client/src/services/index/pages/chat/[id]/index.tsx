@@ -24,10 +24,13 @@ export default () => {
   const router = useRouter();
   const [me, setMe] = React.useState('');
   const [userId, setUserId] = React.useState('');
+  console.log(authStore.token);
   React.useEffect(() => {
     chatStore.getUserChatRoom(router.query.id);
-    setMe(authStore.getAuth()!.userName);
-    setUserId(authStore.getAuth()!.userId + '');
+    if (authStore.getAuth()!.userName) {
+      setMe(authStore.getAuth()!.userName);
+      setUserId(authStore.getAuth()!.userId + '');
+    }
   }, []);
 
   return (

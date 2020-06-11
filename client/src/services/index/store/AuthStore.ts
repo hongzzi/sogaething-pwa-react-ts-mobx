@@ -31,23 +31,28 @@ export type Provider = 'kakao' | 'google' | 'naver';
 class AuthStore {
   @observable token: string = '';
   @observable refreshToken: string = '';
-  @observable auth: IAuth;
+  @observable auth: IAuth = {
+    sub: '',
+    userId: 0,
+    userName: '',
+  };
   @observable email = '';
   @observable provider: string = '';
   @observable imgurl: string = '';
 
-  constructor(root: any, initialData?: AuthStore) {
+  constructor(root: any, initialData?: AuthStore, token?: string) {
     if (initialData) {
       this.auth = initialData!.auth;
       this.token = initialData!.token;
+      this.setToken(initialData!.token);
     } else {
-      this.auth = {
-        sub: '',
-        userId: 0,
-        userName: '',
-      };
-      this.token = '';
-      this.imgurl = '';
+      // this.auth = {
+      //   sub: '',
+      //   userId: 0,
+      //   userName: '',
+      // };
+      // this.token = '';
+      // this.imgurl = '';
     }
   }
 
@@ -104,12 +109,13 @@ class AuthStore {
   setAuth() {
     if (this.token) {
       this.auth = jwtDecode(this.token) as IAuth;
+      return;
     }
   }
 
   @action
   getAuth() {
-    if (this.token) {
+    if (this.auth) {
       return this.auth;
     }
   }
@@ -121,7 +127,6 @@ class AuthStore {
 
   @action
   signOut() {
-    window.sessionStorage.removeItem('jwt');
     this.token = '';
     this.auth = {
       sub: 'logout',
@@ -132,12 +137,19 @@ class AuthStore {
   async nextServerInit(req: Request, res: Response) {
     try {
       if (!req || !res) {
-        console.error('req, res 값 없음');
-        throw new Error();
+        console.log('CSR / req, res 값 없음');
+        return;
+        // throw new Error();
       }
+      console.log('----------------req.headers---------------------')
+      console.log(req.headers.cookie);
+      console.log('----------------req.cookies---------------------')
+      console.log(req.cookies);
       if (!req.headers.cookie) {
-        console.error('쿠키에 토큰 없음');
-        throw new Error();
+        
+        console.log('쿠키에 토큰 없음');
+        return;
+        // throw new Error();
       }
 
       const cookieString: string = req.headers.cookie as string;
@@ -151,6 +163,11 @@ class AuthStore {
         if (cookie[0] === 'token') {
           tokens.token = cookie[1];
         }
+      }
+
+      if (tokens.token === '') {
+        console.error('쿠키 헤더에 토큰 없음');
+        throw new Error();
       }
 
       const isRefreshTokenExpired = checkTokenIsExpired(tokens.token);
@@ -167,7 +184,7 @@ class AuthStore {
       }
       this.setToken(tokens.token);
     } catch (error) {
-      // console.error(error);
+      console.error(error);
       console.error('error in nextServerInit');
     }
   }

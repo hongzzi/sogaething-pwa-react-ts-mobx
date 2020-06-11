@@ -16,7 +16,6 @@ const isServer = typeof window === 'undefined'
 export function createApolloClient(store: RootStore, state?: any) {
   if (apolloClient) {
     return apolloClient
-
   } else {
     const httpLink = createHttpLink({
       fetch,

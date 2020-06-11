@@ -13,10 +13,16 @@ interface IChatMessageProps {
 }
 
 export default (props: IChatMessageProps) => {
-  const Cards = props.chatRoomData.map((item, i) => {
-    return item.sender !== props.me ?
-        <Host key={i} cardData={item} imgPath={props.imgPath}/> :
-        <Client key={i} cardData={item} />
-  });
+  let Cards;
+  if(Array.isArray(props.chatRoomData)){
+    Cards = props.chatRoomData.map((item, i) => {
+      return item.sender !== props.me ?
+          <Host key={i} cardData={item} imgPath={props.imgPath}/> :
+          <Client key={i} cardData={item} />
+    });
+  }else {
+    Cards = '채팅을 시작해보세요!'
+  }
+  
   return <>{Cards}</>;
 };

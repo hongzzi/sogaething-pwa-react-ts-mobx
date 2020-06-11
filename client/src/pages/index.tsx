@@ -1,1 +1,1 @@
-export { default } from '~~/index/pages/index.tsx'
+export { default } from '~/services/index/pages'

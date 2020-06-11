@@ -32,7 +32,6 @@ export default () => {
 };
 
 const Wrapper = styled.div`
-
 `;
 
 const MainContainer = styled.div`

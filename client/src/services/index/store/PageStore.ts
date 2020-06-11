@@ -16,6 +16,7 @@ class PageStore {
   @observable nav: boolean = false;
   @observable clickedIdx: number = 0;
   @observable modal: boolean = false;
+  @observable chatModal: boolean = false;
 
   constructor(root: any, initialData?: PageStore) {
     if (initialData) {
@@ -41,6 +42,11 @@ class PageStore {
   @action
   toggleModal() {
     this.modal = !this.modal;
+  }
+
+  @action
+  toggleChatModal(){
+    this.chatModal = !this.chatModal;
   }
 }
 

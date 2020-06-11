@@ -1,6 +1,8 @@
+import { IDepositRequestDto } from './../service/BankService';
 import autobind from 'autobind-decorator';
 import { action, observable, reaction } from 'mobx';
 import Stomp, {Client} from 'stompjs';
+import BankService from '../service/BankService';
 import ChatService from '../service/ChatService';
 import { ChatRoomListItemDto, IChatDto, IChatRoomAuthDto, ICreateChatRoomRequestDto, ICreateChatRoomResponseDto } from './../service/ChatService';
 
@@ -27,11 +29,17 @@ class ChatStore {
     name: '',
     state: '',
   }
-  constructor(private chatService: ChatService, root: any) {}
+  constructor(private chatService: ChatService, private BankService: BankService, root: any) {}
 
   @action
   getTest() {
     return this.chatService.getTest();
+  }
+
+  @action
+  async postDepostService(data: IDepositRequestDto ) {
+    const res = await this.BankService.postDeposit(data);
+    return res;
   }
 
   @action
