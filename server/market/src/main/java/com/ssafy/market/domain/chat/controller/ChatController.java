@@ -2,10 +2,10 @@ package com.ssafy.market.domain.chat.controller;
 
 import com.ssafy.market.domain.chat.domain.ChatMessage;
 import com.ssafy.market.domain.chat.domain.MessageType;
+import com.ssafy.market.domain.chat.dto.RemitMessageDto;
 import com.ssafy.market.domain.chat.service.ChatRoomService;
 import com.ssafy.market.domain.chat.service.ChatService;
 import com.ssafy.market.domain.chat.util.StringResult;
-import com.ssafy.market.global.apis.ImgurApi;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -41,6 +41,14 @@ public class ChatController {
             chatRoomService.enterChatRoom(message.getRoomId());
         } else {
             chatService.sendMessage(message);
+        }
+    }
+
+    @MessageMapping("/chat/remit")
+    public void remitMessage(RemitMessageDto remitMessageDto){
+        logger.debug("remitMessage {}", remitMessageDto);
+        if (MessageType.REMIT.equals(remitMessageDto.getType())) {
+            chatService.sendRemitMessage(remitMessageDto);
         }
     }
 

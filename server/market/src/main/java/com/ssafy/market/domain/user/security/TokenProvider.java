@@ -1,6 +1,7 @@
 package com.ssafy.market.domain.user.security;
 
 import com.ssafy.market.domain.user.domain.User;
+import com.ssafy.market.domain.user.util.CookieUtils;
 import com.ssafy.market.global.config.AppProperties;
 import graphql.schema.DataFetchingEnvironment;
 import graphql.servlet.GraphQLContext;
@@ -11,6 +12,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 
@@ -82,8 +84,11 @@ public class TokenProvider {
     public String getTokenFromRequest(HttpServletRequest request) {
         String bearerToken = request.getHeader("Authorization");
         if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
+            System.out.println("토큰 is hear~");
+            System.out.println(bearerToken.substring(7, bearerToken.length()));
             return bearerToken.substring(7, bearerToken.length());
         }
+        System.out.println("토큰 is null~");
         return null;
     }
 
@@ -91,7 +96,23 @@ public class TokenProvider {
         GraphQLContext context = env.getContext();
         HttpServletRequest request = context.getHttpServletRequest().get();
         String bearerToken = getTokenFromRequest(request);
+        if(bearerToken==null){
+            Cookie cookie = CookieUtils.getCookie(request,"token");
+//            if(cookie!=null)
+//                bearerToken = cookie.getValue();
+//            else{
+//                System.out.println("쿠키 없음");
+//            }
+
+            System.out.println("Is Cookie Null?" + cookie);
+            bearerToken = cookie.getValue();
+
+        }
+        System.out.println("bearerToken");
+        System.out.println(bearerToken);
         Long userId = getUserIdFromToken(bearerToken);
+        System.out.println("userId");
+        System.out.println(userId);
         return userId;
     }
 }

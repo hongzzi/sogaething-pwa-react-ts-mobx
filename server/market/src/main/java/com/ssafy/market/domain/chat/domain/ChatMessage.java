@@ -15,16 +15,4 @@ public class ChatMessage implements Serializable {
     private String sender;
     private String message;
     private String createdDateTime;
-
-
-    @Override
-    public String toString() {
-        return "ChatMessage{" +
-                "type=" + type +
-                ", roomId='" + roomId + '\'' +
-                ", sender='" + sender + '\'' +
-                ", message='" + message + '\'' +
-                ", createdDateTime='" + createdDateTime + '\'' +
-                '}';
-    }
 }

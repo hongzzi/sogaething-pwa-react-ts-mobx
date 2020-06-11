@@ -49,7 +49,16 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
 
             String Token = getTokenFromRequest(request);
             Cookie cookie = CookieUtils.getCookie(request,"token");
-            if(cookie!=null && StringUtils.hasText(Token) && tokenProvider.validateToken(Token)) {
+            if(Token==null && cookie!=null){
+                Token = cookie.getValue();
+                System.out.println("Cookie:" + cookie);
+
+            }
+
+            if(cookie!=null && Token!=null && StringUtils.hasText(Token) && tokenProvider.validateToken(Token)) {
+                if(Token.equals(cookie.getValue())){
+                    Token = cookie.getValue();
+                }
                 Long userId = tokenProvider.getUserIdFromToken(Token);
                 UserDetails userDetails = customUserDetailsService.loadUserById(userId);
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
@@ -59,6 +68,7 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
             }
         }catch (Exception e){
             logger.error("Could not set user authentication in security context", e);
+            System.out.println("쿠키와 헤더 값 모두 없음 : 다시 로그인 하기");
         }
 
         filterChain.doFilter(request, response);

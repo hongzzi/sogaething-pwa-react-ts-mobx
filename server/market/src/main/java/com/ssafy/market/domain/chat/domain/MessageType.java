@@ -4,6 +4,7 @@ package com.ssafy.market.domain.chat.domain;
 public enum MessageType {
     TALK,
     IMAGE,
+    REMIT,
     ENTER,
     LEAVE
 }
