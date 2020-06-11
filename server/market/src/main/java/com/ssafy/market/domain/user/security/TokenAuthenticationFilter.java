@@ -56,12 +56,16 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
             }
 
             if(cookie!=null && Token!=null && StringUtils.hasText(Token) && tokenProvider.validateToken(Token)) {
-                if(Token.equals(cookie.getValue())){
+                if(!Token.equals(cookie.getValue())){
                     Token = cookie.getValue();
                 }
+                Token = cookie.getValue();
+
                 Long userId = tokenProvider.getUserIdFromToken(Token);
+
                 UserDetails userDetails = customUserDetailsService.loadUserById(userId);
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
                 SecurityContextHolder.getContext().setAuthentication(authentication);
