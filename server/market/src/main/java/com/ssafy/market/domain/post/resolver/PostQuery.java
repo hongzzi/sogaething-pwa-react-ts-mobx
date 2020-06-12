@@ -18,6 +18,8 @@ import com.ssafy.market.domain.product.repository.ProductRepository;
 import com.ssafy.market.domain.user.domain.User;
 import com.ssafy.market.domain.user.dto.UserInfoResponse;
 import com.ssafy.market.domain.user.repository.UserRepository;
+import com.ssafy.market.domain.user.security.TokenProvider;
+import graphql.schema.DataFetchingEnvironment;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Component;
@@ -38,6 +40,7 @@ public class PostQuery implements GraphQLQueryResolver {
     private final FileRepository fileRepository;
     private final MatchingRepository matchingRepository;
     private final MatchingHashtagRepository matchingHashtagRepository;
+    private final TokenProvider tokenProvider;
 
     static String [] categoryList = {"", "디지털/가전", "가구", "유아동", "생활/가공식품", "스포츠/레저", "여성의류", "여성잡화", "남성패션/잡화", "게임/취미", "뷰티/미용", "반려동물용품", "도서/티켓/음반"};
 
@@ -141,9 +144,11 @@ public class PostQuery implements GraphQLQueryResolver {
         return detailOutput;
     }
 
-    public List<PostDetailOutput> matchThings(Long matchingId) {
+    public List<PostDetailOutput> matchThings(Long matchingId, DataFetchingEnvironment env) {
+        Long userId = tokenProvider.getUserIdFromHeader(env);
+
         Matching matching = matchingRepository.findByMatchingId(matchingId);
-        List<SearchByOptionsOutput> searchByOptionsOutputs = postRepository.findByOptions(matching.getMinPrice(), matching.getMaxPrice(), matching.getCategory());
+        List<SearchByOptionsOutput> searchByOptionsOutputs = postRepository.findByOptions(matching.getMinPrice(), matching.getMaxPrice(), matching.getCategory(), userId);
 
         List<PostDetailOutput> postDetailOutputs = searchByOptionsOutputs.stream().map( searchByOptionsOutput -> {
             PostDetailOutput output = PostDetailOutput.builder()
