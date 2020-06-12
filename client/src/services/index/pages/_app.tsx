@@ -22,23 +22,18 @@ import initializeStore, { IEnvironments, RootStore } from '../store';
 
 export default class extends React.Component {
   static async getInitialProps(appContext: any) {
+    console.log("getinitprops");
     const appProps = await App.getInitialProps(appContext);
     const { Component, router, ctx } = appContext;
-
+    
     const isServer = typeof window === 'undefined';
     const navState = getRouteNavIndex(router.asPath);
 
     const mobxStore = initializeStore();
     mobxStore.pageStore.clickedIdx = navState;
 
-    if(ctx.req){
-      console.log(ctx.req.headers);
-    }
-
     try {
-      if (isServer) {
         await mobxStore.authStore.nextServerInit(ctx.req, ctx.res);
-      }
     } catch (error) {
       console.error('[Error 29948] store init failed');
       // console.error(error);
@@ -97,14 +92,15 @@ export default class extends React.Component {
 }
 
 class App extends NextApp<any> {
-  componentDidMount() {
-    // if (!this.props.store.authStore.token) {
-    //   Router.push('/signin');
-    // }
-    // console.log(this.props.store.authStore.token);
+  componentDidMount(){
+    console.log("didmount");
+  }
+  componentDidUpdate() {
+    console.log("didupdate");
   }
   render() {
     const { Component, pageProps } = this.props;
+    console.log(toJS(this.props.store.authStore.auth));
     return (
       <Container>
         <Head>

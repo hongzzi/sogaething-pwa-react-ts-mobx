@@ -1,5 +1,6 @@
 package com.ssafy.market.domain.user.util;
 
+import org.springframework.http.ResponseCookie;
 import org.springframework.util.SerializationUtils;
 
 import javax.servlet.http.Cookie;
@@ -31,14 +32,26 @@ public class CookieUtils {
 //        c2.isHttpOnly();
 //        response.addCookie(c2);
 
-        Cookie cookie = new Cookie(name, value);
-        cookie.setPath("/");
-        cookie.setHttpOnly(true);
-        cookie.setMaxAge(maxAge);
-//        cookie.setDomain("localhost");
-        cookie.setDomain("www.sogaething.com");
-        cookie.isHttpOnly();
-        response.addCookie(cookie);
+//        Cookie cookie = new Cookie(name, value);
+//        cookie.setPath("/");
+//        cookie.setHttpOnly(true);
+//        cookie.setMaxAge(maxAge);
+////        cookie.setDomain("localhost");
+////        cookie.setDomain("www.sogaething.com");
+//        cookie.setDomain("k02a4041.p.ssafy.io");
+
+//        cookie.isHttpOnly();
+//        response.addCookie(cookie);
+        ResponseCookie cookie = ResponseCookie.from(name, value)
+                .domain("k02a4041.p.ssafy.io")
+                .sameSite("None")
+                .secure(true)
+                .path("/")
+//                .httpOnly(true)
+                .maxAge(maxAge)
+                .build();
+        response.addHeader("Set-Cookie", cookie.toString());
+
 
     }
 

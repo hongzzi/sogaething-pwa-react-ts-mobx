@@ -2,6 +2,8 @@ package com.ssafy.market.domain.chat.repository;
 
 import com.ssafy.market.domain.chat.domain.ChatMessage;
 import com.ssafy.market.domain.chat.domain.ChatRoom;
+import com.ssafy.market.domain.chat.domain.MessageType;
+import com.ssafy.market.domain.chat.dto.RemitMessageDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -29,6 +31,16 @@ public class ChatMongoRepository {
         return mongoTemplate.insert(chatMessage, "chatMessage");
     }
 
+    public RemitMessageDto insertRemitMessage(RemitMessageDto remitMessageDto) {
+        remitMessageDto.setCreatedDateTime(LocalDateTime.now().toString());
+
+        Query query = new Query(new Criteria("roomId").is(remitMessageDto.getRoomId()));
+        Update update = new Update();
+        update.set("modifiedDateTime", LocalDateTime.now().toString());
+        mongoTemplate.findAndModify(query, update, ChatRoom.class, "chatRoom");
+        return mongoTemplate.insert(remitMessageDto, "chatMessage");
+    }
+
     public List<ChatMessage> getChatMessagesByRoomId(Long roomId) {
         Query query = new Query(new Criteria("roomId").is(roomId));
         return mongoTemplate.find(query, ChatMessage.class, "chatMessage");
@@ -38,6 +50,9 @@ public class ChatMongoRepository {
         Query query = new Query(new Criteria("roomId").is(roomId));
         query.with(Sort.by(Sort.Direction.DESC, "_id")).limit(1);
         ChatMessage result = mongoTemplate.findOne(query, ChatMessage.class, "chatMessage");
+        if (MessageType.REMIT.equals(result.getType())){
+            result.setMessage("입금 요청");
+        }
         if (result != null) return result.getMessage();
         else return null;
     }

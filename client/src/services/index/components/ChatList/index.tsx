@@ -9,9 +9,15 @@ interface IChatCardProps {
 }
 
 export default (props: IChatCardProps) => {
-  const Cards = props.chatData.map((item, i) => {
-    return <Card key={i} chatData={item} />;
-  });
+  let Cards;
+  if(Array.isArray(props.chatData)){
+    Cards = props.chatData.map((item, i) => {
+      return <Card key={i} chatData={item} />;
+    });
+  }else{
+    Cards= '채팅을 시작해보세요!'
+  }
+  
   return <Wrapper>{Cards}</Wrapper>;
 };
 

@@ -24,7 +24,7 @@ export default (props: IMatchCardProps) => {
   const { match } = props;
   const router = useRouter();
   const handleClick = () => {
-    router.replace(`/matchresult/${match.matchingId}`)
+    router.push(`/matchresult/${match.matchingId}`)
   }
   const isMatchPossible = props.match.possibility;
 

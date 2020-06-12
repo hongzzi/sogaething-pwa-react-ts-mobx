@@ -18,7 +18,7 @@ export default (props: ICategoryHeader) => {
   const router = useRouter();
   const handleBackIconClick = () => {
     if (props.backHome || router.query.isPosted) {
-      router.push('/');
+      router.push('/main');
     } else {
       router.back();
     }

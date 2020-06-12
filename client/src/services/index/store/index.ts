@@ -1,11 +1,12 @@
 import { useStaticRendering } from 'mobx-react';
+import BankService from '../service/BankService';
 import ChatService from '../service/ChatService';
 import AuthStore, { IAuth, initialAuth, IToken } from './AuthStore';
+import CardStore from './CardStore';
 import ChatStore from './ChatStore';
 import MatchStore, { initialMatch } from './MatchStore';
 import PageStore, { initialPage } from './PageStore';
 import PostStore, { initialPost } from './PostStore';
-import CardStore from './CardStore';
 import VisiableStore from './VisiableStore';
 
 const isServer = typeof window === 'undefined';
@@ -31,7 +32,7 @@ export class RootStore {
     this.authStore = new AuthStore(this, initialData ? initialData.authStore : null);
     this.pageStore = new PageStore(this, initialData ? initialData.pageStore : null);
     this.postStore = new PostStore(this, initialData ? initialData.postStore : null);
-    this.chatStore = new ChatStore(new ChatService(), this);
+    this.chatStore = new ChatStore(new ChatService(), new BankService(), this);
     this.matchStore = new MatchStore(this, initialData ? initialData.matchStore : null);
     this.cardStore = new CardStore(this, initialData ? initialData.cardStore : null);
     this.visiableStore = new VisiableStore(this, initialData ? initialData.visiableStore : null);

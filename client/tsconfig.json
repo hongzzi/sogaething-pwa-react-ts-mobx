@@ -9,6 +9,7 @@
       "scripthost",
       "esnext.asynciterable"
     ],
+    // "alwaysStrict": true,
     "module": "commonjs",
     "moduleResolution": "node",
     "experimentalDecorators": true,
