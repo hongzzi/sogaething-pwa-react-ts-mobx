@@ -37,10 +37,10 @@ public class CookieUtils {
 //        cookie.setHttpOnly(true);
 //        cookie.setMaxAge(maxAge);
 ////        cookie.setDomain("localhost");
-////        cookie.setDomain("www.sogaething.com");
-//        cookie.setDomain("k02a4041.p.ssafy.io");
 
+//        cookie.setDomain("k02a4041.p.ssafy.io");
 //        cookie.isHttpOnly();
+
 //        response.addCookie(cookie);
         ResponseCookie cookie = ResponseCookie.from(name, value)
                 .domain("k02a4041.p.ssafy.io")
@@ -51,8 +51,6 @@ public class CookieUtils {
                 .maxAge(maxAge)
                 .build();
         response.addHeader("Set-Cookie", cookie.toString());
-
-
     }
 
     public static void deleteCookie(HttpServletRequest request, HttpServletResponse response, String name) {
