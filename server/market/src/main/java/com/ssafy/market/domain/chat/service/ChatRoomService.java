@@ -89,6 +89,7 @@ public class ChatRoomService {
             for (ChatRoom chatRoom : searchedChatRoom) {
                 User buyer = userRepository.findByUserId(Long.parseLong(chatRoom.getBuyerId()));
                 User seller = userRepository.findByUserId(Long.parseLong(chatRoom.getSellerId()));
+                if (seller == null || buyer == null) continue;
                 Map<String, String> sellerUser = new HashMap<>();
                 sellerUser.put("userId", String.valueOf(seller.getUserId()));
                 sellerUser.put("userName", seller.getName());
