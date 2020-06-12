@@ -37,8 +37,10 @@ public class CookieUtils {
 //        cookie.setHttpOnly(true);
 //        cookie.setMaxAge(maxAge);
 ////        cookie.setDomain("localhost");
+
 //        cookie.setDomain("k02a4041.p.ssafy.io");
-////        cookie.isHttpOnly();
+//        cookie.isHttpOnly();
+
 //        response.addCookie(cookie);
         ResponseCookie cookie = ResponseCookie.from(name, value)
                 .domain("k02a4041.p.ssafy.io")
