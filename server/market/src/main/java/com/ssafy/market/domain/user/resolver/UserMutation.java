@@ -8,6 +8,7 @@ import com.ssafy.market.domain.user.security.TokenProvider;
 import com.ssafy.market.domain.user.util.CookieUtils;
 import com.ssafy.market.global.apis.ImgurApi;
 import com.ssafy.market.global.apis.KakaoApi;
+import com.ssafy.market.global.apis.NewImageApi;
 import graphql.schema.DataFetchingEnvironment;
 import lombok.RequiredArgsConstructor;
 
@@ -21,6 +22,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
+import java.io.IOException;
 
 @Component
 @RequiredArgsConstructor
@@ -30,6 +32,7 @@ public class UserMutation implements GraphQLMutationResolver {
     private final KakaoApi kakaoApi;
     private final TokenProvider tokenProvider;
     private final ImgurApi api;
+    private final NewImageApi apis;
 
     @Transactional
     public LoginUserOutput loginUser(LoginUserInput input){
@@ -57,11 +60,16 @@ public class UserMutation implements GraphQLMutationResolver {
         return output;
     }
     @Transactional
-    public UserOutput updateImg(UpdateImgInput input, DataFetchingEnvironment env){
+    public UserOutput updateImg(UpdateImgInput input, DataFetchingEnvironment env) {
         Long userId = tokenProvider.getUserIdFromHeader(env);
         User user = userRepository.findByUserId(userId);
         String[] image = input.getImageUrl().split(",");
-        String img = api.uploadImg(image[1]);
+        String img = null;
+        try {
+            img = apis.uploadImg(image[1]);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         user.updateimg(img);
         UserOutput output =  new UserOutput(userId,user.getName(),user.getEmail(),user.getImageUrl(),user.getProvider(),user.getProviderId(),user.getPhone(),user.getAddress(),user.getTrust());
         return output;
@@ -71,7 +79,12 @@ public class UserMutation implements GraphQLMutationResolver {
         Long userId = tokenProvider.getUserIdFromHeader(env);
         User user = userRepository.findByUserId(userId);
         String[] image = input.getImageUrl().split(",");
-        String img = api.uploadImg(image[1]);
+        String img = null;
+        try {
+            img = apis.uploadImg(image[1]);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         user.update(img,input.getPhone(),input.getAddress(),input.getTrust());
         UserOutput output =  new UserOutput(userId,user.getName(),user.getEmail(),user.getImageUrl(),user.getProvider(),user.getProviderId(),user.getPhone(),user.getAddress(),user.getTrust());

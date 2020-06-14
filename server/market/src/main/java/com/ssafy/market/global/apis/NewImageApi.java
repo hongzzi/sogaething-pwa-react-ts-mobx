@@ -24,30 +24,35 @@ public class NewImageApi {
     private String CLIENT_ID;
 
 
+    public String uploadImg(String base64) {
+        try {
+            OkHttpClient client = new OkHttpClient().newBuilder()
+                    .build();
+            MediaType mediaType = MediaType.parse("text/plain");
+            RequestBody body = new MultipartBody.Builder().setType(MultipartBody.FORM)
+                    .addFormDataPart("image", base64)
+                    .build();
+            Request request = new Request.Builder()
+                    .url("https://api.imgbb.com/1/upload?key=" + CLIENT_ID)
+                    .method("POST", body)
+                    .build();
+            Response response = null;
 
-    public String uploadImg(String base64) throws IOException {
+            response = client.newCall(request).execute();
 
-        OkHttpClient client = new OkHttpClient().newBuilder()
-                .build();
-        MediaType mediaType = MediaType.parse("text/plain");
-        RequestBody body = new MultipartBody.Builder().setType(MultipartBody.FORM)
-                .addFormDataPart("image", base64)
-                .build();
-        Request request = new Request.Builder()
-                .url("https://api.imgbb.com/1/upload?key="+CLIENT_ID)
-                .method("POST", body)
-                .build();
-        Response response = client.newCall(request).execute();
-        String result = response.body().string();
+            String result = response.body().string();
 
-        JsonParser parser = new JsonParser();
-        JsonElement element = parser.parse(result);
-        JsonObject properties = element.getAsJsonObject().get("data").getAsJsonObject();
-        String url = String.valueOf(properties.get("url"));
-        url = url.replace("\"", "");
+            JsonParser parser = new JsonParser();
+            JsonElement element = parser.parse(result);
+            JsonObject properties = element.getAsJsonObject().get("data").getAsJsonObject();
+            String url = String.valueOf(properties.get("url"));
+            url = url.replace("\"", "");
 
-        return url;
-
+            return url;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
 
     }
 
