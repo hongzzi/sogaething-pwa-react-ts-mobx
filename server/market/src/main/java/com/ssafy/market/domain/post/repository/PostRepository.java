@@ -46,6 +46,6 @@ public interface PostRepository extends JpaRepository<Post, Long> {
             "join user user on user.user_id = post.user_id\n" +
             "join (SELECT product_id, group_concat(distinct hashtag separator ',') as hashtags FROM hashtag group by product_id) hashtags on hashtags.product_id = product.product_id\n" +
             "where product.product_id in (SELECT product_id FROM product WHERE post_id in (select distinct post_id from post where category = :category) \n" +
-            "and price >= :startPrice and price <= :endPrice)", nativeQuery = true)
-    List<SearchByOptionsOutput> findByOptions(@Param("startPrice")int startPrice, @Param("endPrice")int endPrice, @Param("category")String category);
+            "and price >= :startPrice and price <= :endPrice) and user.user_id != :userId", nativeQuery = true)
+    List<SearchByOptionsOutput> findByOptions(@Param("startPrice")int startPrice, @Param("endPrice")int endPrice, @Param("category")String category, @Param("userId")Long userId);
 }
