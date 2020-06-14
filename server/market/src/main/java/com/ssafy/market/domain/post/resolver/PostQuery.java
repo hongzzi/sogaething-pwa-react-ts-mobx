@@ -148,7 +148,23 @@ public class PostQuery implements GraphQLQueryResolver {
         Long userId = tokenProvider.getUserIdFromHeader(env);
 
         Matching matching = matchingRepository.findByMatchingId(matchingId);
+        String[] hashtags = matchingHashtagRepository.findHashtagByMatching(matching).toArray(new String[0]);
         List<SearchByOptionsOutput> searchByOptionsOutputs = postRepository.findByOptions(matching.getMinPrice(), matching.getMaxPrice(), matching.getCategory(), userId);
+
+        for (int i = searchByOptionsOutputs.size()-1; i >= 0 ; i--) {
+            String[] target_hash =  searchByOptionsOutputs.get(i).getHashtag().split(",");
+            int flag = 0;
+            for (int j = 0; j < target_hash.length; j++) {
+                for (int k = 0; k < hashtags.length; k++) {
+                    if(target_hash[j].equals(hashtags[k])){
+                        flag++;
+                    }
+                }
+            }
+            if(flag < hashtags.length){
+                searchByOptionsOutputs.remove(i);
+            }
+        }
 
         List<PostDetailOutput> postDetailOutputs = searchByOptionsOutputs.stream().map( searchByOptionsOutput -> {
             PostDetailOutput output = PostDetailOutput.builder()
