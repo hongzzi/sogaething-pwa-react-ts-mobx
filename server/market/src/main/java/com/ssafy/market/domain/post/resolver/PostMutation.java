@@ -15,6 +15,7 @@ import com.ssafy.market.domain.user.repository.UserRepository;
 
 import com.ssafy.market.domain.user.security.TokenProvider;
 import com.ssafy.market.global.apis.ImgurApi;
+import com.ssafy.market.global.apis.NewImageApi;
 import graphql.schema.DataFetchingEnvironment;
 import lombok.RequiredArgsConstructor;
 
@@ -36,16 +37,21 @@ public class PostMutation implements GraphQLMutationResolver {
     private final FileRepository fileRepository;
     private final TokenProvider tokenProvider;
     private final ImgurApi api;
+    private final NewImageApi apis;
 
 
     @Transactional
     public Output createPost(CreatePostInput input, DataFetchingEnvironment env ) throws Exception {
+
 
         Long userId = tokenProvider.getUserIdFromHeader(env);
         User user = (userRepository.findByUserId(userId));
 
         Output output = null;
         Boolean check = true;
+        Boolean result = false;
+        Post post =null;
+        Product product = null;
         try {
             SimpleDateFormat formatter = new SimpleDateFormat ("yyyy-MM-dd hh:mm:ss");
             Calendar cal = Calendar.getInstance();
@@ -59,8 +65,8 @@ public class PostMutation implements GraphQLMutationResolver {
                 check =false;
             }
             if(check) {
-                Post post = postRepository.save(new Post(null, user, false, input.getTitle(), ts, input.getContents(), (long) 0, "판매", "진행중", input.getTransaction()));
-                Product product = productRepository.save(new Product(null, post, input.getPrice(), input.getCategory(), (long) 0));
+                post = postRepository.save(new Post(null, user, false, input.getTitle(), ts, input.getContents(), (long) 0, "판매", "진행중", input.getTransaction()));
+                product = productRepository.save(new Product(null, post, input.getPrice(), input.getCategory(), (long) 0));
                 String[] hashtagArr = input.getHashtag();
                 List<Hashtag> hList = new ArrayList<>();
                 for(int i =0; i<hashtagArr.length;i++){
@@ -72,22 +78,39 @@ public class PostMutation implements GraphQLMutationResolver {
                 if (Arr.length > 0) {
                     for (int k = 0; k < Arr.length; k++) {
                         String[] temp = Arr[k].split(",");
-                        String imgur = api.uploadImg(temp[1]);
+//                        String imgur = api.uploadImg(temp[1]);
+                        String imgur = apis.uploadImg(temp[1]);
+                        if(imgur.equals("false") || imgur=="false"){
+                            result = false;
+                            break;
+                        }
                         if(!imgur.equals("false")) {
                             fList.add(new File(null,product,imgur));
-                        }
-                        else{
+                        }else{
+                            output = new Output("FAIL", post.getPostId());
+                            result = false;
                             break;
                         }
                     }
                 }
                 fileRepository.saveAll(fList);
                 output = new Output("SUCCESS", post.getPostId());
+                result = true;
             }else{
                 output = new Output("FAIL",null);
+                result = false;
             }
         } catch (Exception e) {
             output = new Output("FAIL",null);
+            result = false;
+        }
+        if(!result){
+            postRepository.deleteByPostId(post.getPostId());
+            productRepository.deleteByProductId(product.getProductId());
+            List<Hashtag> list = hashtagRepository.findByProduct(product);
+            for(int j = 0; j<list.size(); j++){
+                hashtagRepository.deleteByHashtagId(list.get(j).getHashtagId());
+            }
         }
         return  output;
     }
