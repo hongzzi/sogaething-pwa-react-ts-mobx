@@ -6,7 +6,6 @@ import com.ssafy.market.domain.user.dto.*;
 import com.ssafy.market.domain.user.repository.UserRepository;
 import com.ssafy.market.domain.user.security.TokenProvider;
 import com.ssafy.market.domain.user.util.CookieUtils;
-import com.ssafy.market.global.apis.ImgurApi;
 import com.ssafy.market.global.apis.KakaoApi;
 import com.ssafy.market.global.apis.NewImageApi;
 import graphql.schema.DataFetchingEnvironment;
@@ -22,7 +21,6 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
-import java.io.IOException;
 
 @Component
 @RequiredArgsConstructor
@@ -31,7 +29,6 @@ public class UserMutation implements GraphQLMutationResolver {
     private final UserRepository userRepository;
     private final KakaoApi kakaoApi;
     private final TokenProvider tokenProvider;
-    private final ImgurApi api;
     private final NewImageApi apis;
 
     @Transactional
@@ -52,7 +49,6 @@ public class UserMutation implements GraphQLMutationResolver {
 
             RequestAttributes attrs = RequestContextHolder.getRequestAttributes();
             HttpServletResponse res = ((ServletRequestAttributes) attrs).getResponse();
-//            HttpServletRequest req = ((ServletRequestAttributes)attrs).getRequest();
             CookieUtils.addCookie(res,"token",Jwt,3600);
         }
 
