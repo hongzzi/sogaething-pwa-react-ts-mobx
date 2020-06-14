@@ -39,84 +39,86 @@ public class PostMutation implements GraphQLMutationResolver {
 
 
     @Transactional
-    public Output createPost(CreatePostInput input, DataFetchingEnvironment env ) throws Exception {
-
+    public Output createPost(CreatePostInput input, DataFetchingEnvironment env) {
 
         Long userId = tokenProvider.getUserIdFromHeader(env);
         User user = (userRepository.findByUserId(userId));
 
         Output output = null;
         Boolean check = true;
-        Boolean result = false;
-        Post post =null;
+        Post post = null;
         Product product = null;
         try {
-            SimpleDateFormat formatter = new SimpleDateFormat ("yyyy-MM-dd hh:mm:ss");
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
             Calendar cal = Calendar.getInstance();
             String today = null;
             today = formatter.format(cal.getTime());
             Timestamp ts = Timestamp.valueOf(today);
-            if(input.getTitle().equals("") || input.getContents().equals("") ||input.getTransaction().equals("") || input.getPrice()==null || input.getCategory().equals("")){
+            if (input.getTitle().equals("") || input.getContents().equals("") || input.getTransaction().equals("") || input.getPrice() == null || input.getCategory().equals("")) {
                 check = false;
             }
-            if(input.getHashtag().length<0 || input.getImgPaths().length<0){
-                check =false;
+            if (input.getHashtag().length < 0 || input.getImgPaths().length < 0) {
+                check = false;
             }
-            if(check) {
+            if (check) {
                 post = postRepository.save(new Post(null, user, false, input.getTitle(), ts, input.getContents(), (long) 0, "판매", "진행중", input.getTransaction()));
                 product = productRepository.save(new Product(null, post, input.getPrice(), input.getCategory(), (long) 0));
                 String[] hashtagArr = input.getHashtag();
+                if (hashtagArr.length == 0) check = false;
                 List<Hashtag> hList = new ArrayList<>();
-                for(int i =0; i<hashtagArr.length;i++){
-                    hList.add(new Hashtag(null,product,hashtagArr[i]));
+                for (int i = 0; i < hashtagArr.length; i++) {
+                    hList.add(new Hashtag(null, product, hashtagArr[i]));
                 }
                 hashtagRepository.saveAll(hList);
                 String[] Arr = input.getImgPaths();
                 List<File> fList = new ArrayList<>();
-                if (Arr.length > 0) {
+                if (Arr.length == 0) check = false;
+                else {
                     for (int k = 0; k < Arr.length; k++) {
                         String[] temp = Arr[k].split(",");
                         String imgur = apis.uploadImg(temp[1]);
-                        if(!imgur.equals("false")) {
-                            fList.add(new File(null,product,imgur));
-                        }else{
-                            output = new Output("FAIL", post.getPostId());
-                            result = false;
+                        if (!imgur.equals("false")) {
+                            fList.add(new File(null, product, imgur));
+                        } else {
+                            check = false;
                             break;
                         }
                     }
-                }else {
-                    result = false;
+                    if (check) {
+                        fileRepository.saveAll(fList);
+                    }
                 }
-                fileRepository.saveAll(fList);
                 output = new Output("SUCCESS", post.getPostId());
-                result = true;
-            }else{
-                output = new Output("FAIL",null);
-                result = false;
+            } else {
+                check = false;
             }
         } catch (Exception e) {
-            output = new Output("FAIL",null);
-            result = false;
+            output = new Output("FAIL", null);
         }
-        if(!result){
-            output = new Output("FAIL",null);
-            postRepository.deleteByPostId(post.getPostId());
-            productRepository.deleteByProductId(product.getProductId());
+        if (!check) {
+            output = new Output("FAIL", null);
+            if (post != null) {
+                postRepository.deleteByPostId(post.getPostId());
+            }
+            if (product != null) {
+                productRepository.deleteByProductId(product.getProductId());
+            }
             List<Hashtag> list = hashtagRepository.findByProduct(product);
-            for(int j = 0; j<list.size(); j++){
-                hashtagRepository.deleteByHashtagId(list.get(j).getHashtagId());
+            if (list.size() > 0) {
+                for (int j = 0; j < list.size(); j++) {
+                    hashtagRepository.deleteByHashtagId(list.get(j).getHashtagId());
+                }
             }
         }
-        return  output;
+        return output;
     }
 
     @Transactional
-    public PostMetaOutput updatePost(UpdatePostInput input){
+    public PostMetaOutput updatePost(UpdatePostInput input) {
         Post post = postRepository.findByPostId(input.getPostId());
-        post.update(input.getTitle(),input.getContents(),input.getTransaction());
+        post.update(input.getTitle(), input.getContents(), input.getTransaction());
         Product product = productRepository.findByPost(post);
-        product.update(post,input.getPrice(),input.getCategory());
+        product.update(post, input.getPrice(), input.getCategory());
         List<Hashtag> hashtagList = hashtagRepository.findByProduct(product);
         List<File> fileList = fileRepository.findByProduct(product);
         // 해시 태그 및 파일 삭제 하기
@@ -129,8 +131,8 @@ public class PostMutation implements GraphQLMutationResolver {
         // 해시 태그 및 파일 추가 하기
         String[] hashtagArr = input.getHashtag();
         List<Hashtag> hList = new ArrayList<>();
-        for(int i =0; i<hashtagArr.length;i++){
-            hList.add(new Hashtag(null,product,hashtagArr[i]));
+        for (int i = 0; i < hashtagArr.length; i++) {
+            hList.add(new Hashtag(null, product, hashtagArr[i]));
         }
         hashtagRepository.saveAll(hList);
 
@@ -140,10 +142,9 @@ public class PostMutation implements GraphQLMutationResolver {
             for (int k = 0; k < fArr.length; k++) {
                 String[] temp = fArr[k].split(",");
                 String imgur = apis.uploadImg(temp[1]);
-                if(!imgur.equals("false")) {
-                    fList.add(new File(null,product,imgur));
-                }
-                else{
+                if (!imgur.equals("false")) {
+                    fList.add(new File(null, product, imgur));
+                } else {
                     break;
                 }
             }
@@ -152,32 +153,34 @@ public class PostMutation implements GraphQLMutationResolver {
         List<String> hash = hashtagRepository.findDistinctByHashtag(product.getProductId());
         String imgPath = fileRepository.findTop1ByProduct(product).getImgPath();
         PostMetaOutput output = new PostMetaOutput(
-                input.getPostId(),post.getTitle(),product.getCategory(),imgPath,
-                product.getPrice(),hash,post.isBuy(),post.getViewCount(),post.getDeal(),post.getDealState(),
-                post.getSaleDate().toString(),post.getTransaction(),post.getCreatedDate().toString(),
+                input.getPostId(), post.getTitle(), product.getCategory(), imgPath,
+                product.getPrice(), hash, post.isBuy(), post.getViewCount(), post.getDeal(), post.getDealState(),
+                post.getSaleDate().toString(), post.getTransaction(), post.getCreatedDate().toString(),
                 post.getModifiedDate().toString());
 
         return output;
     }
 
     @Transactional
-    public Long updateView(Long postId){
+    public Long updateView(Long postId) {
         Post post = postRepository.findByPostId(postId);
         post.updateViewCount();
         return post.getViewCount();
     }
+
     @Transactional
-    public Boolean updateIsBuy(Long postsId){
+    public Boolean updateIsBuy(Long postsId) {
         Post post = postRepository.findByPostId(postsId);
-        if(post.isBuy()== true){
+        if (post.isBuy() == true) {
             post.update(false);
-        }else {
+        } else {
             post.update(true);
         }
         return post.isBuy();
     }
+
     @Transactional
-    public Output deletePost(Long postId){
+    public Output deletePost(Long postId) {
         Output output = null;
 
         Post post = postRepository.findByPostId(postId);
@@ -195,8 +198,8 @@ public class PostMutation implements GraphQLMutationResolver {
             productRepository.deleteByProductId(product.getProductId());
             postRepository.deleteByPostId(postId);
             output = new Output("SUCCESS", postId);
-        }catch (Exception e){
-            output = new Output("FAIL",null);
+        } catch (Exception e) {
+            output = new Output("FAIL", null);
         }
         return output;
     }
