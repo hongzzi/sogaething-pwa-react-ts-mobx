@@ -32,16 +32,16 @@ public class UserMutation implements GraphQLMutationResolver {
     private final NewImageApi apis;
 
     @Transactional
-    public LoginUserOutput loginUser(LoginUserInput input){
+    public LoginUserOutput loginUser(LoginUserInput input) {
         String Provider = input.getProvider();
         String Token = input.getToken();
         String Jwt = "ERROR";
-        if(StringUtils.hasText(Provider) && Provider.equals("Kakao")){
+        if (StringUtils.hasText(Provider) && Provider.equals("Kakao")) {
 
             User user = kakaoApi.getUserInfo(Token);
 
             User selected = userRepository.findByProviderId(user.getProviderId());
-            if(selected == null){
+            if (selected == null) {
                 userRepository.save(user);
             }
             user = userRepository.findByProviderId(user.getProviderId());
@@ -49,29 +49,32 @@ public class UserMutation implements GraphQLMutationResolver {
 
             RequestAttributes attrs = RequestContextHolder.getRequestAttributes();
             HttpServletResponse res = ((ServletRequestAttributes) attrs).getResponse();
-            CookieUtils.addCookie(res,"token",Jwt,3600);
+            CookieUtils.addCookie(res, "token", Jwt, 3600);
         }
 
         LoginUserOutput output = new LoginUserOutput(Jwt);
         return output;
     }
+
     @Transactional
     public UserOutput updateImg(UpdateImgInput input, DataFetchingEnvironment env) {
-        Long userId = tokenProvider.getUserIdFromHeader(env);
-        User user = userRepository.findByUserId(userId);
-        String[] image = input.getImageUrl().split(",");
-        String img = null;
+        UserOutput output = null;
         try {
-            img = apis.uploadImg(image[1]);
+            Long userId = tokenProvider.getUserIdFromHeader(env);
+            User user = userRepository.findByUserId(userId);
+            String[] image = input.getImageUrl().split(",");
+            String img = apis.uploadImg(image[1]);
+            user.updateimg(img);
+            output = new UserOutput(userId, user.getName(), user.getEmail(), user.getImageUrl(), user.getProvider(), user.getProviderId(), user.getPhone(), user.getAddress(), user.getTrust());
         } catch (Exception e) {
             e.printStackTrace();
         }
-        user.updateimg(img);
-        UserOutput output =  new UserOutput(userId,user.getName(),user.getEmail(),user.getImageUrl(),user.getProvider(),user.getProviderId(),user.getPhone(),user.getAddress(),user.getTrust());
+
         return output;
     }
+
     @Transactional
-    public UserOutput updateUser(UpdateUserInput input,DataFetchingEnvironment env ){
+    public UserOutput updateUser(UpdateUserInput input, DataFetchingEnvironment env) {
         Long userId = tokenProvider.getUserIdFromHeader(env);
         User user = userRepository.findByUserId(userId);
         String[] image = input.getImageUrl().split(",");
@@ -82,30 +85,31 @@ public class UserMutation implements GraphQLMutationResolver {
             e.printStackTrace();
         }
 
-        user.update(img,input.getPhone(),input.getAddress(),input.getTrust());
-        UserOutput output =  new UserOutput(userId,user.getName(),user.getEmail(),user.getImageUrl(),user.getProvider(),user.getProviderId(),user.getPhone(),user.getAddress(),user.getTrust());
+        user.update(img, input.getPhone(), input.getAddress(), input.getTrust());
+        UserOutput output = new UserOutput(userId, user.getName(), user.getEmail(), user.getImageUrl(), user.getProvider(), user.getProviderId(), user.getPhone(), user.getAddress(), user.getTrust());
         return output;
     }
+
     @Transactional
-    public int deleteUser(Long id){
+    public int deleteUser(Long id) {
         User user = userRepository.findByUserId(id);
         return userRepository.deleteByUserId(id);
     }
 
-    public UserLogout logoutUser(Long userId){
+    public UserLogout logoutUser(Long userId) {
 
         RequestAttributes attrs = RequestContextHolder.getRequestAttributes();
         HttpServletResponse res = ((ServletRequestAttributes) attrs).getResponse();
         HttpServletRequest req = ((ServletRequestAttributes) attrs).getRequest();
-        CookieUtils.deleteCookie(req,res,"token");
+        CookieUtils.deleteCookie(req, res, "token");
         UserLogout output = null;
-        Cookie cookie = CookieUtils.getCookie(req,"token");
+        Cookie cookie = CookieUtils.getCookie(req, "token");
 
-        if(cookie==null){
-            output = new UserLogout("SUCCESS",userId);
+        if (cookie == null) {
+            output = new UserLogout("SUCCESS", userId);
             return output;
-        }else{
-            output = new UserLogout("FAIL",userId);
+        } else {
+            output = new UserLogout("FAIL", userId);
             return output;
         }
 
