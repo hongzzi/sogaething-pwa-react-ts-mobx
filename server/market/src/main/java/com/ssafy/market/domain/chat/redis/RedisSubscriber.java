@@ -2,6 +2,7 @@ package com.ssafy.market.domain.chat.redis;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.market.domain.chat.domain.ChatMessage;
+import com.ssafy.market.domain.chat.dto.RemitMessageDto;
 import com.ssafy.market.domain.chat.service.ChatService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,13 +29,22 @@ public class RedisSubscriber implements MessageListener {
     public void onMessage(Message message, byte[] pattern) {
         try {
             // redis 에서 발행된 데이터를 받아 deserialize
+//            String publishMessage = (String) redisTemplate.getStringSerializer().deserialize(message.getBody());
             String publishMessage = (String) redisTemplate.getStringSerializer().deserialize(message.getBody());
             // ChatMessage 객체로 맵핑
-            ChatMessage roomMessage = objectMapper.readValue(publishMessage, ChatMessage.class);
-            // WebSocket 구독자에게 채팅 메시지 Send
-            messagingTemplate.convertAndSend("/sub/chat/room/" + roomMessage.getRoomId(), roomMessage);
+            System.out.println("after deserialize: " + publishMessage);
+
+            if (publishMessage.startsWith("{\"type\":\"REMIT\"")) {
+                RemitMessageDto roomMessage = objectMapper.readValue(publishMessage, RemitMessageDto.class);
+                messagingTemplate.convertAndSend("/sub/chat/room" + roomMessage.getRoomId(), roomMessage);
+            } else {
+                ChatMessage roomMessage = objectMapper.readValue(publishMessage, ChatMessage.class);
+                // WebSocket 구독자에게 채팅 메시지 Send
+                messagingTemplate.convertAndSend("/sub/chat/room/" + roomMessage.getRoomId(), roomMessage);
+            }
         } catch (Exception e) {
             logger.error(e.getMessage());
+            e.printStackTrace();
         }
     }
 }

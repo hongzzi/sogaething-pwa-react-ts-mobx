@@ -44,7 +44,7 @@ public class ChatService {
         return topics.get(roomId);
     }
 
-    @CacheEvict(value = CacheKey.MESSAGE, key = "#chatMessage.roomId")
+//    @CacheEvict(value = CacheKey.MESSAGE, key = "#chatMessage.roomId")
     @Transactional
     public Boolean sendMessage(ChatMessage chatMessage) {
         ChannelTopic channelTopic = getTopic(chatMessage.getRoomId());
