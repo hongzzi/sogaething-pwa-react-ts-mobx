@@ -14,7 +14,6 @@ import com.ssafy.market.domain.user.domain.User;
 import com.ssafy.market.domain.user.repository.UserRepository;
 
 import com.ssafy.market.domain.user.security.TokenProvider;
-import com.ssafy.market.global.apis.ImgurApi;
 import com.ssafy.market.global.apis.NewImageApi;
 import graphql.schema.DataFetchingEnvironment;
 import lombok.RequiredArgsConstructor;
@@ -36,7 +35,6 @@ public class PostMutation implements GraphQLMutationResolver {
     private final HashtagRepository hashtagRepository;
     private final FileRepository fileRepository;
     private final TokenProvider tokenProvider;
-    private final ImgurApi api;
     private final NewImageApi apis;
 
 
@@ -78,12 +76,7 @@ public class PostMutation implements GraphQLMutationResolver {
                 if (Arr.length > 0) {
                     for (int k = 0; k < Arr.length; k++) {
                         String[] temp = Arr[k].split(",");
-//                        String imgur = api.uploadImg(temp[1]);
                         String imgur = apis.uploadImg(temp[1]);
-                        if(imgur.equals("false") || imgur=="false"){
-                            result = false;
-                            break;
-                        }
                         if(!imgur.equals("false")) {
                             fList.add(new File(null,product,imgur));
                         }else{
@@ -92,6 +85,8 @@ public class PostMutation implements GraphQLMutationResolver {
                             break;
                         }
                     }
+                }else {
+                    result = false;
                 }
                 fileRepository.saveAll(fList);
                 output = new Output("SUCCESS", post.getPostId());
@@ -105,6 +100,7 @@ public class PostMutation implements GraphQLMutationResolver {
             result = false;
         }
         if(!result){
+            output = new Output("FAIL",null);
             postRepository.deleteByPostId(post.getPostId());
             productRepository.deleteByProductId(product.getProductId());
             List<Hashtag> list = hashtagRepository.findByProduct(product);
@@ -143,7 +139,7 @@ public class PostMutation implements GraphQLMutationResolver {
         if (fArr.length > 0) {
             for (int k = 0; k < fArr.length; k++) {
                 String[] temp = fArr[k].split(",");
-                String imgur = api.uploadImg(temp[1]);
+                String imgur = apis.uploadImg(temp[1]);
                 if(!imgur.equals("false")) {
                     fList.add(new File(null,product,imgur));
                 }
