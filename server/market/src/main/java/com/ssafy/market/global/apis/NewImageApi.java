@@ -44,6 +44,7 @@ public class NewImageApi {
 
             JsonParser parser = new JsonParser();
             JsonElement element = parser.parse(result);
+
             JsonObject properties = element.getAsJsonObject().get("data").getAsJsonObject();
             String url = String.valueOf(properties.get("url"));
             url = url.replace("\"", "");
