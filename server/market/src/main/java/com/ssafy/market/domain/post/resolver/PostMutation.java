@@ -64,19 +64,27 @@ public class PostMutation implements GraphQLMutationResolver {
                 post = postRepository.save(new Post(null, user, false, input.getTitle(), ts, input.getContents(), (long) 0, "판매", "진행중", input.getTransaction()));
                 product = productRepository.save(new Product(null, post, input.getPrice(), input.getCategory(), (long) 0));
                 String[] hashtagArr = input.getHashtag();
-                if (hashtagArr.length == 0) check = false;
-                List<Hashtag> hList = new ArrayList<>();
-                for (int i = 0; i < hashtagArr.length; i++) {
-                    hList.add(new Hashtag(null, product, hashtagArr[i]));
+                if (hashtagArr.length == 0) {
+                    System.out.println("들어온 해시태그 데이터 없음..");
+                    check = false;
+                }else {
+                    List<Hashtag> hList = new ArrayList<>();
+                    for (int i = 0; i < hashtagArr.length; i++) {
+                        hList.add(new Hashtag(null, product, hashtagArr[i]));
+                    }
+                    hashtagRepository.saveAll(hList);
                 }
-                hashtagRepository.saveAll(hList);
                 String[] Arr = input.getImgPaths();
                 List<File> fList = new ArrayList<>();
-                if (Arr.length == 0) check = false;
+                if (Arr.length == 0){
+                    System.out.println("들어온 파일 데이타가 없음");
+                    check = false;
+                }
                 else {
                     for (int k = 0; k < Arr.length; k++) {
                         String[] temp = Arr[k].split(",");
                         String imgur = apis.uploadImg(temp[1]);
+                        System.out.println(imgur);
                         if (!imgur.equals("false")) {
                             fList.add(new File(null, product, imgur));
                         } else {
@@ -94,8 +102,12 @@ public class PostMutation implements GraphQLMutationResolver {
             }
         } catch (Exception e) {
             output = new Output("FAIL", null);
+//            System.out.println(e);
+            e.printStackTrace();
+            return output;
         }
         if (!check) {
+            System.out.println("어느 하나가 없다는 애기");
             output = new Output("FAIL", null);
             if (post != null) {
                 postRepository.deleteByPostId(post.getPostId());
