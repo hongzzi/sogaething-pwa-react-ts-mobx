@@ -151,41 +151,28 @@ public class PostQuery implements GraphQLQueryResolver {
         String[] hashtags = matchingHashtagRepository.findHashtagByMatching(matching).toArray(new String[0]);
         List<SearchByOptionsOutput> searchByOptionsOutputs = postRepository.findByOptions(matching.getMinPrice(), matching.getMaxPrice(), matching.getCategory(), userId);
 
-        for (int i = searchByOptionsOutputs.size()-1; i >= 0 ; i--) {
-            String[] target_hash =  searchByOptionsOutputs.get(i).getHashtag().split(",");
-            int flag = 0;
-            for (int j = 0; j < target_hash.length; j++) {
-                for (int k = 0; k < hashtags.length; k++) {
-                    if(target_hash[j].equals(hashtags[k])){
-                        flag++;
-                    }
-                }
-            }
-            if(flag < hashtags.length){
-                searchByOptionsOutputs.remove(i);
-            }
-        }
-
-        List<PostDetailOutput> postDetailOutputs = searchByOptionsOutputs.stream().map( searchByOptionsOutput -> {
-            PostDetailOutput output = PostDetailOutput.builder()
-                    .category(searchByOptionsOutput.getCategory())
-                    .contents(searchByOptionsOutput.getContents())
-                    .createdDate(searchByOptionsOutput.getCreatedDate())
-                    .deal(searchByOptionsOutput.getDeal())
-                    .dealState(searchByOptionsOutput.getDealState())
-                    .hashtag(Arrays.asList(searchByOptionsOutput.getHashtag().split(",")))
-                    .imgPaths(Arrays.asList(new String[]{searchByOptionsOutput.getImgPath()}))
-                    .isBuy(searchByOptionsOutput.getIsBuy())
-                    .modifiedDate(searchByOptionsOutput.getModifiedDate())
-                    .postId(searchByOptionsOutput.getPostId())
-                    .price(searchByOptionsOutput.getPrice())
-                    .saleDate(searchByOptionsOutput.getSaleDate())
-                    .title(searchByOptionsOutput.getTitle())
-                    .transaction(searchByOptionsOutput.getTransaction())
-                    .user(new UserInfoResponse(searchByOptionsOutput.getUserId(), searchByOptionsOutput.getName(), searchByOptionsOutput.getAddress(), searchByOptionsOutput.getTrust(), postRepository.countPostByUserId(searchByOptionsOutput.getUserId()), searchByOptionsOutput.getImageUrl()))
-                    .viewCount(searchByOptionsOutput.getViewCount())
-                    .build();
-            return output;
+        List<PostDetailOutput> postDetailOutputs = searchByOptionsOutputs.stream()
+                .filter( item -> Arrays.asList(item.getHashtag().split(",")).containsAll(Arrays.asList(hashtags)))
+                .map(searchByOptionsOutput -> {
+                    PostDetailOutput output = PostDetailOutput.builder()
+                            .category(searchByOptionsOutput.getCategory())
+                            .contents(searchByOptionsOutput.getContents())
+                            .createdDate(searchByOptionsOutput.getCreatedDate())
+                            .deal(searchByOptionsOutput.getDeal())
+                            .dealState(searchByOptionsOutput.getDealState())
+                            .hashtag(Arrays.asList(searchByOptionsOutput.getHashtag().split(",")))
+                            .imgPaths(Arrays.asList(new String[]{searchByOptionsOutput.getImgPath()}))
+                            .isBuy(searchByOptionsOutput.getIsBuy())
+                            .modifiedDate(searchByOptionsOutput.getModifiedDate())
+                            .postId(searchByOptionsOutput.getPostId())
+                            .price(searchByOptionsOutput.getPrice())
+                            .saleDate(searchByOptionsOutput.getSaleDate())
+                            .title(searchByOptionsOutput.getTitle())
+                            .transaction(searchByOptionsOutput.getTransaction())
+                            .user(new UserInfoResponse(searchByOptionsOutput.getUserId(), searchByOptionsOutput.getName(), searchByOptionsOutput.getAddress(), searchByOptionsOutput.getTrust(), postRepository.countPostByUserId(searchByOptionsOutput.getUserId()), searchByOptionsOutput.getImageUrl()))
+                            .viewCount(searchByOptionsOutput.getViewCount())
+                            .build();
+                    return output;
         }).collect(Collectors.toList());
         return postDetailOutputs;
     }
