@@ -7,6 +7,7 @@ import Stomp from 'stompjs';
 import styled from '~/styled';
 import gallery from '../../assets/img/chat-gallery.png?url';
 import send from '../../assets/img/chat-send.png?url';
+import DropdownIcon from '../../assets/img/form-dropdown.png';
 import { ENDPOINT } from '../../constants';
 import { NEXT_APP_SOCKET_ENDPOINT } from '../../helpers/config';
 import useStores from '../../helpers/useStores';
@@ -40,15 +41,18 @@ export default (props: IChatInputProps) => {
   const [roomId, setRoomId] = React.useState(props.roomId);
   const [sender, setSender] = React.useState(auth ? auth.userId : '');
   const [message, setMessage] = React.useState('');
-  const [bankName, setBankName] = React.useState('');
+  const [bankName, setBankName] = React.useState('기업');
   const [bankAccountNo, setBankAccountNo] = React.useState('');
-  const [amount, setAmount] = React.useState(0);
+  const [amount, setAmount] = React.useState('');
 
   React.useEffect(() => {
     connect();
   }, []);
 
+  const InputFocus = React.useRef<HTMLTextAreaElement>(null);
+
   const handleSendMessage = () => {
+    InputFocus.current!.focus();
     ws.send(
       '/pub/chat/message',
       {},
@@ -57,19 +61,24 @@ export default (props: IChatInputProps) => {
     setMessage('');
   };
 
-  //REMIT
+  
 
   const handleSendDeposit = () => {
     ws.send(
       '/pub/chat/remit',
       {},
-      JSON.stringify({type: 'REMIT', roomId, sender, message: {bankName, bankAccountNo, amount, message: sender}}),
+      JSON.stringify({
+        type: 'REMIT',
+        roomId,
+        sender,
+        message: { bankName, bankAccountNo, amount, message: sender },
+      }),
     );
     setBankAccountNo('');
-    setBankName('');
-    setAmount(0);
+    setBankName('기업');
+    setAmount('');
     handlePlusClick();
-  }
+  };
 
   const handlePlusClick = () => {
     pageStore.toggleChatModal();
@@ -91,7 +100,7 @@ export default (props: IChatInputProps) => {
     const notIncludeWords = ['e', '-', '+'];
     if (notIncludeWords.includes(tv)) {
       return;
-    }else{
+    } else {
       setBankAccountNo(tv);
     }
   };
@@ -101,10 +110,12 @@ export default (props: IChatInputProps) => {
   };
 
   const handleChangeAmount = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setAmount(Number.parseInt(e.target.value, 10));
+    setAmount(Number.parseInt(e.target.value, 10) + '');
   };
 
   const handleRecvMessage = (recv: IChatDto) => {
+    console.log('recv------------------');
+    console.log(recv);
     const temp: IChatDto[] = [
       {
         type: recv.type,
@@ -139,6 +150,7 @@ export default (props: IChatInputProps) => {
           const recv = JSON.parse(message.body);
           handleRecvMessage(recv);
         });
+
         ws.send(
           '/pub/chat/message',
           {},
@@ -162,25 +174,25 @@ export default (props: IChatInputProps) => {
     <Wrapper>
       <StyledPlusIcon size={26} color={'#c5cee0'} onClick={handlePlusClick} />
       <CustomIcon url={gallery} />
-      <Input value={message} onChange={handleInputChange} />
+      <Input value={message} ref={InputFocus} onChange={handleInputChange} />
       <div onClick={handleSendMessage}>
         <CustomIcon url={send} />
       </div>
       <Modal modalState={chatModal}>
         <ModalItem>
           <ModalFlexItem>
-            계좌번호{' '}
             <DepostInput
               value={bankAccountNo}
               type='number'
+              placeholder={'계좌번호를 입력해주세요'}
               onChange={handleChangeAccountNo}
             />
           </ModalFlexItem>
         </ModalItem>
         <ModalItem>
           <ModalFlexItem>
-            은행
-            <DepositSelect onChange={handleChangeBankName}>
+            <ModalText>은행</ModalText>
+            <DepositSelect value={bankName} onChange={handleChangeBankName}>
               <option>기업</option>
               <option>우리</option>
               <option>농협</option>
@@ -190,10 +202,10 @@ export default (props: IChatInputProps) => {
         </ModalItem>
         <ModalItem>
           <ModalFlexItem>
-            금액
             <DepostInput
               type='number'
               value={amount}
+              placeholder={'금액을 입력해주세요'}
               onChange={handleChangeAmount}
             />
           </ModalFlexItem>
@@ -221,7 +233,7 @@ const Input = styled.textarea`
   padding: 2vw;
   min-width: 70%;
   max-width: 85%;
-  height: 35px;
+  height: 40px;
   border-radius: 5px;
   box-shadow: inset 0 1px 3px 0 rgba(218, 218, 218, 0.5);
   background-color: #fcfcfc;
@@ -240,8 +252,8 @@ const Modal = styled.div<IModalProps>`
   position: fixed;
   bottom: 0;
   width: 100vw;
-  height: 250px;
-  background-color: rgba(255, 255, 255, 0.95);
+  height: 300px;
+  background-color: white;
   /* transition: visibility 1s ease-in; */
 `;
 
@@ -254,12 +266,42 @@ const ModalFlexItem = styled.div`
 `;
 
 const DepostInput = styled.input`
-  border: 1px solid lightgray;
-  width: 45vw;
+  width: 80vw;
+  font-size: 16px;
+  font-weight: bold;
+  border: solid 0;
+  color: black;
+  padding: 0.5rem;
+  :focus {
+    outline: none !important;
+  }
 `;
 
 const DepositSelect = styled.select`
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background: url(${DropdownIcon}) no-repeat 95% 50%;
+  font-size: 16px;
+  color: #929292;
+  font-weight: bold;
+  border: solid 0;
+  padding: 0.2rem;
+  :focus {
+    outline: none !important;
+  }
+  ::selection {
+    color: pink;
+  }
   width: 45vw;
+`;
+
+const ModalText = styled.div`
+  height: 50px;
+  display: flex;
+  align-items: center;
+  padding: 0.5rem;
+  font-weight: bold;
 `;
 
 const ModalItem = styled.div`
@@ -267,7 +309,7 @@ const ModalItem = styled.div`
   align-items: center;
   text-align: center;
   justify-content: space-around;
-  height: 50px;
+  height: 60px;
   width: 100%;
   border-top: 1px solid ${(props) => props.theme.bolderColor};
 `;

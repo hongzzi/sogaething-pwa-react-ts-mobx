@@ -1,28 +1,29 @@
 import { toJS } from 'mobx';
-import { useObserver } from 'mobx-react';
 import { NextPage, NextPageContext } from 'next';
 import { useRouter } from 'next/router';
 import * as React from 'react';
-import { useCookies } from 'react-cookie';
+import { PullToRefresh } from 'react-js-pull-to-refresh';
+import {
+  PullDownContent,
+  RefreshContent,
+  ReleaseContent,
+} from 'react-js-pull-to-refresh';
 import styled from '~/styled';
 import CardList from '../components/CardList';
-import CategoryHeader from '../components/CategoryHeader';
 import CommonBtn from '../components/CommonBtn';
-import Loader from '../components/Loader';
 import MainUserCard from '../components/MainUserCard';
 import Nav from '../components/Nav';
-import Pikachu from '../components/Pikachu';
 import ProductCardList from '../components/ProductCardList';
 import SearchBar from '../components/SearchBar';
 import useStores from '../helpers/useStores';
-import ChatService from '../service/ChatService';
 
 const PageIndex: NextPage = (props) => {
   const { pageStore, authStore } = useStores();
   const router = useRouter();
-  console.log('-------------------------------main--------------------------')
-  console.log(toJS(authStore.auth));
-  console.log('-------------------------------main_end--------------------------')
+  //   const getHistory = useGetHistoryQuery();
+
+  //   console.log('-------------------------------main--------------------------')
+  //   console.log('-------------------------------main_end--------------------------')
   React.useEffect(() => {
     // if (authStore.token === '' || !authStore.token) {
     //   router.push('/signin');
@@ -32,37 +33,57 @@ const PageIndex: NextPage = (props) => {
     // console.log(authStore.token);
     router.push('/category');
   };
+
+  const handleRefresh = async () => {
+    return new Promise((reslove, reject) => {
+      setTimeout(() => {
+        window.location.reload(false);
+        reslove();
+      }, 500);
+    });
+  };
+
   return (
     <Layout>
-      <Container>
-        <SearchBar />
-        <StyledMainUserCard />
-        <Line>
-          <CategoryText>'내가 본'</CategoryText> 매물
-        </Line>
-        <CardList />
-        <Line>
-          <CategoryText>'최신'</CategoryText> 중고매물
-        </Line>
-        <ProductCardList />
-        <WrapperAlignCenter onClick={handleMoreCards}>
-          <CommonBtn type={'common'} text={'더보기'} />
-        </WrapperAlignCenter>
-      </Container>
+      <PullToRefresh
+        pullDownContent={<PullDownContent label={'새로운 정보를 로띵'} />}
+        releaseContent={<ReleaseContent label={'로띵 로띵'} />}
+        refreshContent={<RefreshContent />}
+        pullDownThreshold={200}
+        onRefresh={handleRefresh}
+        triggerHeight={400}
+        backgroundColor='white'
+      >
+        <Container>
+          <SearchBar />
+          <StyledMainUserCard />
+          <Line>
+            <CategoryText>'내가 본'</CategoryText> 매물
+          </Line>
+          <CardList />
+          <Line>
+            <CategoryText>'최신'</CategoryText> 중고매물
+          </Line>
+          <ProductCardList />
+          <WrapperAlignCenter onClick={handleMoreCards}>
+            <CommonBtn type={'common'} text={'더보기'} />
+          </WrapperAlignCenter>
+        </Container>
+      </PullToRefresh>
       <Nav />
     </Layout>
   );
-}
+};
 
 PageIndex.getInitialProps = async (ctx: NextPageContext) => {
-  return {test : 'test'}
-}
+  return { test: 'test' };
+};
 
 export default PageIndex;
 
 const Layout = styled.div`
   position: relative;
-  padding-bottom: 48px;
+  padding-bottom: 70px;
 `;
 
 export const Container = styled.div`

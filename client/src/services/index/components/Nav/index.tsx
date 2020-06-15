@@ -36,9 +36,11 @@ export default (props: INav) => {
   const { clickedIdx, modal } = usePageData();
   const handleMatch = () => {
     router.push('/form/match');
+    handleModal();
   }
   const handlePost = () => {
     router.push('/form/post');
+    handleModal();
   }
 
   const handleModal = () => {
@@ -108,15 +110,16 @@ export default (props: INav) => {
 };
 
 const WrapprNav = styled.nav`
+  z-index: 1000;
   position: fixed;
   display: flex;
   justify-content: space-around;
   bottom: 0;
   height: ${(props: Pick<INav, 'size'>) =>
-    props.size ? props.size.height : '48px'};
+    props.size ? props.size.height : '70px'};
   width: 100%;
   background-color: ${(props) => props.theme.mainBGcolor};
-  align-items: center;
+  align-items: baseline;
   border-top: solid 1px #dcdcdc;
 `;
 

@@ -48,31 +48,31 @@ export default () => {
   const { MainHistoryCards} = useCardData();
   const { cardStore, authStore } = useStores();
 
-  if (data) {
-    cardStore.setHistoryCards(data);
-  }
-
   const handleCardClick = () => {};
   let Cards;
-  if (loading || error) {
+  if (loading) {
     Cards = [1, 2, 3].map((item, i) => {
       return <Card key={i} cardData={null} loading />;
     });
     return <Wrapper onClick={handleCardClick}>{Cards}</Wrapper>;
   }
 
+  if (data) {
+    cardStore.setHistoryCards(data);
+  }
+
   if (
-    MainHistoryCards.findUserHistoryByUserId &&
-    MainHistoryCards.findUserHistoryByUserId!.length !== 0
+    Array.isArray(data!.findUserHistoryByUserId) &&
+    data!.findUserHistoryByUserId.length !== 0
   ) {
-    Cards = MainHistoryCards.findUserHistoryByUserId.map((item, i) => {
+    Cards = data!.findUserHistoryByUserId.map((item, i) => {
       return <Card key={i} cardData={item} loading={false} />;
     });
   }
 
   return (
     <Wrapper onClick={handleCardClick}>
-      {Cards ? Cards : <HistoryText>구경하러 가기</HistoryText>}
+      {Cards ? Cards : <HistoryText>띵한 중고물품을 구경해보세요</HistoryText>}
     </Wrapper>
   );
 };

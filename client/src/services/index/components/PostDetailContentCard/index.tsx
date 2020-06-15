@@ -39,7 +39,6 @@ export default function PostDetailContentCard(props: IPostDetailContentCardProps
 
 const Wrapper = styled.div`
     display: grid;
-    row-gap: 0.4rem;
     width: 100%;
     height: 100%;
     padding: 1rem;
@@ -64,7 +63,7 @@ const SpanWrapper = styled.div`
 `
 
 const Span = styled.span`
-    font-size: 0.3rem;
+    font-size: 0.8rem;
     font-weight: bold;
     color: #a7a7a7;
     padding: 0 0.5rem 0 0;

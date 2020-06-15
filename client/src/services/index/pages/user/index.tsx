@@ -3,7 +3,10 @@ import * as React from 'react';
 import { FaMoneyBillWave, FaRegHeart, FaShoppingBag } from 'react-icons/fa';
 import { IoIosPin, IoIosSettings } from 'react-icons/io';
 import { MdGpsFixed } from 'react-icons/md';
-import { useGetUserInfoQuery, usePutUpdateImgMutation } from '~/generated/graphql';
+import {
+  useGetUserInfoQuery,
+  usePutUpdateImgMutation,
+} from '~/generated/graphql';
 import styled from '~/styled';
 import Camera from '../../assets/img/circle-camera.png?url';
 import NoAvatar from '../../assets/img/no-avatar.png?url';
@@ -27,8 +30,8 @@ export default (props: IUserProps) => {
   const userInfo = useGetUserInfoQuery();
   const mutationUpdateImg = usePutUpdateImgMutation();
   const [userImg, setUserImg] = React.useState(NoAvatar);
-  const {authStore} = useStores();
-  const {imgurl} = useAuthData();
+  const { authStore } = useStores();
+  const { imgurl } = useAuthData();
   const [loading, setLoading] = React.useState(false);
 
   React.useEffect(() => {
@@ -39,7 +42,7 @@ export default (props: IUserProps) => {
       setUserImg(imgurl);
       return;
     }
-  }, [userImg])
+  }, [userImg]);
 
   if (userInfo.loading || !userInfo.data) {
     return (
@@ -72,91 +75,111 @@ export default (props: IUserProps) => {
                 },
               },
             })
-            .then((res) => {
-              setUserImg(res.data.updateImg.imageUrl);
-              authStore.setUserImage(res.data.updateImg.imageUrl);
-              setLoading(false);
-            })
-            .finally(()=>{
-              setLoading(false);
-            })
+              .then((res) => {
+                setUserImg(res.data.updateImg.imageUrl);
+                authStore.setUserImage(res.data.updateImg.imageUrl);
+                setLoading(false);
+              })
+              .catch((e) => {
+                console.error(e);
+              })
+              .finally(() => {
+                setLoading(false);
+              });
           }
-        }
+        };
         reader.readAsDataURL(files[0]);
       }
     }
-  }
+  };
 
-  const {data} = userInfo;
+  const { data } = userInfo;
   return (
     <Wrapper>
       {loading && <Loader />}
       {!loading && <Categoryheader type={'chat'} text={'내 정보'} />}
       {!loading && (
         <Container>
-        <FileInput type='file' ref={fileInput} onChange={handleFileChange} />
-        <WrapperRow>
-          <WrapperImg onClick={handleClick}>
-            <div onClick={handleClick}>
-              <CircleImageView src={authStore.imgurl ? authStore.imgurl : data.findUserInfo!.imgurl!} size={3} />
-            </div>
-          </WrapperImg>
-          <WrapperUserInfo>
-            <FlexContainer>
-              <BoldText> {data.findUserInfo!.name} </BoldText>
-              <SmallText>lv 1</SmallText>
-            </FlexContainer>
-            <SmallText>{data.findUserInfo!.address ? data.findUserInfo!.address : '주소를 등록하세요.'}</SmallText>
-          </WrapperUserInfo>
-        </WrapperRow>
-        <WrapperRow>
-          <CenterFelxContainer>
-            <div>
-              <WrapperCircle>
-                <FaMoneyBillWave size={30} color={'#3466ac'} /> <br />
-              </WrapperCircle>
-              판매내역
-            </div>
-            <div>
-              <WrapperCircle>
-                <FaShoppingBag size={30} color={'#3466ac'} /> <br />
-              </WrapperCircle>
-              구매내역
-            </div>
-            <div>
-              <WrapperCircle>
-                <FaRegHeart size={30} color={'#3466ac'} /> <br />
-              </WrapperCircle>
-              찜목록
-            </div>
-          </CenterFelxContainer>
-        </WrapperRow>
-        <WrapperRow>
-          <ListContainer>
-            <CommonFelxContainer>
-              <IoIosPin size={25} /> <Text>내 동네 설정</Text>
-            </CommonFelxContainer>
-            <CommonFelxContainer>
-              <MdGpsFixed size={25} /> <Text>내 동네 인증</Text>
-            </CommonFelxContainer>
-          </ListContainer>
-        </WrapperRow>
-        <WrapperRow>
-          <ListContainer>
-            <CommonFelxContainer>
-              <IoIosSettings size={25} /> <Text>앱 설정</Text>
-            </CommonFelxContainer>
-          </ListContainer>
-        </WrapperRow>
-      </Container>
+          <FileInput
+            type='file'
+            ref={fileInput}
+            accept='image/*'
+            onChange={handleFileChange}
+          />
+          <WrapperRow>
+            <WrapperImg onClick={handleClick}>
+              <div onClick={handleClick}>
+                <CircleImageView
+                  src={
+                    authStore.imgurl
+                      ? authStore.imgurl
+                      : data.findUserInfo!.imgurl!
+                  }
+                  size={3}
+                />
+              </div>
+            </WrapperImg>
+            <WrapperUserInfo>
+              <FlexContainer>
+                <BoldText> {data.findUserInfo!.name} </BoldText>
+                <SmallText>lv 1</SmallText>
+              </FlexContainer>
+              <SmallText>
+                {data.findUserInfo!.address
+                  ? data.findUserInfo!.address
+                  : '주소를 등록하세요.'}
+              </SmallText>
+            </WrapperUserInfo>
+          </WrapperRow>
+          <WrapperRow>
+            <CenterFelxContainer>
+              <div>
+                <WrapperCircle>
+                  <FaMoneyBillWave size={30} color={'#3466ac'} /> <br />
+                </WrapperCircle>
+                판매내역
+              </div>
+              <div>
+                <WrapperCircle>
+                  <FaShoppingBag size={30} color={'#3466ac'} /> <br />
+                </WrapperCircle>
+                구매내역
+              </div>
+              <div>
+                <WrapperCircle>
+                  <FaRegHeart size={30} color={'#3466ac'} /> <br />
+                </WrapperCircle>
+                찜목록
+              </div>
+            </CenterFelxContainer>
+          </WrapperRow>
+          <WrapperRow>
+            <ListContainer>
+              <CommonFelxContainer>
+                <IoIosPin size={25} /> <Text>내 동네 설정</Text>
+              </CommonFelxContainer>
+              <CommonFelxContainer>
+                <MdGpsFixed size={25} /> <Text>내 동네 인증</Text>
+              </CommonFelxContainer>
+            </ListContainer>
+          </WrapperRow>
+          <WrapperRow>
+            <ListContainer>
+              <CommonFelxContainer>
+                <IoIosSettings size={25} /> <Text>앱 설정</Text>
+              </CommonFelxContainer>
+            </ListContainer>
+          </WrapperRow>
+        </Container>
       )}
-      
+
       <Nav />
     </Wrapper>
   );
 };
 
 const Wrapper = styled.div`
+  position: relative;
   height: 100%;
 `;
 

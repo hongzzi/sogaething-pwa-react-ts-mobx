@@ -12,18 +12,18 @@ export enum PAGE_PATHS {
 
 export enum ENDPOINT {
     //배포용
-    // GRAPHQL = 'https://k02a4041.p.ssafy.io/graphql',
-    // REST = 'https://k02a4041.p.ssafy.io/chat',
-    // SOCKET = 'https://k02a4041.p.ssafy.io/ws-stomp',
+    GRAPHQL = 'https://k02a4041.p.ssafy.io/graphql',
+    REST = 'https://k02a4041.p.ssafy.io/chat',
+    SOCKET = 'https://k02a4041.p.ssafy.io/ws-stomp',
 
     // GRAPHQL = 'https://www.sogaething.com/graphql',
     // REST = 'https://www.sogaething.com/chat',
     // SOCKET = 'https://www.sogaething.com/ws-stomp',
 
     // 로컬
-    GRAPHQL = 'http://localhost:8080/graphql',
-    REST = 'https://k02a4041.p.ssafy.io/chat',
-    SOCKET = 'https://k02a4041.p.ssafy.io/ws-stomp',
+    // GRAPHQL = 'http://localhost:8080/graphql',
+    // REST = 'https://k02a4041.p.ssafy.io/chat',
+    // SOCKET = 'https://k02a4041.p.ssafy.io/ws-stomp',
 
     // GRAPHQL = 'http://localhost:8081/graphql',
     // REST = 'http://localhost:8081/chat',

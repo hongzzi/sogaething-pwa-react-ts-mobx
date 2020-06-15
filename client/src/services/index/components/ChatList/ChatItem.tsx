@@ -20,13 +20,13 @@ export default (props: IChatCardProps) => {
   const handleClickChatItem = () => {
     router.push(`/chat/${props.chatData!.roomId}`);
   }
-
+  
   return(
         <ChatListItem onClick={handleClickChatItem}>
           <CircleImageView
             size={2}
             src={
-              authStore.auth!.userId + '' === props.chatData!.buyerUser.userId ? props.chatData!.sellerUser.imgPath ? props.chatData!.sellerUser.imgPath : NoAvatar : props.chatData!.buyerUser.imgPath ? props.chatData!.buyerUser.imgPath : NoAvatar
+              authStore.auth!.userId + '' === props.chatData!.buyerUser.userId ? props.chatData!.sellerUser.imageUrl ? props.chatData!.sellerUser.imageUrl : NoAvatar : props.chatData!.buyerUser.imageUrl ? props.chatData!.buyerUser.imageUrl : NoAvatar
             }
           />
           <WrapperText>

@@ -5,8 +5,8 @@ import { ENDPOINT } from './../constants';
 
 export interface ChatUserDto {
   userName: string;
-  userId: string | number;
-  imgPath: string;
+  userId: string;
+  imageUrl: string;
 }
 
 export interface ChatRoomListItemDto {

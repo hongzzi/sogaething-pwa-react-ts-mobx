@@ -4,9 +4,10 @@ import * as React from 'react';
 import KakaoLogin from 'react-kakao-login';
 import { useGetLoginMutation } from '~/generated/graphql';
 import styled from '~/styled';
-import GoogleIcon from '../assets/img/signin-google.png?url';
-import KakaoIcon from '../assets/img/signin-kakao.png?url';
+import Logo from '../assets/img/main-logo.png?url';
+import ImageView from '../components/ImageView';
 import { KEYS } from '../constants';
+import { setCookie } from '../helpers';
 import {
   NEXT_APP_KAKAO_CLIENT_KEY,
 } from '../helpers/config';
@@ -34,6 +35,7 @@ export default (props: ISignInProps) => {
     })
     .then((res: {data: IAuthResponseDto}) => {
       store.authStore.setToken(res.data.loginUser.token);
+      setCookie('token', res.data.loginUser.token);
       router.push('/main');
     })
     .catch((err) => {
@@ -49,10 +51,9 @@ export default (props: ISignInProps) => {
   return (
     <Wrapper>
       <WrapperSigninContainer>
-      <WrapperLine>
-        <Line size={48}>소개</Line>
-        <Line size={70}>ㄸ!</Line>
-      </WrapperLine>
+      <WrapperLogo>
+        <DivLogo />
+      </WrapperLogo>
       <StyledKakaoLogin
         jsKey={KEYS.KAKAO}
         onSuccess={success}
@@ -78,12 +79,24 @@ const Wrapper = styled.div`
   overflow: hidden;
 `;
 
-const WrapperLine = styled.div`
+const WrapperLogo = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
   margin-top: 20vh;
   margin-bottom: 5vh;
+  width:100%;
+`;
+
+const DivLogo = styled.div`
+  background-image: url(${Logo});
+  background-repeat: no-repeat;
   align-items: center;
   text-align: center;
-  width:100%;
+  min-width: 35%;
+  max-width: 60%;
+  height: 25vh;
+  background-size: contain;
 `;
 
 const WrapperLoginImageText = styled.div`
@@ -96,7 +109,6 @@ const WrapperLoginImageText = styled.div`
 const Line = styled.p<{size: number}>`
   /* margin: 22px 0.5rem 0rem 0; */
   margin: 0;
-  width: 100%;
   font-size: ${(props) => props.size + 'px'};
   font-weight: bold;
   font-family: "TmonMonsori";

@@ -67,7 +67,8 @@ const Wrapper = styled.div`
   position: relative;
   display: flex;
   margin: 2vw;
-
+  min-height: 10px;
+  max-height: 300px;
   & > img {
     margin-right: 2vw;
   }

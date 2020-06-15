@@ -42,7 +42,7 @@ export default (props: IPostListSellerProps) => {
             {data && data.findPostListByUserId &&
                 <PostList data={data.findPostListByUserId as IMetaData[]} />
             }
-            <Nav />
+            {/* <Nav /> */}
         </Wrapper>
     )
 }

@@ -134,7 +134,7 @@ const InputContainer = styled.div`
 const Input = styled.input`
     width: 40%;
     height: 2rem;
-    font-size: 15px;
+    font-size: 16px;
     font-weight: bold;
     border: solid 0;
     color: #929292;
@@ -162,7 +162,7 @@ const Select = styled.select`
     background: url(${DropdownIcon}) no-repeat 95% 50%;
     width: 100%;
     height: 2rem;
-    font-size: 15px;
+    font-size: 16px;
     color: #929292;
     font-weight: bold;
     border: solid 0;
@@ -184,7 +184,7 @@ const HashTag = styled.div`
     background: url(${ExpandIcon}) no-repeat 95% 50%;
     width: 100%;
     height: auto;
-    font-size: 15px;
+    font-size: 16px;
     color: #929292;
     font-weight: bold;
     border: solid 0;

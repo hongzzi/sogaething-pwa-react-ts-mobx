@@ -32,7 +32,7 @@ async function main() {
   server.use(cors({
     credentials: true,
   }))
-  server.use(bodyParser.json())
+  server.use(bodyParser.json({limit: '50mb'}))
   server.use(bodyParser.urlencoded({ extended: true }))
   server.use(cookieParser())
 

@@ -1,5 +1,5 @@
-# source: http://localhost:8080/graphql/
-# timestamp: Mon Jun 08 2020 21:19:13 GMT+0900 (대한민국 표준시)
+# source: https://k02a4041.p.ssafy.io/graphql
+# timestamp: Fri Jun 12 2020 02:50:35 GMT+0900 (대한민국 표준시)
 
 """This directive allows results to be deferred during execution"""
 directive @defer on FIELD
@@ -167,27 +167,27 @@ type Mutation {
   createPost(input: CreatePostInput!): Output
   updatePost(input: UpdatePostInput!): PostMetaOutput
   deletePost(postId: Int!): Output
-  createDetailDeal(input: CreateDetailDealInput!): DetailOutput
-  deleteDetailDeal(id: Int!): Int!
   createFile(input: CreateFileInput!): FileOutput
   updateFile(input: UpdateFileInput!): FileOutput
   deleteFile(id: Int!): Int
-  createHashtag(input: CreateHashtagInput!): HashtagOutput
-  updateHashtag(input: UpdateHashtagInput!): HashtagOutput
-  deleteHashtag(id: Int!): Int
-  createHistory(postId: Int!): HistoryOutput
-  createJjim(input: CreateJjimInput!): Jjim
-  deleteJjim(jjimId: Int): Int
-  createMatching(input: MatchInput!): Matching
-  deleteMatching(matchingId: Int): Int
-  updateProduct(input: UpdateProductInput!): ProductOutput
-  createProduct(input: CreateProductInput!): ProductOutput
-  deleteProduct(id: Int!): Int
+  createDetailDeal(input: CreateDetailDealInput!): DetailOutput
+  deleteDetailDeal(id: Int!): Int!
   logoutUser(userId: Int!): UserLogout!
   loginUser(input: LoginUserInput!): LoginUserOutput
   updateUser(input: UpdateUserInput!): UserOutput
   updateImg(input: UpdateImgInput!): UserOutput
   deleteUser(id: Int!): Int
+  createHashtag(input: CreateHashtagInput!): HashtagOutput
+  updateHashtag(input: UpdateHashtagInput!): HashtagOutput
+  deleteHashtag(id: Int!): Int
+  createMatching(input: MatchInput!): Matching
+  deleteMatching(matchingId: Int): Int
+  updateProduct(input: UpdateProductInput!): ProductOutput
+  createProduct(input: CreateProductInput!): ProductOutput
+  deleteProduct(id: Int!): Int
+  createJjim(input: CreateJjimInput!): Jjim
+  deleteJjim(jjimId: Int): Int
+  createHistory(postId: Int!): HistoryOutput
 }
 
 type Output {
@@ -291,26 +291,26 @@ type Query {
   matchThings(matchingId: Int!): [PostDetailOutput]
   searchThingsByTitle(title: String!): [PostMetaOutput]
   searchThingsByCategory(categoryNum: Int!): [PostMetaOutput]
-  findAllDetailDeals: [DetailDeal]
-  findAllDetailDeal: [DetailOutput]
-  findDetailDealByPost(postId: Int): DetailOutput
   findAllFile: [FileOutput]
   findAllFiles: [File]
   findFileById(id: Int): FileOutput
+  findAllDetailDeals: [DetailDeal]
+  findAllDetailDeal: [DetailOutput]
+  findDetailDealByPost(postId: Int): DetailOutput
+  findAllUsers: [User]
+  findAllUser: [UserOutput]
+  findUserInfo: UserInfoResponse
   findAllHashtags: [Hashtag]
   findAllHashtag: [HashtagOutput]
   findByHashtagId(id: Int): HashtagOutput
   autocomplete(hashtag: String!): [Autocomplete]
   findAllMatchingHashtagByMatchingId(matchingId: Int): [String]
-  findUserHistoryByUserId: [UserHistoryResponse]
-  findJjimByUserId(userId: Int): [JjimOutput]
   findMatchingByUserId: [MatchResponse]
   findAllProduct: [ProductOutput]
   findAllProducts: [Product]
   findByProductId(id: Int): ProductOutput
-  findAllUsers: [User]
-  findAllUser: [UserOutput]
-  findUserInfo: UserInfoResponse
+  findJjimByUserId(userId: Int): [JjimOutput]
+  findUserHistoryByUserId: [UserHistoryResponse]
 }
 
 type RecentPostResponse {
@@ -361,11 +361,10 @@ input UpdateProductInput {
 }
 
 input UpdateUserInput {
-  name: String
-  email: String
   imageUrl: String
   phone: String
   address: String
+  trust: Int
 }
 
 type User {

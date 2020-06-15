@@ -11,6 +11,7 @@ import DropdownIcon from '../../assets/img/form-dropdown.png';
 import ExpandIcon from '../../assets/img/form-expand.png';
 import useStores from '../../helpers/useStores';
 import { IPostResponseDto } from '../../store/PostStore';
+import Loader from '../Loader';
 
 export interface IPostFormProps {
 }
@@ -24,6 +25,7 @@ export default (props: IPostFormProps) => {
     const mutation = useCreatePostMutation();
     const [post, setPost] = useState(postStore.getPost());
     const [previews, setPreviews] = useState(Array());
+    const [loading, setLoading] = useState(false);
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files) {
@@ -76,6 +78,7 @@ export default (props: IPostFormProps) => {
         previews.map((pre) => {postStore.setImgPaths(pre.slice(23))})
         setPost(postStore.getPost());
         if (postStore.getImgPaths().length > 0) {
+            setLoading(true);
             mutation({
                 variables: {
                     input: {
@@ -90,14 +93,25 @@ export default (props: IPostFormProps) => {
                 },
             }).then((res: { data: IPostResponseDto }) => {
                 if (res.data.createPost.state === 'SUCCESS') {
+                    setLoading(false);
                     router.push(`/post/${res.data.createPost.postId}?isPosted=true`);
+                }else {
+                    setLoading(false);
+                    router.push('/main');
                 }
             }).catch((error) => {
-                console.log(error);
+                console.error(error);
+            })
+            .finally(() => {
+                setLoading(false);
             })
         } else {
             alert('사진을 등록해주세요!');
         }
+    }
+
+    if (loading) {
+        return <Loader />
     }
 
     return (
@@ -108,7 +122,7 @@ export default (props: IPostFormProps) => {
                         <CameraIcon src={CameraFillIcon} />
                         <ImageSpan>{!previews && '0/10'} {previews && previews.length + '/10'}</ImageSpan>
                     </ImageBtn>
-                    <FileInput id={'img-file'} type={'file'} multiple accept={'image/png, image/jpeg, image/jpg'} capture={'camera'} onChange={handleFileChange} />
+                    <FileInput id={'img-file'} type={'file'} multiple accept={'image/png, image/jpeg, image/jpg'} onChange={handleFileChange} />
                     <PreviewContainer>
                         {
                             postStore.imgPaths.map((preview, index) => (<PreviewImg src={preview} key={index} />))
@@ -263,7 +277,7 @@ const Select = styled.select`
     background: url(${DropdownIcon}) no-repeat 95% 50%;
     width: 100%;
     height: 2rem;
-    font-size: 15px;
+    font-size: 16px;
     color: #929292;
     font-weight: bold;
     border: solid 0;

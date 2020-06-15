@@ -1,14 +1,35 @@
 {
-    "name": "Legend of Market",
-    "short_name": "LOM",
+    "name": "소개띵",
+    "short_name": "소개띵",
     "background_color": "#FFFFFF",
     "theme_color": "status bar color",
-    "description": "Legend of Market",
+    "description": "중고를 소개하다!",
     "display": "standalone",
     "start_url": "/",
     "icons": [{
-        "src": "/static/test_icon_192.png",
+        "src": "/static/app_icon_120.png",
+        "type": "image/png",
+        "sizes": "120x120"
+    },
+    {
+        "src": "/static/app_icon_180.png",
+        "type": "image/png",
+        "sizes": "180x180"
+    },
+    {
+        "src": "/static/app_icon_192.png",
         "type": "image/png",
         "sizes": "192x192"
-    }]
+    },
+    {
+        "src": "/static/app_icon_310.png",
+        "type": "image/png",
+        "sizes": "310x310"
+    },
+    {
+        "src": "/static/app_icon_512.png",
+        "type": "image/png",
+        "sizes": "512x512"
+    }
+]
 }

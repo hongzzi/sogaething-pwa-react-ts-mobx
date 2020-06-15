@@ -35,18 +35,21 @@ export default () => {
   }
 
   return (
+    <>
     <Wrapper>
       <CategoryHeader type={'chat'} text={'채팅'}/>
       <MarginTopCategoryHeaderContainer>
         <ChatList chatData={chatRooms} loading={loading} />
       </MarginTopCategoryHeaderContainer>
-      <Nav />
     </Wrapper>
+    <Nav />
+    </>
   );
 };
 
 const Wrapper = styled.div`
-  padding-bottom: 48px;
+  padding-bottom: 56px;
+  margin-bottom: 56px;
 `;
 
 const ChatListItem = styled.div`

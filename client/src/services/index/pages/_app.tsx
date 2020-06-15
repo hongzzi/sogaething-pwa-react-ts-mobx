@@ -22,7 +22,7 @@ import initializeStore, { IEnvironments, RootStore } from '../store';
 
 export default class extends React.Component {
   static async getInitialProps(appContext: any) {
-    console.log("getinitprops");
+    // console.log("getinitprops");
     const appProps = await App.getInitialProps(appContext);
     const { Component, router, ctx } = appContext;
     
@@ -34,12 +34,12 @@ export default class extends React.Component {
 
     try {
         await mobxStore.authStore.nextServerInit(ctx.req, ctx.res);
+        appContext.ctx.mobxStore = mobxStore;
     } catch (error) {
       console.error('[Error 29948] store init failed');
       // console.error(error);
     }
 
-    appContext.ctx.mobxStore = mobxStore;
     const apolloClient = createApolloClient(mobxStore);
 
     try {
@@ -92,15 +92,14 @@ export default class extends React.Component {
 }
 
 class App extends NextApp<any> {
-  componentDidMount(){
-    console.log("didmount");
-  }
-  componentDidUpdate() {
-    console.log("didupdate");
-  }
+  // componentDidMount(){
+  //   console.log("didmount");
+  // }
+  // componentDidUpdate() {
+  //   console.log("didupdate");
+  // }
   render() {
     const { Component, pageProps } = this.props;
-    console.log(toJS(this.props.store.authStore.auth));
     return (
       <Container>
         <Head>

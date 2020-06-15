@@ -31,7 +31,7 @@ export interface ICategoryProps {}
 //     |'반려동물'
 //     |'도서';
 
-export const categoryItems: {[key: string]: string} = {
+export const categoryItems: { [key: string]: string } = {
   1: '디지털/가전',
   2: '가구',
   3: '유아동',
@@ -55,73 +55,51 @@ export default (props: ICategoryProps) => {
     <Wrapper>
       <Categoryheader type={'chat'} text={'카테고리'} />
       <Container>
-        <WrapperCategoryItem>
+        <WrapperCategoryItem onClick={() => handleCategoryItemClick(1)}>
           <MdComputer size={25} color={'black'} />{' '}
-          <CategoryItemText onClick={() => handleCategoryItemClick(1)}>
-            디지털/가전
-          </CategoryItemText>
+          <CategoryItemText>디지털/가전</CategoryItemText>
         </WrapperCategoryItem>
         <WrapperCategoryItem onClick={() => handleCategoryItemClick(2)}>
-          <GiSofa size={25} />{' '}
-          <CategoryItemText>가구</CategoryItemText>
+          <GiSofa size={25} /> <CategoryItemText>가구</CategoryItemText>
         </WrapperCategoryItem>
-        <WrapperCategoryItem>
+        <WrapperCategoryItem onClick={() => handleCategoryItemClick(3)}>
           <FaBabyCarriage size={25} />{' '}
-          <CategoryItemText onClick={() => handleCategoryItemClick(3)}>
-            유아동
-          </CategoryItemText>
+          <CategoryItemText>유아동</CategoryItemText>
         </WrapperCategoryItem>
-        <WrapperCategoryItem>
+        <WrapperCategoryItem onClick={() => handleCategoryItemClick(4)}>
           <FaUtensils size={25} />{' '}
-          <CategoryItemText onClick={() => handleCategoryItemClick(4)}>
-            생활/가공식품
-          </CategoryItemText>
+          <CategoryItemText>생활/가공식품</CategoryItemText>
         </WrapperCategoryItem>
-        <WrapperCategoryItem>
+        <WrapperCategoryItem onClick={() => handleCategoryItemClick(5)}>
           <IoMdFootball size={25} />{' '}
-          <CategoryItemText onClick={() => handleCategoryItemClick(5)}>
-            스포츠/레저
-          </CategoryItemText>
+          <CategoryItemText>스포츠/레저</CategoryItemText>
         </WrapperCategoryItem>
-        <WrapperCategoryItem>
+        <WrapperCategoryItem onClick={() => handleCategoryItemClick(6)}>
           <GiLargeDress size={25} />{' '}
-          <CategoryItemText onClick={() => handleCategoryItemClick(6)}>
-            여성의류
-          </CategoryItemText>
+          <CategoryItemText>여성의류</CategoryItemText>
         </WrapperCategoryItem>
-        <WrapperCategoryItem>
+        <WrapperCategoryItem onClick={() => handleCategoryItemClick(7)}>
           <FaShoppingBag size={25} />{' '}
-          <CategoryItemText onClick={() => handleCategoryItemClick(7)}>
-            여성잡화
-          </CategoryItemText>
+          <CategoryItemText>여성잡화</CategoryItemText>
         </WrapperCategoryItem>
-        <WrapperCategoryItem>
+        <WrapperCategoryItem onClick={() => handleCategoryItemClick(8)}>
           <FaTshirt size={25} />{' '}
-          <CategoryItemText onClick={() => handleCategoryItemClick(8)}>
-            남성패션/잡화
-          </CategoryItemText>
+          <CategoryItemText>남성패션/잡화</CategoryItemText>
         </WrapperCategoryItem>
-        <WrapperCategoryItem>
+        <WrapperCategoryItem onClick={() => handleCategoryItemClick(9)}>
           <IoLogoGameControllerB size={25} />{' '}
-          <CategoryItemText onClick={() => handleCategoryItemClick(9)}>
-            게임/취미
-          </CategoryItemText>
+          <CategoryItemText>게임/취미</CategoryItemText>
         </WrapperCategoryItem>
-        <WrapperCategoryItem>
+        <WrapperCategoryItem onClick={() => handleCategoryItemClick(10)}>
           <GiHeartBottle size={25} />{' '}
-          <CategoryItemText onClick={() => handleCategoryItemClick(10)}>
-            뷰티/미용
-          </CategoryItemText>
+          <CategoryItemText>뷰티/미용</CategoryItemText>
         </WrapperCategoryItem>
         <WrapperCategoryItem onClick={() => handleCategoryItemClick(11)}>
-          <FaDog size={25} />{' '}
-          <CategoryItemText>반려동물용품</CategoryItemText>
+          <FaDog size={25} /> <CategoryItemText>반려동물용품</CategoryItemText>
         </WrapperCategoryItem>
-        <WrapperCategoryItem>
+        <WrapperCategoryItem onClick={() => handleCategoryItemClick(12)}>
           <FaBook size={25} />{' '}
-          <CategoryItemText onClick={() => handleCategoryItemClick(12)}>
-            도서/티켓/음반
-          </CategoryItemText>
+          <CategoryItemText>도서/티켓/음반</CategoryItemText>
         </WrapperCategoryItem>
       </Container>
       <Nav />
@@ -130,6 +108,7 @@ export default (props: ICategoryProps) => {
 };
 
 const Wrapper = styled.div`
+  position: relative;
   height: 100%;
 `;
 
