@@ -14,7 +14,7 @@ import com.ssafy.market.domain.user.domain.User;
 import com.ssafy.market.domain.user.repository.UserRepository;
 
 import com.ssafy.market.domain.user.security.TokenProvider;
-import com.ssafy.market.global.apis.ImgurApi;
+import com.ssafy.market.global.apis.NewImageApi;
 import graphql.schema.DataFetchingEnvironment;
 import lombok.RequiredArgsConstructor;
 
@@ -35,69 +35,102 @@ public class PostMutation implements GraphQLMutationResolver {
     private final HashtagRepository hashtagRepository;
     private final FileRepository fileRepository;
     private final TokenProvider tokenProvider;
-    private final ImgurApi api;
+    private final NewImageApi apis;
 
 
     @Transactional
-    public Output createPost(CreatePostInput input, DataFetchingEnvironment env ) throws Exception {
+    public Output createPost(CreatePostInput input, DataFetchingEnvironment env) {
 
         Long userId = tokenProvider.getUserIdFromHeader(env);
         User user = (userRepository.findByUserId(userId));
 
         Output output = null;
         Boolean check = true;
+        Post post = null;
+        Product product = null;
         try {
-            SimpleDateFormat formatter = new SimpleDateFormat ("yyyy-MM-dd hh:mm:ss");
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
             Calendar cal = Calendar.getInstance();
             String today = null;
             today = formatter.format(cal.getTime());
             Timestamp ts = Timestamp.valueOf(today);
-            if(input.getTitle().equals("") || input.getContents().equals("") ||input.getTransaction().equals("") || input.getPrice()==null || input.getCategory().equals("")){
+            if (input.getTitle().equals("") || input.getContents().equals("") || input.getTransaction().equals("") || input.getPrice() == null || input.getCategory().equals("")) {
                 check = false;
             }
-            if(input.getHashtag().length<0 || input.getImgPaths().length<0){
-                check =false;
+            if (input.getHashtag().length < 0 || input.getImgPaths().length < 0) {
+                check = false;
             }
-            if(check) {
-                Post post = postRepository.save(new Post(null, user, false, input.getTitle(), ts, input.getContents(), (long) 0, "판매", "진행중", input.getTransaction()));
-                Product product = productRepository.save(new Product(null, post, input.getPrice(), input.getCategory(), (long) 0));
+            if (check) {
+                post = postRepository.save(new Post(null, user, false, input.getTitle(), ts, input.getContents(), (long) 0, "판매", "진행중", input.getTransaction()));
+                product = productRepository.save(new Product(null, post, input.getPrice(), input.getCategory(), (long) 0));
                 String[] hashtagArr = input.getHashtag();
-                List<Hashtag> hList = new ArrayList<>();
-                for(int i =0; i<hashtagArr.length;i++){
-                    hList.add(new Hashtag(null,product,hashtagArr[i]));
+                if (hashtagArr.length == 0) {
+                    System.out.println("들어온 해시태그 데이터 없음..");
+                    check = false;
+                }else {
+                    List<Hashtag> hList = new ArrayList<>();
+                    for (int i = 0; i < hashtagArr.length; i++) {
+                        hList.add(new Hashtag(null, product, hashtagArr[i]));
+                    }
+                    hashtagRepository.saveAll(hList);
                 }
-                hashtagRepository.saveAll(hList);
                 String[] Arr = input.getImgPaths();
                 List<File> fList = new ArrayList<>();
-                if (Arr.length > 0) {
+                if (Arr.length == 0){
+                    System.out.println("들어온 파일 데이타가 없음");
+                    check = false;
+                }
+                else {
                     for (int k = 0; k < Arr.length; k++) {
                         String[] temp = Arr[k].split(",");
-                        String imgur = api.uploadImg(temp[1]);
-                        if(!imgur.equals("false")) {
-                            fList.add(new File(null,product,imgur));
-                        }
-                        else{
+                        String imgur = apis.uploadImg(temp[1]);
+                        System.out.println(imgur);
+                        if (!imgur.equals("false")) {
+                            fList.add(new File(null, product, imgur));
+                        } else {
+                            check = false;
                             break;
                         }
                     }
+                    if (check) {
+                        fileRepository.saveAll(fList);
+                    }
                 }
-                fileRepository.saveAll(fList);
                 output = new Output("SUCCESS", post.getPostId());
-            }else{
-                output = new Output("FAIL",null);
+            } else {
+                check = false;
             }
         } catch (Exception e) {
-            output = new Output("FAIL",null);
+            output = new Output("FAIL", null);
+//            System.out.println(e);
+            e.printStackTrace();
+            return output;
         }
-        return  output;
+        if (!check) {
+            System.out.println("어느 하나가 없다는 애기");
+            output = new Output("FAIL", null);
+            if (post != null) {
+                postRepository.deleteByPostId(post.getPostId());
+            }
+            if (product != null) {
+                productRepository.deleteByProductId(product.getProductId());
+            }
+            List<Hashtag> list = hashtagRepository.findByProduct(product);
+            if (list.size() > 0) {
+                for (int j = 0; j < list.size(); j++) {
+                    hashtagRepository.deleteByHashtagId(list.get(j).getHashtagId());
+                }
+            }
+        }
+        return output;
     }
 
     @Transactional
-    public PostMetaOutput updatePost(UpdatePostInput input){
+    public PostMetaOutput updatePost(UpdatePostInput input) {
         Post post = postRepository.findByPostId(input.getPostId());
-        post.update(input.getTitle(),input.getContents(),input.getTransaction());
+        post.update(input.getTitle(), input.getContents(), input.getTransaction());
         Product product = productRepository.findByPost(post);
-        product.update(post,input.getPrice(),input.getCategory());
+        product.update(post, input.getPrice(), input.getCategory());
         List<Hashtag> hashtagList = hashtagRepository.findByProduct(product);
         List<File> fileList = fileRepository.findByProduct(product);
         // 해시 태그 및 파일 삭제 하기
@@ -110,8 +143,8 @@ public class PostMutation implements GraphQLMutationResolver {
         // 해시 태그 및 파일 추가 하기
         String[] hashtagArr = input.getHashtag();
         List<Hashtag> hList = new ArrayList<>();
-        for(int i =0; i<hashtagArr.length;i++){
-            hList.add(new Hashtag(null,product,hashtagArr[i]));
+        for (int i = 0; i < hashtagArr.length; i++) {
+            hList.add(new Hashtag(null, product, hashtagArr[i]));
         }
         hashtagRepository.saveAll(hList);
 
@@ -120,11 +153,10 @@ public class PostMutation implements GraphQLMutationResolver {
         if (fArr.length > 0) {
             for (int k = 0; k < fArr.length; k++) {
                 String[] temp = fArr[k].split(",");
-                String imgur = api.uploadImg(temp[1]);
-                if(!imgur.equals("false")) {
-                    fList.add(new File(null,product,imgur));
-                }
-                else{
+                String imgur = apis.uploadImg(temp[1]);
+                if (!imgur.equals("false")) {
+                    fList.add(new File(null, product, imgur));
+                } else {
                     break;
                 }
             }
@@ -133,32 +165,34 @@ public class PostMutation implements GraphQLMutationResolver {
         List<String> hash = hashtagRepository.findDistinctByHashtag(product.getProductId());
         String imgPath = fileRepository.findTop1ByProduct(product).getImgPath();
         PostMetaOutput output = new PostMetaOutput(
-                input.getPostId(),post.getTitle(),product.getCategory(),imgPath,
-                product.getPrice(),hash,post.isBuy(),post.getViewCount(),post.getDeal(),post.getDealState(),
-                post.getSaleDate().toString(),post.getTransaction(),post.getCreatedDate().toString(),
+                input.getPostId(), post.getTitle(), product.getCategory(), imgPath,
+                product.getPrice(), hash, post.isBuy(), post.getViewCount(), post.getDeal(), post.getDealState(),
+                post.getSaleDate().toString(), post.getTransaction(), post.getCreatedDate().toString(),
                 post.getModifiedDate().toString());
 
         return output;
     }
 
     @Transactional
-    public Long updateView(Long postId){
+    public Long updateView(Long postId) {
         Post post = postRepository.findByPostId(postId);
         post.updateViewCount();
         return post.getViewCount();
     }
+
     @Transactional
-    public Boolean updateIsBuy(Long postsId){
+    public Boolean updateIsBuy(Long postsId) {
         Post post = postRepository.findByPostId(postsId);
-        if(post.isBuy()== true){
+        if (post.isBuy() == true) {
             post.update(false);
-        }else {
+        } else {
             post.update(true);
         }
         return post.isBuy();
     }
+
     @Transactional
-    public Output deletePost(Long postId){
+    public Output deletePost(Long postId) {
         Output output = null;
 
         Post post = postRepository.findByPostId(postId);
@@ -176,8 +210,8 @@ public class PostMutation implements GraphQLMutationResolver {
             productRepository.deleteByProductId(product.getProductId());
             postRepository.deleteByPostId(postId);
             output = new Output("SUCCESS", postId);
-        }catch (Exception e){
-            output = new Output("FAIL",null);
+        } catch (Exception e) {
+            output = new Output("FAIL", null);
         }
         return output;
     }

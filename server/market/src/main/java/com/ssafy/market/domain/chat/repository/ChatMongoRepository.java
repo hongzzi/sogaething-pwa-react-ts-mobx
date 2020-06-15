@@ -50,10 +50,12 @@ public class ChatMongoRepository {
         Query query = new Query(new Criteria("roomId").is(roomId));
         query.with(Sort.by(Sort.Direction.DESC, "_id")).limit(1);
         ChatMessage result = mongoTemplate.findOne(query, ChatMessage.class, "chatMessage");
-        if (MessageType.REMIT.equals(result.getType())){
-            result.setMessage("입금 요청");
+        if (result != null) {
+            if (MessageType.REMIT.equals(result.getType())){
+                result.setMessage("입금 요청");
+            }
+            return result.getMessage();
         }
-        if (result != null) return result.getMessage();
         else return null;
     }
 }

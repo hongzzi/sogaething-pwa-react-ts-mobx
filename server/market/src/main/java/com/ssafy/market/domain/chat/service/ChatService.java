@@ -44,7 +44,7 @@ public class ChatService {
         return topics.get(roomId);
     }
 
-    @CacheEvict(value = CacheKey.MESSAGE, key = "#chatMessage.roomId")
+//    @CacheEvict(value = CacheKey.MESSAGE, key = "#chatMessage.roomId")
     @Transactional
     public Boolean sendMessage(ChatMessage chatMessage) {
         ChannelTopic channelTopic = getTopic(chatMessage.getRoomId());
@@ -62,7 +62,7 @@ public class ChatService {
         }
     }
 
-    @CacheEvict(value = CacheKey.MESSAGE, key = "#remitMessageDto.roomId")
+//    @CacheEvict(value = CacheKey.MESSAGE, key = "#remitMessageDto.roomId")
     @Transactional
     public Boolean sendRemitMessage(RemitMessageDto remitMessageDto) {
         ChannelTopic channelTopic = getTopic(remitMessageDto.getRoomId());
@@ -77,7 +77,7 @@ public class ChatService {
         }
     }
 
-    @Cacheable(value = CacheKey.MESSAGE, key = "#roomId", unless = "#result == null")
+//    @Cacheable(value = CacheKey.MESSAGE, key = "#roomId", unless = "#result == null")
     @Transactional(readOnly = true)
     public Map<String, Object> findChatMessagesByRoomId(Long roomId) {
 //        System.out.println("findChatMessagesByRoomId");

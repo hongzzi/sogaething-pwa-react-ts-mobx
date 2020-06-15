@@ -35,7 +35,7 @@ public class MatchingQuery implements GraphQLQueryResolver {
             for (int j = 0; j < matchingHashtag.size(); j++) {
                 hashtags[j] = matchingHashtag.get(j).getHashtag();
             }
-            List<PostDetailOutput> postDetailOutputs = postQuery.matchThings(matching.get(i).getMatchingId());
+            List<PostDetailOutput> postDetailOutputs = postQuery.matchThings(matching.get(i).getMatchingId(), env);
 
             String possibility = "";
             if(postDetailOutputs.size()<=5) {

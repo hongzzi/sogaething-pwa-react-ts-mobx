@@ -42,7 +42,7 @@ public class ChatRoomService {
     // 구독 처리 서비스
     private final RedisSubscriber redisSubscriber;
 
-    @CachePut(value = CacheKey.ROOM, key = "#chatRoom.postId+#chatRoom.buyerId+#chatRoom.sellerId")
+//    @CachePut(value = CacheKey.ROOM, key = "#chatRoom.postId+#chatRoom.buyerId+#chatRoom.sellerId")
     @Transactional
     public ChatRoom createChatRoom(ChatRoom chatRoom) {
         ChatRoom result;
@@ -73,7 +73,7 @@ public class ChatRoomService {
         return chatRooms;
     }
 
-    @Cacheable(value = CacheKey.ROOM, key = "#roomId", unless = "#result == null")
+//    @Cacheable(value = CacheKey.ROOM, key = "#roomId", unless = "#result == null")
     @Transactional(readOnly = true)
     public ChatRoom findRoomByRoomId(Long roomId) {
         ChatRoom chatRoom = chatRoomMongoRepository.getChaRoomByRoomId(roomId);
@@ -89,6 +89,7 @@ public class ChatRoomService {
             for (ChatRoom chatRoom : searchedChatRoom) {
                 User buyer = userRepository.findByUserId(Long.parseLong(chatRoom.getBuyerId()));
                 User seller = userRepository.findByUserId(Long.parseLong(chatRoom.getSellerId()));
+                if (seller == null || buyer == null) continue;
                 Map<String, String> sellerUser = new HashMap<>();
                 sellerUser.put("userId", String.valueOf(seller.getUserId()));
                 sellerUser.put("userName", seller.getName());
@@ -112,7 +113,7 @@ public class ChatRoomService {
         }
     }
 
-    @CachePut(value = CacheKey.ROOM, key = "#chatRoom.postId+#chatRoom.buyerId+#chatRoom.sellerId")
+//    @CachePut(value = CacheKey.ROOM, key = "#chatRoom.postId+#chatRoom.buyerId+#chatRoom.sellerId")
     @Transactional
     public Long updateChatRoom(ChatRoom chatRoom) {
         try {
@@ -124,7 +125,7 @@ public class ChatRoomService {
         }
     }
 
-    @CacheEvict(value = CacheKey.ROOM, key = "#chatRoom.postId+#chatRoom.buyerId+#chatRoom.sellerId")
+//    @CacheEvict(value = CacheKey.ROOM, key = "#chatRoom.postId+#chatRoom.buyerId+#chatRoom.sellerId")
     public Long deleteChatRoom(ChatRoom chatRoom) {
         try {
             Long deletedCount = chatRoomMongoRepository.deleteChatRoom(chatRoom);

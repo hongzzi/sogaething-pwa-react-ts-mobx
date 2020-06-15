@@ -18,6 +18,8 @@ import com.ssafy.market.domain.product.repository.ProductRepository;
 import com.ssafy.market.domain.user.domain.User;
 import com.ssafy.market.domain.user.dto.UserInfoResponse;
 import com.ssafy.market.domain.user.repository.UserRepository;
+import com.ssafy.market.domain.user.security.TokenProvider;
+import graphql.schema.DataFetchingEnvironment;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Component;
@@ -38,6 +40,7 @@ public class PostQuery implements GraphQLQueryResolver {
     private final FileRepository fileRepository;
     private final MatchingRepository matchingRepository;
     private final MatchingHashtagRepository matchingHashtagRepository;
+    private final TokenProvider tokenProvider;
 
     static String [] categoryList = {"", "디지털/가전", "가구", "유아동", "생활/가공식품", "스포츠/레저", "여성의류", "여성잡화", "남성패션/잡화", "게임/취미", "뷰티/미용", "반려동물용품", "도서/티켓/음반"};
 
@@ -141,30 +144,35 @@ public class PostQuery implements GraphQLQueryResolver {
         return detailOutput;
     }
 
-    public List<PostDetailOutput> matchThings(Long matchingId) {
-        Matching matching = matchingRepository.findByMatchingId(matchingId);
-        List<SearchByOptionsOutput> searchByOptionsOutputs = postRepository.findByOptions(matching.getMinPrice(), matching.getMaxPrice(), matching.getCategory());
+    public List<PostDetailOutput> matchThings(Long matchingId, DataFetchingEnvironment env) {
+        Long userId = tokenProvider.getUserIdFromHeader(env);
 
-        List<PostDetailOutput> postDetailOutputs = searchByOptionsOutputs.stream().map( searchByOptionsOutput -> {
-            PostDetailOutput output = PostDetailOutput.builder()
-                    .category(searchByOptionsOutput.getCategory())
-                    .contents(searchByOptionsOutput.getContents())
-                    .createdDate(searchByOptionsOutput.getCreatedDate())
-                    .deal(searchByOptionsOutput.getDeal())
-                    .dealState(searchByOptionsOutput.getDealState())
-                    .hashtag(Arrays.asList(searchByOptionsOutput.getHashtag().split(",")))
-                    .imgPaths(Arrays.asList(new String[]{searchByOptionsOutput.getImgPath()}))
-                    .isBuy(searchByOptionsOutput.getIsBuy())
-                    .modifiedDate(searchByOptionsOutput.getModifiedDate())
-                    .postId(searchByOptionsOutput.getPostId())
-                    .price(searchByOptionsOutput.getPrice())
-                    .saleDate(searchByOptionsOutput.getSaleDate())
-                    .title(searchByOptionsOutput.getTitle())
-                    .transaction(searchByOptionsOutput.getTransaction())
-                    .user(new UserInfoResponse(searchByOptionsOutput.getUserId(), searchByOptionsOutput.getName(), searchByOptionsOutput.getAddress(), searchByOptionsOutput.getTrust(), postRepository.countPostByUserId(searchByOptionsOutput.getUserId()), searchByOptionsOutput.getImageUrl()))
-                    .viewCount(searchByOptionsOutput.getViewCount())
-                    .build();
-            return output;
+        Matching matching = matchingRepository.findByMatchingId(matchingId);
+        String[] hashtags = matchingHashtagRepository.findHashtagByMatching(matching).toArray(new String[0]);
+        List<SearchByOptionsOutput> searchByOptionsOutputs = postRepository.findByOptions(matching.getMinPrice(), matching.getMaxPrice(), matching.getCategory(), userId);
+
+        List<PostDetailOutput> postDetailOutputs = searchByOptionsOutputs.stream()
+                .filter( item -> Arrays.asList(item.getHashtag().split(",")).containsAll(Arrays.asList(hashtags)))
+                .map(searchByOptionsOutput -> {
+                    PostDetailOutput output = PostDetailOutput.builder()
+                            .category(searchByOptionsOutput.getCategory())
+                            .contents(searchByOptionsOutput.getContents())
+                            .createdDate(searchByOptionsOutput.getCreatedDate())
+                            .deal(searchByOptionsOutput.getDeal())
+                            .dealState(searchByOptionsOutput.getDealState())
+                            .hashtag(Arrays.asList(searchByOptionsOutput.getHashtag().split(",")))
+                            .imgPaths(Arrays.asList(new String[]{searchByOptionsOutput.getImgPath()}))
+                            .isBuy(searchByOptionsOutput.getIsBuy())
+                            .modifiedDate(searchByOptionsOutput.getModifiedDate())
+                            .postId(searchByOptionsOutput.getPostId())
+                            .price(searchByOptionsOutput.getPrice())
+                            .saleDate(searchByOptionsOutput.getSaleDate())
+                            .title(searchByOptionsOutput.getTitle())
+                            .transaction(searchByOptionsOutput.getTransaction())
+                            .user(new UserInfoResponse(searchByOptionsOutput.getUserId(), searchByOptionsOutput.getName(), searchByOptionsOutput.getAddress(), searchByOptionsOutput.getTrust(), postRepository.countPostByUserId(searchByOptionsOutput.getUserId()), searchByOptionsOutput.getImageUrl()))
+                            .viewCount(searchByOptionsOutput.getViewCount())
+                            .build();
+                    return output;
         }).collect(Collectors.toList());
         return postDetailOutputs;
     }
