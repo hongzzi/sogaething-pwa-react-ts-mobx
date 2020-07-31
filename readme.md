@@ -102,7 +102,7 @@ yarn dev
 * [Zeplin](https://zeplin.io/)
 * [Postman](https://www.postman.com/)
 
-Languege
+Language
 * [TypeScript](https://www.typescriptlang.org/)
 * [Java](https://java.com/ko/download/)
 * [GraphQl](https://graphql.org/)
