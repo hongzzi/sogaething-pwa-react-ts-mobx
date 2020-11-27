@@ -13674,9 +13674,9 @@ sync-exec@^0.6.2:
   integrity sha1-cX0izFPwzh3vVZQ2LzqJouu5EQU=
 
 systeminformation@^4.23.3:
-  version "4.26.6"
-  resolved "https://registry.yarnpkg.com/systeminformation/-/systeminformation-4.26.6.tgz#cad751a6640cab1130c6ffe9cea26dfb528c1dee"
-  integrity sha512-oXWCX3imUhwlGTOGMNchkA+/hqGYsiAAGAs6y5aoOUffekpcP+HTNrD2C+MbCZzYzZz9Q55N5D8nUh6odHGL7w==
+  version "4.30.6"
+  resolved "https://registry.yarnpkg.com/systeminformation/-/systeminformation-4.30.6.tgz#b56074968f2ea28ac118f23221c449b0f763db22"
+  integrity sha512-NV7zo9NU7fWSuiCORZmMLe90cFrrTS6jfalrQ0/5B7JGQ2ei15c2gmfICBwWdmviyv/FXAFVReySxOtDDkppqw==
 
 tabtab@^2.2.2:
   version "2.2.2"
