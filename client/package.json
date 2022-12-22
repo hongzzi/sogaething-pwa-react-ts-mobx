@@ -54,7 +54,7 @@
     "isomorphic-unfetch": "^3.0.0",
     "jimp": "^0.10.3",
     "js-cookie": "^2.2.1",
-    "jsonwebtoken": "^8.5.1",
+    "jsonwebtoken": "^9.0.0",
     "lodash": "^4.17.11",
     "mobx": "^5.15.4",
     "mobx-react": "^6.2.2",
